@@ -1,13 +1,13 @@
 #Health 113: facility level
 setwd("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/")
-source("scripts/InstallFormhub.R")
-source("scripts/source_scripts/NMIS_Functions.R")
+source("~/Code/nmis_R_scripts/base_scripts/InstallFormhub.R")
+source("~/Code/nmis_R_scripts/source_scripts/NMIS_Functions.R")
 
 #######
 ##113##
 #######
 #importing data
-h_113 <- read.csv("in_process_data/outlier_cleaned/Health_113_outliercleaned.csv")
+h_113 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Health_113_outliercleaned.csv")
 
 h <- h_113
 hh <- subset(h_113, select=c("uuid", "lga_id", "photo", "X_id", "facility_name", "facility_type", 
@@ -47,10 +47,10 @@ hh$skilled_birth_attendant <- (h$num_doctors_fulltime > 0 |
 hh$num_chews_and_chos <- rowSums(h[, c("num_chews_fulltime",
                                        "num_jr_chews_fulltime",
                                        "num_chos_fulltime")],na.rm=T)
-hh$vaccines_fridge_freezer <- ifelse(h$vaccines_strg_type == "solar_refrigeration" T, 
-                                     ifelse(h$vaccines_strg_type == "grid_refrigeration" T, 
-                                            ifelse(h$vaccines_strg_type == "lpg_refrigeration" T, 
-                                                   ifelse(h$vaccines_strg_type == "" T, 
+hh$vaccines_fridge_freezer <- ifelse(h$vaccines_strg_type == "solar_refrigeration", T,
+                                     ifelse(h$vaccines_strg_type == "grid_refrigeration", T,
+                                            ifelse(h$vaccines_strg_type == "lpg_refrigeration", T,
+                                                   ifelse(h$vaccines_strg_type == "", T,
                                                           NA_character_))))
 hh$emergency_transport <- (h$emergency_transport_ambulance == T | h$emergency_transport_keke_napep == T)
 hh$improved_water_supply <- (h$water_sources_borehole_tube_well == T |
@@ -167,7 +167,7 @@ hh$iv_medications_yn <- h$medication_iv_fluid == T |
      (h$emoc_parenteral1 == T | h$emoc_antibiotics == T))
 
 #writing out
-write.csv(boundary_clean(hh,"mylga_state", "gps"), "in_process_data/nmis/data_113/Health_113_NMIS_Facility.csv", row.names=F)
-write.csv(boundary_clean(cbind(h_113, hh), "mylga_state", "gps"), "in_process_data/nmis/data_113/Health_113_ALL_FACILITY_INDICATORS.csv", row.names=F)
+write.csv(boundary_clean(hh,"mylga_state", "gps"), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Health_113_NMIS_Facility.csv", row.names=F)
+write.csv(boundary_clean(cbind(h_113, hh), "mylga_state", "gps"), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Health_113_ALL_FACILITY_INDICATORS.csv", row.names=F)
 
 

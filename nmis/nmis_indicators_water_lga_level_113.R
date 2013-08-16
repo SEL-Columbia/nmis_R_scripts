@@ -3,11 +3,11 @@
 ## ALIASES / PREP ##
 setwd("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/")
 # slugs are at https://github.com/mvpdev/nmis/blob/develop/uis_r_us/indicators/overview.json
-source("scripts/source_scripts/NMIS_Utils.R")
+source("~/Code/nmis_R_scripts/source_scripts/NMIS_Utils.R")
 
-wat113 <- read.csv("in_process_data/nmis/data_113/Water_113_ALL_FACILITY_INDICATORS.csv")
+wat113 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Water_113_ALL_FACILITY_INDICATORS.csv")
 ww113 <- wat113
-w113 <- merge(ww113, subset(read.csv("lgas.csv"), select=c("lga_id", "pop_2006")), by="lga_id", all.x=TRUE)
+w113 <- merge(ww113, subset(read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/lgas.csv"), select=c("lga_id", "pop_2006")), by="lga_id", all.x=TRUE)
 w113 <- rename(w113, c("pop_2006" = "Population"))
 
 
@@ -74,7 +74,7 @@ lgaw_facilities <- ddply(w113, .(lga_id),
 ##########################
 
 lga_w113_all <- lgaw_facilities
-write.csv(lga_w113_all, "in_process_data/nmis/data_113/Water_LGA_level_113.csv", row.names=F)
+write.csv(lga_w113_all, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Water_LGA_level_113.csv", row.names=F)
 
 
 

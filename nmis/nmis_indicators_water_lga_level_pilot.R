@@ -1,11 +1,11 @@
 ## ALIASES / PREP ##
 # salah -- # setwd("~/Dropbox/Nigeria 661 Baseline Data Cleaning/")
 # slugs are at https://github.com/mvpdev/nmis/blob/develop/uis_r_us/indicators/overview.json
-source("scripts/source_scripts/NMIS_Functions.R")
+source("~/Code/nmis_R_scripts/source_scripts/NMIS_Functions.R")
 
-watpilot <- read.csv("in_process_data/nmis/data_pilot/Water_pilot_ALL_FACILITY_INDICATORS.csv")
+watpilot <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Water_pilot_ALL_FACILITY_INDICATORS.csv")
 wwpilot <- watpilot
-wpilot <- merge(wwpilot, subset(read.csv("lgas.csv"), select=c("lga_id", "pop_2006")), by.x="lga_id", by.y="lga_id", all.x=TRUE)
+wpilot <- merge(wwpilot, subset(read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/lgas.csv"), select=c("lga_id", "pop_2006")), by.x="lga_id", by.y="lga_id", all.x=TRUE)
 wpilot <- rename(wpilot, c("pop_2006" = "Population"))
 
 
@@ -73,7 +73,7 @@ lgaw_facilities <- ddply(wpilot, .(lga_id),
 ##########################
 
 lga_wpilot_all <- lgaw_facilities
-write.csv(lga_wpilot_all, "in_process_data/nmis/data_pilot/Water_LGA_level_pilot.csv", row.names=F)
+write.csv(lga_wpilot_all, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Water_LGA_level_pilot.csv", row.names=F)
 
 
 

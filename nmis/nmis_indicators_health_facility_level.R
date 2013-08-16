@@ -1,10 +1,10 @@
 setwd("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/")
-source("scripts/InstallFormhub.R")
-source("scripts/source_scripts/NMIS_Functions.R")
+source("~/Code/nmis_R_scripts/base_scripts/InstallFormhub.R")
+source("~/Code/nmis_R_scripts/source_scripts/NMIS_Functions.R")
 
 #reading in data
-h <- read.csv("in_process_data/outlier_cleaned/Health_661_outliercleaned.csv")
-lga_661 <- read.csv("661.csv")
+h <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Health_661_outliercleaned.csv")
+lga_661 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/661.csv")
 ##throw out all values from 113 LGAs that were resampled in 661
 h <- merge(h, lga_661, by="lga_id")
 
@@ -341,8 +341,8 @@ hh$iv_medications_yn <- h$not_for_private_2.medication.iv_fluid
    
 hh$inpatient_care_yn <- h$inpatient_care_yn == 'yes'   
      
-write.csv(boundary_clean(hh, "mylga_state", "gps"), "in_process_data/nmis/data_661/Health_661_NMIS_Facility.csv", row.names=F)
-write.csv(boundary_clean(cbind(hh, h), "mylga_state", "gps"), "in_process_data/nmis/data_661/Health_661_ALL_FACILITY_INDICATORS.csv", row.names=F)
+write.csv(boundary_clean(hh, "mylga_state", "gps"), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Health_661_NMIS_Facility.csv", row.names=F)
+write.csv(boundary_clean(cbind(hh, h), "mylga_state", "gps"), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Health_661_ALL_FACILITY_INDICATORS.csv", row.names=F)
 
 #str(hh)
 #head(hh)

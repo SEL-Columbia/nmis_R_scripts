@@ -1,14 +1,14 @@
 #Health Pilot: facility level
 
 setwd("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/")
-source("scripts/InstallFormhub.R")
-source("scripts/source_scripts/NMIS_Functions.R")
+source("~/Code/nmis_R_scripts/base_scripts/InstallFormhub.R")
+source("~/Code/nmis_R_scripts/source_scripts/NMIS_Functions.R")
 
 #######
 #pilot#
 #######
-h_pilot <- read.csv("in_process_data/outlier_cleaned/Health_pilot_outliercleaned.csv")
-h_661 <- read.csv("in_process_data/nmis/data_661/Health_661_NMIS_Facility.csv")
+h_pilot <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Health_pilot_outliercleaned.csv")
+h_661 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Health_661_NMIS_Facility.csv")
 #to do list
 subnm <- names(h_661)[which(names(h_661) %in% names(h_pilot))]
 h_p <- subset(h_pilot, select=subnm)
@@ -138,8 +138,8 @@ h_p$health_no_user_fees <- (hp$paid_services_routine_visit == T | hp$paid_servic
                               hp$paid_services_malaria_treatment == T)  
 
 #writing
-write.csv(boundary_clean(h_p, "mylga_state", "gps"), "in_process_data/nmis/data_pilot/Health_Pilot_NMIS_Facility.csv", row.names=F)
-write.csv(boundary_clean(cbind(h_pilot, h_p), "mylga_state", "gps"),"in_process_data/nmis/data_pilot/Health_Pilot_ALL_FACILITY_INDICATORS.csv", row.names=F)
+write.csv(boundary_clean(h_p, "mylga_state", "gps"), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Health_Pilot_NMIS_Facility.csv", row.names=F)
+write.csv(boundary_clean(cbind(h_pilot, h_p), "mylga_state", "gps"),"~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Health_Pilot_ALL_FACILITY_INDICATORS.csv", row.names=F)
 
 #all facility indicators
 # write.csv(rbind.fill(h_113, h_pilot), "raw_data/113/Health_pilot_113_combined.csv", row.names=F)

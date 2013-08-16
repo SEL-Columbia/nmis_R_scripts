@@ -2,48 +2,35 @@ library(plyr)
 library(doBy)
 library(stringr)
 library(digest)
-require(maptools)
 require(gdata)
 
-library('shapefiles')
-library('stringr')
-library('ggplot2')
-library('plyr')
-library('sp')
-library('maptools')
-library(spatstat)
-require(geosphere)
-
-
-
 bool_proportion <- function(numerator_TF, denominator_TF) {
-    if (class(numerator_TF) == 'character')
-    {
+    if(is.null(numerator_TF) | is.null(denominator_TF)) {
+      print("bool_proportion called on empty column")
+      NA
+    } else {
+      if (class(numerator_TF) == 'character') {
         if (length(c(which(str_detect(numerator_TF, ignore.case("yes|no|true|false"))), 
-                     which(is.na(numerator_TF)))) / length(numerator_TF) > 0.4)
-        {
+                     which(is.na(numerator_TF)))) / length(numerator_TF) > 0.4) {
             numerator_TF <- as.logical(recodeVar(tolower(numerator_TF), src=list(c("yes", "true"), c("no", "false")), 
                       tgt=list(TRUE, FALSE), default=NA, keep.na=T))
-        }else
-        {
+        }
+        else {
             warning("Cannot recode Boolean value, check the data first!")
         }
-    }
-    if (class(denominator_TF) == 'character')
-    {
+      } else if (class(denominator_TF) == 'character') {
         if (length(c(which(str_detect(denominator_TF, ignore.case("yes|no|true|false"))), 
-                     which(is.na(denominator_TF)))) / length(denominator_TF) > 0.4)
-        {
+                     which(is.na(denominator_TF)))) / length(denominator_TF) > 0.4) {
             denominator_TF <- as.logical(recodeVar(tolower(denominator_TF), src=list(c("yes", "true"), c("no", "false")), 
                                                  tgt=list(TRUE, FALSE), default=NA, keep.na=T))
-        }else
-        {
+        } else {
             warning("Cannot recode Boolean value, check the data first!")
         }
+      }
+      df <- data.frame(cbind(num=numerator_TF, den=denominator_TF))
+      df <- na.omit(df)
+      icount(df$num & df$den) / icount(df$den)
     }
-    df <- data.frame(cbind(num=numerator_TF, den=denominator_TF))
-    df <- na.omit(df)
-    icount(df$num & df$den) / icount(df$den)
 }
 
 icount <- function(predicate) { 
@@ -62,11 +49,13 @@ any_na.rm <- function(vec) {any(vec, na.rm=T)}
 
 boundary_clean <- function(df, state_col="mylga_state", gps_col="gps")
 {
-#     require(maptools)
-#     require(plyr)
-#     require(stringr)
-#     require(gdata)
-    
+  require(maptools)
+  library('shapefiles')
+  library('sp')
+  library('maptools')
+  library(spatstat)
+  require(geosphere)
+      
     # detect #of akwa & cross in state column, and write out warnings
     n_akwa <- length(which(str_detect(df[, state_col], ignore.case("^akwa$"))))
     n_cross <- length(which(str_detect(df[, state_col], ignore.case("^cross$"))))

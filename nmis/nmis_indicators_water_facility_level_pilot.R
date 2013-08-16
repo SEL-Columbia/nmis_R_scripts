@@ -1,13 +1,13 @@
 setwd("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/")
-source("scripts/InstallFormhub.R")
-source("scripts/source_scripts/NMIS_Functions.R")
+source("~/Code/nmis_R_scripts/base_scripts/InstallFormhub.R")
+source("~/Code/nmis_R_scripts/source_scripts/NMIS_Functions.R")
 
 #script for Facility level water for PIlot data
 #setwd("C:/Users/Brett/Dropbox/Nigeria 661 Baseline Data Cleaning/")
 #getwd()
 
-# wpilot_raw <- read.csv("in_process_data/Pilot_Water_cleaned_2011Aug29.csv")
-# lgas <- read.csv("lgas.csv")
+# wpilot_raw <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Pilot_Water_cleaned_2011Aug29.csv")
+# lgas <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/lgas.csv")
 # num_zone <- read.csv("Zone_Nums.csv")
 # lgas <- merge(lgas, num_zone, by="zone")
 # wpilot <- merge(wpilot_raw,lgas, by="lga_id", all.x = T)
@@ -15,7 +15,7 @@ source("scripts/source_scripts/NMIS_Functions.R")
 # wpilot$lga.y <- NULL
 # wpilot$state.y <- NULL
 
-wpilot <- read.csv("in_process_data/outlier_cleaned/Water_pilot_outliercleaned.csv")
+wpilot <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Water_pilot_outliercleaned.csv")
 
 wpilot <- subset(wpilot, subset=(geocodeoffacility != "n/a")) # REMOVING ALL FACILITIES WITHOUT GEO CODE
 wpilot$uuid <- sapply(paste(wpilot$geocodeoffacility, wpilot$photo), FUN=digest)
@@ -120,6 +120,6 @@ wp$distribution_type <-
                               "Water Scheme, Source further than 1km",
                               NA))))
 
-write.csv(wp, "in_process_data/nmis/data_pilot/Water_pilot_NMIS_Facility.csv", row.names=F)
-write.csv(cbind(wp, wpilot), "in_process_data/nmis/data_pilot/Water_pilot_ALL_FACILITY_INDICATORS.csv", row.names=F)
+write.csv(wp, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Water_pilot_NMIS_Facility.csv", row.names=F)
+write.csv(cbind(wp, wpilot), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Water_pilot_ALL_FACILITY_INDICATORS.csv", row.names=F)
 
