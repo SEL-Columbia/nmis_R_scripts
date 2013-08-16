@@ -1,0 +1,281 @@
+library(plyr)
+library(doBy)
+library(stringr)
+library(digest)
+require(maptools)
+require(gdata)
+
+library('shapefiles')
+library('stringr')
+library('ggplot2')
+library('plyr')
+library('sp')
+library('maptools')
+library(spatstat)
+require(geosphere)
+
+
+
+bool_proportion <- function(numerator_TF, denominator_TF) {
+    if (class(numerator_TF) == 'character')
+    {
+        if (length(c(which(str_detect(numerator_TF, ignore.case("yes|no|true|false"))), 
+                     which(is.na(numerator_TF)))) / length(numerator_TF) > 0.4)
+        {
+            numerator_TF <- as.logical(recodeVar(tolower(numerator_TF), src=list(c("yes", "true"), c("no", "false")), 
+                      tgt=list(TRUE, FALSE), default=NA, keep.na=T))
+        }else
+        {
+            warning("Cannot recode Boolean value, check the data first!")
+        }
+    }
+    if (class(denominator_TF) == 'character')
+    {
+        if (length(c(which(str_detect(denominator_TF, ignore.case("yes|no|true|false"))), 
+                     which(is.na(denominator_TF)))) / length(denominator_TF) > 0.4)
+        {
+            denominator_TF <- as.logical(recodeVar(tolower(denominator_TF), src=list(c("yes", "true"), c("no", "false")), 
+                                                 tgt=list(TRUE, FALSE), default=NA, keep.na=T))
+        }else
+        {
+            warning("Cannot recode Boolean value, check the data first!")
+        }
+    }
+    df <- data.frame(cbind(num=numerator_TF, den=denominator_TF))
+    df <- na.omit(df)
+    icount(df$num & df$den) / icount(df$den)
+}
+
+icount <- function(predicate) { 
+    counts <- table(predicate)
+    if('TRUE' %in% names(counts)) { counts['TRUE'] }
+    else { 0 }
+}
+
+ratio <- function(numerator_col, denominator_col, filter) {
+    df <- data.frame(cbind(num=numerator_col, den=denominator_col))
+    df <- na.omit(df[filter,])
+    if (nrow(df) == 0) NA else sum(df$num) / sum(df$den)
+}
+
+any_na.rm <- function(vec) {any(vec, na.rm=T)}
+
+boundary_clean <- function(df, state_col="mylga_state", gps_col="gps")
+{
+#     require(maptools)
+#     require(plyr)
+#     require(stringr)
+#     require(gdata)
+    
+    # detect #of akwa & cross in state column, and write out warnings
+    n_akwa <- length(which(str_detect(df[, state_col], ignore.case("^akwa$"))))
+    n_cross <- length(which(str_detect(df[, state_col], ignore.case("^cross$"))))
+    if ( n_akwa > 0 )
+    {
+        warning(paste(n_akwa, 
+                      "facility in 'Akwa_Ibom' have state spelled as 'akwa', and was replaced with correct one"))
+    }
+    if ( n_cross > 0 )
+    {
+        warning(paste(n_cross, 
+                      "facility in 'Cross_River' have state spelled as 'cross', and was replaced with correct one"))
+    }
+    #standardize state spelling for cross_river & akwa_ibom
+    df[, state_col] <- str_replace(df[, state_col], ignore.case("^akwa$"), "Akwa_Ibom")
+    df[, state_col] <- str_replace(df[, state_col], ignore.case("^cross$"), "Cross_River")
+    
+    # Load shape file
+    xx <- readShapeSpatial("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/nga_states/nga_states.shp", proj4string=CRS("+proj=longlat +datum=WGS84"))
+    regions <- setNames(slot(xx, "polygons"), xx@data$Name)
+    names(regions)[which(names(regions) == "Nassarawa")] <- 'Nasarawa'
+    regions <- llply(regions, function(x) SpatialPolygons(list(x)))
+    
+    #create lat & long from gps
+    gps <- strsplit(as.character(df[, gps_col]), split=' ')
+    
+    lat <- as.numeric(unlist(lapply(gps, function(x) x[1])))
+    long <- as.numeric(unlist(lapply(gps, function(x) x[2])))
+    #Create spatial_point with lat&long 
+    hxy <- cbind(long, lat)
+    
+    if (length(which(is.na(hxy[,1]))) > 0 )
+    {
+        warning(paste(length(which(is.na(hxy[,1]))), 
+                      "facility don't have GPS value, unable to locate state and were dropped from the data"))
+    }
+    
+    hxy[which(is.na(hxy[,1])),] <- c(180, 90)
+    hxy <- SpatialPoints(hxy)
+    
+    # locate states based on x&y coordinate and shapefile
+    output = NULL
+    l_ply(names(regions), function(rid) {
+        r = regions[[rid]]
+        #print(over(pts, r))
+        output <<- replace(output,
+                           over(hxy, r) == 1,
+                           rid)
+    })
+    df$state_valid <- output
+    
+    
+    if (length(which(is.na(df$state_valid))) > 0 )
+    {
+        warning(paste(length(which(is.na(df$state_valid))), 
+                      "facility have errors in XY coordinate, unable to locate state and were dropped from the data"))
+    }
+    df <- subset(df, !is.na(state_valid))
+    
+    table(df$state)
+    table(df$state_valid)
+    
+    
+    df$state_valid <- trim(toupper(str_replace_all(df$state_valid, ignore.case("(\\s|,|ABUJA)"), "")))
+    df$state_orig <- trim(toupper(str_replace_all(df[,state_col], "_", "")))
+    
+    mis_orig <- unique(df$state_orig)[which(! unique(df$state_orig) %in% unique(df$state_valid))]
+    mis_valid <- unique(df$state_valid)[which(! unique(df$state_valid) %in% unique(df$state_orig))]
+    
+    if( (length(mis_orig) > 0 | length(unique(df$state_orig)) > 37 ) ) 
+    {
+        warning("State spelling not consistant: ", mis_orig)
+    }
+    
+    if( length(which(df$state_valid != df$state_orig)) > 0  ) 
+    {
+        warning(paste(length(which(df$state_valid != df$state_orig)), 
+                      "facility have out-of-boundary issue, and were dropped from the data"))
+    }
+    
+    
+    df <- subset(df, df$state_valid == df$state_orig)
+    return(df)
+}
+
+
+facility_update <- function(df, edu_bool, facility_name_col, community_col="community", ward_col="ward")
+{
+    if (edu_bool == T){
+        e_nmis <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/Matching result/nmis_edu.csv", stringsAsFactors=F)
+        e_lga <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/Matching result/lga_edu.csv", stringsAsFactors=F)
+        e_nmis <- subset(e_nmis, select=c(short_id, long_id, lga.long_id))
+        e_lga <- subset(e_lga, select=c(long_id, facility_name, community, ward))
+        update <- merge(e_nmis, e_lga, by.x="lga.long_id", by.y="long_id", all.x=T)
+    }else
+    {
+        h_nmis <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/Matching result/nmis_health.csv", stringsAsFactors=F)
+        h_lga <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/Matching result/lga_health.csv", stringsAsFactors=F)
+        h_nmis <- subset(h_nmis, select=c(short_id, long_id, lga.long_id))
+        h_lga <- subset(h_lga, select=c(long_id, facility_name, community, ward))
+        update <- merge(h_nmis, h_lga, by.x="lga.long_id", by.y="long_id")
+    }
+    
+    update$lga.long_id <- NULL
+    names(update)[3:5] <- c("facility_name_update", "community_update", "ward_update")
+    
+    df <- merge(df, update, by.x='uuid', by.y='long_id', all.x=T)
+    
+    df[,facility_name_col] <- replace(df[,facility_name_col], which(!is.na(df$facility_name_update)), df$facility_name_update[which(!is.na(df$facility_name_update))])
+    warning(paste(length(which(!is.na(df$facility_name_update))), 'facilities have their facility_name column updated' ))
+    
+    df[,community_col] <- replace(df[,community_col], which(!is.na(df$community_update)), df$community_update[which(!is.na(df$community_update))])
+    warning(paste(length(which(!is.na(df$community_update))), 'facilities have their community column updated' ))
+    
+    df[,ward_col] <- replace(df[,ward_col], which(!is.na(df$ward_update)), df$ward_update[which(!is.na(df$ward_update))])
+    warning(paste(length(which(!is.na(df$ward_update))), 'facilities have their ward column updated' ))
+    
+    df <- subset(df, select=-c(facility_name_update, community_update, ward_update))
+    return(df)
+}
+
+
+# Use with care, the distance is euclidean distance, need to project to Great Circle
+# Unfortunatly I don't know the closest point on the polygon, so that I dont really know the angle
+# So the distance is roughly "correct" and need to scale to 'km' or 'mile'.
+
+lga_boudary_dist <- function(df, gps_col)
+{
+
+    ni_shp <- readShapePoly('~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/nga_lgas/nga_lgas.shp')
+    regions <- setNames(slot(ni_shp, "polygons"), ni_shp@data$lga_id)
+
+    regions <- lapply(regions, function(x) SpatialPolygons(list(x)))
+    windows <- lapply(regions, as.owin)
+
+    dist_funs <- lapply(windows, distfun)
+
+
+    gps <- strsplit(as.character(df[, gps_col]), split=' ')
+    lat <- as.numeric(unlist(lapply(gps, function(x) x[1])))
+    long <- as.numeric(unlist(lapply(gps, function(x) x[2])))
+
+    #Create spatial_point with lat&long 
+    hxy <- cbind(long, lat)
+
+    # prints warning message and replace NAs with north pole
+    if (length(which(is.na(hxy[,1]))) > 0 )
+    {
+        warning(paste(length(which(is.na(hxy[,1]))), 
+                      "facility don't have GPS value, unable to locate state and were dropped from the data"))
+    }
+    hxy[which(is.na(hxy[,1])),] <- c(180, 90)
+    #xy_cp <- apply(hxy, MARGIN=1, FUN=list)
+    xy_cp <- hxy
+    hxy <- SpatialPoints(hxy)
+
+
+    # locate states based on x&y coordinate and shapefile
+    output <- NULL
+    l_ply(names(regions), function(rid) {
+        r = regions[[rid]]
+        #print(over(pts, r))
+        output <<- replace(output,
+                           over(hxy, r) == 1,
+                           rid)})
+
+    # record true LGA location and labeled LGA location 
+    df$lga_valid <- output
+    df$lga_orig <- as.character(df$lga_id)
+
+    # Testing out-of-countary points(out of shapefile)
+    if (length(which(is.na(df$lga_valid))) > 0 )
+    {
+        warning(paste(length(which(is.na(df$lga_valid))), 
+                      "facility have XY coordinate outside of Nigeria coordinate, unable to locate state and were dropped from the data"))
+    }
+    #df <- subset(df, !is.na(lga_valid))
+
+    # Testing out-of-LGA points
+    if( length(which(df$lga_valid != df$lga_orig)) > 0  ) 
+    {
+        warning(paste(length(which(df$lga_valid != df$lga_orig)), 
+                      "facility have out-of-boundary issue"))
+    }
+
+
+    ######################################################
+    ##### Need to optimize this part in next iteration#### 
+    ######################################################
+
+    # create matrix to store coordinate & labeled LGA
+    xy_cp2 <- cbind(xy_cp, df$lga_orig)
+    # fuction for calling corresponding distance for each location 
+    cal_dist <- function(row)
+    {
+        id <- row[3]
+        coor <- as.numeric(row[1:2])
+        funct <- dist_funs[[id]]
+        dist <- funct(x=coor[1], y=coor[2])
+        return(dist)
+    }
+
+    # Calculation!!
+    # xy_cp2 <- xy_cp2[1:1000,]
+    system.time(df$dist_euc <- apply(xy_cp2, MARGIN=1, function(row) cal_dist(row)))
+    org_xy <- apply(xy_cp2[,1:2], 2,as.numeric)
+    fake_xy <- org_xy + dist_euc/sqrt(2)
+    df$fake_dist <- distVincentySphere(org_xy,fake_xy)/1000
+    
+    return(df)
+
+}
