@@ -1,27 +1,20 @@
 #PILOT: 999 cleaning
 #Directed by Salah Chafik - July 24th 2013
 #Wrote by Jang Hyun Kim   - from July 24th 2013
+source('./999_functions.R')
 setwd("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/")
-source('scripts/cleaning_999s/999_functions.R')
-
 ####################
 ########health######
 ####################
 h_pilot <- read.csv("raw_data/113/Pilot_Data_Health_Clean_2011.11.18.csv",                    
-                    stringsAsFactors=F)
-h_pilot <- subset(h_pilot, subset=(geocodeoffacility != "n/a")) # REMOVING ALL FACILITIES WITHOUT GEO CODE
+                    na.strings = c('NA', 'n/a'), stringsAsFactors=F)
+h_pilot <- subset(h_pilot, subset=!is.na(geocodeoffacility)) # REMOVING ALL FACILITIES WITHOUT GEO CODE
 h_pilot$uuid <- sapply(paste(h_pilot$geocodeoffacility, h_pilot$photo), FUN=digest)
 h_pilot <- subset(h_pilot, !duplicated(h_pilot$uuid))
 
 # OUTPUT SHOULD BE 0
 anyDuplicated(h_pilot$uuid)
 h <- h_pilot
-
-#changing into real NAs
-for (i in 1:255) 
-{
-  h[,i] <- recodeVar(h[,i], "n/a", NA)  
-}
 
 #Cleaning
 h$num_toilets_improved_p <- as.numeric(h$num_toilets_improved_p)
@@ -38,7 +31,7 @@ write.csv(h, "in_process_data/999cleaned/Health_pilot_999Cleaned.csv", row.names
 #########################
 e_pilot <- read.csv("raw_data/113/Pilot_Education_cleaned_2011Nov17.csv",
                   stringsAsFactors=F, na.strings = c("NA", "n/a"))
-e_pilot <- subset(e_pilot, subset=(gps != "n/a")) # REMOVING ALL FACILITIES WITHOUT GEO CODE
+e_pilot <- subset(e_pilot, subset=!is.na(gps)) # REMOVING ALL FACILITIES WITHOUT GEO CODE
 e_pilot$uuid <- sapply(paste(e_pilot$gps, e_pilot$photo), FUN=digest)
 
 # OUTPUT SHOULD BE 0
@@ -67,13 +60,11 @@ write.csv(e, "in_process_data/999cleaned/Education_pilot_999Cleaned.csv", row.na
 ################
 w_pilot <- read.csv("raw_data/113/Pilot_Water_cleaned_2011Aug29.csv",
                   stringsAsFactors=F, na.strings = c("NA", "n/a"))
-#w_pilot$uuid <- sapply(paste(w_pilot$gps, w_pilot$photo), FUN=digest)
+w_pilot$uuid <- sapply(paste(w_pilot$gps, w_pilot$photo), FUN=digest)
 
 # OUTPUT SHOULD BE 0
-#anyDuplicated(w_pilot$uuid)
-w <- w_pilot
+anyDuplicated(w_pilot$uuid)
 
-file.copy("raw_data/113/Pilot_Water_cleaned_2011Aug29.csv",
-          "in_process_data/999cleaned/Water_pilot_999Cleaned.csv", overwrite=T)
+write.csv(w_pilot, "in_process_data/999cleaned/Water_pilot_999Cleaned.csv", row.names=F)
 
 
