@@ -1,39 +1,19 @@
 ## ALIASES / PREP ##
-setwd("~/Dropbox/Nigeria 661 Baseline Data Cleaning/")
+setwd("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/")
+
 source("~/Code/nmis_R_scripts/base_scripts/InstallFormhub.R")
+source("~/Code/nmis_R_scripts/source_scripts/NMIS_Functions.R")
 # slugs are at https://github.com/mvpdev/nmis/blob/develop/uis_r_us/indicators/overview.json
 
 library(plyr)
-w <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/Water_661_ALL_FACILITY_INDICATORS.csv")
-w$`_lga_id` <- as.factor(w$X_lga_id)
+w <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Water_661_ALL_FACILITY_INDICATORS.csv")
 iw <- idata.frame(w)
-
-####################
-#####functions#####
-####################
-icount <- function(predicate) { 
-  counts <- table(predicate)
-  if('TRUE' %in% names(counts)) { counts['TRUE'] }
-  else { 0 }
-}
-ratio <- function(numerator_col, denominator_col, filter) {
-  df <- data.frame(cbind(num=numerator_col, den=denominator_col))
-  df <- na.omit(df)
-  df[filter,]
-  sum(df$num) / sum(df$den)
-}
-
-bool_proportion <- function(numerator_TF, denominator_TF) {
-  df <- data.frame(cbind(num=numerator_TF, den=denominator_TF))
-  df <- na.omit(df)
-  icount((df$num & df$den)) / icount((df$den))
-}
 
 ####################
 #####indicators#####
 ####################
 
-lgaw <- ddply(iw, .(`_lga_id`), function(df) {
+lgaw <- ddply(iw, .(lga_id), function(df) {
   data.frame(
     #####Type#####
       num_improved_water_points = icount(df$is_improved),
@@ -51,7 +31,7 @@ lgaw <- ddply(iw, .(`_lga_id`), function(df) {
       percentage_functional_handpumps =
           ratio((df$water_point_type == "Borehole" | df$water_point_type == "Handpump") & 
                 (df$is_improved & df$functional == "Yes"),
-            (df$water_point_type == "Borehole"| df$water_point_type == "Handpump"))
+            (df$water_point_type == "Borehole"| df$water_point_type == "Handpump")),
 #####Lift Mechanism Analysis#####Only available for the 62% of the sample that has lift mech data
       num_diesel = icount(df$lift_mechanism == "Diesel"),
       percentage_diesel_functional =
@@ -62,28 +42,14 @@ lgaw <- ddply(iw, .(`_lga_id`), function(df) {
       num_solar = icount(df$lift_mechanism == "Solar"),
       percentage_solar_functional =
           ratio(df$lift_mechanism == "Solar" & df$functional == "Yes", df$lift_mechanism == "Solar")
-)
+)})
 
 ##########################
 ###### SUMMING UP ########
 ##########################
-lga_water_all <- cbind(lgaw_facilities, lgaw_functional, lgaw_lift_mechanism) 
+lga_water_all <- lgaw
 
 #adding ID info
-lga_water_all$X_lga_id <- as.factor(lga_water_all$`_lga_id`)
 lgas <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/lgas.csv")
-lga_water_all <- merge(lga_water_all, lgas, by.x="X_lga_id", by.y="X_lga_id")
-lga_water_all <- lga_water_all[,c(20:22,1:19)]
-lga_water_all <- lga_water_all[,c(20:22,1:19)]
-lga_water_all <- lga_water_all[,-5]
-lga_water_all <- lga_water_all[,c(4,3,2,1,5:21)]
-
-write.csv(lga_water_all, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/Water_LGA_level_661.csv")
-
-
-
-# 
-# aaae <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/Health_LGA_level_661.csv")
-# > aaae$sector <- "health"
-# > write.csv(aaae, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/Health_LGA_level_661.csv")
-
+lga_water_all <- merge(lga_water_all, lgas, by="lga_id")
+write.csv(lga_water_all, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Water_LGA_level_661.csv")

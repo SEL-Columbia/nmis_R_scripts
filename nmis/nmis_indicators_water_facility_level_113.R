@@ -127,5 +127,5 @@ w113$distribution_type <-
                               "Water Scheme, Source further than 1km",
          NA))))
 
-write.csv(w113, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/Water_113_NMIS_Facility.csv", row.names=F)
-write.csv(cbind(w113, w113_raw), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/Water_113_ALL_FACILITY_INDICATORS.csv", row.names=F)
+write.csv(w113, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Water_113_NMIS_Facility.csv", row.names=F)
+write.csv(cbind(w113, w113_raw), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Water_113_ALL_FACILITY_INDICATORS.csv", row.names=F)
