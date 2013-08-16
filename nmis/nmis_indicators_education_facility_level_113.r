@@ -1,14 +1,14 @@
 #Education 113: facility level
 setwd("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/")
-source("scripts/InstallFormhub.R")
-source("scripts/source_scripts/NMIS_Functions.R")
+source("~/Code/nmis_R_scripts/base_scripts/InstallFormhub.R")
+source("~/Code/nmis_R_scripts/source_scripts/NMIS_Functions.R")
 
 #reading in data
-e_113 <- read.csv("in_process_data/outlier_cleaned/Education_113_outliercleaned.csv",
+e_113 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Education_113_outliercleaned.csv",
                   stringsAsFactors=F)
 
 ##### TO DO list:###
-e_661 <- read.csv("in_process_data/nmis/data_661/Education_661_NMIS_Facility.csv")
+e_661 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Education_661_NMIS_Facility.csv")
 
 ###113
 subnm <- names(e_661)[which(names(e_661) %in% names(e_113))]
@@ -107,6 +107,6 @@ ed$tchr_pay_miss <- (as.numeric(e_113$times_tchr_pay_miss_pastyr) >= 1)
 education_113_comp <- ed
 
 #writing out
-write.csv(boundary_clean(education_113_comp, "mylga_state", "gps"), "in_process_data/nmis/data_113/Education_113_NMIS_Facility.csv", row.names=F)
-write.csv(boundary_clean(cbind(e_113, education_113_comp), "mylga_state", "gps"), "in_process_data/nmis/data_113/Education_113_ALL_FACILITY_INDICATORS.csv", row.names=F)
+write.csv(boundary_clean(education_113_comp, "mylga_state", "gps"), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Education_113_NMIS_Facility.csv", row.names=F)
+write.csv(boundary_clean(cbind(e_113, education_113_comp), "mylga_state", "gps"), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Education_113_ALL_FACILITY_INDICATORS.csv", row.names=F)
 

@@ -1,10 +1,11 @@
-setwd("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/")
+setwd("~/Code/nmis_R_scripts/")
+source("base_scripts/PipelineBase.R")
 
 suppressPackageStartupMessages(
   lapply(c('doBy', 'stringr'), require, character.only=T))
 
-lga_corrections <- read.csv('in_process_data/nmis/source_data/nmis_lga_corrections.csv', stringsAsFactors=FALSE)
-nmis_lga_mapping <- read.csv('in_process_data/nmis/source_data/nmis_lga_mapping.csv', stringsAsFactors=FALSE)
+lga_corrections <- read.csv(in_process_data('nmis/source_data/nmis_lga_corrections.csv'), stringsAsFactors=FALSE)
+nmis_lga_mapping <- read.csv(in_process_data('nmis/source_data/nmis_lga_mapping.csv'), stringsAsFactors=FALSE)
 add_lga_id = function(df, lgacolname='mylga', statecolname='mylga_state') {
   df$unique_lga <- ifelse(df[,lgacolname] %in% c('ERROR', NA),
                           NA,
@@ -27,7 +28,7 @@ add_photo_url = function(df) {
   df
 }
 
-source("scripts/source_scripts/Clean_LGA_State_errors.R")
+source("source_scripts/Clean_LGA_State_errors.R")
 row.names(nmis_lga_mapping) <- nmis_lga_mapping$id
 replace_lga_ids = function(df, lga_idcol='lga_id', lgacol='mylga', statecol='mylga_state', uuidcol='uuid') {  
   errids <- newlgaids(df, lga_idcol)

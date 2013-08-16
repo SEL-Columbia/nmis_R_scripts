@@ -1,7 +1,7 @@
 suppressPackageStartupMessages(
   lapply(c('maptools', 'sp', 'plyr', 'stringr'), require, character.only=T))
 
-xx <- readShapeSpatial("raw_data/nga_lgas/nga_lgas.shp", proj4string=CRS("+proj=longlat +datum=WGS84"))
+xx <- readShapeSpatial(raw_data("nga_lgas/nga_lgas.shp"), proj4string=CRS("+proj=longlat +datum=WGS84"))
 regions <- setNames(slot(xx, "polygons"), xx@data$lga_id)
 regions <- llply(regions, function(x) SpatialPolygons(list(x)))
 

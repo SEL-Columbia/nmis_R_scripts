@@ -3,15 +3,15 @@
 ## ALIASES / PREP ##
 # slugs are at https://github.com/mvpdev/nmis/blob/develop/uis_r_us/indicators/overview.json
 setwd("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/")
-source("scripts/InstallFormhub.R")
-source("scripts/source_scripts/NMIS_Functions.R")
+source("~/Code/nmis_R_scripts/base_scripts/InstallFormhub.R")
+source("~/Code/nmis_R_scripts/source_scripts/NMIS_Functions.R")
 
 ################
 #####PILOT#####
 ################
-hp <- read.csv("in_process_data/nmis/data_pilot/Health_Pilot_ALL_FACILITY_INDICATORS.csv", stringsAsFactors=FALSE)
+hp <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Health_Pilot_ALL_FACILITY_INDICATORS.csv", stringsAsFactors=FALSE)
 h <- hp
-pop <- read.csv("lgas.csv")
+pop <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/lgas.csv")
 # population figure within ddply is between the , and the last ) below
 lgah_summaries <- ddply(h, .(lga_id), summarize, population = pop[as.character(lga_id[[1]]),'pop_2006'])
 #other columns necessary for indicators
@@ -143,8 +143,8 @@ lgah_facilities <- ddply(ih, .(lga_id),
 ##########################
 lga_health_all <- lgah_facilities
 lga_health_all <- rename(lga_health_all, c("lga_id"="lga_id"))
-lgas <- subset(read.csv("lgas.csv"), select=c("lga_id", "lga", "state", "zone"))
+lgas <- subset(read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/lgas.csv"), select=c("lga_id", "lga", "state", "zone"))
 lga_health_all <- merge(lga_health_all, lgas, by="lga_id")
 
-write.csv(lga_health_all, "in_process_data/nmis/data_pilot/Health_LGA_level_pilot.csv", row.names=F)
+write.csv(lga_health_all, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Health_LGA_level_pilot.csv", row.names=F)
 

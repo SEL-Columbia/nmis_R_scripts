@@ -1,14 +1,13 @@
 #Education Pilot: lga level
 
 setwd("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/")
-source("scripts/InstallFormhub.R")
-source("scripts/source_scripts/NMIS_Functions.R")
-
+source("~/Code/nmis_R_scripts/base_scripts/InstallFormhub.R")
+source("~/Code/nmis_R_scripts/source_scripts/NMIS_Functions.R")
 ################################################################################################
 ##PILOT###########################################################################################
 ################################################################################################
 
-ed <- read.csv("in_process_data/nmis/data_pilot/Education_Pilot_ALL_FACILITY_INDICATORS.csv", stringsAsFactor=F)
+ed <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Education_Pilot_ALL_FACILITY_INDICATORS.csv", stringsAsFactor=F)
 e <- ed
 
 e$is_primary <- e$level_of_education %in% 
@@ -214,9 +213,9 @@ lga_edu_data <- ddply(ie, .(lga_id), function(df) {
 ###### SUMMING UP #########
 lga_education_all <- lga_edu_data
 
-lgas <- subset(read.csv("lgas.csv"), select=c("lga_id", "lga", "state", "zone"))
+lgas <- subset(read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/lgas.csv"), select=c("lga_id", "lga", "state", "zone"))
 lga_education_all <- merge(lga_education_all, lgas, by="lga_id")
 
 #writing out
-write.csv(lga_education_all, "in_process_data/nmis/data_pilot/Education_LGA_level_pilot.csv", row.names=F)
+write.csv(lga_education_all, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Education_LGA_level_pilot.csv", row.names=F)
 

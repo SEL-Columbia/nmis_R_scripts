@@ -1,12 +1,12 @@
 #script for Facility level water for PIlot data from 113
 #setwd("C:/Users/Brett/Dropbox/Nigeria 661 Baseline Data Cleaning/")
 setwd("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/")
-source("scripts/InstallFormhub.R")
-source("scripts/source_scripts/NMIS_Utils.R")
+source("~/Code/nmis_R_scripts/base_scripts/InstallFormhub.R")
+source("~/Code/nmis_R_scripts/source_scripts/NMIS_Functions.R")
 
 
-w113_raw <- read.csv("in_process_data/999cleaned/Water_113_999Cleaned.csv")
-lgas <- read.csv("lgas.csv")
+w113_raw <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Water_113_999Cleaned.csv")
+lgas <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/lgas.csv")
 num_zone <- read.csv("Zone_Nums.csv")
 
 #removing geographic outliers
@@ -127,5 +127,5 @@ w113$distribution_type <-
                               "Water Scheme, Source further than 1km",
          NA))))
 
-write.csv(w113, "in_process_data/nmis/Water_113_NMIS_Facility.csv", row.names=F)
-write.csv(cbind(w113, w113_raw), "in_process_data/nmis/Water_113_ALL_FACILITY_INDICATORS.csv", row.names=F)
+write.csv(w113, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Water_113_NMIS_Facility.csv", row.names=F)
+write.csv(cbind(w113, w113_raw), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Water_113_ALL_FACILITY_INDICATORS.csv", row.names=F)

@@ -1,10 +1,10 @@
 ## ALIASES / PREP ##
 setwd("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/")
-source("scripts/InstallFormhub.R")
-source("scripts/source_scripts/NMIS_Functions.R")
+source("~/Code/nmis_R_scripts/base_scripts/InstallFormhub.R")
+source("~/Code/nmis_R_scripts/source_scripts/NMIS_Functions.R")
 
-e <- read.csv("in_process_data/outlier_cleaned/Education_661_outliercleaned.csv")
-lga_661 <- read.csv("661.csv")
+e <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Education_661_outliercleaned.csv")
+lga_661 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/661.csv")
 ##throw out all values from 113 LGAs that were resampled in 661
 e <- merge(e, lga_661, by="lga_id")
 ed <- subset(e, select=c("uuid", "mylga", "mylga_state", "mylga_zone", "gps", "school_name", "level_of_education", "unique_lga", "lga_id", "photo"))
@@ -120,8 +120,8 @@ ed$functioning_library_yn <- e$functioning_library_yn == 'yes'
 
 
                                
-write.csv(boundary_clean(ed, "mylga_state", "gps"), "in_process_data/nmis/data_661/Education_661_NMIS_Facility.csv", row.names=F)
-write.csv(boundary_clean(cbind(ed, e), "mylga_state", "gps"), "in_process_data/nmis/data_661/Education_661_ALL_FACILITY_INDICATORS.csv", row.names=F)
+write.csv(boundary_clean(ed, "mylga_state", "gps"), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Education_661_NMIS_Facility.csv", row.names=F)
+write.csv(boundary_clean(cbind(ed, e), "mylga_state", "gps"), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Education_661_ALL_FACILITY_INDICATORS.csv", row.names=F)
 
 #str(ed)
 #head(ed)

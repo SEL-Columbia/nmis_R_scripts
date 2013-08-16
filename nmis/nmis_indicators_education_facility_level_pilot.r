@@ -1,18 +1,18 @@
 #Education pilot: facility level
 
 setwd("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/")
-source("scripts/InstallFormhub.R")
-source("scripts/source_scripts/NMIS_Functions.R")
+source("~/Code/nmis_R_scripts/base_scripts/InstallFormhub.R")
+source("~/Code/nmis_R_scripts/source_scripts/NMIS_Functions.R")
 
 ########
 ########
 ###PILOT
 #reading in data
-e_p <- read.csv("in_process_data/outlier_cleaned/Education_pilot_outliercleaned.csv",
+e_p <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Education_pilot_outliercleaned.csv",
                 stringsAsFactors=F)
 
 #strip common variables
-e_661 <- read.csv("in_process_data/nmis/data_661/Education_661_NMIS_Facility.csv")
+e_661 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Education_661_NMIS_Facility.csv")
 subnm <- names(e_661)[which(names(e_661) %in% names(e_p))]
 ed <- subset(e_p, select=subnm)
 rm(subnm)
@@ -112,8 +112,8 @@ e_pilot_comp <- ed
 ed$phcn_electricity <- e_p$power_grid_connection == T
 
 #writing
-write.csv(boundary_clean(e_pilot_comp,"mylga_state", "gps"), "in_process_data/nmis/data_pilot/Education_Pilot_NMIS_Facility.csv", row.names=F)
-write.csv(boundary_clean(cbind(e_p, e_pilot_comp),"mylga_state", "gps"), "in_process_data/nmis/data_pilot/Education_Pilot_ALL_FACILITY_INDICATORS.csv", row.names=F)
+write.csv(boundary_clean(e_pilot_comp,"mylga_state", "gps"), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Education_Pilot_NMIS_Facility.csv", row.names=F)
+write.csv(boundary_clean(cbind(e_p, e_pilot_comp),"mylga_state", "gps"), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Education_Pilot_ALL_FACILITY_INDICATORS.csv", row.names=F)
 
 #all facility indicators
 # write.csv(boundary_clean(rbind.fill(e_pilot_comp, education_113_comp), "mylga_state", "gps"), "raw_data/113/Education_pilot_113_combined.csv", row.names=F)

@@ -1,9 +1,9 @@
 setwd("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/")
-source("scripts/InstallFormhub.R")
-source("scripts/source_scripts/NMIS_Functions.R")
+source("~/Code/nmis_R_scripts/base_scripts/InstallFormhub.R")
+source("~/Code/nmis_R_scripts/source_scripts/NMIS_Functions.R")
 
 
-w <- read.csv("in_process_data/999cleaned/Water_661_999Cleaned_Reclassified.csv")
+w <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Water_661_999Cleaned_Reclassified.csv")
 ###THE INPUT FILE WAS CREATED FROM Water_reclassify_photos.R and includes all 661 LGAs, even though only 148 were reclassified
 
 #create smaller dataset 
@@ -128,12 +128,12 @@ water$distribution_type <-
          "Water Scheme, Source further than 1km",
       NA))))
 
-write.csv(water, "in_process_data/nmis/data_661/Water_661_NMIS_Facility.csv", row.names=F)
+write.csv(water, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Water_661_NMIS_Facility.csv", row.names=F)
 water <- subset(water, select=c('water_point_type', 'is_improved', 'functional', 'lift_mechanism', 'breakdown', 'pay_for_water_yn','distribution_type'))
 w$water_point_type <- NULL
 w$pay_for_water_yn <- NULL
 w_nmis <- cbind(water,w)
 
 
-write.csv(boundary_clean(w_nmis, "mylga_state", gps_col="gps"), "in_process_data/nmis/data_661/Water_661_ALL_FACILITY_INDICATORS.csv", row.names=F)
+write.csv(boundary_clean(w_nmis, "mylga_state", gps_col="gps"), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Water_661_ALL_FACILITY_INDICATORS.csv", row.names=F)
 
