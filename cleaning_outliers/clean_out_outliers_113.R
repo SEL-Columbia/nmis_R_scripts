@@ -108,8 +108,6 @@ e <- outlierreplace(e, 'num_students_total_gender.num_students_male',
 e <- outlierreplace(e, 'num_students_total_gender.num_students_total',
                     (e$num_students_total_gender.num_students_total > 2000 & e$num_classrms_total < 25 &
                          e$num_tchrs.num_tchrs_total < 10))
-e <- outlierreplace(e, 'num_ss_total_gender.num_ss_total',
-                    (e$km_to_catchment_area > 30))
 e <- outlierreplace(e, 'km_to_catchment_area',
                     (e$km_to_catchment_area > 55))                    
 e <- outlierreplace(e, 'km_to_secondary_school',
