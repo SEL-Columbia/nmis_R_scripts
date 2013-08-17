@@ -23,10 +23,6 @@ e$num_students_total_gender.num_students_total <-  replace(e$num_students_total_
 
 e$num_tchrs.num_tchrs_total <- e$num_tchrs_total 
 
-
-e[which(e$total > e$num_students_total_gender.num_students_total),"num_students_total_gender.num_students_total"] <- 
-    e[which(e$total > e$num_students_total_gender.num_students_total),"total"]
-
 e$num_tchrs.num_tchrs_male <- replace(e$num_tchrs_male_full_time, is.na(e$num_tchrs_male_full_time), 0) +
     replace(e$num_tchrs_male_part_time, is.na(e$num_tchrs_male_part_time), 0)
 
