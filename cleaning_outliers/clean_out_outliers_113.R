@@ -1,7 +1,7 @@
 ##113 Outlier Cleaning Script
+source('~/Code/nmis_R_scripts/cleaning_outliers/outlier_functions.R')
+source("~/Code/nmis_R_scripts/InstallFormhub.R")
 setwd("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/")
-source('scripts/cleaning_outliers/outlier_functions.R')
-source("scripts/InstallFormhub.R")
 
 ###############################################################################################
 ######education################################################################################
@@ -164,8 +164,6 @@ write.csv(e, "in_process_data/outlier_cleaned/Education_113_outliercleaned.csv",
 
 rm(e)                   
 
-file.copy("in_process_data/999cleaned/Education_113_999Cleaned.csv",
-          "in_process_data/outlier_cleaned/Education_113_outliercleaned.csv", overwrite=T)
 
 ###############################################################################################
 ######health###################################################################################

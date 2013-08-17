@@ -1,8 +1,7 @@
-setwd("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/")
 ##PILOT Outlier Cleaning Script
-source("scripts/InstallFormhub.R")
-source('scripts/cleaning_outliers/outlier_functions.R')
-
+source("~/Code/nmis_R_scripts/InstallFormhub.R")
+source('~/Code/nmis_R_scripts/cleaning_outliers/outlier_functions.R')
+setwd("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/")
 
 ###############################################################################################
 ######education################################################################################
@@ -48,9 +47,6 @@ e <- outlierreplace(e,'num_classrms_need_min_repairs',
 
 e <- outlierreplace(e,'num_classrms_good_cond',
                     (e$num_classrms_good_cond > e$num_classrms_total))
-
-e <- outlierreplace(e, 'num_students_frthr_than_3km',
-                    (e$num_classrms_good_cond > e$num_students_total_gender.num_students_total))
 
 e <- outlierreplace(e, 'num_classrms_good_cond',
                     (e$num_classrms_good_cond + e$num_classrms_need_min_repairs + 
@@ -155,12 +151,6 @@ write.csv(e, "in_process_data/outlier_cleaned/Education_pilot_outliercleaned.csv
 
 
 
-
-
-
-
-file.copy("in_process_data/999cleaned/Education_pilot_999Cleaned.csv",
-          "in_process_data/outlier_cleaned/Education_pilot_outliercleaned.csv", overwrite=T)
 
 ###############################################################################################
 ######health###################################################################################
