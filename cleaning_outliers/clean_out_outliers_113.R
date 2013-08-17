@@ -1,7 +1,7 @@
 ##113 Outlier Cleaning Script
+source("../InstallFormhub.R")
+source('./outlier_functions.R')
 setwd("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/")
-source('scripts/cleaning_outliers/outlier_functions.R')
-source("scripts/InstallFormhub.R")
 
 ###############################################################################################
 ######education################################################################################
@@ -22,10 +22,6 @@ e$num_students_total_gender.num_students_total <-  replace(e$num_students_total_
     replace(e$num_students_total_gender.num_students_male, is.na(e$num_students_total_gender.num_students_male), 0)
 
 e$num_tchrs.num_tchrs_total <- e$num_tchrs_total 
-
-
-e[which(e$total > e$num_students_total_gender.num_students_total),"num_students_total_gender.num_students_total"] <- 
-    e[which(e$total > e$num_students_total_gender.num_students_total),"total"]
 
 e$num_tchrs.num_tchrs_male <- replace(e$num_tchrs_male_full_time, is.na(e$num_tchrs_male_full_time), 0) +
     replace(e$num_tchrs_male_part_time, is.na(e$num_tchrs_male_part_time), 0)
@@ -108,8 +104,6 @@ e <- outlierreplace(e, 'num_students_total_gender.num_students_male',
 e <- outlierreplace(e, 'num_students_total_gender.num_students_total',
                     (e$num_students_total_gender.num_students_total > 2000 & e$num_classrms_total < 25 &
                          e$num_tchrs.num_tchrs_total < 10))
-e <- outlierreplace(e, 'num_ss_total_gender.num_ss_total',
-                    (e$km_to_catchment_area > 30))
 e <- outlierreplace(e, 'km_to_catchment_area',
                     (e$km_to_catchment_area > 55))                    
 e <- outlierreplace(e, 'km_to_secondary_school',
@@ -164,8 +158,6 @@ write.csv(e, "in_process_data/outlier_cleaned/Education_113_outliercleaned.csv",
 
 rm(e)                   
 
-file.copy("in_process_data/999cleaned/Education_113_999Cleaned.csv",
-          "in_process_data/outlier_cleaned/Education_113_outliercleaned.csv", overwrite=T)
 
 ###############################################################################################
 ######health###################################################################################
