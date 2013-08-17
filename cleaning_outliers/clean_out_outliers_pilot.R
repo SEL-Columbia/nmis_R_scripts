@@ -1,6 +1,6 @@
 ##PILOT Outlier Cleaning Script
-source("~/Code/nmis_R_scripts/InstallFormhub.R")
-source('~/Code/nmis_R_scripts/cleaning_outliers/outlier_functions.R')
+source("../InstallFormhub.R")
+source('./outlier_functions.R')
 setwd("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/")
 
 ###############################################################################################
