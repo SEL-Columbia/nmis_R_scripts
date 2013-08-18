@@ -1,6 +1,6 @@
 #113: 999 cleaning
 #setwd("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/")
-source('./999_functions.R')
+source('./cleaning_999s/999_functions.R')
 setwd("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/")
 
 ##############
