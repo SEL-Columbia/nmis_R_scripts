@@ -1,7 +1,7 @@
 #PILOT: 999 cleaning
 #Directed by Salah Chafik - July 24th 2013
 #Wrote by Jang Hyun Kim   - from July 24th 2013
-source('./999_functions.R')
+source('./cleaning_999s/999_functions.R')
 setwd("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/")
 ####################
 ########health######
