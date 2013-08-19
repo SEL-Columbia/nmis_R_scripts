@@ -1,5 +1,4 @@
-setwd("~/Code/nmis_R_scripts/")
-source("~/Code/nmis_R_scripts/base_scripts/InstallFormhub.R")
+source("base_scripts/InstallFormhub.R")
 
 extraSchema = setNames(data.frame(rbind(
                     c("mylga", "select one", "LGA"),
@@ -64,7 +63,7 @@ merged_local <- rbind(data.frame(local), data.frame(local2), data.frame(local3))
 rm(list=c("education", "education2", "education3", "health", "health2", "health3", "water", "water2", "water3", "local", "local2", "local3"))
 
 ###### ELEMENTARY MANIPULATIONS ########
-source("~/Code/nmis_R_scripts/source_scripts/NMIS_Utils.R")
+source("source_scripts/NMIS_Utils.R")
 merged_education <- add_photo_url(merged_education)
 merged_health <- add_photo_url(merged_health)
 merged_water <- add_photo_url(merged_water)

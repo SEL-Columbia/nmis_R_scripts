@@ -1,6 +1,5 @@
-#setwd("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/")
-source("~/Code/nmis_R_scripts/base_scripts/InstallFormhub.R")
-source('~/Code/nmis_R_scripts/cleaning_999s/999_functions.R')
+source("base_scripts/InstallFormhub.R")
+source('cleaning_999s/999_functions.R')
 
 extraschema = setNames(data.frame(rbind(
   c("mylga", "select one", "LGA"),

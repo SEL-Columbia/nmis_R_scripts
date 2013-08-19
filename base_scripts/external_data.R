@@ -1,5 +1,4 @@
 #External Data
-setwd("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/")
 library("foreign")
 require(foreign)
 require(gdata)
@@ -229,9 +228,6 @@ require(foreign)
 require(gdata)
 require(plyr)
 require(s)
-
-#setwd("C:/Users/Zaiming/Dropbox/Nigeria 661 Baseline Data Cleaning (2)/")
-setwd("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/")
 
 #skilled <- read.csv("C:/Users/Zaiming/Dropbox/Nigeria 661 Baseline Data Cleaning (2)/external data/08_Skilled_Birth.csv")
 skilled <- read.csv("external data/08_Skilled_Birth.csv") 

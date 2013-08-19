@@ -1,4 +1,3 @@
-setwd("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/")
 source("scripts/source_scripts/NMIS_Utils.R")
 
 #education

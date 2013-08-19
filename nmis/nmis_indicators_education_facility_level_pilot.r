@@ -1,8 +1,6 @@
 #Education pilot: facility level
-
-setwd("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/")
-source("~/Code/nmis_R_scripts/base_scripts/InstallFormhub.R")
-source("~/Code/nmis_R_scripts/source_scripts/NMIS_Functions.R")
+source("base_scripts/InstallFormhub.R")
+source("source_scripts/NMIS_Functions.R")
 
 ########
 ########
