@@ -5,7 +5,7 @@ source("source_scripts/NMIS_Functions.R")
 
 w113_raw <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Water_113_999Cleaned.csv")
 lgas <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/lgas.csv")
-num_zone <- read.csv("Zone_Nums.csv")
+num_zone <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/Zone_Nums.csv")
 
 #removing geographic outliers
 w113_raw <- boundary_clean(w113_raw, "state", "geocodeoffacility")#
