@@ -1,7 +1,7 @@
 ## ALIASES / PREP ##
 setwd("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/")
-source("~/Code/nmis_R_scripts/base_scripts/InstallFormhub.R")
-source("~/Code/nmis_R_scripts/source_scripts/NMIS_Functions.R")
+source("base_scripts/InstallFormhub.R")
+source("source_scripts/NMIS_Functions.R")
 
 e <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Education_661_outliercleaned.csv")
 lga_661 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/661.csv")
