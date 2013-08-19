@@ -1,6 +1,4 @@
 ## ALIASES / PREP ##
-setwd("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/")
-
 source("base_scripts/InstallFormhub.R")
 source("source_scripts/NMIS_Functions.R")
 # slugs are at https://github.com/mvpdev/nmis/blob/develop/uis_r_us/indicators/overview.json
