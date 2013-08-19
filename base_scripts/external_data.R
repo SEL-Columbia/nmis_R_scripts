@@ -137,7 +137,6 @@ final <- merge(final, final_san, all.x=T, all.y=T)
 final <- transform(final, state=as.factor(as.numeric(state)))
 
 
-
 #merging final with ref
 final_merged <- merge(final, ref, by.x=c('state', 'lg'), by.y=c('state_hnlss', 'lg_hnlss'), all=T)
 final_merged<- rename(final_merged, c("LGA_id" = "lga_id"))

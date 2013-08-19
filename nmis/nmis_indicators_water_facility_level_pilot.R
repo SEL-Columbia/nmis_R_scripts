@@ -1,10 +1,7 @@
-setwd("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/")
-source("~/Code/nmis_R_scripts/base_scripts/InstallFormhub.R")
-source("~/Code/nmis_R_scripts/source_scripts/NMIS_Functions.R")
+source("base_scripts/InstallFormhub.R")
+source("source_scripts/NMIS_Functions.R")
 
 #script for Facility level water for PIlot data
-#setwd("C:/Users/Brett/Dropbox/Nigeria 661 Baseline Data Cleaning/")
-#getwd()
 
 # wpilot_raw <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Pilot_Water_cleaned_2011Aug29.csv")
 # lgas <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/lgas.csv")

@@ -1,5 +1,5 @@
-source('../InstallFormhub.R')
-source('./outlier_functions.R')
+source('base_scripts/InstallFormhub.R')
+source('cleaning_outliers/outlier_functions.R')
 
 ###############################################################################################
 ######education################################################################################

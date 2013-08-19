@@ -1,5 +1,4 @@
-setwd("~/Code/nmis_R_scripts/")
-source("~/Code/nmis_R_scripts/base_scripts/InstallFormhub.R")
+source("base_scripts/InstallFormhub.R")
 
 extraSchema = setNames(data.frame(rbind(
                     c("mylga", "select one", "LGA"),
@@ -7,6 +6,11 @@ extraSchema = setNames(data.frame(rbind(
               c("name", "type", "label"))
 dropCols = c("mylga_.*_in_.*", ".*_calc") # cascading selects; calcs with propagated 999s
 na.strings = c("999", "9999", "n/a")
+
+raw_data <- function(basepath) {
+  paste('~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data',basepath, sep='/')
+}
+
 ###### READ #######
 education <- formhubRead(raw_data("Education_05_06_2012_2013_05_15_12_00_14.csv"),
                          raw_data("json_schemas/Education_05_06_2012.json"),
@@ -107,8 +111,8 @@ merged_local <- replace_lga_ids(merged_local)
 #### WRITE EVERYTHING OUT
 ############################
 
-write.csv(merged_education, in_process_data("merged/Education_661_Merged.csv"))
-write.csv(merged_health, in_process_data("merged/Health_661_Merged.csv"))
-write.csv(merged_water, in_process_data("merged/Water_661_Merged.csv"))
-write.csv(merged_local, in_process_data("merged/Local_661_Merged.csv"))
+write.csv(merged_education, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/merged/Education_661_Merged.csv")
+write.csv(merged_health, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/merged/Health_661_Merged.csv")
+write.csv(merged_water, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/merged/Water_661_Merged.csv")
+write.csv(merged_local, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/merged/Local_661_Merged.csv")
 rm(merged_education, merged_health, merged_water, merged_local, extraSchema, lga_corrections, nmis_lga_mapping)

@@ -1,12 +1,10 @@
 #113: 999 cleaning
-#setwd("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/")
-source('./999_functions.R')
-setwd("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/")
+source('./cleaning_999s/999_functions.R')
 
 ##############
 ########health
 ##############
-h_113 <- read.csv("raw_data/113/Health_PhII_RoundI&II&III_Clean_2011.10.21.csv",
+h_113 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/113/Health_PhII_RoundI&II&III_Clean_2011.10.21.csv",
                   na.strings = c('n/a',"NA"),stringsAsFactors=F)
 h_113 <- subset(h_113, subset=!is.na(geocodeoffacility)) # REMOVING ALL FACILITIES WITHOUT GEO CODE
 h_113$uuid <- sapply(paste(h_113$geocodeoffacility, h_113$photo), FUN=digest)
@@ -74,13 +72,13 @@ cellst(h, 'inpatient_stay_price',
        which(h$inpatient_stay_price > 5000), NA_integer_)
 
 #WRITING OUT
-write.csv(h, "in_process_data/999cleaned/Health_113_999Cleaned.csv", row.names=F)
+write.csv(h, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Health_113_999Cleaned.csv", row.names=F)
 
 
 ##############
 #####education
 ##############
-e_113 <- read.csv("raw_data/113/Educ_Baseline_PhaseII_all_merged_cleaned_2011Nov21.csv",
+e_113 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/113/Educ_Baseline_PhaseII_all_merged_cleaned_2011Nov21.csv",
                   stringsAsFactors=F, na.strings = c("NA", "n/a"))
 e_113 <- subset(e_113, subset=!is.na(gps)) # REMOVING ALL FACILITIES WITHOUT GEO CODE
 e_113$uuid <- sapply(paste(e_113$gps, e_113$photo), FUN=digest)
@@ -426,16 +424,16 @@ for (i in 1:length(selcol))
 
 
 #WRITING OUT
-write.csv(e, "in_process_data/999cleaned/Education_113_999Cleaned.csv", row.names=F)
+write.csv(e, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Education_113_999Cleaned.csv", row.names=F)
 
 ##############
 #####Water
 ##############
 # water -- no numerical questions (except for elevation...)
-w_113 <- read.csv("raw_data/113/Water_Baseline_PhaseII_all_merged_cleaned_2011Nov21.csv",
+w_113 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/113/Water_Baseline_PhaseII_all_merged_cleaned_2011Nov21.csv",
                   stringsAsFactors=F, na.strings = c("NA", "n/a"))
 w_113$uuid <- sapply(paste(w_113$geo_id, w_113$photo), FUN=digest)
 # OUTPUT SHOULD BE 0
 anyDuplicated(w_113$uuid)
 
-write.csv(w_113, "in_process_data/999cleaned/Water_113_999Cleaned.csv", row.names=F)
+write.csv(w_113, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Water_113_999Cleaned.csv", row.names=F)

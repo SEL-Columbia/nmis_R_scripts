@@ -43,4 +43,3 @@ install_gh_packages(required_gh_packages)
 
 suppressPackageStartupMessages(library(formhub))
 library(plyr)
-source("~/Code/nmis_R_scripts/base_scripts/PipelineBase.R")
