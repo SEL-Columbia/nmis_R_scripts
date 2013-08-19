@@ -1,11 +1,10 @@
 setwd("~/Code/nmis_R_scripts/")
-source("base_scripts/PipelineBase.R")
 
 suppressPackageStartupMessages(
   lapply(c('doBy', 'stringr'), require, character.only=T))
 
-lga_corrections <- read.csv(in_process_data('nmis/source_data/nmis_lga_corrections.csv'), stringsAsFactors=FALSE)
-nmis_lga_mapping <- read.csv(in_process_data('nmis/source_data/nmis_lga_mapping.csv'), stringsAsFactors=FALSE)
+lga_corrections <- read.csv('~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/source_data/nmis_lga_corrections.csv', stringsAsFactors=FALSE)
+nmis_lga_mapping <- read.csv('~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/source_data/nmis_lga_mapping.csv', stringsAsFactors=FALSE)
 add_lga_id = function(df, lgacolname='mylga', statecolname='mylga_state') {
   df$unique_lga <- ifelse(df[,lgacolname] %in% c('ERROR', NA),
                           NA,

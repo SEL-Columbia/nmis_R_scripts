@@ -27,10 +27,10 @@ $(IN_PROC)/999cleaned/*_661_999Cleaned.csv: $(IN_PROC)/merged/Education_661_Merg
 	$(R) cleaning_999s/clean_out999s.R  /dev/tty
 # outlier cleaning -- 661 (H + E)
 $(IN_PROC)/outlier_cleaned/Health_661_outliercleaned.csv $(IN_PROC)/outlier_cleaned/Education_661_outliercleaned.csv: $(IN_PROC)/999cleaned/Health_661_999Cleaned.csv $(IN_PROC)/999cleaned/Education_661_999Cleaned.csv cleaning_outliers/clean_out_outliers.R
-	$(R) cleaning_outliers/clean_out_outliers.R
+	$(R) cleaning_outliers/clean_out_outliers.R /dev/tty
 # reclassification -- 661 (W)
 $(IN_PROC)/999cleaned/Water_661_999Cleaned_Reclassified.csv: $(IN_PROC)/999cleaned/Water_661_999Cleaned.csv $(IN_PROC)/reclassify_final_148.csv
-	$(R) scripts/Water_reclassify_photos.R
+	$(R) scripts/Water_reclassify_photos.R /dev/tty
 
 # combine to 774 -- health
 $(N7)/Education$(L)_774.csv $(N7)/Education_774_$(NF) $(N7)/Health$(L)_774.csv $(N7)/Health_774_$(NF) $(N7)/Water$(L)_774.csv $(N7)/Water_774$(NF): $(N6)/Health_661_$(NF) $(N1)/Health_113_$(NF) $(NP)/Health_Pilot_$(NF) $(N6)/Health$(L)_661.csv $(N1)/Health$(L)_113.csv $(NP)/Health$(L)_Pilot.csv $(N6)/Education_661_$(NF) $(N1)/Education_113_$(NF) $(NP)/Education_Pilot_$(NF) $(N6)/Education$(L)_661.csv $(N1)/Education$(L)_113.csv $(NP)/Education$(L)_Pilot.csv $(N6)/Water_661_$(NF) $(N1)/Water_113_$(NF) $(NP)/Water_Pilot_$(NF) $(N6)/Water$(L)_661.csv $(N1)/Water$(L)_113.csv $(NP)/Water$(L)_Pilot.csv $(n)COMBINING.R
@@ -48,7 +48,7 @@ $(N6)/Education$(L)_661.csv: $(N6)/Education_661_$(AF) $(n)education$(l).R
 $(NP)/Education$(L)_Pilot.csv: $(NP)/Education_Pilot_$(AF) $(n)education$(l)_pilot.R
 	$(R) $(n)education$(l)_pilot.R /dev/tty
 $(N1)/Education$(L)_113.csv: $(N1)/Education_113_$(AF) $(n)education$(l)_113.R
-	$(R) $(n)education$(l)_113.R
+	$(R) $(n)education$(l)_113.R /dev/tty
 # lga aggregations -- water -- 661 + 113 + pilot
 $(N6)/Water$(L)_661.csv: $(N6)/Water_661_$(AF) $(n)water$(l).R
 	$(R) $(n)water$(l).R /dev/tty
@@ -79,7 +79,7 @@ $(N6)/Health_661_$(NF) $(N6)/Health_661_$(AF): $(IN_PROC)/outlier_cleaned/Health
 
 # facility indicators -- education -- pilot
 $(NP)/Education_Pilot_$(NF) $(NP)/Education_Pilot_$(AF): $(n)education$(f)_pilot.R $(RAW_DATA)/113/Pilot_Education_cleaned_2011Nov17.csv 
-	$(R) $(n)education$(f)_pilot.R
+	$(R) $(n)education$(f)_pilot.R /dev/tty
 # facility indicators -- education -- 113
 $(N1)/Education_113_$(NF) $(N1)/Education_113_$(AF): $(n)education$(f)_113.R $(RAW_DATA)/113/Educ_Baseline_PhaseII_all_merged_cleaned_2011Nov21.csv 
 	$(R) $(n)education$(f)_113.R /dev/tty
