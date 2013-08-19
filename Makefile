@@ -1,4 +1,4 @@
-R=R CMD BATCH --no-restore --slave
+R=R CMD BATCH --no-restore  
 N6=~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/in_process_data/nmis/data_661
 N1=~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/in_process_data/nmis/data_113
 NP=~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/in_process_data/nmis/data_pilot

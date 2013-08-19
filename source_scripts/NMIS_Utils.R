@@ -1,5 +1,3 @@
-setwd("~/Code/nmis_R_scripts/")
-
 suppressPackageStartupMessages(
   lapply(c('doBy', 'stringr'), require, character.only=T))
 
@@ -27,7 +25,7 @@ add_photo_url = function(df) {
   df
 }
 
-source("source_scripts/Clean_LGA_State_errors.R")
+source("~/Code/nmis_R_scripts/source_scripts/Clean_LGA_State_errors.R")
 row.names(nmis_lga_mapping) <- nmis_lga_mapping$id
 replace_lga_ids = function(df, lga_idcol='lga_id', lgacol='mylga', statecol='mylga_state', uuidcol='uuid') {  
   errids <- newlgaids(df, lga_idcol)
