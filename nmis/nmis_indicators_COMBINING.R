@@ -1,7 +1,6 @@
 ##combining 661/113/pilot facility level scripts##
-setwd("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/")
 library(plyr)
-source("~/Code/nmis_R_scripts/source_scripts/NMIS_Utils.R")
+source("source_scripts/NMIS_Utils.R")
 
 ######################################################################################
 ##EDUCATION###########################################################################

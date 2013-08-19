@@ -1,7 +1,6 @@
 ## ALIASES / PREP ##
-# salah -- # setwd("~/Dropbox/Nigeria 661 Baseline Data Cleaning/")
 # slugs are at https://github.com/mvpdev/nmis/blob/develop/uis_r_us/indicators/overview.json
-source("~/Code/nmis_R_scripts/source_scripts/NMIS_Functions.R")
+source("source_scripts/NMIS_Functions.R")
 
 watpilot <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Water_pilot_ALL_FACILITY_INDICATORS.csv")
 wwpilot <- watpilot
