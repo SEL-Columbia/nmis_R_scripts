@@ -1,7 +1,6 @@
 #Water 113: LGA level
 
 ## ALIASES / PREP ##
-setwd("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/")
 # slugs are at https://github.com/mvpdev/nmis/blob/develop/uis_r_us/indicators/overview.json
 source("source_scripts/NMIS_Functions.R")
 

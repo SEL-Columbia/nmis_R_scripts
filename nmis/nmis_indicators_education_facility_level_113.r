@@ -1,5 +1,4 @@
 #Education 113: facility level
-setwd("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/")
 source("base_scripts/InstallFormhub.R")
 source("source_scripts/NMIS_Functions.R")
 

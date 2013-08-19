@@ -1,8 +1,7 @@
 ###############################
 ####HEALTH#####################
 ###############################
-# salah -- # setwd("~/Dropbox/Nigeria 661 Baseline Data Cleaning/")
-h <- read.csv("in_process_data/999cleaned/Health_661_999Cleaned.csv", header=TRUE)
+h <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Health_661_999Cleaned.csv", header=TRUE)
 cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
 library("ggplot2")
 
@@ -135,7 +134,7 @@ cells(h, 'medical_staff_active.num_junior_chews_active',
       which(h$medical_staff_active.num_junior_chews_active > 50)) <- NA
 
 
-#write.csv(merged_health, "in_process_data/999cleaned/Health_661_999Cleaned.csv", row.names=FALSE)
+#write.csv(merged_health, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Health_661_999Cleaned.csv", row.names=FALSE)
 
 ###############################
 ########graphs/tables##########

@@ -1,8 +1,7 @@
 ###############################
 ####EDUCATION####
 ###############################
-# salah -- # setwd("~/Dropbox/Nigeria 661 Baseline Data Cleaning/")
-e <- read.csv("in_process_data/999cleaned/Education_661_999Cleaned.csv", header=TRUE)
+e <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Education_661_999Cleaned.csv", header=TRUE)
 cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
 library("ggplot2")
 

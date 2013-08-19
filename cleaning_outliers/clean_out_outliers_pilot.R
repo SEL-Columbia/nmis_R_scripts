@@ -1,12 +1,11 @@
 ##PILOT Outlier Cleaning Script
 source("../InstallFormhub.R")
 source('./outlier_functions.R')
-setwd("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/")
 
 ###############################################################################################
 ######education################################################################################
 ###############################################################################################                    
-e <- read.csv("in_process_data/999cleaned/Education_pilot_999Cleaned.csv", header=TRUE, stringsAsFactors=F)
+e <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Education_pilot_999Cleaned.csv", header=TRUE, stringsAsFactors=F)
 
 
 e$num_classrms_total <- e$num_total_classrooms
@@ -146,7 +145,7 @@ e <- outlierreplace(e, 'ratio_students_to_desks',
 e <- outlierreplace(e, 'ratio_students_to_benches',
                     (e$ratio_students_to_benches > 1000)) 
 
-write.csv(e, "in_process_data/outlier_cleaned/Education_pilot_outliercleaned.csv", row.names=FALSE)
+write.csv(e, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Education_pilot_outliercleaned.csv", row.names=FALSE)
 
 
 
@@ -156,7 +155,7 @@ write.csv(e, "in_process_data/outlier_cleaned/Education_pilot_outliercleaned.csv
 ######health###################################################################################
 ###############################################################################################                    
 ##reading in data
-h_p <- read.csv("in_process_data/999cleaned/Health_pilot_999Cleaned.csv", stringsAsFactors=F)
+h_p <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Health_pilot_999Cleaned.csv", stringsAsFactors=F)
 hp <- h_p
 
 #cleaning
@@ -196,15 +195,15 @@ hp <- outlierreplace(hp, 'num_lab_techs_fulltime',
 hp <- outlierreplace(hp, 'inpatient_care_num_beds',
                      hp$inpatient_care_num_beds > 50)
 
-write.csv(hp, "in_process_data/outlier_cleaned/Health_pilot_outliercleaned.csv", row.names=F)
+write.csv(hp, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Health_pilot_outliercleaned.csv", row.names=F)
 rm(hp)
 
 ###############################################################################################
 ######water####################################################################################
 ############################################################################################### 
 
-file.copy("in_process_data/999cleaned/Water_pilot_999Cleaned.csv",
-          "in_process_data/outlier_cleaned/Water_pilot_outliercleaned.csv", overwrite=T)
+file.copy("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Water_pilot_999Cleaned.csv",
+          "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Water_pilot_outliercleaned.csv", overwrite=T)
 
 
 
