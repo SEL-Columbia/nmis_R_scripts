@@ -21,8 +21,10 @@ lga_edu_data <- ddply(ie, .(lga_id), function(df) {
    data.frame(
               schools_pri_junsec_total = icount(df$pj),
               classrooms_total = sum(df$num_classrms_total, na.rm = TRUE),
-              schools_func_potable_water = bool_proportion(df$potable_water, TRUE), 
-              schools_improved_sanit = bool_proportion(df$education_improved_sanitation, TRUE),
+              
+              schools_improved_water_supply = bool_proportion(df$improved_water_supply, TRUE), 
+              schools_improved_sanitation = bool_proportion(df$improved_sanitation, TRUE),
+              
               benches_school_ratio = ratio(df$num_benches, df$pj),
               benches_pupil_ratio = ratio(df$num_benches, df$num_students_total_gender.num_students_total, df$pj),
               desks_school_ratio = ratio(df$num_desks, df$pj),
@@ -48,14 +50,17 @@ lga_edu_data <- ddply(ie, .(lga_id), function(df) {
             bool_proportion(df$num_students_frthr_than_3km > 0, df$is_primary),
           proportion_students_3kmplus_juniorsec =
             bool_proportion(df$num_students_frthr_than_3km > 0, df$is_junior_secondary),            
-              proportion_schools_potable_water_primary =
-                bool_proportion(df$potable_water, df$is_primary),
-              proportion_schools_potable_water_juniorsec =
-                bool_proportion(df$potable_water, df$is_junior_secondary),
+              
+              proportion_schools_improved_water_supply_primary =
+                bool_proportion(df$improved_water_supply, df$is_primary),
+              proportion_schools_improved_water_supply_juniorsec =
+                bool_proportion(df$improved_water_supply, df$is_junior_secondary),
+              
               proportion_schools_improved_sanitation_primary =
-                bool_proportion(df$education_improved_sanitation, df$is_primary),
+                bool_proportion(df$improved_sanitation, df$is_primary),
               proportion_schools_improved_sanitation_juniorsec =
-                bool_proportion(df$education_improved_sanitation, df$is_junior_secondary),
+                bool_proportion(df$improved_sanitation, df$is_junior_secondary),
+              
               proportion_schools_gender_sep_toilet_primary =
                 bool_proportion(df$gender_separated_toilets_yn, df$is_primary),
               proportion_schools_gender_sep_toilet_juniorsec =
