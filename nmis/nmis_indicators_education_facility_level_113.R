@@ -11,8 +11,11 @@ e_661 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_proce
 
 ###113
 subnm <- names(e_661)[which(names(e_661) %in% names(e_113))]
+nm_113 <- names(e_113)[! names(e_113) %in% subnm]
+nm_113 <- c(nm_113, "uuid")
 ed <- subset(e_113, select=subnm)
-rm(subnm)
+e_113_left <- subset(e_113, select=nm_113)
+rm(subnm, nm_113)
 
 ed$mylga <- e_113$lga
 ed$mylga_state <- e_113$state
@@ -97,15 +100,21 @@ ed$tchr_pay_delay <- (as.numeric(e_113$times_tchr_pay_delay_pastyr) >= 1)
 
 ed$tchr_pay_miss <- (as.numeric(e_113$times_tchr_pay_miss_pastyr) >= 1)
                         
-                                
-#ed$functioning_library_yn
-# ed$improved_water_supply <- 
 
-
-
+#Adding distant to every facility
+#combining calculated result back to original data
+ed <- lga_boudary_dist(ed, gps_col="gps")
 education_113_comp <- ed
+e_113 <- merge(ed, e_113_left, by="uuid")
+
+
+#Delete all those have dist >= 35 km
+education_113_comp <- subset(education_113_comp, dist_fake <= 35 | is.na(dist_fake))
+e_113 <- subset(e_113, dist_fake <= 35 | is.na(dist_fake))
+
+
 
 #writing out
-write.csv(boundary_clean(education_113_comp, "mylga_state", "gps"), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Education_113_NMIS_Facility.csv", row.names=F)
-write.csv(boundary_clean(cbind(e_113, education_113_comp), "mylga_state", "gps"), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Education_113_ALL_FACILITY_INDICATORS.csv", row.names=F)
+write.csv(education_113_comp, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Education_113_NMIS_Facility.csv", row.names=F)
+write.csv(e_113, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Education_113_ALL_FACILITY_INDICATORS.csv", row.names=F)
 
