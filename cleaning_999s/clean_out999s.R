@@ -161,8 +161,10 @@ write.csv(merged_health, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/i
 
 # water -- no numerical questions
 file.copy("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/merged/Water_661_Merged.csv", 
-          "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Water_661_999Cleaned.csv")
+          "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Water_661_999Cleaned.csv",
+          overwrite=TRUE)
 
 # localities -- numerical questions already discarded in MergeDatasets.R
 file.copy("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/merged/Local_661_Merged.csv",
-          "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Localities_661_999Cleaned.csv")
+          "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Localities_661_999Cleaned.csv",
+          overwrite=TRUE)

@@ -115,10 +115,10 @@ lgah_facilities <- ddply(ih, .(lga_id),
                                bool_proportion(df$lab_tests_tb_microscopy_calc == T, TRUE),
                              proportion_any_power_access = 
                                bool_proportion(df$power_access_and_functional == T, TRUE),                      
-                             proportion_improved_water_source = 
-                               bool_proportion(df$potable_water_access == T, TRUE),                        
-                            proportion_functional_sanitation = 
-                              bool_proportion(df$improved_sanitation_and_functional, TRUE),                        
+                             proportion_improved_water_supply = 
+                               bool_proportion(df$improved_water_supply == T, TRUE),                        
+                            proportion_improved_sanitation = 
+                              bool_proportion(df$improved_sanitation, TRUE),                        
                              proportion_mobile_coverage = 
                                bool_proportion(df$mobile_signal_funct_yn == T, TRUE),                    
                              proportion_health_facilities_med_waste_separated = 

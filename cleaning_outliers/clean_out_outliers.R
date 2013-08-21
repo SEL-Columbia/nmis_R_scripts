@@ -596,7 +596,8 @@ rm(h)
 ############################################################################################### 
 
 file.copy("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Water_661_999Cleaned_Reclassified.csv", 
-          "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Water_661_outliercleaned.csv")
+          "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Water_661_outliercleaned.csv",
+          overwrite=TRUE)
 
 
 
