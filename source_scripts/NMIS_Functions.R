@@ -1,8 +1,22 @@
-library(plyr)
-library(doBy)
-library(stringr)
-library(digest)
-require(gdata)
+#packages
+required_library <- c("plyr", "doBy", "stringr", "digest", "gdata",
+                      "maptools", "shapefiles", "sp", "spatstat", "geosphere")
+
+# testing required packages and install if not installed  
+for (re_lib in required_library)
+{
+    if (! re_lib %in% installed.packages())
+    {
+        install.packages(re_lib)    
+    }
+    require(re_lib,character.only = TRUE)
+    print(re_lib)
+}
+
+rm(required_library, re_lib)
+
+
+
 
 bool_proportion <- function(numerator_TF, denominator_TF) {
     if(is.null(numerator_TF) | is.null(denominator_TF)) {
@@ -49,12 +63,7 @@ any_na.rm <- function(vec) {any(vec, na.rm=T)}
 
 boundary_clean <- function(df, state_col="mylga_state", gps_col="gps")
 {
-  require(maptools)
-  library('shapefiles')
-  library('sp')
-  library('maptools')
-  library(spatstat)
-  require(geosphere)
+  
       
     # detect #of akwa & cross in state column, and write out warnings
     n_akwa <- length(which(str_detect(df[, state_col], ignore.case("^akwa$"))))
@@ -192,8 +201,7 @@ lga_boudary_dist <- function(df, gps_col)
     windows <- lapply(regions, as.owin)
 
     dist_funs <- lapply(windows, distfun)
-
-
+    
     gps <- strsplit(as.character(df[, gps_col]), split=' ')
     lat <- as.numeric(unlist(lapply(gps, function(x) x[1])))
     long <- as.numeric(unlist(lapply(gps, function(x) x[2])))
@@ -207,7 +215,9 @@ lga_boudary_dist <- function(df, gps_col)
         warning(paste(length(which(is.na(hxy[,1]))), 
                       "facility don't have GPS value, unable to locate state and were dropped from the data"))
     }
-    hxy[which(is.na(hxy[,1])),] <- c(180, 90)
+    df <- df[which(!(is.na(hxy[,1] | is.na(hxy[,2])))),]
+#     hxy[which(is.na(hxy[,1])),] <- c(180, 90)
+    hxy <- hxy[which(!(is.na(hxy[,1] | is.na(hxy[,2])))),]
     #xy_cp <- apply(hxy, MARGIN=1, FUN=list)
     xy_cp <- hxy
     hxy <- SpatialPoints(hxy)
@@ -249,21 +259,47 @@ lga_boudary_dist <- function(df, gps_col)
     # create matrix to store coordinate & labeled LGA
     xy_cp2 <- cbind(xy_cp, df$lga_orig)
     # fuction for calling corresponding distance for each location 
-    cal_dist <- function(row)
+#     cal_dist <- function(row, dist_fun_list)
+#     {
+#         id <- row[3]
+#         coor <- as.numeric(row[1:2])
+#         funct <- dist_fun_list[[id]]
+#         dist <- funct(x=coor[1], y=coor[2])
+#         return(dist)
+#     }
+# 
+#     # Calculation!!
+#     # xy_cp2 <- xy_cp2[1:1000,]
+#     system.time(dist_euc <- apply(xy_cp2, MARGIN=1, function(x) cal_dist(x, dist_funs)))
+    
+#     actual_calculate <- function(dist_mtx, dist_fun_list)
+#     {
+#         cal_dist <- function(row, dist_fun_list)
+#         {
+#             id <- row[3]
+#             coor <- as.numeric(row[1:2])
+#             funct <- dist_fun_list[[id]]
+#             dist <- funct(x=coor[1], y=coor[2])
+#             return(dist)
+#         }
+#         
+#         dist_euc <- apply(xy_cp2, MARGIN=1, function(x) cal_dist(x))
+#         return(dist_euc)
+#     
+#     }
+#     dist_euc <- actual_calculate(xy_cp2, dist_funs)
+    print("dist_function")
+    dist_euc <- rep(NA, nrow(df))
+    l_ply(names(dist_funs), function(rid) 
     {
-        id <- row[3]
-        coor <- as.numeric(row[1:2])
-        funct <- dist_funs[[id]]
-        dist <- funct(x=coor[1], y=coor[2])
-        return(dist)
-    }
-
-    # Calculation!!
-    # xy_cp2 <- xy_cp2[1:1000,]
-    system.time(df$dist_euc <- apply(xy_cp2, MARGIN=1, function(row) cal_dist(row)))
-    org_xy <- apply(xy_cp2[,1:2], 2,as.numeric)
+        r = dist_funs[[rid]]
+        idx <- which(df$lga_id == rid)
+        dist_euc[idx] <<- r(xy_cp)[idx] })
+    
+    df$dist_euc <- dist_euc
+    org_xy <- xy_cp
     fake_xy <- org_xy + dist_euc/sqrt(2)
-    df$fake_dist <- distVincentySphere(org_xy,fake_xy)/1000
+    df$dist_fake <- distVincentySphere(org_xy,fake_xy)/1000
     
     return(df)
 
