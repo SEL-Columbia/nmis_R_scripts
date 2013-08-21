@@ -302,7 +302,6 @@ hh$num_lab_techs_fulltime <- h$medical_staff_posted.lab_technicians_posted
 ##########################
 
 #zero_na <- function(x) ifelse(is.na(x), x, 0)
-#hh$potable_water_access <- zero_na(h$not_for_private_1.days_no_potable_water_pastmth) <= 23    
 hh$potable_water_access <- (as.numeric(h$not_for_private_1.days_no_potable_water_pastmth) <= 23)
 hh$improved_sanitation_and_functional <- (h$not_for_private_1.vip_latrine_functional_yn == 'yes' & 
                                       h$not_for_private_1.toilets_available.num_vip_latrine > 0) | 
@@ -310,7 +309,6 @@ hh$improved_sanitation_and_functional <- (h$not_for_private_1.vip_latrine_functi
                                       h$not_for_private_1.toilets_available.num_pit_w_slab > 0) | 
                                       (h$not_for_private_1.flush_improved_functional_yn == 'yes' &   
                                       h$not_for_private_1.toilets_available.num_flush_or_pour_flush_piped > 0)
-
                                                         
 ########################
 ##### TUBERCULOSIS #####

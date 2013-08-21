@@ -117,10 +117,10 @@ lgah_facilities <- ddply(ih, .(lga_id),
       bool_proportion(df$lab_tests_tb_microscopy_calc, TRUE),
                     proportion_any_power_access = 
                       bool_proportion(df$power_access_and_functional, TRUE),                      
-                    proportion_improved_water_source = 
-                      bool_proportion(df$potable_water_access, TRUE),                        
-                    proportion_functional_sanitation = 
-                      bool_proportion(df$improved_sanitation_and_functional, TRUE),                        
+                    proportion_improved_water_supply =
+                      bool_proportion(df$improved_water_supply, TRUE),                        
+                    proportion_improved_sanitation = 
+                      bool_proportion(df$improved_sanitation, TRUE),                        
                     proportion_mobile_coverage = 
                       bool_proportion(df$mobile_signal_funct_yn, TRUE),                    
                     proportion_health_facilities_med_waste_separated = 
@@ -143,7 +143,7 @@ lgah_facilities <- ddply(ih, .(lga_id),
 ###### SUMMING UP ########
 ##########################
 lga_health_all <- lgah_facilities
-lgas <- subset(read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/lgas.csv"), select=c("lga_id", "lga", "state", "zone"))
+lgas <- subset(read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/lgas.csv"), select=c("lga_id", "lga", "state", "zone","unique_lga"))
 lga_health_all <- merge(lga_health_all, lgas, by="lga_id")
 
 write.csv(lga_health_all, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Health_LGA_level_661.csv", row.names=F)
