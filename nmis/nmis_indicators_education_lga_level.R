@@ -201,8 +201,7 @@ lga_edu_data <- ddply(ie, .(lga_id), function(df) {
 
 ###### SUMMING UP #########
 lga_education_all <- lga_edu_data
-
-lgas <- subset(read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/lgas.csv"), select=c("lga_id", "lga", "state", "zone"))
+lgas <- subset(read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/lgas.csv"), select=c("lga_id", "lga", "state", "zone","unique_lga"))
 lga_education_all <- merge(lga_education_all, lgas, by="lga_id")
 
 #writing out
