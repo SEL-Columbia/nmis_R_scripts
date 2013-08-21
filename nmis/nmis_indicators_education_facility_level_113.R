@@ -12,6 +12,7 @@ e_661 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_proce
 ###113
 subnm <- names(e_661)[which(names(e_661) %in% names(e_113))]
 nm_113 <- names(e_113)[! names(e_113) %in% subnm]
+nm_113 <- c(nm_113, "uuid")
 ed <- subset(e_113, select=subnm)
 e_113_left <- subset(e_113, select=nm_113)
 rm(subnm, nm_113)
@@ -104,12 +105,12 @@ ed$tchr_pay_miss <- (as.numeric(e_113$times_tchr_pay_miss_pastyr) >= 1)
 #combining calculated result back to original data
 ed <- lga_boudary_dist(ed, gps_col="gps")
 education_113_comp <- ed
-e_113 <- cbind(ed, e_113_left)
+e_113 <- merge(ed, e_113_left, by="uuid")
 
 
 #Delete all those have dist >= 35 km
-education_113_comp <- subset(education_113_comp, dist_fake <= 35)
-e_113 <- subset(e_113, dist_fake <= 35)
+education_113_comp <- subset(education_113_comp, dist_fake <= 35 | is.na(dist_fake))
+e_113 <- subset(e_113, dist_fake <= 35 | is.na(dist_fake))
 
 
 

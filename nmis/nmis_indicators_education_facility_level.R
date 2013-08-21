@@ -12,6 +12,7 @@ ed$formhub_photo_id <- ed$photo
 
 
 nm_661 <- names(e)[! names(e) %in% names(ed)]
+nm_661 <- c(nm_661, "uuid")
 e_661_left <- subset(e, select=nm_661)
 rm(nm_661)
 
@@ -130,14 +131,14 @@ ed$functioning_library_yn <- e$functioning_library_yn == 'yes'
 #combining calculated result back to original data
 ed <- lga_boudary_dist(ed, gps_col="gps")
 education_661_comp <- ed
-e_661 <- cbind(ed, e_661_left)
+e_661 <- merge(ed, e_661_left, by="uuid")
 
 
 #Delete all those have dist >= 35 km
-education_661_comp <- subset(education_661_comp, dist_fake <= 35)
-e_661 <- subset(e_661, dist_fake <= 35)
+education_661_comp <- subset(education_661_comp, dist_fake <= 35 | is.na(dist_fake))
+e_661 <- subset(e_661, dist_fake <= 35 | is.na(dist_fake))
 
 
                                
 write.csv(education_661_comp, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Education_661_NMIS_Facility.csv", row.names=F)
-write.csv(e_661, "mylga_state", "gps"), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Education_661_ALL_FACILITY_INDICATORS.csv", row.names=F)
+write.csv(e_661, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Education_661_ALL_FACILITY_INDICATORS.csv", row.names=F)

@@ -250,57 +250,41 @@ lga_boudary_dist <- function(df, gps_col)
         warning(paste(length(which(df$lga_valid != df$lga_orig)), 
                       "facility have out-of-boundary issue"))
     }
-
-
+    print(paste(nrow(df), "Total Facilities after those without GPS "))
+    df2 <- subset(df, lga_valid == lga_orig)
+    xy_cp <- xy_cp[(df$lga_valid != df$lga_orig) | is.na(df$lga_valid), ]
+    df <- subset(df, (lga_valid != lga_orig) | is.na(lga_valid))
+    
+    if (nrow(df) != nrow(xy_cp))
+    {
+        warning("number of out-of-LGA facility doesnt match")
+    }
+    print(paste(nrow(df2), "facilities NOT have out-of-LGA issue"))
+    print(paste(nrow(df), "facilities HAVE out-of-LGA issue"))
+    
     ######################################################
     ##### Need to optimize this part in next iteration#### 
     ######################################################
-
-    # create matrix to store coordinate & labeled LGA
-    xy_cp2 <- cbind(xy_cp, df$lga_orig)
-    # fuction for calling corresponding distance for each location 
-#     cal_dist <- function(row, dist_fun_list)
-#     {
-#         id <- row[3]
-#         coor <- as.numeric(row[1:2])
-#         funct <- dist_fun_list[[id]]
-#         dist <- funct(x=coor[1], y=coor[2])
-#         return(dist)
-#     }
-# 
-#     # Calculation!!
-#     # xy_cp2 <- xy_cp2[1:1000,]
-#     system.time(dist_euc <- apply(xy_cp2, MARGIN=1, function(x) cal_dist(x, dist_funs)))
     
-#     actual_calculate <- function(dist_mtx, dist_fun_list)
-#     {
-#         cal_dist <- function(row, dist_fun_list)
-#         {
-#             id <- row[3]
-#             coor <- as.numeric(row[1:2])
-#             funct <- dist_fun_list[[id]]
-#             dist <- funct(x=coor[1], y=coor[2])
-#             return(dist)
-#         }
-#         
-#         dist_euc <- apply(xy_cp2, MARGIN=1, function(x) cal_dist(x))
-#         return(dist_euc)
-#     
-#     }
-#     dist_euc <- actual_calculate(xy_cp2, dist_funs)
+    
     print("dist_function")
     dist_euc <- rep(NA, nrow(df))
-    l_ply(names(dist_funs), function(rid) 
-    {
-        r = dist_funs[[rid]]
-        idx <- which(df$lga_id == rid)
-        dist_euc[idx] <<- r(xy_cp)[idx] })
+    system.time(l_ply(names(dist_funs), function(rid) 
+    {r = dist_funs[[rid]]
+     idx <- which(df$lga_id == rid)
+     dist_euc[idx] <<- r(xy_cp)[idx] }))
+    
     
     df$dist_euc <- dist_euc
     org_xy <- xy_cp
     fake_xy <- org_xy + dist_euc/sqrt(2)
     df$dist_fake <- distVincentySphere(org_xy,fake_xy)/1000
     
-    return(df)
+    
+    
+    final <- rbind.fill(df, df2)
+    hist(final$dist_fake, nclass=50)
+    
+    return(final)
 
 }
