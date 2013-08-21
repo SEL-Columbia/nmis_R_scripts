@@ -95,5 +95,8 @@ edu_external <- merge(combined_774_lga_EDU, external, by.x="lga_id", by.y="LGA_i
 health_ed_ex <- merge(edu_external, combined_774_lga_H, by="lga_id", all.x=T) 
 water_h_ed_ex <- merge(health_ed_ex, combined_774_lga_WATER, by="lga_id", all.x=T)
 #organizing
-water_h_ed_ex <- water_h_ed_ex[,c(1:96,100:147,151:156,158:160,162:165,167:177)]
+#TODO: wtf is this line?
+#water_h_ed_ex <- water_h_ed_ex[,c(1:96,100:147,151:156,158:160,162:165,167:177)]
+selcol <- grep(".x$|.y$",colnames(water_h_ed_ex))
+water_h_ed_ex <- water_h_ed_ex[-c(selcol)]
 write.csv(water_h_ed_ex, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/All_774_LGA.csv", row.names=F)
