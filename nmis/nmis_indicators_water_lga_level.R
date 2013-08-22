@@ -50,4 +50,4 @@ lga_water_all <- lgaw
 #adding ID info
 lgas <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/lgas.csv")
 lga_water_all <- merge(lga_water_all, lgas, by="lga_id")
-write.csv(lga_water_all, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Water_LGA_level_661.csv")
+write.csv(x_y_killa(lga_water_all), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Water_LGA_level_661.csv")

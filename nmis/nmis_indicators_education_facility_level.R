@@ -142,5 +142,5 @@ e_661 <- subset(e_661, dist_fake <= 35 | is.na(dist_fake))
 
 
                                
-write.csv(education_661_comp, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Education_661_NMIS_Facility.csv", row.names=F)
-write.csv(e_661, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Education_661_ALL_FACILITY_INDICATORS.csv", row.names=F)
+write.csv(x_y_killa(education_661_comp), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Education_661_NMIS_Facility.csv", row.names=F)
+write.csv(x_y_killa(e_661), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Education_661_ALL_FACILITY_INDICATORS.csv", row.names=F)

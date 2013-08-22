@@ -94,5 +94,5 @@ e_p <- subset(e_p, dist_fake <= 35 | is.na(dist_fake))
 
 
 #writing
-write.csv(e_pilot_comp, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Education_Pilot_NMIS_Facility.csv", row.names=F)
-write.csv(e_p, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Education_Pilot_ALL_FACILITY_INDICATORS.csv", row.names=F)
+write.csv(x_y_killa(e_pilot_comp), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Education_Pilot_NMIS_Facility.csv", row.names=F)
+write.csv(x_y_killa(e_p), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Education_Pilot_ALL_FACILITY_INDICATORS.csv", row.names=F)
