@@ -6,7 +6,7 @@ source("source_scripts/NMIS_Functions.R")
 ##113##
 #######
 #importing data
-h_113 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Health_113_outliercleaned.csv")
+h_113 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Health_113_outliercleaned.csv", stringsAsFactors=F)
 
 h <- h_113
 hh <- subset(h_113, select=c("uuid", "lga_id", "photo", "X_id", "facility_name", "facility_type", 
@@ -26,6 +26,19 @@ hh$mylga_zone <- h$zone
 hh$mylga_state <- h$state
 hh$mylga <- h$lga
 hh$gps <- h$geocodeoffacility
+
+
+
+###113
+nm_113 <- names(h_113)[! names(h_113) %in% names(hh)]
+nm_113 <- c(nm_113, "uuid")
+h_113_left <- subset(h_113, select=nm_113)
+rm(nm_113)
+
+
+
+
+
 #####################
 ####SNAPSHOT###
 ###################
@@ -165,8 +178,28 @@ hh$iv_medications_yn <- h$medication_iv_fluid == T |
   ((h$emoc_needles_tubing == T & h$emergency_obstetrics_yn == 'yes') | 
      (h$emoc_parenteral1 == T | h$emoc_antibiotics == T))
 
+
+
+#Adding distant to every facility
+#combining calculated result back to original data
+hh <- lga_boudary_dist(hh, gps_col="gps")
+health_113_comp <- hh
+h_113 <- merge(hh, h_113_left, by="uuid")
+
+
+#Delete all those have dist >= 35 km
+health_113_comp <- subset(health_113_comp, dist_fake <= 35 | is.na(dist_fake))
+h_113 <- subset(h_113, dist_fake <= 35 | is.na(dist_fake))
+
+
+
+
+
+
+
+
 #writing out
-write.csv(boundary_clean(hh,"mylga_state", "gps"), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Health_113_NMIS_Facility.csv", row.names=F)
-write.csv(boundary_clean(cbind(h_113, hh), "mylga_state", "gps"), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Health_113_ALL_FACILITY_INDICATORS.csv", row.names=F)
+write.csv(health_113_comp, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Health_113_NMIS_Facility.csv", row.names=F)
+write.csv(h_113, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Health_113_ALL_FACILITY_INDICATORS.csv", row.names=F)
 
 

@@ -6,12 +6,23 @@ source("source_scripts/NMIS_Functions.R")
 #######
 #pilot#
 #######
-h_pilot <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Health_pilot_outliercleaned.csv")
-h_661 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Health_661_NMIS_Facility.csv")
+h_pilot <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Health_pilot_outliercleaned.csv",
+                    stringsAsFactors=F)
+h_661 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Health_661_NMIS_Facility.csv",
+                  stringsAsFactors=F)
 #to do list
+
 subnm <- names(h_661)[which(names(h_661) %in% names(h_pilot))]
 h_p <- subset(h_pilot, select=subnm)
-rm(subnm)
+
+nm_p <- names(h_pilot)[! names(h_pilot) %in% subnm]
+nm_p <- c(nm_p, "uuid")
+
+h_p_left <- subset(h_pilot, select=nm_p)
+rm(subnm, nm_p)
+
+
+
 #todo <- names(h_661)
 hp <- h_pilot
 
@@ -136,9 +147,24 @@ h_p$health_no_user_fees <- (hp$paid_services_routine_visit == T | hp$paid_servic
                               hp$paid_services_hiv_treatment == T | hp$paid_services_tb_treatment == T | 
                               hp$paid_services_malaria_treatment == T)  
 
-#writing
-write.csv(boundary_clean(h_p, "mylga_state", "gps"), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Health_Pilot_NMIS_Facility.csv", row.names=F)
-write.csv(boundary_clean(cbind(h_pilot, h_p), "mylga_state", "gps"),"~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Health_Pilot_ALL_FACILITY_INDICATORS.csv", row.names=F)
 
-#all facility indicators
-# write.csv(rbind.fill(h_113, h_pilot), "raw_data/113/Health_pilot_113_combined.csv", row.names=F)
+
+#Adding distant to every facility
+#combining calculated result back to original data
+h_p <- lga_boudary_dist(h_p, gps_col="gps")
+h_pilot_comp <- h_p
+hp <- merge(h_p, h_p_left, by="uuid")
+
+
+#Delete all those have dist >= 35 km
+h_pilot_comp <- subset(h_pilot_comp, dist_fake <= 35 | is.na(dist_fake))
+hp <- subset(hp, dist_fake <= 35 | is.na(dist_fake))
+
+
+
+
+
+#writing
+write.csv(h_pilot_comp, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Health_Pilot_NMIS_Facility.csv", row.names=F)
+write.csv(hp,"~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Health_Pilot_ALL_FACILITY_INDICATORS.csv", row.names=F)
+
