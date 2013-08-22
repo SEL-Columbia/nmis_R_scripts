@@ -70,8 +70,6 @@ x_y_killa <- function(merged) {
 ratio <- function(numerator_col, denominator_col, filter) {
     df <- data.frame(cbind(num=numerator_col, den=denominator_col))
     df <- na.omit(df[filter,])
-    print(colnames(numerator_col))
-    print(colnames(denominator_col))
     if (nrow(df) == 0 | sum(df$den) == 0){
         return(NA)
     }
