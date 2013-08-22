@@ -58,7 +58,9 @@ x_y_killa <- function(merged) {
   col_remove = grep("\\.y$", colnames(merged))
   print(paste(length(grep("\\.y$", colnames(merged))), " columns has .y's were changed"))
   print(paste(length(grep("\\.x$", colnames(merged))), " columns has .x's were changed"))
-  merged <- merged[,-col_remove]
+  if (length(col_remove) > 0) {
+    merged <- merged[,-col_remove]    
+  }
   colnames(merged) <- gsub("\\.x$", "", colnames(merged))
   print(length(which(duplicated(colnames(merged)))))
   merged <- merged[,!duplicated(colnames(merged))]
