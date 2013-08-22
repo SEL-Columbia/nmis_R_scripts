@@ -13,6 +13,14 @@ hh <- subset(h, select=c("uuid", "mylga", "mylga_state", "mylga_zone", "lga_id",
 hh$`_id` <- hh$uuid
 hh$formhub_photo_id <- hh$photo
 hh$gps <- h$geocodeoffacility
+
+
+nm_661 <- names(h)[! names(h) %in% names(hh)]
+nm_661 <- c(nm_661, "uuid")
+h_661_left <- subset(h, select=nm_661)
+rm(nm_661)
+
+
 ####################
 ##### SNAPSHOT #####
 ####################
@@ -337,11 +345,23 @@ hh$health_no_user_fees <-
 hh$iv_medications_yn <- h$not_for_private_2.medication.iv_fluid   
    
 hh$inpatient_care_yn <- h$inpatient_care_yn == 'yes'   
-     
-write.csv(boundary_clean(hh, "mylga_state", "gps"), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Health_661_NMIS_Facility.csv", row.names=F)
-write.csv(boundary_clean(cbind(hh, h), "mylga_state", "gps"), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Health_661_ALL_FACILITY_INDICATORS.csv", row.names=F)
 
-#str(hh)
-#head(hh)
-#summary(hh)
+
+
+
+#Adding distant to every facility
+#combining calculated result back to original data
+hh <- lga_boudary_dist(hh, gps_col="gps")
+health_661_comp <- hh
+h_661 <- merge(hh, h_661_left, by="uuid")
+
+
+#Delete all those have dist >= 35 km
+health_661_comp <- subset(health_661_comp, dist_fake <= 35 | is.na(dist_fake))
+h_661 <- subset(h_661, dist_fake <= 35 | is.na(dist_fake))
+
+
+write.csv(health_661_comp, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Health_661_NMIS_Facility.csv", row.names=F)
+write.csv(h_661, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Health_661_ALL_FACILITY_INDICATORS.csv", row.names=F)
+
 

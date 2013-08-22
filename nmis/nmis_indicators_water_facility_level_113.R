@@ -3,12 +3,14 @@ source("base_scripts/InstallFormhub.R")
 source("source_scripts/NMIS_Functions.R")
 
 
-w113_raw <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Water_113_999Cleaned.csv")
-lgas <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/lgas.csv")
-num_zone <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/Zone_Nums.csv")
+w113_raw <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Water_113_999Cleaned.csv",
+                     stringsAsFactors=F)
+lgas <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/lgas.csv",
+                 stringsAsFactors=F)
+num_zone <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/Zone_Nums.csv",
+                     stringsAsFactors=F)
 
 #removing geographic outliers
-w113_raw <- boundary_clean(w113_raw, "state", "geocodeoffacility")#
 w113_raw <- subset(w113_raw, subset=(geocodeoffacility != "n/a")) # REMOVING ALL FACILITIES WITHOUT GEO CODE
 w113_raw$uuid <- sapply(paste(w113_raw$geocodeoffacility, w113_raw$photo), FUN=digest)
 w113_raw <- subset(w113_raw, !duplicated(w113_raw$uuid))
@@ -17,12 +19,12 @@ anyDuplicated(w113_raw$uuid)
 
 lgas <- merge(lgas, num_zone, by="zone")
 w113 <- merge(w113_raw,lgas, by="lga_id", all.x = T)
-w113 <- rename(w113, c("lga.y"="lga", "state.y"="state", "zone.y"="zone", "number_zone.y"="num_zone"))
+w113 <- rename(w113, c("lga.y"='lga', "state.y"="state", "zone.y"="zone"))
 w113$lga.x <- NULL
 w113$state.x <- NULL
 w113$zone.x <- NULL
 
-w113 <- subset(w113, select=c("photo", "state", "lga", "lga_id", "uuid"))
+w113 <- subset(w113, select=c("photo", "state", "lga", "lga_id", "uuid", "geocodeoffacility"))
 
 ## GENERAL ##
 #type#
@@ -125,5 +127,30 @@ w113$distribution_type <-
                               "Water Scheme, Source further than 1km",
          NA))))
 
-write.csv(w113, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Water_113_NMIS_Facility.csv", row.names=F)
-write.csv(cbind(w113, w113_raw), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Water_113_ALL_FACILITY_INDICATORS.csv", row.names=F)
+
+
+
+
+#Adding distant to every facility
+#combining calculated result back to original data
+###113
+nm_113 <- names(w113_raw)[! names(w113_raw) %in% names(w113)]
+nm_113 <- c(nm_113, "uuid")
+w_113_left <- subset(w113_raw, select=nm_113)
+rm(nm_113)
+
+w113 <- lga_boudary_dist(w113, gps_col="geocodeoffacility")
+water_113_comp <- w113
+w113_raw <- merge(w113, w_113_left, by="uuid")
+
+
+#Delete all those have dist >= 35 km
+water_113_comp <- subset(water_113_comp, dist_fake <= 35 | is.na(dist_fake))
+w113_raw <- subset(w113_raw, dist_fake <= 35 | is.na(dist_fake))
+
+
+
+
+
+write.csv(water_113_comp, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Water_113_NMIS_Facility.csv", row.names=F)
+write.csv(w113_raw, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Water_113_ALL_FACILITY_INDICATORS.csv", row.names=F)
