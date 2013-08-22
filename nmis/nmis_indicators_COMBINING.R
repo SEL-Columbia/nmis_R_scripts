@@ -1,6 +1,7 @@
 ##combining 661/113/pilot facility level scripts##
 library(plyr)
 source("source_scripts/NMIS_Utils.R")
+source("source_scripts/NMIS_Functions.R")
 
 ######################################################################################
 ##EDUCATION###########################################################################
