@@ -73,4 +73,4 @@ lgaw_facilities <- ddply(w113, .(lga_id),
 ##########################
 
 lga_w113_all <- lgaw_facilities
-write.csv(lga_w113_all, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Water_LGA_level_113.csv", row.names=F)
+write.csv(x_y_killa(lga_w113_all), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Water_LGA_level_113.csv", row.names=F)

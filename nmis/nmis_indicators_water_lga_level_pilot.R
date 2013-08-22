@@ -72,7 +72,7 @@ lgaw_facilities <- ddply(wpilot, .(lga_id),
 ##########################
 
 lga_wpilot_all <- lgaw_facilities
-write.csv(lga_wpilot_all, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Water_LGA_level_pilot.csv", row.names=F)
+write.csv(x_y_killa(lga_wpilot_all), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Water_LGA_level_pilot.csv", row.names=F)
 
 
 

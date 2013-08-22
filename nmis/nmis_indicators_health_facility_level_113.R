@@ -199,7 +199,7 @@ h_113 <- subset(h_113, dist_fake <= 35 | is.na(dist_fake))
 
 
 #writing out
-write.csv(health_113_comp, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Health_113_NMIS_Facility.csv", row.names=F)
-write.csv(h_113, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Health_113_ALL_FACILITY_INDICATORS.csv", row.names=F)
+write.csv(x_y_killa(health_113_comp), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Health_113_NMIS_Facility.csv", row.names=F)
+write.csv(x_y_killa(h_113), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Health_113_ALL_FACILITY_INDICATORS.csv", row.names=F)
 
 
