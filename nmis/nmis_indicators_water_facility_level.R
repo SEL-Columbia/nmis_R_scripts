@@ -159,10 +159,10 @@ w_661 <- subset(w_661, dist_fake <= 35 | is.na(dist_fake))
 
 
 
-write.csv(water_661_comp, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Water_661_NMIS_Facility.csv", row.names=F)
+write.csv(x_y_killa(water_661_comp), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Water_661_NMIS_Facility.csv", row.names=F)
 
 w_661$water_point_type.y <- NULL
 w_661$pay_for_water_yn.y <- NULL
 
-write.csv(w_661, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Water_661_ALL_FACILITY_INDICATORS.csv", row.names=F)
+write.csv(x_y_killa(w_661), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Water_661_ALL_FACILITY_INDICATORS.csv", row.names=F)
 

@@ -53,10 +53,27 @@ icount <- function(predicate) {
     else { 0 }
 }
 
+x_y_killa <- function(merged) {
+  #getting rid of all .y's, and renaming .x's to no_x
+  col_remove = grep("\\.y$", colnames(merged))
+  print(paste(length(grep("\\.y$", colnames(merged))), " columns has .y's were changed"))
+  print(paste(length(grep("\\.x$", colnames(merged))), " columns has .x's were changed"))
+  if (length(col_remove) > 0) {
+    merged <- merged[,-col_remove]    
+  }
+  colnames(merged) <- gsub("\\.x$", "", colnames(merged))
+  print(length(which(duplicated(colnames(merged)))))
+  merged <- merged[,!duplicated(colnames(merged))]
+  return(merged)
+}
+
 ratio <- function(numerator_col, denominator_col, filter) {
     df <- data.frame(cbind(num=numerator_col, den=denominator_col))
     df <- na.omit(df[filter,])
-    if (nrow(df) == 0) NA else sum(df$num) / sum(df$den)
+    if (nrow(df) == 0 | sum(df$den) == 0){
+        return(NA)
+    }
+    return(sum(df$num) / sum(df$den))
 }
 
 any_na.rm <- function(vec) {any(vec, na.rm=T)}

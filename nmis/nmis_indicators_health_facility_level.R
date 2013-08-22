@@ -361,7 +361,7 @@ health_661_comp <- subset(health_661_comp, dist_fake <= 35 | is.na(dist_fake))
 h_661 <- subset(h_661, dist_fake <= 35 | is.na(dist_fake))
 
 
-write.csv(health_661_comp, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Health_661_NMIS_Facility.csv", row.names=F)
-write.csv(h_661, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Health_661_ALL_FACILITY_INDICATORS.csv", row.names=F)
+write.csv(x_y_killa(health_661_comp), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Health_661_NMIS_Facility.csv", row.names=F)
+write.csv(x_y_killa(h_661), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Health_661_ALL_FACILITY_INDICATORS.csv", row.names=F)
 
 
