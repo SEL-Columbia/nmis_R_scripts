@@ -12,18 +12,19 @@ source("source_scripts/NMIS_Functions.R")
 # wpilot$lga.y <- NULL
 # wpilot$state.y <- NULL
 
-wpilot <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Water_pilot_outliercleaned.csv")
+wpilot <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Water_pilot_outliercleaned.csv", 
+                   stringsAsFactors=F)
 
 wpilot <- subset(wpilot, subset=(geocodeoffacility != "n/a")) # REMOVING ALL FACILITIES WITHOUT GEO CODE
 wpilot$uuid <- sapply(paste(wpilot$geocodeoffacility, wpilot$photo), FUN=digest)
 wpilot <- subset(wpilot, !duplicated(wpilot$uuid))
-wpilot <- boundary_clean(wpilot, "state", "geocodeoffacility")
+
 
 # OUTPUT SHOULD BE 0
 anyDuplicated(wpilot$uuid)
 
 
-wp <- subset(wpilot, select=c("photo", "state", "lga", "lga_id", "uuid"))
+wp <- subset(wpilot, select=c("photo", "state", "lga", "lga_id", "uuid", "geocodeoffacility"))
 
 ## GENERAL ##
 ####type note that 210 NAs on water source type could be fixed by hand with photo verification
@@ -117,6 +118,30 @@ wp$distribution_type <-
                               "Water Scheme, Source further than 1km",
                               NA))))
 
-write.csv(wp, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Water_pilot_NMIS_Facility.csv", row.names=F)
-write.csv(cbind(wp, wpilot), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Water_pilot_ALL_FACILITY_INDICATORS.csv", row.names=F)
+
+
+
+#Adding distant to every facility
+#combining calculated result back to original data
+###113
+nm_p <- names(wpilot)[! names(wpilot) %in% names(wp)]
+nm_p <- c(nm_p, "uuid")
+w_p_left <- subset(wpilot, select=nm_p)
+rm(nm_p)
+
+wp <- lga_boudary_dist(wp, gps_col="geocodeoffacility")
+water_p_comp <- wp
+wpilot <- merge(wp, w_p_left, by="uuid")
+
+
+#Delete all those have dist >= 35 km
+water_p_comp <- subset(water_p_comp, dist_fake <= 35 | is.na(dist_fake))
+wpilot <- subset(wpilot, dist_fake <= 35 | is.na(dist_fake))
+
+
+
+
+
+write.csv(water_p_comp, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Water_pilot_NMIS_Facility.csv", row.names=F)
+write.csv(wpilot, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Water_pilot_ALL_FACILITY_INDICATORS.csv", row.names=F)
 

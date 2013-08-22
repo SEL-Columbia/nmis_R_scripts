@@ -206,6 +206,19 @@ lga_boudary_dist <- function(df, gps_col)
     lat <- as.numeric(unlist(lapply(gps, function(x) x[1])))
     long <- as.numeric(unlist(lapply(gps, function(x) x[2])))
 
+    #Error handling kick out records with unvalid gps values like 'None'
+    idx <- which(!(is.na(lat) | is.na(lat)))
+    if (length(idx) != 0)
+    {
+        warning(paste(length(which(is.na(lat) | is.na(lat))),
+                      'facility has invalid gps value, 
+                      and records dropped from data', sep=''))
+    }
+    df <- df[idx,]
+    lat <- lat[idx]
+    long <- long[idx]
+    rm(idx)
+        
     #Create spatial_point with lat&long 
     hxy <- cbind(long, lat)
 

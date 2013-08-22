@@ -2,12 +2,26 @@ source("base_scripts/InstallFormhub.R")
 source("source_scripts/NMIS_Functions.R")
 
 
-w <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Water_661_999Cleaned_Reclassified.csv")
+w <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Water_661_999Cleaned_Reclassified.csv", stringsAsFactors=F)
 ###THE INPUT FILE WAS CREATED FROM Water_reclassify_photos.R and includes all 661 LGAs, even though only 148 were reclassified
 
 #create smaller dataset 
 w$`_id` <- w$uuid
 water <- subset(w, select=c("_id", "uuid", "lga", "state", "zone", "lga_id", "gps", "formhub_photo_id", "unique_lga", "photo"))
+
+
+nm_661 <- names(w)[! names(w) %in% names(water)]
+nm_661 <- c(nm_661, "uuid")
+w_661_left <- subset(w, select=nm_661)
+rm(nm_661)
+
+
+
+
+
+
+
+
 
 ## GENERAL ##
 
@@ -127,12 +141,28 @@ water$distribution_type <-
          "Water Scheme, Source further than 1km",
       NA))))
 
-write.csv(water, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Water_661_NMIS_Facility.csv", row.names=F)
-water <- subset(water, select=c('water_point_type', 'is_improved', 'functional', 'lift_mechanism', 'breakdown', 'pay_for_water_yn','distribution_type'))
-w$water_point_type <- NULL
-w$pay_for_water_yn <- NULL
-w_nmis <- cbind(water,w)
 
 
-write.csv(boundary_clean(w_nmis, "mylga_state", gps_col="gps"), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Water_661_ALL_FACILITY_INDICATORS.csv", row.names=F)
+
+
+
+#Adding distant to every facility
+#combining calculated result back to original data
+water <- lga_boudary_dist(water, gps_col="gps")
+water_661_comp <- water
+w_661 <- merge(water, w_661_left, by="uuid")
+
+
+#Delete all those have dist >= 35 km
+water_661_comp <- subset(water_661_comp, dist_fake <= 35 | is.na(dist_fake))
+w_661 <- subset(w_661, dist_fake <= 35 | is.na(dist_fake))
+
+
+
+write.csv(water_661_comp, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Water_661_NMIS_Facility.csv", row.names=F)
+
+w_661$water_point_type.y <- NULL
+w_661$pay_for_water_yn.y <- NULL
+
+write.csv(w_661, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Water_661_ALL_FACILITY_INDICATORS.csv", row.names=F)
 
