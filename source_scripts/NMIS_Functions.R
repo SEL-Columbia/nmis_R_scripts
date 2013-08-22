@@ -55,11 +55,11 @@ icount <- function(predicate) {
 
 x_y_killa <- function(merged) {
   #getting rid of all .y's, and renaming .x's to no_x
-  col_remove = grep(".y$", colnames(merged))
-  print(paste(length(grep(".y$", colnames(merged))), " columns has .y's were changed"))
-  print(paste(length(grep(".x$", colnames(merged))), " columns has .x's were changed"))
+  col_remove = grep("\\.y$", colnames(merged))
+  print(paste(length(grep("\\.y$", colnames(merged))), " columns has .y's were changed"))
+  print(paste(length(grep("\\.x$", colnames(merged))), " columns has .x's were changed"))
   merged <- merged[,-col_remove]
-  colnames(merged) <- gsub(".x$", "", colnames(merged))
+  colnames(merged) <- gsub("\\.x$", "", colnames(merged))
   print(length(which(duplicated(colnames(merged)))))
   merged <- merged[,!duplicated(colnames(merged))]
   return(merged)
