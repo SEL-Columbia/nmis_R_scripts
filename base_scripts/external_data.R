@@ -29,6 +29,18 @@ hiv_b <- merge(hiv, ref, by.x=c('state', 'lg'), by.y=c('state_hnlss', 'lg_hnlss'
 hiv_b<- rename(hiv_b, c("LGA_id" = "lga_id"))
 hiv_tested <- subset(hiv_b, !is.na(hiv_b$lga_id), select=c('lga_id', 'p_tested'))
 
+#Read net_enroll_na_fixed
+net_enroll_na <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external data/source_data/net enrollment NA fixed.csv")
+net_enroll_JS <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external data/source_data/net_enroll_JS_male female.csv")
+other_edu <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external data/source_data/Other edu indicators.csv")
+
+net_enroll_na <- subset(net_enroll_na, select=-c(state, LGA))
+net_enroll_JS <- subset(net_enroll_JS, select=-c(state, LGA))
+other_edu <- subset(other_edu, select=-c(X, lga, state, LGA))
+
+net_enroll_na<- rename(net_enroll_na, c("LGA_id" = "lga_id"))
+net_enroll_JS<- rename(net_enroll_JS, c("LGA_id" = "lga_id"))
+other_edu<- rename(other_edu, c("LGA_id" = "lga_id"))
 
 #########################
 ####### primary #########
@@ -147,9 +159,13 @@ final_merged <- subset(final_merged, !is.na(hiv_b$lga_id), select=-c(state, lg))
 ######################################
 final_total <- merge(final_merged, hiv_tested, by='lga_id', all=T)
 final_total <- merge(final_total, skilled_birth, by='lga_id', all=T)
+final_total <- merge(final_total, net_enroll_na, by='lga_id', all=T)
+final_total <- merge(final_total, net_enroll_JS, by='lga_id', all=T)
+final_total <- merge(final_total, other_edu, by='lga_id', all=T)
+
+
 final_total <- subset(final_total, !is.na(lga_id) & lga_id %in% 1:774 & !duplicated(lga_id))
 
 write.csv(final_total, '~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external data/output_data/external_data.csv')
-
 
 
