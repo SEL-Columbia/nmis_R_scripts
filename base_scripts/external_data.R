@@ -166,6 +166,6 @@ final_total <- merge(final_total, other_edu, by='lga_id', all=T)
 
 final_total <- subset(final_total, !is.na(lga_id) & lga_id %in% 1:774 & !duplicated(lga_id))
 
-write.csv(final_total, '~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/output_data/external_data.csv')
+write.csv(final_total, '~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/output_data/external_data.csv', row.names=F)
 
 

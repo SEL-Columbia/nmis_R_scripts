@@ -92,7 +92,7 @@ write.csv(combined_774_lga_WATER, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data C
 external <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/output_data/external_data.csv", stringsAsFactors=F)
 
 #combining all
-edu_external <- merge(combined_774_lga_EDU, external, by.x="lga_id", by.y="LGA_id", all.y=T)
+edu_external <- merge(combined_774_lga_EDU, external, by.x="lga_id", by.y="lga_id", all.y=T)
 health_ed_ex <- merge(edu_external, combined_774_lga_H, by="lga_id", all.x=T) 
 water_h_ed_ex <- merge(health_ed_ex, combined_774_lga_WATER, by="lga_id", all.x=T)
 #organizing
