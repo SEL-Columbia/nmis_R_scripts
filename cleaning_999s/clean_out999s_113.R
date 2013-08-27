@@ -71,6 +71,21 @@ h$medication_price <- as.numeric(h$medication_price)
 cellst(h, 'inpatient_stay_price',
        which(h$inpatient_stay_price > 5000), NA_integer_)
 
+h$days_facility_inacsble_pastyr<- as.numeric(h$days_facility_inacsble_pastyr)
+h$days_no_electricity <- as.numeric(h$days_no_electricity)   
+h$days_no_water_pastmth <- as.numeric(h$days_no_water_pastmth)
+h$days_no_potable_water_pastmth <- as.numeric(h$days_no_potable_water_pastmth)
+h$flush_toilet_number <- as.numeric(h$flush_toilet_number)
+h$flush_toilet_not_working <- as.numeric(h$flush_toilet_not_working)
+h$open_pit_latrine_number <- as.numeric(h$open_pit_latrine_number)
+h$open_pit_latrine_not_working <- as.numeric(h$open_pit_latrine_not_working)
+h$times_trash_disposed_lastmth <- as.numeric(h$times_trash_disposed_lastmth)
+h$days_facility_understaffed <- as.numeric(h$days_facility_understaffed)
+h$days_facility_understaffed_close <- as.numeric(h$days_facility_understaffed_close)
+h$routine_visit_price <- as.numeric(h$routine_visit_price)
+h$child_health_services_price <- as.numeric(h$child_health_services_price)
+h$hiv_treatment_price <- as.numeric(h$hiv_treatment_price)
+
 #WRITING OUT
 write.csv(h, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Health_113_999Cleaned.csv", row.names=F)
 
@@ -128,6 +143,10 @@ e$vip_latrine_not_working <- as.numeric(e$vip_latrine_not_working)
 
 e$slab_pit_latrine_number <- as.numeric(e$slab_pit_latrine_number)
 
+cellst(e, 'slab_pit_latrine_number',
+       which(e$slab_pit_latrine_number >= 9999), NA_integer_)
+
+
 e$slab_pit_latrine_not_working <- as.numeric(e$slab_pit_latrine_not_working)
 
 e$open_pit_latrine_number <- as.numeric(e$open_pit_latrine_number)
@@ -156,6 +175,9 @@ e$num_tchrs_male_part_time <- as.numeric(e$num_tchrs_male_part_time)
 e$num_tchrs_female_full_time <- as.numeric(e$num_tchrs_female_full_time)
 
 e$num_tchrs_female_part_time <- as.numeric(e$num_tchrs_female_part_time)
+
+cellst(e, 'num_tchrs_female_part_time',
+       which(e$num_tchrs_female_part_time >= 999), NA_integer_)
 
 e$tchrs_male_below_ssce <- as.numeric(e$tchrs_male_below_ssce)
 cellst(e, 'tchrs_male_below_ssce',which(e$tchrs_male_below_ssce >900), NA_integer_) 
@@ -274,21 +296,31 @@ e$annual_budget_amt_received <- as.numeric(e$annual_budget_amt_received)
 
 e$num_tchrs_paid_fed_gov <- as.numeric(e$num_tchrs_paid_fed_gov)
 
+cellst(e, 'num_tchrs_paid_fed_gov',
+       which(e$num_tchrs_paid_fed_gov >= 9999), NA_integer_)
+
 e$num_tchrs_payrl_st_gov <- as.numeric(e$num_tchrs_payrl_st_gov)
-cellst(e, 'num_tchrs_payrl_st_gov', which(e$num_tchrs_payrl_st_gov > 8000), NA_integer_)
+cellst(e, 'num_tchrs_payrl_st_gov', which(e$num_tchrs_payrl_st_gov >= 9999), NA_integer_)
 
 e$num_tchrs_othr_payrl_st_gov <- as.numeric(e$num_tchrs_othr_payrl_st_gov)
+cellst(e, 'num_tchrs_othr_payrl_st_gov',
+       which(e$num_tchrs_othr_payrl_st_gov >= 999), NA_integer_)
 
 e$num_tchrs_paid_loc_gov <- as.numeric(e$num_tchrs_paid_loc_gov)
+cellst(e, 'num_tchrs_paid_loc_gov',
+       which(e$num_tchrs_paid_loc_gov >= 999), NA_integer_)
 
 e$num_tchrs_paid_prvt_for_profit <- as.numeric(e$num_tchrs_paid_prvt_for_profit)
+cellst(e, 'num_tchrs_paid_prvt_for_profit',
+       which(e$num_tchrs_paid_prvt_for_profit >= 999), NA_integer_)
 
 e$num_tchrs_paid_prvt_non_profit <- as.numeric(e$num_tchrs_paid_prvt_non_profit)
 
 e$num_tchrs_paid_other_src <- as.numeric(e$num_tchrs_paid_other_src)
-cellst(e, 'num_tchrs_paid_other_src', which(e$num_tchrs_paid_other_src > 10000), NA_integer_) #one extreme value
+cellst(e, 'num_tchrs_paid_other_src', which(e$num_tchrs_paid_other_src == 999|e$num_tchrs_paid_other_src == 9999), NA_integer_) #999 and 9999
 
 e$num_tchrs_no_salary <- as.numeric(e$num_tchrs_no_salary)
+cellst(e, 'num_tchrs_no_salary', which(e$num_tchrs_no_salary >= 999), NA_integer_)
 
 e$num_students_scholarship <- as.numeric(e$num_students_scholarship)
 cellst(e, 'num_students_scholarship', which(e$num_students_scholarship > 9000), NA_integer_)
@@ -308,10 +340,10 @@ e$num_classrms_good_cond <- as.numeric(e$num_classrms_good_cond)
 cellst(e, 'num_classrms_good_cond', which(e$num_classrms_good_cond == 999), NA_integer_)
 
 e$num_classrms_need_min_repairs <- as.numeric(e$num_classrms_need_min_repairs)
-cellst(e, 'num_classrms_need_min_repairs', which(e$num_classrms_need_min_repairs == 999), NA_integer_)
+cellst(e, 'num_classrms_need_min_repairs', which(e$num_classrms_need_min_repairs >= 999), NA_integer_)
 
 e$num_classrms_need_maj_repairs <- as.numeric(e$num_classrms_need_maj_repairs)
-cellst(e, 'num_classrms_need_maj_repairs', which(e$num_classrms_need_maj_repairs == 999), NA_integer_)
+cellst(e, 'num_classrms_need_maj_repairs', which(e$num_classrms_need_maj_repairs >= 999), NA_integer_)
 
 e$num_classrms_unused <- as.numeric(e$num_classrms_unused)
 cellst(e, 'num_classrms_unused', which(e$num_classrms_unused >= 999), NA_integer_)
@@ -386,6 +418,8 @@ cellst(e,'num_tchrs_attended_last_day', which(e$num_tchrs_attended_last_day < 0)
 
 e$num_textbooks_pry_sci <- as.numeric(e$num_textbooks_pry_sci)
 
+e$grid_months_broken <- as.numeric(e$grid_months_broken)
+cellst(e, 'grid_months_broken', which(e$grid_months_broken >= 9999), NA_integer_)
 
 #clearing columns (names start from 'pry~' or 'js~')
 
