@@ -16,11 +16,12 @@ L=_LGA_level
 NF=NMIS_Facility.csv
 AF=ALL_FACILITY_INDICATORS.csv
 #R=echo "\n"; echo
+EXT=$(DROPBOX)/external_data
 
 all: $(N7)/Education$(L)_774.csv $(N7)/Health$(L)_774.csv $(N7)/Water$(L)_774.csv $(N7)/Education_774_$(NF) $(N7)/Health_774_$(NF) $(N7)/Water_774_$(NF)
 
 # external data
-$(DROPBOX)/external data/output_data/external_data.csv: $(DROPBOX)/external data/source_data/*
+$(EXT)/output_data/external_data.csv: base_scripts/external_data.R
 	$(R) base_scripts/external_data.R /dev/tty
 
 # merging -- 661
@@ -37,7 +38,7 @@ $(IN_PROC)/999cleaned/Water_661_999Cleaned_Reclassified.csv: $(IN_PROC)/999clean
 	$(R) scripts/Water_reclassify_photos.R /dev/tty
 
 # combine to 774 -- health
-$(N7)/Education$(L)_774.csv $(N7)/Education_774_$(NF) $(N7)/Health$(L)_774.csv $(N7)/Health_774_$(NF) $(N7)/Water$(L)_774.csv $(N7)/Water_774$(NF): $(N6)/Health_661_$(NF) $(N1)/Health_113_$(NF) $(NP)/Health_Pilot_$(NF) $(N6)/Health$(L)_661.csv $(N1)/Health$(L)_113.csv $(NP)/Health$(L)_Pilot.csv $(N6)/Education_661_$(NF) $(N1)/Education_113_$(NF) $(NP)/Education_Pilot_$(NF) $(N6)/Education$(L)_661.csv $(N1)/Education$(L)_113.csv $(NP)/Education$(L)_Pilot.csv $(N6)/Water_661_$(NF) $(N1)/Water_113_$(NF) $(NP)/Water_Pilot_$(NF) $(N6)/Water$(L)_661.csv $(N1)/Water$(L)_113.csv $(NP)/Water$(L)_Pilot.csv $(n)COMBINING.R
+$(N7)/Education$(L)_774.csv $(N7)/Education_774_$(NF) $(N7)/Health$(L)_774.csv $(N7)/Health_774_$(NF) $(N7)/Water$(L)_774.csv $(N7)/Water_774$(NF): $(N6)/Health_661_$(NF) $(N1)/Health_113_$(NF) $(NP)/Health_Pilot_$(NF) $(N6)/Health$(L)_661.csv $(N1)/Health$(L)_113.csv $(NP)/Health$(L)_Pilot.csv $(N6)/Education_661_$(NF) $(N1)/Education_113_$(NF) $(NP)/Education_Pilot_$(NF) $(N6)/Education$(L)_661.csv $(N1)/Education$(L)_113.csv $(NP)/Education$(L)_Pilot.csv $(N6)/Water_661_$(NF) $(N1)/Water_113_$(NF) $(NP)/Water_Pilot_$(NF) $(N6)/Water$(L)_661.csv $(N1)/Water$(L)_113.csv $(NP)/Water$(L)_Pilot.csv $(EXT)/output_data/external_data.csv $(n)COMBINING.R
 	$(R) $(n)COMBINING.R /dev/tty
 # lga aggregations -- health -- 661 + 113 + pilot
 $(N6)/Health$(L)_661.csv: $(N6)/Health_661_$(AF) $(n)health$(l).R

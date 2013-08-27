@@ -14,25 +14,25 @@ rm(re_lib, required_library)
 
 
 # load hnlss lga state mapping data
-ref <- read.xls("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external data/source_data/Nigeria Master Codes_SP.xlsx")
+ref <- read.xls("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/source_data/Nigeria Master Codes_SP.xlsx")
 ref <- ref[,c("LGA_id", "lg_hnlss", "state_hnlss")]
 
 #Read skilled birth data and add lga id
-skilled <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external data/source_data/08_Skilled_Birth.csv") 
+skilled <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/source_data/08_Skilled_Birth.csv") 
 skilled_b <- merge(skilled, ref, by.x=c('state', 'lg'), by.y=c('state_hnlss', 'lg_hnlss'), all=T)
 skilled_b<- rename(skilled_b, c("LGA_id" = "lga_id"))
 skilled_birth <- subset(skilled_b,  !is.na(skilled_b$lga_id), select=c('lga_id', 'p_births'))
 
 #Read hiv tested data and add lga id
-hiv <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external data/source_data/10_HIV_Tested.csv")
+hiv <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/source_data/10_HIV_Tested.csv")
 hiv_b <- merge(hiv, ref, by.x=c('state', 'lg'), by.y=c('state_hnlss', 'lg_hnlss'), all=T)
 hiv_b<- rename(hiv_b, c("LGA_id" = "lga_id"))
 hiv_tested <- subset(hiv_b, !is.na(hiv_b$lga_id), select=c('lga_id', 'p_tested'))
 
 #Read net_enroll_na_fixed
-net_enroll_na <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external data/source_data/net enrollment NA fixed.csv")
-net_enroll_JS <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external data/source_data/net_enroll_JS_male female.csv")
-other_edu <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external data/source_data/Other edu indicators.csv")
+net_enroll_na <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/source_data/net enrollment NA fixed.csv")
+net_enroll_JS <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/source_data/net_enroll_JS_male female.csv")
+other_edu <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/source_data/Other edu indicators.csv")
 
 net_enroll_na <- subset(net_enroll_na, select=-c(state, LGA))
 net_enroll_JS <- subset(net_enroll_JS, select=-c(state, LGA))
@@ -46,7 +46,7 @@ other_edu<- rename(other_edu, c("LGA_id" = "lga_id"))
 ####### primary #########
 #########################
 # Load hnlss data
-sec_2 <- read.dta("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external data/source_data/section_2.dta") 
+sec_2 <- read.dta("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/source_data/section_2.dta") 
 # select records with age == 6-11,  s2a07== 11-16 (primary)
 age_6_11<- sec_2[which(sapply(sec_2[,c("age")], 
                  function(x) any(x == c(6:11)))),c("lga","lg", "stlga","age","state")]
@@ -101,7 +101,7 @@ literacy$literacy_rate <- (literacy[,"count_liter"]/literacy[,"count_age"])
 ####### WATER/SANITATION ########
 ##############################
 
-sec_6 <- read.dta("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external data/source_data/hh_final.dta")
+sec_6 <- read.dta("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/source_data/hh_final.dta")
 #select only records with improved water == 1:5 | 7
 water_improved <- sec_6[which(sapply(as.numeric(sec_6[,c("s6f4a")]), 
                                      function(x) any(x == c(1:5,7)))),
@@ -166,6 +166,6 @@ final_total <- merge(final_total, other_edu, by='lga_id', all=T)
 
 final_total <- subset(final_total, !is.na(lga_id) & lga_id %in% 1:774 & !duplicated(lga_id))
 
-write.csv(final_total, '~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external data/output_data/external_data.csv')
+write.csv(final_total, '~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/output_data/external_data.csv')
 
 
