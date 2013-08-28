@@ -31,6 +31,7 @@ merge_non_redundant <- function(df1, df2, by, by.x=NA, by.y=NA, printDropped=F, 
 merge_strict <- function(df1, df2, ...) {
   merged <- merge(df1, df2, ...)
   stopifnot(all(names(merged) %in% c(names(df1), names(df2))))
+  merged
 }
 
 bool_proportion <- function(numerator_TF, denominator_TF) {
