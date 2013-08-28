@@ -42,6 +42,10 @@ net_enroll_na<- rename(net_enroll_na, c("LGA_id" = "lga_id"))
 net_enroll_JS<- rename(net_enroll_JS, c("LGA_id" = "lga_id"))
 other_edu<- rename(other_edu, c("LGA_id" = "lga_id"))
 
+#fix the transition rate by divide by 100
+other_edu$transition_rate_primary_to_js1_male = other_edu$transition_rate_primary_to_js1_male / 100
+other_edu$transition_rate_primary_to_js1_female = other_edu$transition_rate_primary_to_js1_female / 100
+
 #########################
 ####### primary #########
 #########################
