@@ -9,53 +9,39 @@ w <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_d
 w$`_id` <- w$uuid
 water <- subset(w, select=c("_id", "uuid", "lga", "state", "zone", "lga_id", "gps", "formhub_photo_id", "unique_lga", "photo"))
 
-
-nm_661 <- names(w)[! names(w) %in% names(water)]
-nm_661 <- c(nm_661, "uuid")
-w_661_left <- subset(w, select=nm_661)
-rm(nm_661)
-
-
-
-
-
-
-
-
-
 ## GENERAL ##
 
 #type#
 water$water_point_type <- 
-  ifelse(w$water_point_type == "handpump",
-         "Handpump",
-         ifelse(w$water_point_type %in% c('ten_thousand_overhead', 'ten_thousand_ovehead'),
-                "Overhead Tank (10,000)",
-                ifelse(w$water_point_type == "one_thousand_overhead",
-                       "Overhead Tank (1,000)",
-                ifelse(w$water_point_type == "unimproved",
-                       "Unimproved",
-                       ifelse(w$water_point_type == "tap",
-                              "Tap",
-                              ifelse(w$water_point_type == "rainwater",
-                                     "Rainwater Harvesting System",
-                                     ifelse(w$water_scheme_type =="outlet",
-                                            "Tap",
-                                            ifelse(w$water_scheme_type == "dk",
-                                                   "Don't Know",
-                                                   ifelse(w$water_source_type == "dk",
-                                                          "Don't Know",
-                                                          ifelse(w$water_source_type == "borehole_tube_well",
-                                                                 "Borehole",
-                                                                 ifelse(w$water_source_type == "rainwater_harvesting_scheme",
-                                                                        "Unimproved",
-                                                                        ifelse(w$water_source_type =="dam",
-                                                                               "Untreated Surface Water",
-                                                                               ifelse(w$water_source_type == "developed_protected_spring_water",
-                                                                                      "Unprotected Spring",
-                                                                                      ifelse(w$water_source_type %in% c('protected_dug_well', 'unprotected_dug_well'),
-                                                                                             "Unimproved Well",
-                                                                                             NA))))))))))))))
+        ifelse(w$water_point_type == "handpump",
+            "Handpump",
+        ifelse(w$water_point_type %in% c('ten_thousand_overhead', 'ten_thousand_ovehead'),
+            "Overhead Tank (10,000)",
+        ifelse(w$water_point_type == "one_thousand_overhead",
+            "Overhead Tank (1,000)",
+        ifelse(w$water_point_type == "unimproved",
+            "Unimproved",
+        ifelse(w$water_point_type == "tap",
+            "Tap",
+        ifelse(w$water_point_type == "rainwater",
+            "Rainwater Harvesting System",
+        ifelse(w$water_scheme_type =="outlet",
+            "Tap",
+        ifelse(w$water_scheme_type == "dk",
+            "Don't Know",
+        ifelse(w$water_source_type == "dk",
+            "Don't Know",
+        ifelse(w$water_source_type == "borehole_tube_well",
+            "Borehole",
+        ifelse(w$water_source_type == "rainwater_harvesting_scheme",
+            "Unimproved",
+        ifelse(w$water_source_type =="dam",
+            "Untreated Surface Water",
+        ifelse(w$water_source_type == "developed_protected_spring_water",
+            "Unprotected Spring",
+        ifelse(w$water_source_type %in% c('protected_dug_well', 'unprotected_dug_well'),
+            "Unimproved Well",
+            NA))))))))))))))
 
 water$Classification <-w$Classification
 water$water_source_type <- w$water_source_type
@@ -142,12 +128,16 @@ water$distribution_type <-
       NA))))
 
 
-
-
-
-
 #Adding distant to every facility
 #combining calculated result back to original data
+
+# make w_661_left: all the data that was not selected into the water dataset + uuid
+nm_661 <- names(w)[! names(w) %in% names(water)]
+nm_661 <- c(nm_661, "uuid")
+w_661_left <- subset(w, select=nm_661)
+rm(nm_661) #temporary variable
+
+# merge in
 water <- lga_boudary_dist(water, gps_col="gps")
 water_661_comp <- water
 w_661 <- merge(water, w_661_left, by="uuid")
@@ -159,10 +149,12 @@ w_661 <- subset(w_661, dist_fake <= 35 | is.na(dist_fake))
 
 
 
-write.csv(x_y_killa(water_661_comp), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Water_661_NMIS_Facility.csv", row.names=F)
+write.csv(x_y_killa(water_661_comp), 
+          "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Water_661_NMIS_Facility.csv", row.names=F)
 
 w_661$water_point_type.y <- NULL
 w_661$pay_for_water_yn.y <- NULL
 
-write.csv(x_y_killa(w_661), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Water_661_ALL_FACILITY_INDICATORS.csv", row.names=F)
+write.csv(x_y_killa(w_661), 
+          "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Water_661_ALL_FACILITY_INDICATORS.csv", row.names=F)
 

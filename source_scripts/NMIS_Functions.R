@@ -15,8 +15,12 @@ for (re_lib in required_library)
 
 rm(required_library, re_lib)
 
-
-
+# Merge two dataframes, dropping redundant columns in dataframe2 if necessary
+merge_without_redundant_columns(df1, df2, by) {
+  df2uniquecols <- names(df2)[! names(df2) %in% names(df1)]
+  df2unique <- df[,c(df2uniquecols, by)]
+  merge(df1, df2unique, by, ...)
+}
 
 bool_proportion <- function(numerator_TF, denominator_TF) {
     if(is.null(numerator_TF) | is.null(denominator_TF)) {

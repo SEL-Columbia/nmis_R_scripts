@@ -19,7 +19,7 @@ lgaw <- ddply(iw, .(lga_id), function(df) {
           c('Overhead Tank (1,000)', 'Overhead Tank (10,000)', 'Rainwater Harvesting System')),
       num_taps = icount(df$water_point_type == "Tap"),       
       num_handpumps = icount(df$water_point_type %in% c('Borehole', 'Handpump')),
-      num_unimproved_points = icount(df$is_improved),                                                    
+      num_unimproved_points = nrow(df) - icount(df$is_improved),                                                    
       num_total_water_points = nrow(df),
     #####Functionality#####
       percentage_functional_improved = 
