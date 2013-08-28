@@ -464,10 +464,6 @@ write.csv(e, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_da
 #####Water
 ##############
 # water -- no numerical questions (except for elevation...)
-w_113 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/113/Water_Baseline_PhaseII_all_merged_cleaned_2011Nov21.csv",
-                  stringsAsFactors=F, na.strings = c("NA", "n/a"))
-w_113$uuid <- sapply(paste(w_113$geo_id, w_113$photo), FUN=digest)
-# OUTPUT SHOULD BE 0
-anyDuplicated(w_113$uuid)
-
-write.csv(w_113, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Water_113_999Cleaned.csv", row.names=F)
+file.copy("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/113/Water_Baseline_PhaseII_all_merged_cleaned_2011Nov21.csv",
+          "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Water_113_999Cleaned.csv",
+          overwrite=T)
