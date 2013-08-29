@@ -19,7 +19,8 @@ AF=ALL_FACILITY_INDICATORS.csv
 EXT=$(DROPBOX)/external_data
 
 all: $(N7)/Education$(L)_774.csv $(N7)/Health$(L)_774.csv $(N7)/Water$(L)_774.csv $(N7)/Education_774_$(NF) $(N7)/Health_774_$(NF) $(N7)/Water_774_$(NF)
-test: tests/GeneralDataChecks.R tests/WaterSpecificChecks.R
+test: tests/GeneralDataChecks.R tests/WaterSpecificChecks.R tests/LGALevelTests.R
+	$(R) tests/LGALevelTests.R /dev/tty
 	$(R) tests/WaterSpecificChecks.R /dev/tty
 	$(R) tests/GeneralDataChecks.R /dev/tty
 
