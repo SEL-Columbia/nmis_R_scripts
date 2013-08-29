@@ -1,4 +1,4 @@
-R=R CMD BATCH --no-restore  --slave
+R=R CMD BATCH --no-restore
 N6=~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/in_process_data/nmis/data_661
 N1=~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/in_process_data/nmis/data_113
 NP=~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/in_process_data/nmis/data_pilot
@@ -19,6 +19,8 @@ AF=ALL_FACILITY_INDICATORS.csv
 EXT=$(DROPBOX)/external_data
 
 all: $(N7)/Education$(L)_774.csv $(N7)/Health$(L)_774.csv $(N7)/Water$(L)_774.csv $(N7)/Education_774_$(NF) $(N7)/Health_774_$(NF) $(N7)/Water_774_$(NF)
+test: tests/GeneralDataChecks.R
+	$(R) tests/GeneralDataChecks.R /dev/tty
 
 # external data
 $(EXT)/output_data/external_data.csv: base_scripts/external_data.R
