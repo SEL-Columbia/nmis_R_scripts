@@ -3,9 +3,12 @@
 source("source_scripts/NMIS_Functions.R")
 
 watpilot <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Water_pilot_ALL_FACILITY_INDICATORS.csv")
-wwpilot <- watpilot
-wpilot <- merge(wwpilot, subset(read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/lgas.csv"), select=c("lga_id", "pop_2006")), by.x="lga_id", by.y="lga_id", all.x=TRUE)
-wpilot <- rename(wpilot, c("pop_2006" = "Population"))
+
+# merge in population
+lgapops <- subset(read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/lgas.csv"), select=c("lga_id", "pop_2006"))
+watpilot <- merge_strict(lgapops, watpilot, by='lga_id')
+watpilot <- rename(watpilot, c("pop_2006" = "Population"))
+iwpilot <- idata.frame(watpilot)
 
 
 ####################
@@ -14,58 +17,41 @@ wpilot <- rename(wpilot, c("pop_2006" = "Population"))
 
 #####Type#####
 
-lgaw_facilities <- ddply(wpilot, .(lga_id),
-                    summarize, 
-                  num_improved_water_points = length(which(is_improved == 
-                                              "Yes")),
-                  num_taps = length(which(water_source_type ==
-                                              "Tap")),       
-                  num_handpumps = length(which(water_source_type ==
-                                              "Borehole")),
-                  num_unimproved_points = length(which(is_improved ==
-                                              "No")),                                                    
-                  num_total_water_points = length(which(is_improved %in%
-                                              c('Yes', 'No'))),
+lgaw_facilities <- ddply(iwpilot, .(lga_id), function(df) {
+  data.frame(
+    num_improved_water_points = icount(df$is_improved),
+    num_taps = icount(df$water_point_type == "Tap"),       
+    num_handpumps = icount(df$water_point_type %in% c('Borehole', 'Handpump')),
+    num_unimproved_points = icount(! df$is_improved),                                                    
+    num_total_water_points = nrow(df),
 
 #####Functionality#####
-                  percentage_functional_improved = 
-                    ratio(is_improved== "Yes" & functional== "Yes", is_improved== "Yes"),
-                  percentage_functional_taps =
-                    ratio(water_source_type== "Tap" & functional=="Yes", water_source_type== "Tap"),
-                  percentage_functional_handpumps =
-                    ratio(water_source_type== "Borehole" & is_improved == "Yes" & 
-                            functional == "Yes", water_source_type== "Borehole"),
+    percentage_functional_improved = 
+      ratio(df$is_improved & df$functional== "Yes", df$is_improved),
+    percentage_functional_taps =
+      ratio(df$water_point_type== "Tap" & df$functional =="Yes", df$water_point_type== "Tap"),
+    percentage_functional_handpumps =
+      ratio(df$water_point_type== "Handpump" & df$is_improved & df$functional == "Yes", df$water_point_type== "Handpump"),
 
-    
 #####Population Served#####National standard is 250 people per water point
 
-                    population_improved_water_points = 250*length(which(is_improved == 
-                              "Yes")),
-                    population_improved_functional_water_points = 250*length(which(is_improved ==
-                              "Yes" & functional == "Yes")),
-                    percentage_population_improved =
-                      ratio(250*length(which(is_improved == "Yes")), Population), 
-                    percentage_population_improved_functional =
-                      ratio(250*length(which(is_improved == "Yes" & functional == "Yes")), Population),
+    population_improved_water_points = 250 * icount(df$is_improved),
+    population_improved_functional_water_points = 250 * icount(df$is_improved & df$functional == "Yes"),
+    percentage_population_improved = ratio(250 * icount(df$is_improved), df$Population), 
+    percentage_population_improved_functional = ratio(250 * icount(df$is_improved & df$functional == "Yes"), df$Population),
                      
 
 #####Lift Mechanism Analysis#####Only available for the 62% of the sample that has lift mech data
 
-                  num_diesel = length(which(lift_mechanism == "Diesel")),
-                  
-                  percentage_diesel_functional =
-                    ratio(lift_mechanism == "Diesel" & functional == "Yes", lift_mechanism == "Diesel"),
-                 
-                  num_electric = length(which(lift_mechanism == "Electric")),
-                  
-                  percentage_electric_functional =
-                    ratio(lift_mechanism == "Electric" & functional == "Yes", lift_mechanism == "Electric"),
-                             
-                  num_solar = length(which(lift_mechanism == "Solar")),
-                             
-                  percentage_solar_functional =
-                    ratio(lift_mechanism == "Solar" & functional == "Yes", lift_mechanism == "Solar")
-)
+    num_diesel = icount(df$lift_mechanism == "Diesel"),
+    percentage_diesel_functional =
+        ratio(df$lift_mechanism == "Diesel" & df$functional == "Yes", df$lift_mechanism == "Diesel"),
+    num_electric = icount(df$lift_mechanism == "Electric"),
+    percentage_electric_functional =
+        ratio(df$lift_mechanism == "Electric" & df$functional == "Yes", df$lift_mechanism == "Electric"),                             
+    num_solar = icount(df$lift_mechanism == "Solar"),
+    percentage_solar_functional = ratio(df$lift_mechanism == "Solar" & df$functional == "Yes", df$lift_mechanism == "Solar")
+)})
 
 ##########################
 ###### SUMMING UP ########

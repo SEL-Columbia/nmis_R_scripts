@@ -4,7 +4,8 @@ source("source_scripts/NMIS_Functions.R")
 # slugs are at https://github.com/mvpdev/nmis/blob/develop/uis_r_us/indicators/overview.json
 
 library(plyr)
-w <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Water_661_ALL_FACILITY_INDICATORS.csv")
+w <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Water_661_ALL_FACILITY_INDICATORS.csv",
+              stringsAsFactors=F)
 iw <- idata.frame(w)
 
 ####################
@@ -19,7 +20,7 @@ lgaw <- ddply(iw, .(lga_id), function(df) {
           c('Overhead Tank (1,000)', 'Overhead Tank (10,000)', 'Rainwater Harvesting System')),
       num_taps = icount(df$water_point_type == "Tap"),       
       num_handpumps = icount(df$water_point_type %in% c('Borehole', 'Handpump')),
-      num_unimproved_points = icount(df$is_improved),                                                    
+      num_unimproved_points = nrow(df) - icount(df$is_improved),                                                    
       num_total_water_points = nrow(df),
     #####Functionality#####
       percentage_functional_improved = 
@@ -49,5 +50,5 @@ lga_water_all <- lgaw
 
 #adding ID info
 lgas <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/lgas.csv")
-lga_water_all <- merge(lga_water_all, lgas, by="lga_id")
-write.csv(x_y_killa(lga_water_all), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Water_LGA_level_661.csv")
+lga_water_all <- merge_strict(lga_water_all, lgas, by="lga_id")
+write.csv(lga_water_all, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Water_LGA_level_661.csv")

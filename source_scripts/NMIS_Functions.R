@@ -15,8 +15,24 @@ for (re_lib in required_library)
 
 rm(required_library, re_lib)
 
+# Merge two dataframes, dropping redundant columns in dataframe2 if necessary
+# note: by.x and by.y are not supported
+merge_non_redundant <- function(df1, df2, by, by.x=NA, by.y=NA, printDropped=F, ...) {
+  stopifnot(is.na(by.x) && is.na(by.y))
+  df2uniquecols <- names(df2)[! names(df2) %in% names(df1)]
+  df2unique <- df2[,c(df2uniquecols, by)]
+  if (printDropped) {
+    print(paste(c('Dropping columns during merge: ', names(df2)[names(df2) %in% names(df1)]), collapse=' '))
+  }
+  merge(df1, df2unique, by, ...)
+}
 
-
+# a version of merge that throws up an error if there are redundant columns
+merge_strict <- function(df1, df2, ...) {
+  merged <- merge(df1, df2, ...)
+  stopifnot(all(names(merged) %in% c(names(df1), names(df2))))
+  merged
+}
 
 bool_proportion <- function(numerator_TF, denominator_TF) {
     if(is.null(numerator_TF) | is.null(denominator_TF)) {
