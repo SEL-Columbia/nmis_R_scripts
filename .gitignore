@@ -5,3 +5,8 @@
 
 # Example code in package build process
 *-Ex.R
+
+# python
+*.pyc
+.idea/*
+.*.swp
