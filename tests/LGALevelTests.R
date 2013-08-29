@@ -6,8 +6,8 @@ library(stringr)
 # To run the test, with nmis_R_scripts as wd, type
 # test_file("tests/GeneralDataChecks.R")
 
-test_that("ratio indicators are between 0 and 1", {
-  proportion_indicators <- names(nmis_l)[str_detect(names(nmis_l), "ratio|percent|proportion")]
+test_that("percent indicators are between 0 and 1", {
+  proportion_indicators <- names(nmis_l)[str_detect(names(nmis_l), "percent|proportion")]
   expect_false(any(nmis_l[,proportion_indicators] < 0, na.rm=T))
   expect_false(any(nmis_l[,proportion_indicators] > 1, na.rm=T))
 })
