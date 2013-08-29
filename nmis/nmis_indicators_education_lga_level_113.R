@@ -52,7 +52,7 @@ lga_edu_data <- ddply(ie, .(lga_id), function(df) {
     teachers_qualified = sum(df$num_tchrs_with_nce, na.rm = TRUE),
     teachers_attended_training = sum(df$num_tchrs_attended_training, na.rm = TRUE),    
     txt_pupil_ratio = ratio(df$num_textbooks, df$num_students_total, df$pj),    
-    percent_teaching_guides = 100 * bool_proportion(df$teacher_guide_yn, TRUE),
+    percent_teaching_guides = bool_proportion(df$teacher_guide_yn, TRUE),
     schools_use_teaching_aids = icount(df$teacher_guide_yn == 'yes'),    
     num_primary_schools = icount(df$is_primary),
     num_junior_secondary_schools = icount(df$is_junior_secondary),    
