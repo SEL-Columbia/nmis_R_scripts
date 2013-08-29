@@ -35,3 +35,21 @@ test_that("lga, state, and unique_lga are standardized", {
     expect_true(all(df$unique_lga %in% lgas$unique_lga))
   })    
 })
+
+test_that("ratio indicators are between 0 and 1", {
+  foralldatasets(function(df) {
+    proportion_indicators <- names(nmis_l)[str_detect(names(nmis_l), "ratio|percent|proportion")]
+    expect_false(any(nmis_l[,proportion_indicators] < 0, na.rm=T))
+    expect_false(any(nmis_l[,proportion_indicators] > 1, na.rm=T))
+  })    
+})
+
+
+test_that("no indicator should be NA for more than 100 LGAs (no hard failure)", {
+  na_counts <- colwise(function(x) icount(is.na(x)))(nmis_l)
+  high_na_counts <- na_counts[,na_counts>100]
+  if(nrow(high_na_counts) > 0) {
+    print("The following indicators have high NA counts:",
+          high_na_counts) 
+  }
+})
