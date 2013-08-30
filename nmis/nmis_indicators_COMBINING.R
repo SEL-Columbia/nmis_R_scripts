@@ -101,12 +101,7 @@ water_h_ed_ex <- merge(health_ed_ex, combined_774_lga_WATER, by="lga_id", all.x=
 #selcol <- grep(".x$|.y$",colnames(water_h_ed_ex))
 #water_h_ed_ex <- water_h_ed_ex[-c(selcol)]
 
-lgas_ref <- read.csv('~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/lgas.csv',
-                     stringsAsFactors=F)
 
-drop_idx <- grep('(^state(\\.x|\\.y|)|^unique_lga(\\.x|\\.y|)|^lga(\\.x|\\.y|)|^zone(\\.x|\\.y|))$' , names(water_h_ed_ex))
-water_h_ed_ex <- subset(water_h_ed_ex, select=-drop_idx)
-rm(drop_idx)
-water_h_ed_ex <- merge(lgas_ref, water_h_ed_ex, by="lga_id")
+water_h_ed_ex <- x_y_merge_lga(water_h_ed_ex)
 
 write.csv(x_y_killa(water_h_ed_ex), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/All_774_LGA.csv", row.names=F)
