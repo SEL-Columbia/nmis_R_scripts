@@ -17,6 +17,7 @@ pilot <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_proce
 combined_113p <- rbind.fill(one13, pilot)
 combined_774 <- rbind.fill(six61, combined_113p)
 combined_774$sector <- "education"
+combined_774 <- x_y_merge_lga(combined_774,T)
 write.csv(combined_774, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/Education_774_NMIS_Facility.csv", row.names=F)
 
 ######################################################################################
@@ -35,6 +36,8 @@ pilot <- add_lga_id(pilot)
 combined_113p <- rbind.fill(one13, pilot)
 combined_774 <- rbind.fill(six61, combined_113p)
 combined_774$sector <- "health"
+
+combined_774 <- x_y_merge_lga(combined_774, T)
 write.csv(combined_774, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/Health_774_NMIS_Facility.csv", row.names=F)
 
 ######################################################################################
@@ -55,6 +58,7 @@ pilot <- add_lga_id(pilot, lgacolname="lga", statecolname="state")
 combined_113p <- rbind.fill(one13, pilot)
 combined_774 <- rbind.fill(six61, combined_113p)
 combined_774$sector <- "water"
+combined_774 <- x_y_merge_lga(combined_774, T)
 write.csv(combined_774, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/Water_774_NMIS_Facility.csv", row.names=F)
 
 ######################################################################################

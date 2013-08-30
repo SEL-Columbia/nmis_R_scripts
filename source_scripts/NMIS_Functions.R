@@ -43,6 +43,7 @@ x_y_merge_lga <- function(df, aggressive=F)
     lga_cols <- lga_cols[lga_cols %in% names(df)]
     
     id2<- which(names(df) %in% lga_cols)
+    warning(paste("Following columns will be dropped from the data.frame: \n"), paste(names(df)[id2], collapse=', '))
     id1 <- x_y_index(df, aggressive)
     drop_idx <- unique(c(id2, id1))
     df <- subset(df, select = -drop_idx)
