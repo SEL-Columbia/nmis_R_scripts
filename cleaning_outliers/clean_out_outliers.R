@@ -1,4 +1,5 @@
 source('base_scripts/InstallFormhub.R')
+source('source_scripts/NMIS_Functions.R')
 source('cleaning_outliers/outlier_functions.R')
 
 ###############################################################################################
@@ -163,21 +164,21 @@ e$ratio_pupil_science_js_textbook <- replace(e$manuals_js.num_science_textbook_j
           is.na(e$num_js_total_gender.num_js_total), 0)  
 
 e <- outlierreplace(e, 'manuals_pry.num_math_textbook_pry', 
-                    (e$ratio_pupil_math_pry_textbook > 10))
+                    between(e$ratio_pupil_math_pry_textbook, 10, Inf))
 e <- outlierreplace(e, 'manuals_pry.num_english_textbook_pry', 
-                    (e$ratio_pupil_english_pry_textbook > 10))
+                    between(e$ratio_pupil_english_pry_textbook , 10, Inf))
 e <- outlierreplace(e, 'manuals_pry.num_soc_science_textbook_pry', 
-                    (e$ratio_pupil_socscience_pry_textbook > 10))
+                    between(e$ratio_pupil_socscience_pry_textbook , 10, Inf))
 e <- outlierreplace(e, 'manuals_pry.num_science_textbook_pry', 
-                    (e$ratio_pupil_science_pry_textbook > 10))
+                    between(e$ratio_pupil_science_pry_textbook , 10, Inf))
 e <- outlierreplace(e, 'manuals_js.num_math_textbook_js', 
-                    (e$ratio_pupil_math_js_textbook > 10))
+                    between(e$ratio_pupil_math_js_textbook , 10, Inf))
 e <- outlierreplace(e, 'manuals_js.num_english_textbook_js', 
-                    (e$ratio_pupil_english_js_textbook > 10))
+                    between(e$ratio_pupil_english_js_textbook , 10, Inf))
 e <- outlierreplace(e, 'manuals_js.num_soc_science_textbook_js', 
-                    (e$ratio_pupil_socscience_js_textbook > 10))
+                    between(e$ratio_pupil_socscience_js_textbook , 10, Inf))
 e <- outlierreplace(e, 'manuals_js.num_science_textbook_js', 
-                    (e$ratio_pupil_science_js_textbook > 10))
+                    between(e$ratio_pupil_science_js_textbook , 10, Inf))
 
 #new data points
 
@@ -186,6 +187,7 @@ e <- outlierreplace(e, 'manuals_js.num_science_textbook_js',
 #                  (e$pupil_class_ratio < 5 | e$pupil_class_ratio > 150))
 #e <- outlierreplace(e, 'num_classrms_total', 
 #                   (e$pupil_class_ratio < 5 | e$pupil_class_ratio > 150))
+
 e <- outlierreplace(e, 'num_students_total_gender.num_students_female',
                     (e$num_students_total_gender.num_students_female > 11000))
 e <- outlierreplace(e, 'num_students_total_gender.num_students_female',
@@ -265,7 +267,7 @@ e <- outlierreplace(e, 'num_classrms_good_cond',
                     (e$num_classrms_good_cond > 260))                    
 #ratio/ combining other data points example
 #e <- outlierreplace(e, 'num_desks',
-#     (e$ratio_students_to_desks > 750))
+#     between(e$ratio_students_to_desks, 750, Inf))
 e <- outlierreplace(e, 'num_desks',
                     (e$num_desks > 2500))
 e <- outlierreplace(e, 'num_benches',
@@ -298,15 +300,14 @@ e <- outlierreplace(e, 'num_exercise_books_per_student_jss',
                             (e$num_students_total_gender.num_students_total * 8 < 
                                e$num_exercise_books_per_student_jss)))  
 e <- outlierreplace(e, 'ratio_students_to_toilet',
-                    (e$ratio_students_to_toilet > 1000))      
+                    between(e$ratio_students_to_toilet, 1000, Inf))      
 e <- outlierreplace(e, 'ratio_students_to_desks',
-                    (e$ratio_students_to_desks > 1000)) 
+                    between(e$ratio_students_to_desks, 1000, Inf)) 
 e <- outlierreplace(e, 'ratio_students_to_benches',
-                    (e$ratio_students_to_benches > 1000)) 
+                    between(e$ratio_students_to_benches, 1000, Inf)) 
 
-e$ratio_students_to_toilet <-   replace(e$num_students_total_gender.num_students_total, 
-                                        is.na(e$num_students_total_gender.num_students_total), 0) /
-  replace(e$num_toilet.num_toilet_total, is.na(e$num_toilet.num_toilet_total), 0) 
+e$ratio_students_to_toilet <-   zeroIfNA(e$num_students_total_gender.num_students_total) /
+    zeroIfNA(e$num_toilet.num_toilet_total)
 
 e$ratio_students_to_toilet <- 
   ifelse(e$ratio_students_to_toilet == 0, NA, e$ratio_students_to_toilet)
@@ -379,11 +380,11 @@ e$num_tchrs.num_tchrs_total <- replace(e$num_tchrs.num_tchrs_male, is.na(e$num_t
   replace(e$num_tchrs.num_tchrs_female, is.na(e$num_tchrs.num_tchrs_female), 0) 
 
 e <- outlierreplace(e, 'ratio_students_to_toilet',
-                    (e$ratio_students_to_toilet > 1000))      
+                    between(e$ratio_students_to_toilet, 1000,Inf))      
 e <- outlierreplace(e, 'ratio_students_to_desks',
-                    (e$ratio_students_to_desks > 1000)) 
+                    between(e$ratio_students_to_desks, 1000, Inf)) 
 e <- outlierreplace(e, 'ratio_students_to_benches',
-                    (e$ratio_students_to_benches > 1000)) 
+                    between(e$ratio_students_to_benches, 1000,Inf)) 
 
 ##writing out csv
 write.csv(e, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Education_661_outliercleaned.csv", row.names=FALSE)
