@@ -389,11 +389,6 @@ e <- outlierreplace(e, 'ratio_students_to_benches',
 e <- outlierreplace(e, 'num_classrms_need_min_repairs',e$num_classrms_need_min_repairs > e$num_classrms_total) 
 e <- outlierreplace(e, 'num_classrms_need_maj_repairs',e$num_classrms_need_maj_repairs > e$num_classrms_total) 
 
-# replace all teacher indicators if they are below total teachers
-e <- outlierreplace(e, '',e$num_classrms_need_min_repairs > e$num_classrms_total) 
-e <- outlierreplace(e, 'num_classrms_need_maj_repairs',e$num_classrms_need_maj_repairs > e$num_classrms_total) 
-
-
 ##writing out csv
 write.csv(e, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Education_661_outliercleaned.csv", row.names=FALSE)
 rm(e)                     
