@@ -15,6 +15,19 @@ for (re_lib in required_library)
 
 rm(required_library, re_lib)
 
+# takes a vector of data, and returns a version where all the na values are replaced with 0
+zeroIfNA <- function(x) { replace(x, is.na(x), 0) }
+
+# checks if value is between two thresholds (min, max); convenience function
+# if inclusive = TRUE, then value can be equal to min or max
+between <- function(value, min, max, inclusive=F) { 
+  if(inclusive) { 
+    value >= min & value <= max 
+  } else { 
+    value > min & value < max 
+  }
+}
+
 #reuturn the column number of those columns has .x,.y issue
 #aggressive decides if we would like to drop orginal columns as well
 # e.g. agressive = T ---->> lga, lga.x, lga.y are all gone
