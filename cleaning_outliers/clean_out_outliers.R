@@ -166,19 +166,19 @@ e$ratio_pupil_science_js_textbook <- replace(e$manuals_js.num_science_textbook_j
 e <- outlierreplace(e, 'manuals_pry.num_math_textbook_pry', 
                     between(e$ratio_pupil_math_pry_textbook, 10, Inf))
 e <- outlierreplace(e, 'manuals_pry.num_english_textbook_pry', 
-                    between(e$ratio_pupil_english_pry_textbook , 10, Inf))
+                    between(e$ratio_pupil_english_pry_textbook, 10, Inf))
 e <- outlierreplace(e, 'manuals_pry.num_soc_science_textbook_pry', 
-                    between(e$ratio_pupil_socscience_pry_textbook , 10, Inf))
+                    between(e$ratio_pupil_socscience_pry_textbook, 10, Inf))
 e <- outlierreplace(e, 'manuals_pry.num_science_textbook_pry', 
-                    between(e$ratio_pupil_science_pry_textbook , 10, Inf))
+                    between(e$ratio_pupil_science_pry_textbook, 10, Inf))
 e <- outlierreplace(e, 'manuals_js.num_math_textbook_js', 
-                    between(e$ratio_pupil_math_js_textbook , 10, Inf))
+                    between(e$ratio_pupil_math_js_textbook, 10, Inf))
 e <- outlierreplace(e, 'manuals_js.num_english_textbook_js', 
-                    between(e$ratio_pupil_english_js_textbook , 10, Inf))
+                    between(e$ratio_pupil_english_js_textbook, 10, Inf))
 e <- outlierreplace(e, 'manuals_js.num_soc_science_textbook_js', 
-                    between(e$ratio_pupil_socscience_js_textbook , 10, Inf))
+                    between(e$ratio_pupil_socscience_js_textbook, 10, Inf))
 e <- outlierreplace(e, 'manuals_js.num_science_textbook_js', 
-                    between(e$ratio_pupil_science_js_textbook , 10, Inf))
+                    between(e$ratio_pupil_science_js_textbook, 10, Inf))
 
 #new data points
 
