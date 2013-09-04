@@ -45,18 +45,16 @@ e[which(e$total > e$num_students_total_gender.num_students_total),"num_students_
 #old script paramaters
 #logic checks
 e <- outlierreplace(e, 'num_tchrs.num_tchrs_male', 
-                    (e$num_tchrs.num_tchrs_male > e$num_tchrs.num_tchrs_total) 
-)
+                    (e$num_tchrs.num_tchrs_male > e$num_tchrs.num_tchrs_total))
 
 e <- outlierreplace(e, 'num_tchrs.num_tchrs_female', 
-                    (e$num_tchrs.num_tchrs_female > e$num_tchrs.num_tchrs_total) 
-)
+                    (e$num_tchrs.num_tchrs_female > e$num_tchrs.num_tchrs_total))
 
 e <- outlierreplace(e, 'num_tchrs_qualification.num_tchrs_w_nce',
-                    which(e$num_tchrs_qualification.num_tchrs_w_nce > e$num_tchrs.num_tchrs_total))
+                    (e$num_tchrs_qualification.num_tchrs_w_nce > e$num_tchrs.num_tchrs_total))
 
 e <- outlierreplace(e, 'num_tchrs_attended_training',
-                    which(e$num_tchrs_attended_training > e$num_tchrs.num_tchrs_total))
+                    (e$num_tchrs_attended_training > e$num_tchrs.num_tchrs_total))
 
 e <- outlierreplace(e, 'num_tchrs.num_tchrs_total',
                     (e$num_tchrs.num_tchrs_total > 20 & 
@@ -67,10 +65,10 @@ e <- outlierreplace(e, 'num_tchrs.num_tchrs_total',
                        e$num_tchrs.num_tchrs_female))
 
 e <- outlierreplace(e,'num_classrms_need_maj_repairs',
-                    (e$num_classrms_need_maj_repairs.1 > e$num_classrms_total))
+                    (e$num_classrms_need_maj_repairs > e$num_classrms_total))
 
 e <- outlierreplace(e,'num_classrms_need_min_repairs',
-                    (e$num_classrms_need_min_repairs.1 > e$num_classrms_total))
+                    (e$num_classrms_need_min_repairs > e$num_classrms_total))
 
 e <- outlierreplace(e,'num_classrms_good_cond',
                     (e$num_classrms_good_cond > e$num_classrms_total))
@@ -384,6 +382,17 @@ e <- outlierreplace(e, 'ratio_students_to_desks',
                     (e$ratio_students_to_desks > 1000)) 
 e <- outlierreplace(e, 'ratio_students_to_benches',
                     (e$ratio_students_to_benches > 1000)) 
+
+#### TODO: investigate why these are in the data at all; constraints should have knocked these out #####
+
+# replace all classroom indicators if they are below total classrooms
+e <- outlierreplace(e, 'num_classrms_need_min_repairs',e$num_classrms_need_min_repairs > e$num_classrms_total) 
+e <- outlierreplace(e, 'num_classrms_need_maj_repairs',e$num_classrms_need_maj_repairs > e$num_classrms_total) 
+
+# replace all teacher indicators if they are below total teachers
+e <- outlierreplace(e, '',e$num_classrms_need_min_repairs > e$num_classrms_total) 
+e <- outlierreplace(e, 'num_classrms_need_maj_repairs',e$num_classrms_need_maj_repairs > e$num_classrms_total) 
+
 
 ##writing out csv
 write.csv(e, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Education_661_outliercleaned.csv", row.names=FALSE)

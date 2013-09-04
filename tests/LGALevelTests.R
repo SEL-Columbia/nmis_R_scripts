@@ -4,7 +4,7 @@ nmis_l <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_proc
 library(testthat)
 library(stringr)
 # To run the test, with nmis_R_scripts as wd, type
-# test_file("tests/GeneralDataChecks.R")
+# test_file("tests/LGALevelTests.R")
 
 test_that("percent indicators are between 0 and 1", {
   proportion_indicators <- names(nmis_l)[str_detect(names(nmis_l), "percent|proportion")]
