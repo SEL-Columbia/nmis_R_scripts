@@ -25,6 +25,7 @@ skilled_birth <- subset(skilled_b,  !is.na(skilled_b$lga_id), select=c('lga_id',
 
 #Read hiv tested data and add lga id
 hiv <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/source_data/10_HIV_Tested.csv")
+hiv$percentage_of_individuals_tested_for_hiv_ever <- hiv$percentage_of_individuals_tested_for_hiv_ever/100
 hiv_b <- merge(hiv, ref, by.x=c('state', 'lg'), by.y=c('state_hnlss', 'lg_hnlss'), all=T)
 hiv_b<- rename(hiv_b, c("LGA_id" = "lga_id"))
 hiv_tested <- subset(hiv_b, !is.na(hiv_b$lga_id), select=c('lga_id', 'percentage_of_individuals_tested_for_hiv_ever'))
