@@ -3,6 +3,8 @@ nmis_l <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_proc
 
 library(testthat)
 library(stringr)
+library(plyr)
+source("source_scripts/NMIS_Functions.R")
 # To run the test, with nmis_R_scripts as wd, type
 # test_file("tests/LGALevelTests.R")
 
@@ -19,7 +21,8 @@ test_that("no indicator should be NA for more than 100 LGAs (no hard failure)", 
   na_counts <- colwise(function(x) icount(is.na(x)))(nmis_l)
   high_na_counts <- na_counts[,na_counts>100]
   if(nrow(high_na_counts) > 0) {
-    print("The following indicators have high NA counts:",
-          high_na_counts) 
+    print("The following indicators have high NA counts:")
+    print(high_na_counts) 
   }
+  expect_true(T)
 })
