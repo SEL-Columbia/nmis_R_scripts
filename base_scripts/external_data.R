@@ -27,7 +27,7 @@ skilled_birth <- subset(skilled_b,  !is.na(skilled_b$lga_id), select=c('lga_id',
 hiv <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/source_data/10_HIV_Tested.csv")
 hiv_b <- merge(hiv, ref, by.x=c('state', 'lg'), by.y=c('state_hnlss', 'lg_hnlss'), all=T)
 hiv_b<- rename(hiv_b, c("LGA_id" = "lga_id"))
-hiv_tested <- subset(hiv_b, !is.na(hiv_b$lga_id), select=c('lga_id', 'p_tested'))
+hiv_tested <- subset(hiv_b, !is.na(hiv_b$lga_id), select=c('lga_id', 'percentage_of_individuals_tested_for_hiv_ever'))
 
 #Read net_enroll_na_fixed
 net_enroll_na <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/source_data/net enrollment NA fixed.csv")
