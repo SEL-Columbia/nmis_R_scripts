@@ -7,7 +7,8 @@ e_113 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_proce
                   stringsAsFactors=F)
 
 ##### TO DO list:###
-e_661 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Education_661_NMIS_Facility.csv")
+e_661 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Education_661_NMIS_Facility.csv",
+                  nrow=1)
 
 ###113
 subnm <- names(e_661)[which(names(e_661) %in% names(e_113))]
@@ -44,9 +45,10 @@ ed$phcn_electricity <- e_113$power_grid_connection == T
 ###################
 
 ed$school_1kmplus_catchment_area <- e_113$km_to_catchment_area > 1
-ed$num_tchrs_with_nce <- rowSums(e_113[, c("tchrs_male_nce", "tchrs_female_nce")], na.rm=T) 
+ed$num_tchrs_w_nce <- as.numeric(e_113$num_tchrs_w_nce)
 ed$num_textbooks <- rowSums(e_113[,c("num_textbooks_english", "num_textbooks_math", 
                                      "num_textbooks_social_sci", "num_textbooks_pry_sci")], na.rm=T)
+
 ed$textbook_to_pupil_ratio <- ed$num_textbooks / e_113$num_students_total # NA & Inf introduced
 
 ed$school_1kmplus_secondary_school <- (e_113$km_to_secondary_school > 1)

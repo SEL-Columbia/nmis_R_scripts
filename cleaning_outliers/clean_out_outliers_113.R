@@ -27,7 +27,7 @@ e$num_tchrs.num_tchrs_male <- replace(e$num_tchrs_male_full_time, is.na(e$num_tc
 e$num_tchrs.num_tchrs_female <- replace(e$num_tchrs_female_full_time, is.na(e$num_tchrs_female_full_time), 0) +
     replace(e$num_tchrs_female_part_time, is.na(e$num_tchrs_female_part_time), 0)
 
-e$num_tchrs_qualification.num_tchrs_w_nce <- replace(e$tchrs_male_nce, is.na(e$tchrs_male_nce), 0) +
+e$num_tchrs_w_nce <- replace(e$tchrs_male_nce, is.na(e$tchrs_male_nce), 0) +
     replace(e$tchrs_female_nce, is.na(e$tchrs_female_nce), 0) +
     replace(e$tchrs_male_other_w_nce, is.na(e$tchrs_male_other_w_nce), 0) +
     replace(e$tchrs_female_other_w_nce, is.na(e$tchrs_female_other_w_nce), 0)
@@ -38,8 +38,8 @@ e <- outlierreplace(e, 'num_tchrs.num_tchrs_male',
 e <- outlierreplace(e, 'num_tchrs.num_tchrs_female', 
                     (e$num_tchrs.num_tchrs_female > e$num_tchrs.num_tchrs_total))
 
-e <- outlierreplace(e, 'num_tchrs_qualification.num_tchrs_w_nce',
-                    which(e$num_tchrs_qualification.num_tchrs_w_nce > e$num_tchrs.num_tchrs_total))
+e <- outlierreplace(e, 'num_tchrs_w_nce',
+                    which(e$num_tchrs_w_nce > e$num_tchrs.num_tchrs_total))
 
 e <- outlierreplace(e, 'num_tchrs_attended_training',
                     which(e$num_tchrs_attended_training > e$num_tchrs.num_tchrs_total))
@@ -74,8 +74,8 @@ e <- outlierreplace(e, 'num_classrms_need_maj_repairs',
                     (e$num_classrms_good_cond + e$num_classrms_need_min_repairs + 
                          e$num_classrms_need_maj_repairs > e$num_classrms_total))
 e <- outlierreplace(e, 'num_classrms_total',
-                    (e$num_classrms_good_cond + e$num_classrms_need_min_repairs + 
-                         e$num_classrms_need_maj_repairs > e$num_classrms_total))
+                    ((e$num_classrms_good_cond + e$num_classrms_need_min_repairs + 
+                         e$num_classrms_need_maj_repairs) > e$num_classrms_total))
 
 e <- outlierreplace(e, 'num_students_total_gender.num_students_total',
                     (e$num_tchrs.num_tchrs_total > 20 & 
@@ -112,8 +112,8 @@ e <- outlierreplace(e, 'num_tchrs.num_tchrs_male',
                     (e$num_tchrs.num_tchrs_male > 100))
 e <- outlierreplace(e, 'num_tchrs.num_tchrs_female',
                     (e$num_tchrs.num_tchrs_female > 100))
-e <- outlierreplace(e, 'num_tchrs_qualification.num_tchrs_w_nce',
-                    (e$num_tchrs_qualification.num_tchrs_w_nce > 100))
+e <- outlierreplace(e, 'num_tchrs_w_nce',
+                    (e$num_tchrs_w_nce > 100))
 e <- outlierreplace(e, 'num_sr_staff_total',
                     (e$num_sr_staff_total > 75))   #####    NEGATIVE NUMBER
 e <- outlierreplace(e, 'num_jr_staff_total',
