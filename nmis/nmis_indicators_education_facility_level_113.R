@@ -47,6 +47,10 @@ ed$school_1kmplus_catchment_area <- e_113$km_to_catchment_area > 1
 ed$num_tchrs_with_nce <- rowSums(e_113[, c("tchrs_male_nce", "tchrs_female_nce")], na.rm=T) 
 ed$num_textbooks <- rowSums(e_113[,c("num_textbooks_english", "num_textbooks_math", 
                                      "num_textbooks_social_sci", "num_textbooks_pry_sci")], na.rm=T)
+
+# TODO: figure out a better place for this; this is an outlier-type statement
+ed$num_tchrs_with_nce <- ifelse(ed$num_tchrs_with_nce < ed$num_tchrs_total, ed$num_tchrs_with_nce, NA)
+
 ed$textbook_to_pupil_ratio <- ed$num_textbooks / e_113$num_students_total # NA & Inf introduced
 
 ed$school_1kmplus_secondary_school <- (e_113$km_to_secondary_school > 1)
