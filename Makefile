@@ -37,6 +37,8 @@ $(IN_PROC)/999cleaned/*_661_999Cleaned.csv: $(IN_PROC)/merged/Education_661_Merg
 # outlier cleaning -- 661 (H + E)
 $(IN_PROC)/outlier_cleaned/Health_661_outliercleaned.csv $(IN_PROC)/outlier_cleaned/Education_661_outliercleaned.csv: $(IN_PROC)/999cleaned/Health_661_999Cleaned.csv $(IN_PROC)/999cleaned/Education_661_999Cleaned.csv cleaning_outliers/clean_out_outliers.R
 	$(R) cleaning_outliers/clean_out_outliers.R /dev/tty
+$(IN_PROC)/outlier_cleaned/Health_113_outliercleaned.csv $(IN_PROC)/outlier_cleaned/Education_113_outliercleaned.csv: $(IN_PROC)/999cleaned/Health_113_999Cleaned.csv $(IN_PROC)/999cleaned/Education_113_999Cleaned.csv cleaning_outliers/clean_out_outliers.R
+	$(R) cleaning_outliers/clean_out_outliers_113.R /dev/tty
 # reclassification -- 661 (W)
 $(IN_PROC)/999cleaned/Water_661_999Cleaned_Reclassified.csv: $(IN_PROC)/999cleaned/Water_661_999Cleaned.csv $(IN_PROC)/reclassify_final_148.csv
 	$(R) scripts/Water_reclassify_photos.R /dev/tty
@@ -90,7 +92,7 @@ $(N6)/Health_661_$(NF) $(N6)/Health_661_$(AF): $(IN_PROC)/outlier_cleaned/Health
 $(NP)/Education_Pilot_$(NF) $(NP)/Education_Pilot_$(AF): $(n)education$(f)_pilot.R $(RAW_DATA)/113/Pilot_Education_cleaned_2011Nov17.csv 
 	$(R) $(n)education$(f)_pilot.R /dev/tty
 # facility indicators -- education -- 113
-$(N1)/Education_113_$(NF) $(N1)/Education_113_$(AF): $(n)education$(f)_113.R $(RAW_DATA)/113/Educ_Baseline_PhaseII_all_merged_cleaned_2011Nov21.csv 
+$(N1)/Education_113_$(NF) $(N1)/Education_113_$(AF): $(n)education$(f)_113.R $(IN_PROC)/outlier_cleaned/Education_113_outliercleaned.csv
 	$(R) $(n)education$(f)_113.R /dev/tty
 # facility indicators -- education -- 661
 $(N6)/Education_661_$(NF) $(N6)/Education_661_$(AF): $(IN_PROC)/outlier_cleaned/Education_661_outliercleaned.csv $(DROPBOX)/661.csv $(n)education$(f).R
