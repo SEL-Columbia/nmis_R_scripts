@@ -39,6 +39,9 @@ def find_reads_and_writes(debug=False):
         fileexists = path(f.replace('~', expanduser('~'))).exists()
         if not fileexists: sys.stderr.write("File does not exist: " + f + '; in script ' + script + '\n')
         return fileexists
+    def only_existing_files(fnames, rscript):
+        return [fname for fname in fnames 
+                if file_exists_print_if_not(fname, rscript)]
     def read_excluding_comments(fname):
         f = open(fname, 'r')
         lines = f.readlines()
@@ -47,8 +50,9 @@ def find_reads_and_writes(debug=False):
         lines = [line for line in lines if not comment.match(line)]
         return '\n'.join(lines)
 
-    read_functions = ['read.csv', 'formhubRead', 'file.copy'] # look for first arguments
-    write_functions = ['write.csv', 'file.copy'] # look for second or later arugments
+    read_functions = ['read\.csv', 'formhubRead', 'save'] # look for first arguments
+    write_functions = ['write\.csv', 'load'] # look for second or later arugments
+    rw_functions = ['file\.copy']
     rscripts = find_R_scripts()
     deps = {}
     for rscript in rscripts:
@@ -56,15 +60,19 @@ def find_reads_and_writes(debug=False):
         deps[rscript] = {'inputs': [], 'outputs': []}
         #import pdb; pdb.set_trace()
         for readf in read_functions:
-            candidate_in_deps = re.findall(readf + r'\("([^"]*)"', text)
-            candidate_in_deps = [filename for filename in candidate_in_deps
-                if file_exists_print_if_not(filename, rscript)]
+            candidate_in_deps = only_existing_files(re.findall(readf + r'\("([^"]*)"', text),
+                rscript)
             deps[rscript]['inputs'] = deps[rscript]['inputs'] + candidate_in_deps
         for writef in write_functions:
-            candidate_out_deps = re.findall(writef + r'\([^"]*"([^"]*)"', text)
-            candidate_out_deps = [filename for filename in candidate_out_deps
-                if file_exists_print_if_not(filename, rscript)]
+            candidate_out_deps = only_existing_files(re.findall(writef + r'\([^"]*"([^"]*)"', text),
+                rscript)
             deps[rscript]['outputs'] = deps[rscript]['outputs'] + candidate_out_deps
+        for rwf in rw_functions:
+            inouts = re.findall(rwf + r'\("([^"]*)",\s*"([^"]*)"', text)
+            ins = only_existing_files([inf for inf,outf in inouts], rscript)
+            outs = only_existing_files([outf for inf,outf in inouts], rscript)
+            deps[rscript]['inputs'] = deps[rscript]['inputs'] + ins
+            deps[rscript]['outputs'] = deps[rscript]['outputs'] + outs
         if debug:
             print ">>> FILE: " + rscript
             print "***IN*** " + " ".join(deps[rscript]['inputs'])
