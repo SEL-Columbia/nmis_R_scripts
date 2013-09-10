@@ -54,7 +54,7 @@ def find_reads_and_writes(debug=False):
                 rscript)
             deps[rscript]['outputs'] = deps[rscript]['outputs'] + candidate_out_deps
         for rwf in rw_functions:
-            inouts = re.findall(rwf + r'\("([^"]*)",\s*"([^"]*)"', text)
+            inouts = re.findall(rwf + r'''\(["']([^"']*)["'],\s*["']([^'"]*)["']''', text)
             ins = only_existing_files([inf for inf,outf in inouts], rscript)
             outs = only_existing_files([outf for inf,outf in inouts], rscript)
             deps[rscript]['inputs'] = deps[rscript]['inputs'] + ins
@@ -71,8 +71,12 @@ def make_makefile(dryrun=False):
         return [name.replace(' ', '\ ') for name in names]
     deps = find_reads_and_writes()
     f = open('Makefile', 'w')
-    f.write("R=R CMD BATCH --no-restore --slave\n")
-    f.write("all:~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/in_process_data/nmis/data_774/All_774_LGA.csv\n")
+    preamble = """R=R CMD BATCH --no-restore --slave
+all:~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/in_process_data/nmis/data_774/All_774_LGA.csv
+test:
+\tRscript tests/*.R
+"""
+    f.write(preamble)
     for rscript,v in deps.items():
         inputs = fix_spaces(v['inputs'])
         outputs = fix_spaces(v['outputs'])
