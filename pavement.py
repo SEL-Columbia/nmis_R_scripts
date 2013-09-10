@@ -34,27 +34,51 @@ def find_R_scripts(path='.'):
     return s
 
 @task
-def find_reads_and_writes():
-    read_functions = ['read.csv', 'formhubRead']
-    write_functions = ['write.csv']
+def find_reads_and_writes(debug=False):
+    def fix_tilde(names):
+        return [name.replace('~', expanduser('~')) for name in names]
+    def file_exists_print_if_not(f, script):
+        fileexists = path(f).exists()
+        if not fileexists: sys.stderr.write("File does not exist: " + f + '; in script ' + script + '\n')
+        return fileexists
+    read_functions = ['read.csv', 'formhubRead', 'file.copy'] # look for first arguments
+    write_functions = ['write.csv', 'file.copy'] # look for second or later arugments
     rscripts = find_R_scripts()
-    reads = {}
-    writes = {}
+    deps = {}
     for rscript in rscripts:
         f = open(rscript, 'r')
         text = f.read()
-        reads[rscript] = []
-        writes[rscript] = []
+        deps[rscript] = {'inputs': [], 'outputs': []}
+        #import pdb; pdb.set_trace()
         for readf in read_functions:
-            reads[rscript] = reads[rscript] + re.findall(readf + r'\("([^"]*)"', text)
+            candidate_in_deps = fix_tilde(re.findall(readf + r'\("([^"]*)"', text))
+            candidate_in_deps = [filename for filename in candidate_in_deps 
+                if file_exists_print_if_not(filename, rscript)]
+            deps[rscript]['inputs'] = deps[rscript]['inputs'] + candidate_in_deps
         for writef in write_functions:
-            writes[rscript] = writes[rscript] + re.findall(writef + r'\([^"]*"([^"]*)"', text)
+            candidate_out_deps = fix_tilde(re.findall(writef + r'\([^"]*"([^"]*)"', text))
+            candidate_out_deps = [filename for filename in candidate_out_deps 
+                if file_exists_print_if_not(filename, rscript)]
+            deps[rscript]['outputs'] = deps[rscript]['outputs'] + candidate_out_deps
         f.close()
+        if debug:
+            print ">>> FILE: " + rscript
+            print "***IN*** " + " ".join(deps[rscript]['inputs'])
+            print "**OUT*** " + " ".join(deps[rscript]['outputs']) + '\n'
+    return deps 
 
-        print "For rscript " + rscript
-        print "IN " + " ".join(reads[rscript]),
-        print "OUT " + " ".join(writes[rscript]) + '\n'
-
+@task
+def make_makefile():
+    def fix_spaces(names):
+        return [name.replace(' ', '\ ') for name in names]
+    deps = find_reads_and_writes()
+    f = open('Makefile', 'w')
+    for rscript,v in deps.items():
+        inputs = fix_spaces(v['inputs'])
+        outputs = fix_spaces(v['outputs'])
+        f.write(' '.join(outputs) + ": " + ' '.join(inputs + [rscript]) + '\n')
+        f.write('\tR CMD BATCH --slave --no-restore ' + rscript + ' /dev/tty\n')
+    f.close()
 
 @task
 def combine():
