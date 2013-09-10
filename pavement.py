@@ -39,13 +39,20 @@ def find_reads_and_writes(debug=False):
         fileexists = path(f.replace('~', expanduser('~'))).exists()
         if not fileexists: sys.stderr.write("File does not exist: " + f + '; in script ' + script + '\n')
         return fileexists
+    def read_excluding_comments(fname):
+        f = open(fname, 'r')
+        lines = f.readlines()
+        f.close()
+        comment = re.compile(r'^\s*#')
+        lines = [line for line in lines if not comment.match(line)]
+        return '\n'.join(lines)
+
     read_functions = ['read.csv', 'formhubRead', 'file.copy'] # look for first arguments
     write_functions = ['write.csv', 'file.copy'] # look for second or later arugments
     rscripts = find_R_scripts()
     deps = {}
     for rscript in rscripts:
-        f = open(rscript, 'r')
-        text = f.read()
+        text = read_excluding_comments(rscript)
         deps[rscript] = {'inputs': [], 'outputs': []}
         #import pdb; pdb.set_trace()
         for readf in read_functions:
@@ -58,7 +65,6 @@ def find_reads_and_writes(debug=False):
             candidate_out_deps = [filename for filename in candidate_out_deps
                 if file_exists_print_if_not(filename, rscript)]
             deps[rscript]['outputs'] = deps[rscript]['outputs'] + candidate_out_deps
-        f.close()
         if debug:
             print ">>> FILE: " + rscript
             print "***IN*** " + " ".join(deps[rscript]['inputs'])
