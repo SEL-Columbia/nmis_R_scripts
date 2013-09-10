@@ -15,6 +15,55 @@ for (re_lib in required_library)
 
 rm(required_library, re_lib)
 
+# takes a vector of data, and returns a version where all the na values are replaced with 0
+zeroIfNA <- function(x) { replace(x, is.na(x), 0) }
+
+# checks if value is between two thresholds (min, max); convenience function
+# if inclusive = TRUE, then value can be equal to min or max
+between <- function(value, min, max, inclusive=F) { 
+  if(inclusive) { 
+    value >= min & value <= max 
+  } else { 
+    value > min & value < max 
+  }
+}
+
+#reuturn the column number of those columns has .x,.y issue
+#aggressive decides if we would like to drop orginal columns as well
+# e.g. agressive = T ---->> lga, lga.x, lga.y are all gone
+x_y_index <- function(df, aggressive = F)
+{
+    #getting row number of all '.x' | '.y' columns
+    xy_id <- grep('(\\.x$|\\.y$)', names(df))
+    xy_names <- names(df)[xy_id]
+    xy_names <- unique(xy_names)
+    if (aggressive == T){
+        xy_names_orginal <- unique(gsub('(\\.x$|\\.y$)', '',xy_names))
+        xy_names <- unique(c(xy_names, xy_names_orginal)[order(c(xy_names, xy_names_orginal))])
+    }
+    new_ptrn <- paste('^','(',paste(xy_names, collapse='|'),')$',sep='')
+    warning(paste("Following columns will be dropped from the data.frame: \n"), paste(xy_names, collapse=', '))
+    xy_id_final <- grep(new_ptrn, names(df))
+    return(xy_id_final)
+}
+
+x_y_merge_lga <- function(df, aggressive=F)
+{
+    # this function Drops .x,.y and common columns in lgas.csv
+    lgas_ref <- read.csv('~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/lgas.csv',
+                         stringsAsFactors=F)
+    lga_cols <- names(lgas_ref)[(names(lgas_ref) != 'lga_id')]
+    lga_cols <- lga_cols[lga_cols %in% names(df)]
+    
+    id2<- which(names(df) %in% lga_cols)
+    warning(paste("Following columns will be dropped from the data.frame: \n"), paste(names(df)[id2], collapse=', '))
+    id1 <- x_y_index(df, aggressive)
+    drop_idx <- unique(c(id2, id1))
+    df <- subset(df, select = -drop_idx)
+    df <- merge_strict(df, lgas_ref, by='lga_id')
+    return(df)
+}
+
 # Merge two dataframes, dropping redundant columns in dataframe2 if necessary
 # note: by.x and by.y are not supported
 merge_non_redundant <- function(df1, df2, by, by.x=NA, by.y=NA, printDropped=F, ...) {

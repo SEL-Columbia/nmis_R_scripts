@@ -25,9 +25,11 @@ skilled_birth <- subset(skilled_b,  !is.na(skilled_b$lga_id), select=c('lga_id',
 
 #Read hiv tested data and add lga id
 hiv <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/source_data/10_HIV_Tested.csv")
+#following line is correcting percentage figure in the raw data to fit our pattern (0.0-1.0)
+hiv$percentage_of_individuals_tested_for_hiv_ever <- hiv$percentage_of_individuals_tested_for_hiv_ever/100
 hiv_b <- merge(hiv, ref, by.x=c('state', 'lg'), by.y=c('state_hnlss', 'lg_hnlss'), all=T)
 hiv_b<- rename(hiv_b, c("LGA_id" = "lga_id"))
-hiv_tested <- subset(hiv_b, !is.na(hiv_b$lga_id), select=c('lga_id', 'p_tested'))
+hiv_tested <- subset(hiv_b, !is.na(hiv_b$lga_id), select=c('lga_id', 'percentage_of_individuals_tested_for_hiv_ever'))
 
 #Read net_enroll_na_fixed
 net_enroll_na <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/source_data/net enrollment NA fixed.csv")
