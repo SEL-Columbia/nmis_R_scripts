@@ -12,41 +12,41 @@ raw_data <- function(basepath) {
 }
 
 ###### READ #######
-education <- formhubRead(raw_data("Education_05_06_2012_2013_05_15_12_00_14.csv"),
-                         raw_data("json_schemas/Education_05_06_2012.json"),
+education <- formhubRead("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/Education_05_06_2012_2013_05_15_12_00_14.csv",
+                         "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/json_schemas/Education_05_06_2012.json",
                          extraForm = extraSchema, dropCols=dropCols)
-education2 <- formhubRead(raw_data("Education_17_04_2012_2013_05_15_11_59_29.csv"),
-                         raw_data("json_schemas/Education_05_06_2012.json"),
+education2 <- formhubRead("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/Education_17_04_2012_2013_05_15_11_59_29.csv",
+                         "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/json_schemas/Education_05_06_2012.json",
                           extraForm = extraSchema, dropCols=dropCols)
-education3 <- formhubRead(raw_data("Education_22_05_2012_2013_05_14_13_41_23.csv"),
-                         raw_data("json_schemas/Education_05_06_2012.json"),
+education3 <- formhubRead("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/Education_22_05_2012_2013_05_14_13_41_23.csv",
+                         "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/json_schemas/Education_05_06_2012.json",
                           extraForm = extraSchema, dropCols=dropCols)
-health <- formhubRead(raw_data("Health_05_06_2012_2013_05_14_14_16_00.csv"),
-                      raw_data("json_schemas/Health_17_04_2012.json"),
+health <- formhubRead("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/Health_05_06_2012_2013_05_14_14_16_00.csv",
+                      "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/json_schemas/Health_17_04_2012.json",
                       extraForm = extraSchema, dropCols=dropCols)
-health2 <- formhubRead(raw_data("Health_17_04_2012_2013_05_15_11_45_47.csv"),
-                      raw_data("json_schemas/Health_17_04_2012.json"),
+health2 <- formhubRead("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/Health_17_04_2012_2013_05_15_11_45_47.csv",
+                      "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/json_schemas/Health_17_04_2012.json",
                        extraForm = extraSchema, dropCols=dropCols)
-health3 <- formhubRead(raw_data("Health_22_05_2012_2013_05_14_13_54_51.csv"),
-                      raw_data("json_schemas/Health_17_04_2012.json"),
+health3 <- formhubRead("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/Health_22_05_2012_2013_05_14_13_54_51.csv",
+                      "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/json_schemas/Health_17_04_2012.json",
                        extraForm = extraSchema, dropCols=dropCols)
-water <- formhubRead(raw_data("Water_05_06_2012_2012_11_30_10_54_44.csv"),
-                     raw_data("json_schemas/Water_05_06_2012.json"),
+water <- formhubRead("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/Water_05_06_2012_2012_11_30_10_54_44.csv",
+                     "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/json_schemas/Water_05_06_2012.json",
                      extraForm = extraSchema, dropCols=dropCols)
-water2 <- formhubRead(raw_data("Water_22_05_2012_2012_11_28_13_38_10.csv"),
-                     raw_data("json_schemas/Water_05_06_2012.json"),
+water2 <- formhubRead("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/Water_22_05_2012_2012_11_28_13_38_10.csv",
+                     "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/json_schemas/Water_05_06_2012.json",
                       extraForm = extraSchema, dropCols=dropCols)
-water3 <- formhubRead(raw_data("Water_24_04_2012_2012_11_28_13_40_08.csv"),
-                     raw_data("json_schemas/Water_05_06_2012.json"),
+water3 <- formhubRead("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/Water_24_04_2012_2012_11_28_13_40_08.csv",
+                     "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/json_schemas/Water_05_06_2012.json",
                       extraForm = extraSchema, dropCols=dropCols)
-local <- formhubRead(raw_data("Localities_05_06_2012_2013_05_24_12_25_37.csv"),
-                       raw_data("json_schemas/Localities_05_06_2012.json"),
+local <- formhubRead("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/Localities_05_06_2012_2013_05_24_12_25_37.csv",
+                       "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/json_schemas/Localities_05_06_2012.json",
                      extraForm = extraSchema, dropCols=dropCols, na.strings=na.strings)
-local2 <- formhubRead(raw_data("Localities_16_04_2012_2013_03_08_11_29_53.csv"),
-                       raw_data("json_schemas/Localities_16_04_2012.json"),
+local2 <- formhubRead("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/Localities_16_04_2012_2013_03_08_11_29_53.csv",
+                       "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/json_schemas/Localities_16_04_2012.json",
                       extraForm = extraSchema, dropCols=dropCols, na.strings=na.strings)
-local3 <- formhubRead(raw_data("Localities_22_05_2012_2013_03_08_11_45_37.csv"),
-                       raw_data("json_schemas/Localities_22_05_2012.json"),
+local3 <- formhubRead("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/Localities_22_05_2012_2013_03_08_11_45_37.csv",
+                       "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/json_schemas/Localities_22_05_2012.json",
                       extraForm = extraSchema, dropCols=dropCols, na.strings=na.strings)
 
 stopifnot((names(education) == names(education2)) && (names(education2) == names(education3)) && (names(education3) == names(education)))
@@ -100,12 +100,6 @@ merged_education <- replace_lga_ids(merged_education)
 merged_health <- replace_lga_ids(merged_health)
 merged_water <- replace_lga_ids(merged_water)
 merged_local <- replace_lga_ids(merged_local)
-
-#######
-#148
-#######
-#lga_148 <- read.csv("148_final_list.csv", colClasses="character")
-#merged_education <- merge(merged_education, lga_148, by.x="lga_id", by.y="lga_id", all.y=T)
 
 ############################
 #### WRITE EVERYTHING OUT
