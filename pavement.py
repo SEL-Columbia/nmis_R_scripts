@@ -8,20 +8,6 @@ import os
 ROOT_DIR = join(expanduser('~'), 'Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning')
 
 
-def nmis_datafile(effort, datafiletype, sector):
-    """ Return name of datafile, depending on effort (pilot, 113, 661, 774), 
-            lga or facility level (lga, nmis, all) and sector (education, health, water)"""
-    if effort not in ['pilot', '113', '661', '774'] or sector not in ['education', 'health', 'water'] or \
-                    datafiletype not in ['lga', 'nmis', 'all']: raise Exception('incorrect arguments supplied')
-    dirname = '/'.join([ROOT_DIR, 'in_process_data', 'nmis', 'data_' + effort])
-    tmp = {'lga': 'LGA_level', 'nmis': 'NMIS_Facility', 'all': 'ALL_FACILITY_INDICATORS'}[datafiletype]
-    if datafiletype == "lga":
-        filename = '_'.join([sector.capitalize(), tmp, effort + '.csv'])
-    else:
-        filename = '_'.join([sector.capitalize(), effort, tmp + '.csv'])
-    return '/'.join([dirname, filename])
-
-
 def find_R_scripts(path='.'):
     """ find all the R scripts in this folder"""
     s = []
@@ -80,36 +66,22 @@ def find_reads_and_writes(debug=False):
     return deps 
 
 @task
-def make_makefile():
+def make_makefile(dryrun=False):
     def fix_spaces(names):
         return [name.replace(' ', '\ ') for name in names]
     deps = find_reads_and_writes()
     f = open('Makefile', 'w')
+    f.write("R=R CMD BATCH --no-restore --slave\n")
+    f.write("all:~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/in_process_data/nmis/data_774/All_774_LGA.csv\n")
     for rscript,v in deps.items():
         inputs = fix_spaces(v['inputs'])
         outputs = fix_spaces(v['outputs'])
         f.write(' '.join(outputs) + ": " + ' '.join(inputs + [rscript]) + '\n')
-        f.write('\tR CMD BATCH --slave --no-restore ' + rscript + ' /dev/tty\n')
+        f.write('\t$(R) ' + rscript + ' /dev/tty\n')
     f.close()
 
 @task
-def combine():
-    """Combines all the final files into the 774 files"""
-    sources = [nmis_datafile(effort, lorf, sec) for effort in ['113', '661', 'pilot']
-               for lorf in ['lga', 'nmis'] for sec in ['education', 'water', 'health']]
-    paths = [path(source) for source in sources]
-    print paths
-    print [p.mtime for p in paths]
+def make():
+    make_makefile()
+    sh('make')
 
-
-@task
-def grovel():
-    """Grovel a little"""
-    print "What can I do for you, Master?"
-
-
-@task
-@needs(('hello', 'grovel'))
-def say_all():
-    """Say hello, then grovel some"""
-    print "This should be at the end"
