@@ -35,10 +35,8 @@ def find_R_scripts(path='.'):
 
 @task
 def find_reads_and_writes(debug=False):
-    def fix_tilde(names):
-        return [name.replace('~', expanduser('~')) for name in names]
     def file_exists_print_if_not(f, script):
-        fileexists = path(f).exists()
+        fileexists = path(f.replace('~', expanduser('~'))).exists()
         if not fileexists: sys.stderr.write("File does not exist: " + f + '; in script ' + script + '\n')
         return fileexists
     read_functions = ['read.csv', 'formhubRead', 'file.copy'] # look for first arguments
@@ -51,13 +49,13 @@ def find_reads_and_writes(debug=False):
         deps[rscript] = {'inputs': [], 'outputs': []}
         #import pdb; pdb.set_trace()
         for readf in read_functions:
-            candidate_in_deps = fix_tilde(re.findall(readf + r'\("([^"]*)"', text))
-            candidate_in_deps = [filename for filename in candidate_in_deps 
+            candidate_in_deps = re.findall(readf + r'\("([^"]*)"', text)
+            candidate_in_deps = [filename for filename in candidate_in_deps
                 if file_exists_print_if_not(filename, rscript)]
             deps[rscript]['inputs'] = deps[rscript]['inputs'] + candidate_in_deps
         for writef in write_functions:
-            candidate_out_deps = fix_tilde(re.findall(writef + r'\([^"]*"([^"]*)"', text))
-            candidate_out_deps = [filename for filename in candidate_out_deps 
+            candidate_out_deps = re.findall(writef + r'\([^"]*"([^"]*)"', text)
+            candidate_out_deps = [filename for filename in candidate_out_deps
                 if file_exists_print_if_not(filename, rscript)]
             deps[rscript]['outputs'] = deps[rscript]['outputs'] + candidate_out_deps
         f.close()
