@@ -46,11 +46,11 @@ def find_reads_and_writes(debug=False):
         deps[rscript] = {'inputs': [], 'outputs': []}
         #import pdb; pdb.set_trace()
         for readf in read_functions:
-            candidate_in_deps = only_existing_files(re.findall(readf + r'\("([^"]*)"', text),
+            candidate_in_deps = only_existing_files(re.findall(readf + r'''\(["']([^'"]*)["']''', text),
                 rscript)
             deps[rscript]['inputs'] = deps[rscript]['inputs'] + candidate_in_deps
         for writef in write_functions:
-            candidate_out_deps = only_existing_files(re.findall(writef + r'\([^"]*"([^"]*)"', text),
+            candidate_out_deps = only_existing_files(re.findall(writef + r'''\([^"]*["']([^"']*)["']''', text),
                 rscript)
             deps[rscript]['outputs'] = deps[rscript]['outputs'] + candidate_out_deps
         for rwf in rw_functions:

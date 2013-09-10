@@ -10,7 +10,7 @@ all:~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/in_process_data/nmi
 	$(R) ./cleaning_outliers/clean_out_outliers.R /dev/tty
 ~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/in_process_data/nmis/data_661/Education_661_NMIS_Facility.csv ~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/in_process_data/nmis/data_661/Education_661_ALL_FACILITY_INDICATORS.csv: ~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/in_process_data/outlier_cleaned/Education_661_outliercleaned.csv ~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/661.csv ./nmis/nmis_indicators_education_facility_level.R
 	$(R) ./nmis/nmis_indicators_education_facility_level.R /dev/tty
-: ~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/external_data/source_data/08_Skilled_Birth.csv ~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/external_data/source_data/10_HIV_Tested.csv ~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/external_data/source_data/net\ enrollment\ NA\ fixed.csv ~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/external_data/source_data/net_enroll_JS_male\ female.csv ~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/external_data/source_data/Other\ edu\ indicators.csv ./base_scripts/external_data.R
+~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/external_data/output_data/external_data.csv: ~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/external_data/source_data/08_Skilled_Birth.csv ~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/external_data/source_data/10_HIV_Tested.csv ~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/external_data/source_data/net\ enrollment\ NA\ fixed.csv ~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/external_data/source_data/net_enroll_JS_male\ female.csv ~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/external_data/source_data/Other\ edu\ indicators.csv ./base_scripts/external_data.R
 	$(R) ./base_scripts/external_data.R /dev/tty
 : ./base_scripts/InstallFormhub.R
 	$(R) ./base_scripts/InstallFormhub.R /dev/tty
@@ -66,7 +66,7 @@ all:~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/in_process_data/nmi
 	$(R) ./nmis/nmis_indicators_health_facility_level_pilot.R /dev/tty
 ~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/in_process_data/nmis/data_pilot/Health_LGA_level_pilot.csv: ~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/in_process_data/nmis/data_pilot/Health_Pilot_ALL_FACILITY_INDICATORS.csv ~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/lgas.csv ~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/lgas.csv ./nmis/nmis_indicators_health_lga_level_pilot.R
 	$(R) ./nmis/nmis_indicators_health_lga_level_pilot.R /dev/tty
-: ./source_scripts/NMIS_Utils.R
+: ~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/in_process_data/nmis/source_data/nmis_lga_corrections.csv ~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/in_process_data/nmis/source_data/nmis_lga_mapping.csv ./source_scripts/NMIS_Utils.R
 	$(R) ./source_scripts/NMIS_Utils.R /dev/tty
 ~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/in_process_data/nmis/data_661/Health_LGA_level_661.csv: ~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/in_process_data/nmis/data_661/Health_661_ALL_FACILITY_INDICATORS.csv ~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/lgas.csv ~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/lgas.csv ./nmis/nmis_indicators_health_lga_level.R
 	$(R) ./nmis/nmis_indicators_health_lga_level.R /dev/tty
