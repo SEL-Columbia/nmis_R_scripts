@@ -8,7 +8,7 @@ source("source_scripts/NMIS_Functions.R")
 ################
 #####PILOT#####
 ################
-hp <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Health_Pilot_ALL_FACILITY_INDICATORS.csv", stringsAsFactors=FALSE)
+hp <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Health_Pilot_ALL_FACILITY_INDICATORS.rds")
 h <- hp
 pop <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/lgas.csv")
 # population figure within ddply is between the , and the last ) below

@@ -36,8 +36,8 @@ def find_reads_and_writes(debug=False):
         lines = [line for line in lines if not comment.match(line)]
         return '\n'.join(lines)
 
-    read_functions = ['read\.csv', 'formhubRead', 'save'] # look for first arguments
-    write_functions = ['write\.csv', 'load'] # look for second or later arugments
+    read_functions = ['read\.csv', 'formhubRead', 'load', 'readRDS'] # look for first arguments
+    write_functions = ['write\.csv', 'save', 'saveRDS'] # look for second or later arugments
     rw_functions = ['file\.copy']
     rscripts = find_R_scripts()
     deps = {}
@@ -46,17 +46,15 @@ def find_reads_and_writes(debug=False):
         deps[rscript] = {'inputs': [], 'outputs': []}
         #import pdb; pdb.set_trace()
         for readf in read_functions:
-            candidate_in_deps = only_existing_files(re.findall(readf + r'''\(["']([^'"]*)["']''', text),
-                rscript)
+            candidate_in_deps = re.findall(readf + r'''\(["']([^'"]*)["']''', text)
             deps[rscript]['inputs'] = deps[rscript]['inputs'] + candidate_in_deps
         for writef in write_functions:
-            candidate_out_deps = only_existing_files(re.findall(writef + r'''\([^"]*["']([^"']*)["']''', text),
-                rscript)
+            candidate_out_deps = re.findall(writef + r'''\([^"]*["']([^"']*)["']''', text)
             deps[rscript]['outputs'] = deps[rscript]['outputs'] + candidate_out_deps
         for rwf in rw_functions:
             inouts = re.findall(rwf + r'''\(["']([^"']*)["'],\s*["']([^'"]*)["']''', text)
-            ins = only_existing_files([inf for inf,outf in inouts], rscript)
-            outs = only_existing_files([outf for inf,outf in inouts], rscript)
+            ins = [inf for inf,outf in inouts]
+            outs = [outf for inf,outf in inouts]
             deps[rscript]['inputs'] = deps[rscript]['inputs'] + ins
             deps[rscript]['outputs'] = deps[rscript]['outputs'] + outs
         if debug:

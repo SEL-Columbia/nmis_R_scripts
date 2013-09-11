@@ -26,7 +26,7 @@ write.csv(combined_774, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in
 #reading in data
 six61 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Health_661_NMIS_Facility.csv", stringsAsFactors=FALSE)
 one13 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Health_113_NMIS_Facility.csv", stringsAsFactors=FALSE)
-pilot <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Health_Pilot_NMIS_Facility.csv", stringsAsFactors=FALSE)
+pilot <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Health_Pilot_NMIS_Facility.rds")
 #subnm <- names(six61)[which(!names(six61) %in% names(pilot))]
 ##adding unique_id##
 one13 <- add_lga_id(one13)
