@@ -74,7 +74,7 @@ def make_makefile(dryrun=False):
     preamble = """R=R CMD BATCH --no-restore --slave
 all:~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/in_process_data/nmis/data_774/All_774_LGA.csv
 test:
-\tRscript tests/*.R
+\tRscript tests/*.R > logs/test.log
 """
     f.write(preamble)
     for rscript,v in deps.items():
