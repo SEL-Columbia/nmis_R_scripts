@@ -66,6 +66,38 @@ def find_reads_and_writes(debug=False):
     return deps 
 
 @task
+def make_dependency_graph():
+    import pydot
+    #import ipdb; ipdb.set_trace()
+    deps = find_reads_and_writes()
+    graph = pydot.Dot(graph_type='digraph', rankdir='LR')
+    # create all nodes
+    nodes = {}
+    def strip(s):
+        return s.split('/')[-1]
+    for k, v in deps.items():
+        k = strip(k)
+        nodes[k] = pydot.Node(k, style='filled', fillcolor='red')
+        graph.add_node(nodes[k])
+        for datafile in v['inputs'] + v['outputs']:
+            datafile = strip(datafile)
+            if datafile not in nodes.keys():
+                nodes[datafile] = pydot.Node(datafile, style='filled', fillcolor='blue')
+                graph.add_node(nodes[datafile])
+        
+    # create all edges
+    for script, v in deps.items():
+        script = strip(script)
+        for infile in v['inputs']:
+            i = strip(infile)
+            graph.add_edge(pydot.Edge(nodes[i], nodes[script]))
+        for outfile in v['outputs']:
+            o = strip(outfile)
+            graph.add_edge(pydot.Edge(nodes[script], nodes[o]))
+    graph.write('dependency_graph.pdf', format='pdf')
+    
+
+@task
 def make_makefile(dryrun=False):
     def fix_spaces(names):
         return [name.replace(' ', '\ ') for name in names]
