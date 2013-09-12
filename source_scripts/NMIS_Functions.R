@@ -383,3 +383,26 @@ lga_boudary_dist <- function(df, gps_col)
     return(final)
 
 }
+
+
+#for correcting indicators that are false booleans
+
+booleanification_loop <- function(df, bool_list) {
+  for (nm_bool in bool_list)
+  {
+    df[,nm_bool] <- as.logical(df[,nm_bool])  
+  }
+  df 
+}
+  #columns that need cleaning (can be updated accordingly)
+bools <- c('not_for_private_2.immunization.bcg_immunization', 
+           'not_for_private_2.immunization.bcg_immunization',
+           'not_for_private_2.immunization.opv_immuization',
+           'not_for_private_2.immunization.measles_immun',
+           'not_for_private_2.immunization.dpt_immunization',
+           'not_for_private_2.immunization.yellow_fever_immun',
+           'not_for_private_2.immunization.csm_immunization',
+           'not_for_private_2.immunization.hepb_immunization',
+           'not_for_private_2.immunization.tetanus_immun')
+
+

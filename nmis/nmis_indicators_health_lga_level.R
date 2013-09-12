@@ -13,7 +13,7 @@ h <- hh
 popu <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/lgas.csv")
 row.names(popu) <- as.character(popu$lga_id)
 # population figure within ddply is between the , and the last ) below
-lgah_summaries <- ddply(h, .(lga_id), summarize, population = popu[as.character(lga_id[[1]]),'pop_2006'])
+# lgah_summaries <- ddply(h, .(lga_id), summarize, population = popu[as.character(lga_id[[1]]),'pop_2006'])
 #other columns necessary for indicators
 h$routine_immunization <- (h$not_for_private_2.immunization.bcg_immunization == T | 
                              h$not_for_private_2.immunization.bcg_immunization == T |
