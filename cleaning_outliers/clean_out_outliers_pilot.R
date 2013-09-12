@@ -1,6 +1,6 @@
 ##PILOT Outlier Cleaning Script
-source("../InstallFormhub.R")
-source('./outlier_functions.R')
+source("InstallFormhub.R")
+source('cleaning_outliers/outlier_functions.R')
 
 ###############################################################################################
 ######education################################################################################
