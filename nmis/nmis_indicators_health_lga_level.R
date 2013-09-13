@@ -33,6 +33,7 @@ h$antenatal <-
 h$family <-
   h$family_planning_yn == 'yes'
 h$separated <- h$not_for_private_1.waste_disposal.sharps_separated_yn == 'yes'
+h$facility_open_247 <- facility_open_247_yn == 'yes'
 
 ih <- idata.frame(h)
 # h <- subset(h, lga_id == 309 | lga_id == 310 |  
@@ -67,7 +68,7 @@ lgah_facilities <- ddply(ih, .(lga_id),
             proportion_health_facilities_inpatient_care = 
               bool_proportion(df$inpatient_care_yn, TRUE),
             proportion_health_facilities_open_24_7 = 
-              bool_proportion(df$facility_open_247_yn, TRUE),              
+              bool_proportion(df$facility_open_247, TRUE),              
       num_doctors = sum(df$medical_staff_posted.num_doctors_posted, na.rm = TRUE),            
       num_nursemidwives_midwives = sum(df$medical_staff_posted.num_nursemidwives_posted, na.rm = TRUE) + 
               sum(df$medical_staff_posted.num_midwives_posted, na.rm = TRUE),            

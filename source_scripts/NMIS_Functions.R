@@ -403,6 +403,8 @@ bools <- c('not_for_private_2.immunization.bcg_immunization',
            'not_for_private_2.immunization.yellow_fever_immun',
            'not_for_private_2.immunization.csm_immunization',
            'not_for_private_2.immunization.hepb_immunization',
-           'not_for_private_2.immunization.tetanus_immun')
+           'not_for_private_2.immunization.tetanus_immun',
+           'not_for_private_2.equipment.scale',
+           'not_for_private_2.supplies.muac_tape')
 
 
