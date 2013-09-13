@@ -3,7 +3,7 @@ source("base_scripts/InstallFormhub.R")
 source("source_scripts/NMIS_Functions.R")
 
 
-w113_raw <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Water_113_999Cleaned.csv",
+w113_raw <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Water_113_outliercleaned.csv",
                      stringsAsFactors=F)
 lgas <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/lgas.csv",
                  stringsAsFactors=F)

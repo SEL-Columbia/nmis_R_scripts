@@ -44,7 +44,6 @@ def find_reads_and_writes(debug=False):
     for rscript in rscripts:
         text = read_excluding_comments(rscript)
         deps[rscript] = {'inputs': [], 'outputs': []}
-        #import pdb; pdb.set_trace()
         for readf in read_functions:
             candidate_in_deps = re.findall(readf + r'''\(["']([^'"]*)["']''', text)
             deps[rscript]['inputs'] = deps[rscript]['inputs'] + candidate_in_deps
@@ -62,6 +61,39 @@ def find_reads_and_writes(debug=False):
             print "***IN*** " + " ".join(deps[rscript]['inputs'])
             print "**OUT*** " + " ".join(deps[rscript]['outputs']) + '\n'
     return deps 
+
+@task
+def make_dependency_graph():
+    import pydot
+    deps = find_reads_and_writes()
+    graph = pydot.Dot(graph_type='digraph', rankdir='LR')
+    # create all nodes
+    nodes = {}
+    def strip(s):
+        return s.split('/')[-1]
+    for k, v in deps.items():
+        k = strip(k)
+        nodes[k] = pydot.Node(k, style='filled', fillcolor='red')
+        graph.add_node(nodes[k])
+        for datafile in v['inputs'] + v['outputs']:
+            datafile = strip(datafile)
+            if datafile not in nodes.keys():
+                nodes[datafile] = pydot.Node(datafile, style='filled', fillcolor='#5F9F9F')
+                graph.add_node(nodes[datafile])
+        
+    # create all edges
+    for script, v in deps.items():
+        script = strip(script)
+        for infile in v['inputs']:
+            i = strip(infile)
+            graph.add_edge(pydot.Edge(nodes[i], nodes[script]))
+        for outfile in v['outputs']:
+            o = strip(outfile)
+            graph.add_edge(pydot.Edge(nodes[script], nodes[o]))
+    try:
+        graph.write('dependency_graph.pdf', format='pdf')
+    except pydot.InvocationException:
+        print "You need to install graphviz to create a dependency graph"
 
 @task
 def make_makefile(dryrun=False):
