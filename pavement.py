@@ -80,7 +80,7 @@ def make_dependency_graph():
         for datafile in v['inputs'] + v['outputs']:
             datafile = strip(datafile)
             if datafile not in nodes.keys():
-                nodes[datafile] = pydot.Node(datafile, style='filled', fillcolor='blue')
+                nodes[datafile] = pydot.Node(datafile, style='filled', fillcolor='#5F9F9F')
                 graph.add_node(nodes[datafile])
         
     # create all edges
