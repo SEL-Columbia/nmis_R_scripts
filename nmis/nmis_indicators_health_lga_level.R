@@ -142,6 +142,7 @@ lgah_facilities <- ddply(ih, .(lga_id),
                       as.numeric((popu[as.character(df$lga_id[[1]]),1]/1000)),
               
             # TODO: proportion_improved_water_source = ??
+            # TODO: proportion_functional_sanitation = ??
                            )})                     
 
 ##########################
