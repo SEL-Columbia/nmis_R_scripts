@@ -44,7 +44,6 @@ def find_reads_and_writes(debug=False):
     for rscript in rscripts:
         text = read_excluding_comments(rscript)
         deps[rscript] = {'inputs': [], 'outputs': []}
-        #import pdb; pdb.set_trace()
         for readf in read_functions:
             candidate_in_deps = only_existing_files(re.findall(readf + r'''\(["']([^'"]*)["']''', text),
                 rscript)
@@ -68,7 +67,6 @@ def find_reads_and_writes(debug=False):
 @task
 def make_dependency_graph():
     import pydot
-    #import ipdb; ipdb.set_trace()
     deps = find_reads_and_writes()
     graph = pydot.Dot(graph_type='digraph', rankdir='LR')
     # create all nodes
@@ -94,8 +92,10 @@ def make_dependency_graph():
         for outfile in v['outputs']:
             o = strip(outfile)
             graph.add_edge(pydot.Edge(nodes[script], nodes[o]))
-    graph.write('dependency_graph.pdf', format='pdf')
-    
+    try:
+        graph.write('dependency_graph.pdf', format='pdf')
+    except pydot.InvocationException:
+        print "You need to install graphviz to create a dependency graph"
 
 @task
 def make_makefile(dryrun=False):
