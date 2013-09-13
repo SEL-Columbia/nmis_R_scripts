@@ -103,17 +103,17 @@ e_113$uuid <- sapply(paste(e_113$gps, e_113$photo), FUN=digest)
 anyDuplicated(e_113$uuid)
 e <- e_113
 
-#changing "none" to numeric 0
-for (i in 1:800)
-{
-  e[,i] <- recodeVar(e[,i], "none", 0)  
+#TODO: where to do this longer term
+replaceInAllColumns <- function(df, from, to) {
+  tmp <- t(colwise(function(col) { from %in% col })(df))
+  tmp <- subset(tmp, tmp[,1])
+  names_to_replace <- row.names(tmp)
+  df[,names_to_replace] <- recodeVar(df[,names_to_replace],from, to)
+  df
 }
+e <- replaceInAllColumns(e, "none", 0)
+e <- replaceInAllColumns(e, "o", 0)
 
-#changing "o" to numeric 0
-for (i in 1:800)
-{
-  e[,i] <- recodeVar(e[,i], "o", 0)  
-}
 
 
 #CLEANING            
