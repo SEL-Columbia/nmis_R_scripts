@@ -2,7 +2,7 @@
 # slugs are at https://github.com/mvpdev/nmis/blob/develop/uis_r_us/indicators/overview.json
 source("source_scripts/NMIS_Functions.R")
 
-watpilot <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Water_pilot_ALL_FACILITY_INDICATORS.csv")
+watpilot <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Water_pilot_ALL_FACILITY_INDICATORS.rds")
 
 # merge in population
 lgapops <- subset(read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/lgas.csv"), select=c("lga_id", "pop_2006"))
@@ -58,7 +58,7 @@ lgaw_facilities <- ddply(iwpilot, .(lga_id), function(df) {
 ##########################
 
 lga_wpilot_all <- lgaw_facilities
-write.csv(x_y_killa(lga_wpilot_all), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Water_LGA_level_pilot.csv", row.names=F)
+saveRDS(x_y_killa(lga_wpilot_all), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Water_LGA_level_pilot.rds")
 
 
 

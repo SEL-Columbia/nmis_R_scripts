@@ -8,7 +8,7 @@ source("source_scripts/NMIS_Functions.R")
 ################
 ######113#######
 ################
-hh <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Health_113_ALL_FACILITY_INDICATORS.csv", stringsAsFactors=FALSE)
+hh <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Health_113_ALL_FACILITY_INDICATORS.rds")
 h <- hh
 pop <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/lgas.csv")
 # population figure within ddply is between the , and the last ) below
@@ -145,7 +145,7 @@ lga_health_all <- lgah_facilities
 lgas <- subset(read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/lgas.csv"), select=c("lga_id", "lga", "state", "zone"))
 lga_health_all1 <- merge(lga_health_all, lgas, by="lga_id")
 
-write.csv(x_y_killa(lga_health_all1), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Health_LGA_level_113.csv", row.names=F)
+saveRDS(x_y_killa(lga_health_all1), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Health_LGA_level_113.rds")
 
 
 

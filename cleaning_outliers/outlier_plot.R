@@ -1,7 +1,3 @@
-#pop <- read.csv("C:/Users/zmyao/Dropbox/Nigeria 661 Baseline Data Cleaning (2)/raw_data/Population DATA/population_774.csv")
-#edu <- read.csv("C:/Users/Zmyao/Dropbox/nigeria/Need asse & cov/education_cleand_Feb_6.csv")
-#edu <- read.csv("C:/Users/zmyao/Dropbox/Nigeria 661 Baseline Data Cleaning (2)/in_process_data/nmis/Education_661_ALL_FACILITY_INDICATORS.csv")
-
 
 #* If you would like to merge the data.frame with 774lga population data and get the ratio, run the population function
 #* Please be advided that you need to specify the location of population_774.csv like in (L1)

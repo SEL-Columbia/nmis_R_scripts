@@ -145,5 +145,5 @@ lga_health_all <- rename(lga_health_all, c("lga_id"="lga_id"))
 lgas <- subset(read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/lgas.csv"), select=c("lga_id", "lga", "state", "zone"))
 lga_health_all <- merge(lga_health_all, lgas, by="lga_id")
 
-write.csv(x_y_killa(lga_health_all), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Health_LGA_level_pilot.csv", row.names=F)
+saveRDS(x_y_killa(lga_health_all), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Health_LGA_level_pilot.rds")
 

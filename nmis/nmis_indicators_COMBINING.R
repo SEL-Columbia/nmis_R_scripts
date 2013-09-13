@@ -8,9 +8,9 @@ source("source_scripts/NMIS_Functions.R")
 ######################################################################################
 
 #reading in data
-six61 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Education_661_NMIS_Facility.csv", stringsAsFactors=FALSE)
-one13 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Education_113_NMIS_Facility.csv", stringsAsFactors=FALSE)
-pilot <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Education_Pilot_NMIS_Facility.csv", stringsAsFactors=FALSE)
+six61 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Education_661_NMIS_Facility.rds")
+one13 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Education_113_NMIS_Facility.rds")
+pilot <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Education_Pilot_NMIS_Facility.rds")
 #subnm <- names(one13)[which(!names(one13) %in% names(six61))]
 
 #combining facility data
@@ -24,8 +24,8 @@ write.csv(combined_774, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in
 ##HEALTH##############################################################################
 ######################################################################################
 #reading in data
-six61 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Health_661_NMIS_Facility.csv", stringsAsFactors=FALSE)
-one13 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Health_113_NMIS_Facility.csv", stringsAsFactors=FALSE)
+six61 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Health_661_NMIS_Facility.rds")
+one13 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Health_113_NMIS_Facility.rds")
 pilot <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Health_Pilot_NMIS_Facility.rds")
 #subnm <- names(six61)[which(!names(six61) %in% names(pilot))]
 ##adding unique_id##
@@ -44,9 +44,9 @@ write.csv(combined_774, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in
 ##WATER###############################################################################
 ######################################################################################
 #reading in data
-six61 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Water_661_NMIS_Facility.csv", stringsAsFactors=FALSE)
-one13 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Water_113_NMIS_Facility.csv", stringsAsFactors=FALSE)
-pilot <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Water_pilot_NMIS_Facility.csv", stringsAsFactors=FALSE)
+six61 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Water_661_NMIS_Facility.rds")
+one13 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Water_113_NMIS_Facility.rds")
+pilot <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Water_pilot_NMIS_Facility.rds")
 #subnm <- names(one13)[which(!names(one13) %in% names(six61))]
 
 ##adding unique_id##
@@ -66,34 +66,34 @@ write.csv(combined_774, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in
 ######################################################################################
 
 ##education##
-lga_661 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Education_LGA_level_661.csv", stringsAsFactors=FALSE)
-lga_113 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Education_LGA_level_113.csv", stringsAsFactors=FALSE)
-lga_pilot <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Education_LGA_level_pilot.csv", stringsAsFactors=FALSE)
+lga_661 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Education_LGA_level_661.rds")
+lga_113 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Education_LGA_level_113.rds")
+lga_pilot <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Education_LGA_level_pilot.rds")
 
 combined_113p_lga <- rbind.fill(lga_113, lga_pilot)
 combined_774_lga_EDU <- rbind.fill(combined_113p_lga, lga_661)
 write.csv(combined_774_lga_EDU, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/Education_774_NMIS_LGA.csv", row.names=F)
 
 ##health##
-lga_661 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Health_LGA_level_661.csv", stringsAsFactors=FALSE)
-lga_113 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Health_LGA_level_113.csv", stringsAsFactors=FALSE)
-lga_pilot <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Health_LGA_level_pilot.csv", stringsAsFactors=FALSE)
+lga_661 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Health_LGA_level_661.rds")
+lga_113 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Health_LGA_level_113.rds")
+lga_pilot <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Health_LGA_level_pilot.rds")
 
 combined_113p_lga <- rbind.fill(lga_113, lga_pilot)
 combined_774_lga_H <- rbind.fill(combined_113p_lga, lga_661)
 write.csv(combined_774_lga_H, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/Health_774_NMIS_LGA.csv", row.names=F)
 
 ##water##
-lga_661 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Water_LGA_level_661.csv", stringsAsFactors=FALSE)
-lga_113 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Water_LGA_level_113.csv", stringsAsFactors=FALSE)
-lga_pilot <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Water_LGA_level_pilot.csv", stringsAsFactors=FALSE)
+lga_661 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Water_LGA_level_661.rds")
+lga_113 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Water_LGA_level_113.rds")
+lga_pilot <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Water_LGA_level_pilot.rds")
 
 combined_113p_lga <- rbind.fill(lga_113, lga_pilot)
 combined_774_lga_WATER <- rbind.fill(combined_113p_lga, lga_661)
 write.csv(combined_774_lga_WATER, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/Water_774_NMIS_LGA.csv", row.names=F)
 
 #external data
-external <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/output_data/external_data.csv", stringsAsFactors=F)
+external <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/output_data/external_data.rds")
 
 #combining all
 edu_external <- merge(combined_774_lga_EDU, external, by.x="lga_id", by.y="lga_id", all.y=T)

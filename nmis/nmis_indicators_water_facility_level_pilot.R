@@ -3,8 +3,7 @@ source("source_scripts/NMIS_Functions.R")
 
 #script for Facility level water for PIlot data
 
-wpilot <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Water_pilot_outliercleaned.csv", 
-                   stringsAsFactors=F)
+wpilot <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Water_pilot_outliercleaned.rds")
 
 wpilot <- subset(wpilot, subset=(geocodeoffacility != "n/a")) # REMOVING ALL FACILITIES WITHOUT GEO CODE
 # TODO: uuid is already there; why?
@@ -92,6 +91,6 @@ water_p_nearby <- subset(wp, dist_fake <= 35 | is.na(dist_fake))
 wpilot <- subset(wpilot, dist_fake <= 35 | is.na(dist_fake))
 
 
-write.csv(x_y_killa(water_p_nearby), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Water_pilot_NMIS_Facility.csv", row.names=F)
-write.csv(x_y_killa(wpilot), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Water_pilot_ALL_FACILITY_INDICATORS.csv", row.names=F)
+saveRDS(x_y_killa(water_p_nearby), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Water_pilot_NMIS_Facility.rds")
+saveRDS(x_y_killa(wpilot), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Water_pilot_ALL_FACILITY_INDICATORS.rds")
 

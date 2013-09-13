@@ -18,7 +18,7 @@ merged_health <- data.frame(formhubRead("~/Dropbox/Nigeria/Nigeria 661 Baseline 
 #####Education#####
 ###################
 ##knocking out 999 values
-cellst(merged_education, 
+cellst(merged_education,
     c('num_students_total_gender.num_students_male','num_students_total_gender.num_students_female',
       'num_students_total_gender.num_students_total'),
     which(merged_education$num_students_total_gender.num_students_male %in% c(9991, 99919)), NA_integer_) # 10300 stays
@@ -83,7 +83,7 @@ cellst(merged_education, 'num_students_total_gender.num_students_total',
 cellst(merged_education, 'num_students_total_gender.num_students_total',
       which(merged_education$num_students_total_gender.num_students_total =='9699'), NA_integer_)
 ##total
-write.csv(merged_education, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Education_661_999Cleaned.csv", row.names=FALSE)
+saveRDS(merged_education, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Education_661_999Cleaned.rds")
 
 
 ###################
@@ -157,14 +157,9 @@ cellst(merged_health, 'medical_staff_active.pharmacists_active',
 cellst(merged_health, 'medical_staff_active.medical_records_officers_active',
       which(merged_health$medical_staff_active.medical_records_officers_active > 908), NA_integer_)
 
-write.csv(merged_health, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Health_661_999Cleaned.csv", row.names=FALSE)
+saveRDS(merged_health, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Health_661_999Cleaned.rds")
 
 # water -- no numerical questions
-file.copy("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/merged/Water_661_Merged.csv", 
-          "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Water_661_999Cleaned.csv",
-          overwrite=TRUE)
-
-# localities -- numerical questions already discarded in MergeDatasets.R
-file.copy("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/merged/Local_661_Merged.csv",
-          "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Localities_661_999Cleaned.csv",
-          overwrite=TRUE)
+merged_water <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/merged/Water_661_Merged.csv",
+            stringsAsFactors=FALSE) 
+saveRDS(merged_water, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Water_661_999Cleaned.rds")
