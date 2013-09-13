@@ -10,8 +10,8 @@ row.names(required_gh_packages) <- required_gh_packages$Package
 # get all packages where Version of installed packages < MinVersion in required_packages
 get_packages_to_install = function(required_packages) {
   installed_packages = as.data.frame(installed.packages(), stringsAsFactors=F)
-  packages <- merge(installed_packages, required_packages, id="Package")
-  packages$to_install <- packages$Version < packages$MinVersion
+  packages <- merge(installed_packages, required_packages, id="Package", all.y=T)
+  packages$to_install <- is.na(packages$Version) || packages$Version < packages$MinVersion
   unlist(subset(packages, to_install, select="Package"))
 }
 # install all packages from CRAN first (including devtools)

@@ -93,7 +93,7 @@ combined_774_lga_WATER <- rbind.fill(combined_113p_lga, lga_661)
 write.csv(combined_774_lga_WATER, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/Water_774_NMIS_LGA.csv", row.names=F)
 
 #external data
-external <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/output_data/external_data.rds")
+external <- readRDS('~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/output_data/external_data.rds')
 
 #combining all
 edu_external <- merge(combined_774_lga_EDU, external, by.x="lga_id", by.y="lga_id", all.y=T)

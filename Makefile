@@ -1,4 +1,4 @@
-R=R CMD BATCH --no-restore 
+R=R CMD BATCH --no-restore --slave
 all:~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/in_process_data/nmis/data_774/All_774_LGA.csv
 test:
 	Rscript tests/*.R > logs/test.log
@@ -18,8 +18,6 @@ test:
 	$(R) ./base_scripts/external_data.R /dev/tty
 : ./base_scripts/InstallFormhub.R
 	$(R) ./base_scripts/InstallFormhub.R /dev/tty
-: ~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/in_process_data/999cleaned/Education_661_999Cleaned.rds ./cleaning_outliers/outlier_graphs_tables_education.R
-	$(R) ./cleaning_outliers/outlier_graphs_tables_education.R /dev/tty
 ~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/in_process_data/999cleaned/Health_pilot_999Cleaned.rds ~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/in_process_data/999cleaned/Education_pilot_999Cleaned.rds ~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/in_process_data/999cleaned/Water_pilot_999Cleaned.rds: ~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/raw_data/113/Pilot_Data_Health_Clean_2011.11.18.csv ~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/raw_data/113/Pilot_Education_cleaned_2011Nov17.csv ~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/raw_data/113/Pilot_Water_cleaned_2011Aug29.csv ./cleaning_999s/clean_out999s_pilot.R
 	$(R) ./cleaning_999s/clean_out999s_pilot.R /dev/tty
 : ./source_scripts/Clean_LGA_State_errors.R
@@ -54,8 +52,8 @@ test:
 	$(R) ./nmis/nmis_indicators_education_facility_level_113.R /dev/tty
 ~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/in_process_data/nmis/data_113/Health_LGA_level_113.rds: ~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/lgas.csv ~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/lgas.csv ~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/in_process_data/nmis/data_113/Health_113_ALL_FACILITY_INDICATORS.rds ./nmis/nmis_indicators_health_lga_level_113.R
 	$(R) ./nmis/nmis_indicators_health_lga_level_113.R /dev/tty
-: ./InstallFormhub.R
-	$(R) ./InstallFormhub.R /dev/tty
+: ~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/in_process_data/999cleaned/Education_661_999Cleaned.rds ./cleaning_outliers/outlier_graphs_tables_education.R
+	$(R) ./cleaning_outliers/outlier_graphs_tables_education.R /dev/tty
 : ~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/lgas.csv ~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/in_process_data/nmis/Matching\ result/nmis_edu.csv ~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/in_process_data/nmis/Matching\ result/lga_edu.csv ~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/in_process_data/nmis/Matching\ result/nmis_health.csv ~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/in_process_data/nmis/Matching\ result/lga_health.csv ./source_scripts/NMIS_Functions.R
 	$(R) ./source_scripts/NMIS_Functions.R /dev/tty
 ~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/in_process_data/999cleaned/Health_113_999Cleaned.rds ~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/in_process_data/999cleaned/Education_113_999Cleaned.rds ~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/in_process_data/999cleaned/Water_113_999Cleaned.rds: ~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/raw_data/113/Health_PhII_RoundI&II&III_Clean_2011.10.21.csv ~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/raw_data/113/Educ_Baseline_PhaseII_all_merged_cleaned_2011Nov21.csv ~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/raw_data/113/Water_Baseline_PhaseII_all_merged_cleaned_2011Nov21.csv ./cleaning_999s/clean_out999s_113.R
