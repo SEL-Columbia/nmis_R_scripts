@@ -33,7 +33,8 @@ h$antenatal <-
 h$family <-
   h$family_planning_yn == 'yes'
 h$separated <- h$not_for_private_1.waste_disposal.sharps_separated_yn == 'yes'
-h$facility_open_247 <- facility_open_247_yn == 'yes'
+h$facility_open_247 <- h$facility_open_247_yn == 'yes'
+h$malaria_treatment_art <- h$malaria_treatment_artemisinin == 'yes' 
 
 ih <- idata.frame(h)
 # h <- subset(h, lga_id == 309 | lga_id == 310 |  
@@ -111,7 +112,7 @@ lgah_facilities <- ddply(ih, .(lga_id),
                     proportion_no_user_fees_malaria = 
                       bool_proportion(df$paid_services_malaria_treatment, FALSE),
             proportion_health_facilities_art_treatment =
-              bool_proportion(df$malaria_treatment_artemisinin, TRUE),    
+              bool_proportion(df$malaria_treatment_art, TRUE),    
     proportion_health_facilities_tb_treatment = 
       bool_proportion(df$tb_treatment_yn, TRUE),                           
     proportion_health_facilities_tb_testing = 
