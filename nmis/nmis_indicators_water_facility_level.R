@@ -1,7 +1,7 @@
 source("base_scripts/InstallFormhub.R")
 source("source_scripts/NMIS_Functions.R")
 
-w <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Water_661_999Cleaned_Reclassified.csv", 
+w <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Water_661_outliercleaned.csv", 
               stringsAsFactors=F)
 ###THE INPUT FILE WAS CREATED FROM Water_reclassify_photos.R and includes all 661 LGAs, even though only 148 were reclassified
 
