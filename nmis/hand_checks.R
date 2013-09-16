@@ -328,10 +328,10 @@ ukwa_east <- data.frame(num_primary_schools, num_junior_secondary_schools,
                         num_senior_secondary_schools, num_schools,
                         proportion_schools_1kmplus_catchment_primary, proportion_schools_1kmplus_catchment_juniorsec,
                         proportion_schools_1kmplus_ss,proportion_students_3kmplus_primary,
-                        proportion_students_3kmplus_juniorsec, net_enrollment_rate_boys_primary,
-                        net_enrollment_rate_girls_primary, net_enrollment_rate_boys_js,
-                        net_enrollment_rate_girls_js, gender_parity_index_primary, gender_parity_index_js,
-                        proportion_schools_potable_water_primary, proportion_schools_potable_water_juniorsec,
+                        proportion_students_3kmplus_juniorsec, 
+#                         net_enrollment_rate_boys_primary,net_enrollment_rate_girls_primary, net_enrollment_rate_boys_js,
+#                         net_enrollment_rate_girls_js, gender_parity_index_primary, gender_parity_index_js,
+#                         proportion_schools_potable_water_primary, proportion_schools_potable_water_juniorsec,
                         proportion_schools_improved_sanitation_primary, proportion_schools_improved_sanitation_juniorsec,
                         proportion_schools_gender_sep_toilet_primary, proportion_schools_gender_sep_toilet_juniorsec,
                         pupil_toilet_ratio_primary, pupil_toilet_ratio_secondary, proportion_schools_power_access_primary,
@@ -365,109 +365,110 @@ ukwa_east <- data.frame(num_primary_schools, num_junior_secondary_schools,
                         
   
 #facilities
-num_primary_schools =  
-num_junior_secondary_schools = 
-num_senior_secondary_schools = 
-num_schools = 
+num_primary_schools =  17
+num_junior_secondary_schools = 4
+num_senior_secondary_schools = 1
+num_schools = 22
 
-#access
-proportion_schools_1kmplus_catchment_primary = 
-proportion_schools_1kmplus_catchment_juniorsec = 
-proportion_schools_1kmplus_ss = 
-proportion_students_3kmplus_primary = 
-proportion_students_3kmplus_juniorsec = 
+#access (have to be a little careful here because values might be slightly off after outlier removal)
+proportion_schools_1kmplus_catchment_primary = 0.5294118
+proportion_schools_1kmplus_catchment_juniorsec = 0.75
+proportion_schools_1kmplus_ss = 0.4117647
+proportion_students_3kmplus_primary = 0.4705882
+proportion_students_3kmplus_juniorsec = 0.5
 
-#participation
-net_enrollment_rate_boys_primary
-net_enrollment_rate_girls_primary
-net_enrollment_rate_boys_js
-net_enrollment_rate_girls_js
-gender_parity_index_primary
-gender_parity_index_js
+#participation (no enrollment/gender parity data from our scripts)
+# net_enrollment_rate_boys_primary = 
+# net_enrollment_rate_girls_primary = 
+# net_enrollment_rate_boys_js = 
+# net_enrollment_rate_girls_js = 
+# gender_parity_index_primary = 
+# gender_parity_index_js = 
 
 #infra
-proportion_schools_potable_water_primary
-proportion_schools_potable_water_juniorsec
-proportion_schools_improved_sanitation_primary
-proportion_schools_improved_sanitation_juniorsec
-proportion_schools_gender_sep_toilet_primary
-proportion_schools_gender_sep_toilet_juniorsec
-pupil_toilet_ratio_primary
-pupil_toilet_ratio_secondary
+# TODO: what is going on here? 
+# proportion_schools_potable_water_primary = ?
+# proportion_schools_potable_water_juniorsec = ?
+proportion_schools_improved_sanitation_primary = 0.4117647
+proportion_schools_improved_sanitation_juniorsec = 0.25
+proportion_schools_gender_sep_toilet_primary = 0.2352941
+proportion_schools_gender_sep_toilet_juniorsec = 0.25
+pupil_toilet_ratio_primary = 53.33333
+pupil_toilet_ratio_secondary = 720.25
 
 #building structure
-proportion_schools_power_access_primary
-proportion_schools_power_access_juniorsec
-proportion_classrooms_need_major_repair_primary
-proportion_classrooms_need_major_repair_juniorsec
-proportion_classrooms_need_minor_repair_primary
-proportion_classrooms_need_minor_repair_juniorsec
-proportion_schools_covered_roof_good_cond_primary
-proportion_schools_covered_roof_good_cond_primary
+proportion_schools_power_access_primary = 0.1176471
+proportion_schools_power_access_juniorsec = 0 
+proportion_classrooms_need_major_repair_primary = 0.5741935
+proportion_classrooms_need_major_repair_juniorsec = 0.7580645
+proportion_classrooms_need_minor_repair_primary = 0.3483871
+proportion_classrooms_need_minor_repair_juniorsec = 0.1774194
+proportion_schools_covered_roof_good_cond_primary = 0
+proportion_schools_covered_roof_good_cond_primary = 0
 
 #health&safety
-proportion_schools_with_clinic_dispensary_primary
-proportion_schools_with_clinic_dispensary_juniorsec
-proportion_schools_with_first_aid_kit_primary
-proportion_schools_with_first_aid_kit_juniorsec
-proportion_schools_fence_good_cond_primary
-proportion_schools_fence_good_cond_juniorsec
+proportion_schools_with_clinic_dispensary_primary = 0
+proportion_schools_with_clinic_dispensary_juniorsec = 0 
+proportion_schools_with_first_aid_kit_primary = 0
+proportion_schools_with_first_aid_kit_juniorsec = 0  
+proportion_schools_fence_good_cond_primary = 0 
+proportion_schools_fence_good_cond_juniorsec = 0 
 
 #learning environment
-student_classroom_ratio_lga_primary
-student_classroom_ratio_lga_juniorsec
-proportion_schools_hold_classes_outside_primary
-proportion_schools_hold_classes_outside_juniorsec
-proportion_schools_two_shifts_primary
-proportion_schools_two_shifts_juniorsec
-proportion_schools_multigrade_classrooms_primary
-proportion_schools_multigrade_classrooms_juniorsec
+student_classroom_ratio_lga_primary = 34.97419
+student_classroom_ratio_lga_juniorsec = 422.6774
+proportion_schools_hold_classes_outside_primary = 0.1764706
+proportion_schools_hold_classes_outside_juniorsec = 0.5
+proportion_schools_two_shifts_primary = 0
+proportion_schools_two_shifts_juniorsec = 0 
+proportion_schools_multigrade_classrooms_primary = 0.5294118
+proportion_schools_multigrade_classrooms_juniorsec = 0
 
 #furniture
-proportion_schools_chalkboard_all_rooms_primary
-proportion_schools_chalkboard_all_rooms_juniorsec
-pupil_bench_ratio_lga_primary
-pupil_bench_ratio_lga_juniorsec
-pupil_desk_ratio_lga_primary
-pupil_desk_ratio_lga_juniorsec
+proportion_schools_chalkboard_all_rooms_primary = 0.2352941
+proportion_schools_chalkboard_all_rooms_juniorsec = 0.25
+pupil_bench_ratio_lga_primary = 5.202353
+pupil_bench_ratio_lga_juniorsec = 1.242579
+pupil_desk_ratio_lga_primary = 4.347099
+pupil_desk_ratio_lga_juniorsec = 1.228483
 
 #adecuacy of staffing
-primary_school_pupil_teachers_ratio_lga
-junior_secondary_school_pupil_teachers_ratio_lga
-teacher_nonteachingstaff_ratio_lga_primary
-teacher_nonteachingstaff_ratio_lga_juniorsec
-proportion_teachers_nce_primary
-proportion_teachers_nce_juniorsec
-proportion_teachers_training_last_year_juniorsec
+primary_school_pupil_teachers_ratio_lga = 18.57563
+junior_secondary_school_pupil_teachers_ratio_lga = 451.8276
+teacher_nonteachingstaff_ratio_lga_primary = 
+teacher_nonteachingstaff_ratio_lga_juniorsec = 
+proportion_teachers_nce_primary = 
+proportion_teachers_nce_juniorsec = 
+proportion_teachers_training_last_year_juniorsec = 
 
 #institutional development
-proportion_schools_delay_pay_primary
-proportion_schools_delay_pay_juniorsec
-proportion_schools_missed_pay_primary
-proportion_schools_missed_pay_juniorsec
+proportion_schools_delay_pay_primary = 
+proportion_schools_delay_pay_juniorsec = 
+proportion_schools_missed_pay_primary = 
+proportion_schools_missed_pay_juniorsec = 
 
 #curriculum issues
-num_textbooks_per_pupil_primary
-num_textbooks_per_pupil_juniorsec
-proportion_provide_exercise_books_primary
-proportion_provide_exercise_books_juniorsec
-proportion_provide_pens_pencils_primary
-proportion_provide_pens_pencils_juniorsec
-proportion_natl_curriculum_primary
-proportion_natl_curriculum_juniorsec
-proportion_teachers_with_teacher_guide_primary
-proportion_teachers_with_teacher_guide_juniorsec
-proportion_schools_functioning_library_primary
-proportion_schools_functioning_library_juniorsec
+num_textbooks_per_pupil_primary = 
+num_textbooks_per_pupil_juniorsec = 
+proportion_provide_exercise_books_primary = 
+proportion_provide_exercise_books_juniorsec = 
+proportion_provide_pens_pencils_primary = 
+proportion_provide_pens_pencils_juniorsec = 
+proportion_natl_curriculum_primary = 
+proportion_natl_curriculum_juniorsec = 
+proportion_teachers_with_teacher_guide_primary = 
+proportion_teachers_with_teacher_guide_juniorsec = 
+proportion_schools_functioning_library_primary = 
+proportion_schools_functioning_library_juniorsec = 
 
 #efficiency (flow rates)
-transition_rate_primary_to_js1_male
-transition_rate_primary_to_js1_female
-repetition_rate_primary_male
-repetition_rate_primary_female
+transition_rate_primary_to_js1_male = 
+transition_rate_primary_to_js1_female =
+repetition_rate_primary_male = 
+repetition_rate_primary_female = 
 
 #learning outcomes
-literacy_rate
+literacy_rate = 
 
 
 
