@@ -3,12 +3,10 @@ source("base_scripts/InstallFormhub.R")
 source("source_scripts/NMIS_Functions.R")
 
 #reading in data
-e_113 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Education_113_outliercleaned.csv",
-                  stringsAsFactors=F)
+e_113 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Education_113_outliercleaned.rds")
 
 ##### TO DO list:###
-e_661 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Education_661_NMIS_Facility.csv",
-                  nrow=1)
+e_661 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Education_661_NMIS_Facility.rds")
 
 ###113
 subnm <- names(e_661)[which(names(e_661) %in% names(e_113))]
@@ -117,6 +115,6 @@ e_113 <- subset(e_113, dist_fake <= 35 | is.na(dist_fake))
 
 
 #writing out
-write.csv(x_y_killa(education_113_comp), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Education_113_NMIS_Facility.csv", row.names=F)
-write.csv(x_y_killa(e_113), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Education_113_ALL_FACILITY_INDICATORS.csv", row.names=F)
+saveRDS(x_y_killa(education_113_comp), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Education_113_NMIS_Facility.rds")
+saveRDS(x_y_killa(e_113), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Education_113_ALL_FACILITY_INDICATORS.rds")
 

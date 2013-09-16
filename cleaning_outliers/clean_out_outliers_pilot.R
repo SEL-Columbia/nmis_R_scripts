@@ -1,11 +1,11 @@
 ##PILOT Outlier Cleaning Script
-source("InstallFormhub.R")
+source("base_scripts/InstallFormhub.R")
 source('cleaning_outliers/outlier_functions.R')
 
 ###############################################################################################
 ######education################################################################################
 ###############################################################################################                    
-e <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Education_pilot_999Cleaned.csv", header=TRUE, stringsAsFactors=F)
+e <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Education_pilot_999Cleaned.rds")
 
 
 e$num_classrms_total <- e$num_total_classrooms
@@ -145,7 +145,7 @@ e <- outlierreplace(e, 'ratio_students_to_desks',
 e <- outlierreplace(e, 'ratio_students_to_benches',
                     (e$ratio_students_to_benches > 1000)) 
 
-write.csv(e, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Education_pilot_outliercleaned.csv", row.names=FALSE)
+saveRDS(e, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Education_pilot_outliercleaned.rds")
 
 
 
@@ -155,7 +155,7 @@ write.csv(e, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_da
 ######health###################################################################################
 ###############################################################################################                    
 ##reading in data
-h_p <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Health_pilot_999Cleaned.csv", stringsAsFactors=F)
+h_p <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Health_pilot_999Cleaned.rds")
 hp <- h_p
 
 #cleaning
@@ -195,15 +195,15 @@ hp <- outlierreplace(hp, 'num_lab_techs_fulltime',
 hp <- outlierreplace(hp, 'inpatient_care_num_beds',
                      hp$inpatient_care_num_beds > 50)
 
-write.csv(hp, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Health_pilot_outliercleaned.csv", row.names=F)
+saveRDS(hp, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Health_pilot_outliercleaned.rds")
 rm(hp)
 
 ###############################################################################################
 ######water####################################################################################
 ############################################################################################### 
 
-file.copy("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Water_pilot_999Cleaned.csv",
-          "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Water_pilot_outliercleaned.csv", overwrite=T)
+file.copy("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Water_pilot_999Cleaned.rds",
+          "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Water_pilot_outliercleaned.rds", overwrite=T)
 
 
 

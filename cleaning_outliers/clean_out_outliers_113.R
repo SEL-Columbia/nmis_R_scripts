@@ -5,7 +5,7 @@ source('cleaning_outliers/outlier_functions.R')
 ######education################################################################################
 ###############################################################################################
 
-e <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Education_113_999Cleaned.csv", header=TRUE, stringsAsFactors=F)
+e <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Education_113_999Cleaned.rds")
 
 
 e$num_classrms_total <- rowSums(cbind(e$num_classrms_good_cond,
@@ -152,7 +152,7 @@ e$num_tchrs.num_tchrs_total <- replace(e$num_tchrs.num_tchrs_male, is.na(e$num_t
 e <- outlierreplace(e, 'ratio_students_to_benches',
                     (e$ratio_students_to_benches > 1000)) 
 
-write.csv(e, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Education_113_outliercleaned.csv", row.names=FALSE)
+saveRDS(e, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Education_113_outliercleaned.rds")
 
 rm(e)                   
 
@@ -162,7 +162,7 @@ rm(e)
 ###############################################################################################                    
 
 ##reading in data
-hh <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Health_113_999Cleaned.csv", stringsAsFactors=F)
+hh <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Health_113_999Cleaned.rds")
 h <- hh
 
 #cleaning
@@ -344,7 +344,7 @@ h <- outlierreplace(h, 'open_pit_latrine_number',
 h <- outlierreplace(h, 'bucket_system_number',
                     h$bucket_system_number > 10 )
                     
-write.csv(h, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Health_113_outliercleaned.csv", row.names=FALSE)
+saveRDS(h, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Health_113_outliercleaned.rds")
 rm(h)
 
                     
@@ -352,8 +352,8 @@ rm(h)
 ######water####################################################################################
 ############################################################################################### 
 
-file.copy("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Water_113_999Cleaned.csv",
-     "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Water_113_outliercleaned.csv", overwrite=T)
+file.copy("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Water_113_999Cleaned.rds",
+     "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Water_113_outliercleaned.rds", overwrite=T)
 
 
                     
