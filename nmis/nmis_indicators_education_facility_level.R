@@ -2,10 +2,8 @@
 source("base_scripts/InstallFormhub.R")
 source("source_scripts/NMIS_Functions.R")
 
-e <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Education_661_outliercleaned.csv",
-              stringsAsFactors=F)
-lga_661 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/661.csv",
-                    , stringsAsFactors=F)
+e <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Education_661_outliercleaned.rds")
+lga_661 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/661.csv",stringsAsFactors=F)
 ##throw out all values from 113 LGAs that were resampled in 661
 e <- merge(e, lga_661, by="lga_id")
 ed <- subset(e, select=c("uuid", "mylga", "mylga_state", "mylga_zone", "gps", "school_name", "level_of_education", "unique_lga", "lga_id", "photo"))
@@ -142,5 +140,5 @@ e_661 <- subset(e_661, dist_fake <= 35 | is.na(dist_fake))
 
 
                                
-write.csv(x_y_killa(education_661_comp), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Education_661_NMIS_Facility.csv", row.names=F)
-write.csv(x_y_killa(e_661), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Education_661_ALL_FACILITY_INDICATORS.csv", row.names=F)
+saveRDS(x_y_killa(education_661_comp), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Education_661_NMIS_Facility.rds")
+saveRDS(x_y_killa(e_661), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Education_661_ALL_FACILITY_INDICATORS.rds")

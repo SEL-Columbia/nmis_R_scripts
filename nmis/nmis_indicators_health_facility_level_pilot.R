@@ -6,10 +6,8 @@ source("source_scripts/NMIS_Functions.R")
 #######
 #pilot#
 #######
-h_pilot <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Health_pilot_outliercleaned.csv",
-                    stringsAsFactors=F)
-h_661 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Health_661_NMIS_Facility.csv",
-                  stringsAsFactors=F)
+h_pilot <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Health_pilot_outliercleaned.rds")
+h_661 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Health_661_NMIS_Facility.rds")
 #to do list
 
 subnm <- names(h_661)[which(names(h_661) %in% names(h_pilot))]
@@ -165,6 +163,5 @@ hp <- subset(hp, dist_fake <= 35 | is.na(dist_fake))
 
 
 #writing
-write.csv(x_y_killa(h_pilot_comp), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Health_Pilot_NMIS_Facility.csv", row.names=F)
-write.csv(x_y_killa(hp),"~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Health_Pilot_ALL_FACILITY_INDICATORS.csv", row.names=F)
-
+saveRDS(x_y_killa(h_pilot_comp), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Health_Pilot_NMIS_Facility.rds")
+saveRDS(x_y_killa(hp),"~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Health_Pilot_ALL_FACILITY_INDICATORS.rds")

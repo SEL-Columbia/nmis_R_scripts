@@ -4,7 +4,7 @@
 # slugs are at https://github.com/mvpdev/nmis/blob/develop/uis_r_us/indicators/overview.json
 source("source_scripts/NMIS_Functions.R")
 
-wat113 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Water_113_ALL_FACILITY_INDICATORS.csv")
+wat113 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Water_113_ALL_FACILITY_INDICATORS.rds")
 
 # merge in population
 lgapops <- subset(read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/lgas.csv"), select=c("lga_id", "pop_2006"))
@@ -52,4 +52,4 @@ lgaw_facilities <- ddply(iw113, .(lga_id), function(df) {
 ##########################
 ###### SUMMING UP ########
 ##########################
-write.csv(x_y_killa(lgaw_facilities), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Water_LGA_level_113.csv", row.names=F)
+saveRDS(x_y_killa(lgaw_facilities), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Water_LGA_level_113.rds")

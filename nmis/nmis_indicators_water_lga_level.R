@@ -4,8 +4,7 @@ source("source_scripts/NMIS_Functions.R")
 # slugs are at https://github.com/mvpdev/nmis/blob/develop/uis_r_us/indicators/overview.json
 
 library(plyr)
-w <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Water_661_ALL_FACILITY_INDICATORS.csv",
-              stringsAsFactors=F)
+w <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Water_661_ALL_FACILITY_INDICATORS.rds")
 iw <- idata.frame(w)
 
 ####################
@@ -51,4 +50,4 @@ lga_water_all <- lgaw
 #adding ID info
 lgas <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/lgas.csv")
 lga_water_all <- merge_strict(lga_water_all, lgas, by="lga_id")
-write.csv(lga_water_all, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Water_LGA_level_661.csv")
+saveRDS(lga_water_all, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Water_LGA_level_661.rds")

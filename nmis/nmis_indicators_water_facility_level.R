@@ -1,8 +1,7 @@
 source("base_scripts/InstallFormhub.R")
 source("source_scripts/NMIS_Functions.R")
 
-w <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Water_661_outliercleaned.csv", 
-              stringsAsFactors=F)
+w <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Water_661_outliercleaned.rds")
 ###THE INPUT FILE WAS CREATED FROM Water_reclassify_photos.R and includes all 661 LGAs, even though only 148 were reclassified
 
 #create smaller dataset 
@@ -140,8 +139,8 @@ water_661_nearbypoints <- subset(water, dist_fake <= 35 | is.na(dist_fake))
 w_661 <- subset(w_661, dist_fake <= 35 | is.na(dist_fake))
 
 
-write.csv(x_y_killa(water_661_nearbypoints), 
-          "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Water_661_NMIS_Facility.csv", row.names=F)
+saveRDS(x_y_killa(water_661_nearbypoints), 
+          "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Water_661_NMIS_Facility.rds")
 
-write.csv(x_y_killa(w_661), 
-          "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Water_661_ALL_FACILITY_INDICATORS.csv", row.names=F)
+saveRDS(x_y_killa(w_661), 
+          "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Water_661_ALL_FACILITY_INDICATORS.rds")

@@ -5,7 +5,7 @@ source('cleaning_outliers/outlier_functions.R')
 ###############################################################################################
 ######education################################################################################
 ###############################################################################################                    
-e <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Education_661_999Cleaned.csv", header=TRUE)
+e <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Education_661_999Cleaned.rds")
 
 #total
 e$num_toilet.num_toilet_total <- replace(e$num_toilet.num_toilet_boy, is.na(e$num_toilet.num_toilet_boy), 0) + 
@@ -390,15 +390,15 @@ e <- outlierreplace(e, 'ratio_students_to_benches',
 e <- outlierreplace(e, 'num_classrms_need_min_repairs',e$num_classrms_need_min_repairs > e$num_classrms_total) 
 e <- outlierreplace(e, 'num_classrms_need_maj_repairs',e$num_classrms_need_maj_repairs > e$num_classrms_total) 
 
-##writing out csv
-write.csv(e, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Education_661_outliercleaned.csv", row.names=FALSE)
+##writing out.rds
+saveRDS(e, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Education_661_outliercleaned.rds")
 rm(e)                     
 
 
 ###############################################################################################
 ######health###################################################################################
 ###############################################################################################                    
-h <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Health_661_999Cleaned.csv", header=TRUE)
+h <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Health_661_999Cleaned.rds")
 
 #old script paramaters 
     h <- outlierreplace(h, 'medical_staff_active.num_doctors_active',
@@ -593,16 +593,14 @@ h <- outlierreplace(h, 'not_for_private_1.toilets_available.num_bucket_system',
                       (h$facility_type == "teachinghospital" | 
                       h$facility_type == "federalmedicalcentre")))
 
-write.csv(h, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Health_661_outliercleaned.csv", row.names=FALSE)
+saveRDS(h, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Health_661_outliercleaned.rds")
 rm(h)
 
 ###############################################################################################
 ######water####################################################################################
 ############################################################################################### 
-
-file.copy("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Water_661_999Cleaned_Reclassified.csv", 
-          "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Water_661_outliercleaned.csv",
-          overwrite=TRUE)
-
+water_pilot <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Water_661_999Cleaned_Reclassified.csv", 
+        stringsAsFactors=FALSE)
+saveRDS(water_pilot, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Water_661_outliercleaned.rds")
 
 

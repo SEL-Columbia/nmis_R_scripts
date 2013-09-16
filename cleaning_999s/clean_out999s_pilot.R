@@ -22,7 +22,7 @@ h$num_toilets_notimproved_p <- as.numeric(h$num_toilets_notimproved_p)
 
 h$inpatient_care_num_beds <- as.numeric(h$inpatient_care_num_beds)
 
-write.csv(h, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Health_pilot_999Cleaned.csv", row.names=F)
+saveRDS(h, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Health_pilot_999Cleaned.rds")
 
 
 #########################
@@ -51,7 +51,7 @@ e <- e_pilot
 
 #X_p_budget_spending <- data is in range format
 
-write.csv(e, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Education_pilot_999Cleaned.csv", row.names=F)
+saveRDS(e, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Education_pilot_999Cleaned.rds")
 
 
 ################
@@ -64,6 +64,6 @@ w_pilot$uuid <- sapply(paste(w_pilot$gps, w_pilot$photo), FUN=digest)
 # OUTPUT SHOULD BE 0
 anyDuplicated(w_pilot$uuid)
 
-write.csv(w_pilot, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Water_pilot_999Cleaned.csv", row.names=F)
+saveRDS(w_pilot, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Water_pilot_999Cleaned.rds")
 
 

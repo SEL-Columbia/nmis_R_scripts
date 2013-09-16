@@ -3,10 +3,8 @@ source("base_scripts/InstallFormhub.R")
 source("source_scripts/NMIS_Functions.R")
 
 
-w113_raw <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Water_113_outliercleaned.csv",
-                     stringsAsFactors=F)
-lgas <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/lgas.csv",
-                 stringsAsFactors=F)
+w113_raw <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Water_113_outliercleaned.rds")
+lgas <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/lgas.csv")
 
 #removing geographic outliers
 w113_raw <- subset(w113_raw, subset=(geocodeoffacility != "n/a")) # REMOVING ALL FACILITIES WITHOUT GEO CODE
@@ -103,5 +101,5 @@ w113_nearbypoints <- subset(w113, dist_fake <= 35 | is.na(dist_fake))
 w113_raw <- subset(w113_raw, dist_fake <= 35 | is.na(dist_fake))
 
 
-write.csv(x_y_killa(w113_nearbypoints), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Water_113_NMIS_Facility.csv", row.names=F)
-write.csv(x_y_killa(w113_raw), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Water_113_ALL_FACILITY_INDICATORS.csv", row.names=F)
+saveRDS(x_y_killa(w113_nearbypoints), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Water_113_NMIS_Facility.rds")
+saveRDS(x_y_killa(w113_raw), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Water_113_ALL_FACILITY_INDICATORS.rds")
