@@ -33,6 +33,9 @@ h$antenatal <-
 h$family <-
   h$family_planning_yn == 'yes'
 h$separated <- h$not_for_private_1.waste_disposal.sharps_separated_yn == 'yes'
+h$facility_open_247 <- h$facility_open_247_yn == 'yes'
+h$malaria_treatment_art <- h$malaria_treatment_artemisinin == 'yes' 
+h$tb_treatment <- h$tb_treatment_yn == 'yes'
 
 ih <- idata.frame(h)
 # h <- subset(h, lga_id == 309 | lga_id == 310 |  
@@ -67,7 +70,7 @@ lgah_facilities <- ddply(ih, .(lga_id),
             proportion_health_facilities_inpatient_care = 
               bool_proportion(df$inpatient_care_yn, TRUE),
             proportion_health_facilities_open_24_7 = 
-              bool_proportion(df$facility_open_247_yn, TRUE),              
+              bool_proportion(df$facility_open_247, TRUE),              
       num_doctors = sum(df$medical_staff_posted.num_doctors_posted, na.rm = TRUE),            
       num_nursemidwives_midwives = sum(df$medical_staff_posted.num_nursemidwives_posted, na.rm = TRUE) + 
               sum(df$medical_staff_posted.num_midwives_posted, na.rm = TRUE),            
@@ -108,9 +111,9 @@ lgah_facilities <- ddply(ih, .(lga_id),
                     proportion_offer_bednets = 
                       bool_proportion(df$has_itns, TRUE),                    
                     proportion_no_user_fees_malaria = 
-                      bool_proportion(df$paid_services_malaria_treatment, FALSE),
+                      bool_proportion(df$paid_services_malaria_treatment, TRUE),
             proportion_health_facilities_art_treatment =
-              bool_proportion(df$malaria_treatment_artemisinin, TRUE),    
+              bool_proportion(df$malaria_treatment_art, TRUE),    
     proportion_health_facilities_tb_treatment = 
       bool_proportion(df$tb_treatment_yn, TRUE),                           
     proportion_health_facilities_tb_testing = 
@@ -136,7 +139,10 @@ lgah_facilities <- ddply(ih, .(lga_id),
                     num_chews_per_1000 = 
                       as.numeric((sum(df$medical_staff_posted.num_chews_posted, na.rm = TRUE) + 
                          sum(df$medical_staff_posted.num_junior_chews_posted, na.rm = TRUE))) /
-                      as.numeric((popu[as.character(df$lga_id[[1]]),1]/1000))                    
+                      as.numeric((popu[as.character(df$lga_id[[1]]),1]/1000)),
+              
+            # TODO: proportion_improved_water_source = ??
+            # TODO: proportion_functional_sanitation = ??
                            )})                     
 
 ##########################
