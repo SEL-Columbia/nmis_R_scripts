@@ -1,17 +1,5 @@
-# Install package if library not installed then load library
-required_library <- c("foreign", "gdata", "plyr")
-# testing required packages and install if not installed  
-for (re_lib in required_library)
-{
-    if (! re_lib %in% installed.packages())
-    {
-        install.packages(re_lib)    
-    }
-    require(re_lib,character.only = TRUE)
-    print(re_lib)
-}
-rm(re_lib, required_library)
-
+source("base_scripts/InstallFormhub.R")
+load_packages_with_install(c("foreign", "gdata", "plyr"))
 
 # load hnlss lga state mapping data
 ref <- read.xls("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/source_data/Nigeria Master Codes_SP.xlsx")
@@ -52,7 +40,7 @@ other_edu$transition_rate_primary_to_js1_female = other_edu$transition_rate_prim
 ####### primary #########
 #########################
 # Load hnlss data
-sec_2 <- read.dta("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/source_data/section_2.dta") 
+sec_2 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/source_data/section_2.rds") 
 # select records with age == 6-11,  s2a07== 11-16 (primary)
 age_6_11<- sec_2[which(sapply(sec_2[,c("age")], 
                  function(x) any(x == c(6:11)))),c("lga","lg", "stlga","age","state")]
@@ -107,7 +95,7 @@ literacy$literacy_rate <- (literacy[,"count_liter"]/literacy[,"count_age"])
 ####### WATER/SANITATION ########
 ##############################
 
-sec_6 <- read.dta("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/source_data/hh_final.dta")
+sec_6 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/source_data/hh_final.rds")
 #select only records with improved water == 1:5 | 7
 water_improved <- sec_6[which(sapply(as.numeric(sec_6[,c("s6f4a")]), 
                                      function(x) any(x == c(1:5,7)))),
