@@ -102,7 +102,7 @@ hh$emergency_transport_currently_functioning <-
 
 
 hh$power_access_and_functional <-
-    h$not_for_private_1.power_sources.none == F
+    h$not_for_private_1.power_sources.none != F
 
 hh$comprehensive_obstetrics_yn <- h$emergency_obstetrics_yn == 'yes' & h$c_section_yn == 'yes'
 
