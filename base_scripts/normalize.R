@@ -22,14 +22,8 @@ see <- function(nm, df=edu_113)
 length(which(!names(edu_113) %in% names(edu_661)))
 edu_113$num_students_male
 ####
-ed$mylga <- e_113$lga
-ed$mylga_state <- e_113$state
-ed$mylga_zone <- e_113$zone
-ed$unique_lga <- paste(ed$mylga_state, ed$mylga, sep='_')
 
-
-
-rename(edu_113, c("days_no_potable_water_pastmth" = "days_no_potable_water",
+edu_113 <- rename(edu_113, c("days_no_potable_water_pastmth" = "days_no_potable_water",
                   "new_stdnts_enroll_fee" = "fees.admission_new", #### including fees.tuition_new??
                   "cont_stdnts_enroll_fee" = "fees.tuition_cont", 
                   "textbooks_fee" = "fees.textbook", 
@@ -39,8 +33,8 @@ rename(edu_113, c("days_no_potable_water_pastmth" = "days_no_potable_water",
                   "num_unattached_desks" = "num_desks",
                   "num_textbooks_pry_sci" = "num_science_textbook_pry",
                   "lga" = "mylga",
-                  "state", "mylga_state", 
-                  "zone", "mylga_zone", 
+                  "state" = "mylga_state", 
+                  "zone"= "mylga_zone" 
                   ))
 
 newname_113 <- c("days_no_electricity", "days_no_water_pastmth", "flush_toilet_number",
@@ -70,7 +64,7 @@ newname_113 <- c("days_no_electricity", "days_no_water_pastmth", "flush_toilet_n
                  "num_attached_benches","num_attached_benches_unused", "num_unattached_benches",
                  "num_unattached_benches_unused", "num_unattached_desks_unused", "num_textbooks_english",
                  "num_textbooks_math", "num_textbooks_social_sci", "num_exercise_books",
-                 "num_tchrs_attended_last_day", "grid_months_broken", )
+                 "num_tchrs_attended_last_day", "grid_months_broken" )
 
 
 # Creating new variables in 113
@@ -97,7 +91,13 @@ edu_113$ratio_students_to_benches <- replace(edu_113$num_students_total, is.na(e
 
 edu_113$unique_lga <- paste(edu_113$mylga_state, edu_113$mylga, sep='_')
 
-edu_113$school_managed <- NULL
+edu_113$school_managed <- ifelse(edu_113$school_managed_fed_gov, "fed_gov",
+                             ifelse(edu_113$school_managed_st_gov, "st_gov",
+                                ifelse(edu_113$school_managed_loc_gov, "loc_gov",
+                                   ifelse(edu_113$school_managed_priv_profit, "priv_profit",
+                                      ifelse(edu_113$school_managed_priv_noprofit, "priv_noprofit",
+                                        ifelse(edu_113$school_managed_other | !is.na(edu_113$school_managed_other_specify), "other",
+                                            NA))))))
 
 
 a <- data.frame(as.logical(edu_113$school_managed_fed_gov),
@@ -108,6 +108,8 @@ a <- data.frame(as.logical(edu_113$school_managed_fed_gov),
             as.logical(edu_113$school_managed_none),
             as.logical(edu_113$school_managed_other),
             edu_113$school_managed_other_specify)
-which(rowSums(a[,1:7]) !=1 & !is.na(a[,8]))
+head(a[which(rowSums(a[,1:7], na.rm=T) !=1 & is.na(a[,8])),])
+
+which(is.na(edu_661$school_managed) & !is.na(edu_661$school_managed_other))
 
 a[,8][(which(!is.na(a[,8])))]
