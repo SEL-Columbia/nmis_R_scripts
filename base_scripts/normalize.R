@@ -9,7 +9,7 @@ edu_pilot <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_
                     stringsAsFactors=F, na.strings = c("NA", "n/a"))
 
 ####
-names(edu_661)[(which(!names(edu_661) %in% names(edu_113)))]
+common_slugs <- names(edu_661)[(which(names(edu_661) %in% names(edu_113)))]
 
 slugsearch <- function(nm, df=edu_661){
     names(df)[grep(nm, names(df), ignore.case=T)]
@@ -22,6 +22,11 @@ see <- function(nm, df=edu_113)
 length(which(!names(edu_113) %in% names(edu_661)))
 edu_113$num_students_male
 ####
+ed$mylga <- e_113$lga
+ed$mylga_state <- e_113$state
+ed$mylga_zone <- e_113$zone
+ed$unique_lga <- paste(ed$mylga_state, ed$mylga, sep='_')
+
 
 
 rename(edu_113, c("days_no_potable_water_pastmth" = "days_no_potable_water",
@@ -33,7 +38,10 @@ rename(edu_113, c("days_no_potable_water_pastmth" = "days_no_potable_water",
                   "pta_fee" = "fees.pta_fee", 
                   "num_unattached_desks" = "num_desks",
                   "num_textbooks_pry_sci" = "num_science_textbook_pry",
-                  ""))
+                  "lga" = "mylga",
+                  "state", "mylga_state", 
+                  "zone", "mylga_zone", 
+                  ))
 
 newname_113 <- c("days_no_electricity", "days_no_water_pastmth", "flush_toilet_number",
                  "flush_toilet_not_working", "vip_latrine_number", "vip_latrine_not_working",
@@ -86,3 +94,20 @@ edu_113$num_classrms_total <- apply(cbind(edu_113$num_classrms_good_cond,
 
 edu_113$ratio_students_to_benches <- replace(edu_113$num_students_total, is.na(edu_113$num_students_total), 0) / 
                                                     replace(edu_113$num_benches, is.na(edu_113$num_benches), 0) 
+
+edu_113$unique_lga <- paste(edu_113$mylga_state, edu_113$mylga, sep='_')
+
+edu_113$school_managed <- NULL
+
+
+a <- data.frame(as.logical(edu_113$school_managed_fed_gov),
+           as.logical(edu_113$school_managed_st_gov),
+            as.logical(edu_113$school_managed_loc_gov),
+            as.logical(edu_113$school_managed_priv_profit),
+            as.logical(edu_113$school_managed_priv_noprofit),
+            as.logical(edu_113$school_managed_none),
+            as.logical(edu_113$school_managed_other),
+            edu_113$school_managed_other_specify)
+which(rowSums(a[,1:7]) !=1 & !is.na(a[,8]))
+
+a[,8][(which(!is.na(a[,8])))]
