@@ -1,5 +1,5 @@
-suppressPackageStartupMessages(
-  lapply(c('doBy', 'stringr'), require, character.only=T))
+source('base_scripts/InstallFormhub.R')
+load_packages_with_install(c('doBy', 'stringr'))
 
 lga_corrections <- read.csv('~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/source_data/nmis_lga_corrections.csv', stringsAsFactors=FALSE)
 nmis_lga_mapping <- read.csv('~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/source_data/nmis_lga_mapping.csv', stringsAsFactors=FALSE)

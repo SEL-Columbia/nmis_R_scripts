@@ -6,11 +6,10 @@ source("source_scripts/NMIS_Functions.R")
 ########
 ###PILOT
 #reading in data
-e_p <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Education_pilot_outliercleaned.csv",
-                stringsAsFactors=F)
+e_p <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Education_pilot_outliercleaned.rds")
 
 #strip common variables
-e_661 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Education_661_NMIS_Facility.csv")
+e_661 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Education_661_NMIS_Facility.rds")
 subnm <- names(e_661)[which(names(e_661) %in% names(e_p))]
 
 nm_p <- names(e_p)[! names(e_p) %in% subnm]
@@ -94,5 +93,5 @@ e_p <- subset(e_p, dist_fake <= 35 | is.na(dist_fake))
 
 
 #writing
-write.csv(x_y_killa(e_pilot_comp), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Education_Pilot_NMIS_Facility.csv", row.names=F)
-write.csv(x_y_killa(e_p), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Education_Pilot_ALL_FACILITY_INDICATORS.csv", row.names=F)
+saveRDS(x_y_killa(e_pilot_comp), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Education_Pilot_NMIS_Facility.rds")
+saveRDS(x_y_killa(e_p), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_pilot/Education_Pilot_ALL_FACILITY_INDICATORS.rds")

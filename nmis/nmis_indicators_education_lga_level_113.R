@@ -5,7 +5,7 @@ source("source_scripts/NMIS_Functions.R")
 ################################################################################################
 ##113###########################################################################################
 ################################################################################################
-ed <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Education_113_ALL_FACILITY_INDICATORS.csv", stringsAsFactor=F)
+ed <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Education_113_ALL_FACILITY_INDICATORS.rds")
 e <- ed
 
 e$is_primary <- e$level_of_education %in% 
@@ -224,5 +224,5 @@ lgas <- subset(read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/lg
 lga_education_all <- merge(lga_education_all, lgas, by="lga_id")
 
 #writing out
-write.csv(x_y_killa(lga_education_all), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Education_LGA_level_113.csv", row.names=F)
+saveRDS(x_y_killa(lga_education_all), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_113/Education_LGA_level_113.rds")
 

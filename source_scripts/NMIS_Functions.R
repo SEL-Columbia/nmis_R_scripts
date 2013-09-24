@@ -1,19 +1,7 @@
+source('base_scripts/InstallFormhub.R')
 #packages
-required_library <- c("plyr", "doBy", "stringr", "digest", "gdata",
-                      "maptools", "shapefiles", "sp", "spatstat", "geosphere")
-
-# testing required packages and install if not installed  
-for (re_lib in required_library)
-{
-    if (! re_lib %in% installed.packages())
-    {
-        install.packages(re_lib)    
-    }
-    require(re_lib,character.only = TRUE)
-    print(re_lib)
-}
-
-rm(required_library, re_lib)
+load_packages_with_install(c("plyr", "doBy", "stringr", "digest", "gdata",
+                      "maptools", "shapefiles", "sp", "spatstat", "geosphere"))
 
 # takes a vector of data, and returns a version where all the na values are replaced with 0
 zeroIfNA <- function(x) { replace(x, is.na(x), 0) }

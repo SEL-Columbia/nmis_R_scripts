@@ -1,4 +1,5 @@
 #113: 999 cleaning
+source('base_scripts/InstallFormhub.R')
 source('./cleaning_999s/999_functions.R')
 
 ##############
@@ -87,7 +88,7 @@ h$child_health_services_price <- as.numeric(h$child_health_services_price)
 h$hiv_treatment_price <- as.numeric(h$hiv_treatment_price)
 
 #WRITING OUT
-write.csv(h, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Health_113_999Cleaned.csv", row.names=F)
+saveRDS(h, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Health_113_999Cleaned.rds")
 
 
 ##############
@@ -102,17 +103,17 @@ e_113$uuid <- sapply(paste(e_113$gps, e_113$photo), FUN=digest)
 anyDuplicated(e_113$uuid)
 e <- e_113
 
-#changing "none" to numeric 0
-for (i in 1:800)
-{
-  e[,i] <- recodeVar(e[,i], "none", 0)  
+#TODO: where to do this longer term
+replaceInAllColumns <- function(df, from, to) {
+  tmp <- t(colwise(function(col) { from %in% col })(df))
+  tmp <- subset(tmp, tmp[,1])
+  names_to_replace <- row.names(tmp)
+  df[,names_to_replace] <- recodeVar(df[,names_to_replace],from, to)
+  df
 }
+e <- replaceInAllColumns(e, "none", 0)
+e <- replaceInAllColumns(e, "o", 0)
 
-#changing "o" to numeric 0
-for (i in 1:800)
-{
-  e[,i] <- recodeVar(e[,i], "o", 0)  
-}
 
 
 #CLEANING            
@@ -458,12 +459,11 @@ for (i in 1:length(selcol))
 
 
 #WRITING OUT
-write.csv(e, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Education_113_999Cleaned.csv", row.names=F)
+saveRDS(e, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Education_113_999Cleaned.rds")
 
 ##############
 #####Water
 ##############
 # water -- no numerical questions (except for elevation...)
-file.copy("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/113/Water_Baseline_PhaseII_all_merged_cleaned_2011Nov21.csv",
-          "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Water_113_999Cleaned.csv",
-          overwrite=T)
+water_113 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/113/Water_Baseline_PhaseII_all_merged_cleaned_2011Nov21.csv")
+saveRDS(water_113, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Water_113_999Cleaned.rds")

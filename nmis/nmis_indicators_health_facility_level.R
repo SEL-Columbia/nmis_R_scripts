@@ -2,8 +2,7 @@ source("base_scripts/InstallFormhub.R")
 source("source_scripts/NMIS_Functions.R")
 
 #reading in data
-h <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Health_661_outliercleaned.csv",
-              stringsAsFactors=F)
+h <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Health_661_outliercleaned.rds")
 lga_661 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/661.csv")
 ##throw out all values from 113 LGAs that were resampled in 661
 h <- merge(h, lga_661, by="lga_id")
@@ -362,7 +361,7 @@ health_661_comp <- subset(health_661_comp, dist_fake <= 35 | is.na(dist_fake))
 h_661 <- subset(h_661, dist_fake <= 35 | is.na(dist_fake))
 
 
-write.csv(x_y_killa(health_661_comp), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Health_661_NMIS_Facility.csv", row.names=F)
-write.csv(x_y_killa(h_661), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Health_661_ALL_FACILITY_INDICATORS.csv", row.names=F)
+saveRDS(x_y_killa(health_661_comp), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Health_661_NMIS_Facility.rds")
+saveRDS(x_y_killa(h_661), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Health_661_ALL_FACILITY_INDICATORS.rds")
 
 

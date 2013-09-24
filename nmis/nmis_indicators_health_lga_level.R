@@ -3,7 +3,7 @@
 source("base_scripts/InstallFormhub.R")
 source("source_scripts/NMIS_Functions.R")
 
-hh <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Health_661_ALL_FACILITY_INDICATORS.csv", stringsAsFactors=FALSE)
+hh <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Health_661_ALL_FACILITY_INDICATORS.rds")
 
 #getting rid of erroneous lgas surveyed (that were part of 113)
 # hh <- subset(hh, !(lga_id %in% c(133, 2, 208, 253, 415, 618, 699, 742, 753, 773)))
@@ -152,5 +152,5 @@ lga_health_all <- lgah_facilities
 lgas <- subset(read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/lgas.csv"), select=c("lga_id", "lga", "state", "zone","unique_lga"))
 lga_health_all <- merge(lga_health_all, lgas, by="lga_id")
 
-write.csv(x_y_killa(lga_health_all), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Health_LGA_level_661.csv", row.names=F)
+saveRDS(x_y_killa(lga_health_all), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Health_LGA_level_661.rds")
 
