@@ -41,11 +41,13 @@ ed$chalkboard_each_classroom_yn <- e_113$num_classrms_total <= e_113$chalkboard_
 ed$improved_water_supply <- (e_113$water_pipe_water == T | e_113$water_tube_well == T)
 ed$improved_sanitation <- (e_113$toilet_flush_or_pour_flush == T| e_113$toilet_ventilated_improved == T | e_113$toilet_pit_latrine_with_slab)
 ed$phcn_electricity <- e_113$power_grid_connection == T
+ed$num_toilet <- e_113$flush_toilet_number + e_113$other_toilets_number
+
 ################### 
 ###################
 
 ed$school_1kmplus_catchment_area <- e_113$km_to_catchment_area > 1
-ed$num_tchrs_w_nce <- as.numeric(e_113$num_tchrs_w_nce)
+ed$num_tchrs_w_nce <- e_113$num_tchrs_attended_training
 ed$num_textbooks <- rowSums(e_113[,c("num_textbooks_english", "num_textbooks_math", 
                                      "num_textbooks_social_sci", "num_textbooks_pry_sci")], na.rm=T)
 
