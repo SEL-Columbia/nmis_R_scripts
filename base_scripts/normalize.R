@@ -21,8 +21,31 @@ see <- function(nm, df=edu_113)
 
 length(which(!names(edu_113) %in% names(edu_661)))
 edu_113$num_students_male
-####
 
+
+#### adding new variable to 661
+
+edu_661$chalkboard_each_classroom_yn <- edu_661$num_classrms_total <= edu_661$num_classrm_w_chalkboard
+
+edu_661$num_textbooks <-  
+    ifelse(edu_661$level_of_education %in% c('primary_only', 'preprimary_and_primary'),  
+        edu_661$num_math_textbook_pry + edu_661$num_english_textbook_pry + 
+        edu_661$num_soc_science_textbook_pry + edu_661$num_science_textbook_pry,
+    ifelse(edu_661$level_of_education %in% c('junior_and_senior_sec', 'juniors_sec_only'),
+        edu_661$num_math_textbook_js + edu_661$num_english_textbook_js + 
+        edu_661$num_soc_science_textbook_js + edu_661$num_science_textbook_js,
+    ifelse(edu_661$level_of_education %in% c('primary_and_junior_sec', 'primary_junior_and_senior_sec'),
+        edu_661$num_math_textbook_pry + edu_661$num_english_textbook_pry + 
+        edu_661$num_soc_science_textbook_pry + edu_661$num_science_textbook_pry +
+        edu_661$num_math_textbook_js + edu_661$num_english_textbook_js + 
+        edu_661$num_soc_science_textbook_js + edu_661$num_science_textbook_js,
+    0)))
+
+
+edu_661$num_students_total_gender.num_students_total / 
+    (edu_661$num_toilet.num_toilet_boy + edu_661$num_toilet.num_toilet_girl + edu_661$num_toilet.num_toilet_both)
+
+### mapping names
 edu_113 <- rename(edu_113, c("days_no_potable_water_pastmth" = "days_no_potable_water",
                   "new_stdnts_enroll_fee" = "fees.admission_new", #### including fees.tuition_new??
                   "cont_stdnts_enroll_fee" = "fees.tuition_cont", 
@@ -31,11 +54,21 @@ edu_113 <- rename(edu_113, c("days_no_potable_water_pastmth" = "days_no_potable_
                   "exams_fee" = "fees.exam_fee", 
                   "pta_fee" = "fees.pta_fee", 
                   "num_unattached_desks" = "num_desks",
-                  "num_textbooks_pry_sci" = "num_science_textbook_pry",
+                  "num_science_textbook_pry" = "num_textbooks_pry_sci",
                   "lga" = "mylga",
                   "state" = "mylga_state", 
-                  "zone"= "mylga_zone" 
-                  ))
+                  "zone"= "mylga_zone",
+                  "water_pipe_water" = "water.pipe_water", 
+                  "water_tube_well" = "water.tube_well", 
+                  "toilet_flush_or_pour_flush" = "toilet.flush_or_pour_flush_improved", 
+                  "toilet_ventilated_improved" = "toilet.ventilated_improved", 
+                  "toilet_pit_latrine_with_slab" = "toilet.pit_latrine_with_slab"
+                  "power_generator" = "power_sources.generator", 
+                  "power_sources.solar_system" = "power_solar_system", 
+                  "power_sources.grid" = "power_grid_connection", 
+                  "funtioning_library_yn" = "functioning_library_yn"))
+
+
 
 newname_113 <- c("days_no_electricity", "days_no_water_pastmth", "flush_toilet_number",
                  "flush_toilet_not_working", "vip_latrine_number", "vip_latrine_not_working",
@@ -80,7 +113,7 @@ edu_113$num_tchrs_w_nce <- apply(cbind(edu_113$tchrs_male_nce,
                                        edu_113$tchrs_female_other_w_nce), 1, sum, na.rm=T)
 
 edu_113$num_benches <- apply(cbind(edu_113$num_attached_benches, 
-                                       edu_113$num_unattached_benches), 1, sum, na.rm=T)
+                                   edu_113$num_unattached_benches), 1, sum, na.rm=T)
 
 edu_113$num_classrms_total <- apply(cbind(edu_113$num_classrms_good_cond, 
                                           edu_113$num_classrms_need_min_repairs, 
@@ -99,17 +132,27 @@ edu_113$school_managed <- ifelse(edu_113$school_managed_fed_gov, "fed_gov",
                                         ifelse(edu_113$school_managed_other | !is.na(edu_113$school_managed_other_specify), "other",
                                             NA))))))
 
+edu_113$grid_proximity[edu_113$power_grid_connection == T] <- "connected_to_grid"
 
-a <- data.frame(as.logical(edu_113$school_managed_fed_gov),
-           as.logical(edu_113$school_managed_st_gov),
-            as.logical(edu_113$school_managed_loc_gov),
-            as.logical(edu_113$school_managed_priv_profit),
-            as.logical(edu_113$school_managed_priv_noprofit),
-            as.logical(edu_113$school_managed_none),
-            as.logical(edu_113$school_managed_other),
-            edu_113$school_managed_other_specify)
-head(a[which(rowSums(a[,1:7], na.rm=T) !=1 & is.na(a[,8])),])
+slugsearch("textbook", edu_113)
 
-which(is.na(edu_661$school_managed) & !is.na(edu_661$school_managed_other))
 
-a[,8][(which(!is.na(a[,8])))]
+edu_113$num_textbooks <- apply(cbind(edu_113$num_textbooks_english, 
+                                     edu_113$num_textbooks_math, 
+                                     edu_113$num_textbooks_social_sci,
+                                     edu_113$num_textbooks_pry_sci), 1, sum, na.rm=T)
+
+
+# edu_113$improved_sanitation <- (edu_113$toilet.flush_or_pour_flush_improved | 
+#                                 edu_113$toilet.ventilated_improved | 
+#                                 edu_113$toilet.pit_latrine_with_slab)
+
+edu_113$pupil_toilet_ratio_facility <- (ifelse(edu_113$flush_toilet_drain_to == "improved", 
+                                          apply(cbind(edu_113$flush_toilet_number, 
+                                                      edu_113$vip_latrine_number,
+                                                      edu_113$slab_pit_latrine_number), 1, sum, na.rm=T),
+                                          apply(cbind(edu_113$vip_latrine_number,
+                                                      edu_113$slab_pit_latrine_number,
+                                                      edu_113$education_improved_sanitation), 1, sum, na.rm=T)) / edu_113$num_students_total)
+
+ed$covered_roof_good_condi <- edu_113$covered_roof_yn %in% c("roof_fence_good_condition", 'yes')
