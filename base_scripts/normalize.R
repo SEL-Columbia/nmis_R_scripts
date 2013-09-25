@@ -16,7 +16,7 @@ slugsearch <- function(nm, df=edu_661){
 }
 see <- function(nm, df=edu_113)
 {
-    table(df[,nm])
+    table(df[,nm],exclude=NULL)
 }
 
 length(which(!names(edu_113) %in% names(edu_661)))
@@ -62,7 +62,7 @@ edu_113 <- rename(edu_113, c("days_no_potable_water_pastmth" = "days_no_potable_
                   "water_tube_well" = "water.tube_well", 
                   "toilet_flush_or_pour_flush" = "toilet.flush_or_pour_flush_improved", 
                   "toilet_ventilated_improved" = "toilet.ventilated_improved", 
-                  "toilet_pit_latrine_with_slab" = "toilet.pit_latrine_with_slab"
+                  "toilet_pit_latrine_with_slab" = "toilet.pit_latrine_with_slab",
                   "power_generator" = "power_sources.generator", 
                   "power_sources.solar_system" = "power_solar_system", 
                   "power_sources.grid" = "power_grid_connection", 
@@ -156,3 +156,48 @@ edu_113$pupil_toilet_ratio_facility <- (ifelse(edu_113$flush_toilet_drain_to == 
                                                       edu_113$education_improved_sanitation), 1, sum, na.rm=T)) / edu_113$num_students_total)
 
 ed$covered_roof_good_condi <- edu_113$covered_roof_yn %in% c("roof_fence_good_condition", 'yes')
+
+
+
+
+
+
+#### Pilot 
+
+edu_pilot <- rename(edu_pilot, c("num_total_classrooms" = "num_classrms_total",
+                                 "lga" = "mylga",
+                                 "state" = "mylga_state", 
+                                 "zone"= "mylga_zone",
+                                 "X_p_num_total_desk" = "num_desks",
+                                 "X_p_num_benches_chairs" = "num_benches",
+                                 "water_pipe_water" = "water.pipe_water", 
+                                 "water_tube_well" = "water.tube_well", 
+                                 "toilet_flush_or_pour_flush" = "toilet.flush_or_pour_flush_improved", 
+                                 "toilet_ventilated_improved" = "toilet.ventilated_improved", 
+                                 "toilet_pit_latrine_with_slab" = "toilet.pit_latrine_with_slab",
+                                 
+                                 ))
+
+
+### Pilot new indicator
+edu_pilot$grid_proximity[edu_pilot$power_grid_connection == T] <- "connected_to_grid"
+
+edu_pilot$num_textbooks <- apply(cbind(edu_pilot$num_textbooks_english, 
+                                       edu_pilot$num_textbooks_math, 
+                                       edu_pilot$num_textbooks_social_sci,
+                                       edu_pilot$num_textbooks_pry_sci), 1, sum, na.rm=T)
+
+###### All 3 new indicator:
+ed$potable_water <- ((e_p$days_no_potable_water < 7) & (e_p$water_none == FALSE))
+
+
+
+
+slugsearch("manage", edu_113)
+slugsearch("manage", edu_pilot)
+slugsearch("manage", edu_661)
+common_slugs
+
+see("X_p_managed_by", edu_pilot)
+                    
+        
