@@ -8,26 +8,26 @@ source('cleaning_outliers/outlier_functions.R')
 e <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Education_661_999Cleaned.rds")
 
 #total
-e$num_toilet.num_toilet_total <- replace(e$num_toilet.num_toilet_boy, is.na(e$num_toilet.num_toilet_boy), 0) + 
-  replace(e$num_toilet.num_toilet_girl, 
-          is.na(e$num_toilet.num_toilet_girl), 0) + 
-  replace(e$num_toilet.num_toilet_both, is.na(e$num_toilet.num_toilet_both), 0)
+e$num_toilet_total <- replace(e$num_toilet_boy, is.na(e$num_toilet_boy), 0) + 
+  replace(e$num_toilet_girl, 
+          is.na(e$num_toilet_girl), 0) + 
+  replace(e$num_toilet_both, is.na(e$num_toilet_both), 0)
 
-e$num_toilet.num_toilet_total <- 
-  ifelse(e$toilet.none == "FALSE" & e$num_toilet.num_toilet_total == 0, NA, e$num_toilet.num_toilet_total)
+e$num_toilet_total <- 
+  ifelse(e$toilet.none == "FALSE" & e$num_toilet_total == 0, NA, e$num_toilet_total)
 
-e$num_students_total_gender.num_students_total <-  replace(e$num_students_total_gender.num_students_female, 
-                                                           is.na(e$num_students_total_gender.num_students_female), 0) +
-  replace(e$num_students_total_gender.num_students_male, 
-          is.na(e$num_students_total_gender.num_students_male), 0)
+e$num_students_total <-  replace(e$num_students_female, 
+                                                           is.na(e$num_students_female), 0) +
+  replace(e$num_students_male, 
+          is.na(e$num_students_male), 0)
 
-e$num_tchrs.num_tchrs_total <- replace(e$num_tchrs.num_tchrs_male, is.na(e$num_tchrs.num_tchrs_male), 0) + 
-  replace(e$num_tchrs.num_tchrs_female, is.na(e$num_tchrs.num_tchrs_female), 0) 
+e$num_tchrs_total <- replace(e$num_tchrs_male, is.na(e$num_tchrs_male), 0) + 
+  replace(e$num_tchrs_female, is.na(e$num_tchrs_female), 0) 
 
 #dealing with total students problem
-e$test_f_p <- replace(e$num_pry_total_gender.num_pry_female, is.na(e$num_pry_total_gender.num_pry_female), 0) + 
-  replace(e$num_js_total_gender.num_js_female, is.na(e$num_js_total_gender.num_js_female), 0) + 
-  replace(e$num_ss_total_gender.num_ss_female, is.na(e$num_ss_total_gender.num_ss_female), 0)
+e$test_f_p <- replace(e$num_pry_female, is.na(e$num_pry_female), 0) + 
+  replace(e$num_js_female, is.na(e$num_js_total_gender.num_js_female), 0) + 
+  replace(e$num_ss_female, is.na(e$num_ss_total_gender.num_ss_female), 0)
 
 e$test_m_p <- replace(e$num_pry_total_gender.num_pry_male, is.na(e$num_pry_total_gender.num_pry_male),0) +
   replace(e$num_js_total_gender.num_js_male, is.na(e$num_js_total_gender.num_js_male),0) + 
