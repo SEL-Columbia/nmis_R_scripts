@@ -1,12 +1,31 @@
 # source("source_scripts/NMIS_Utils.R")
 # source("base_scripts/InstallFormhub.R")
-
+require(plyr)
+require(doBy)
+require(digest)
 
 edu_661 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/merged/Education_661_Merged.csv", stringsAsFactors=F)
 edu_113 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/113/Educ_Baseline_PhaseII_all_merged_cleaned_2011Nov21.csv",
                   stringsAsFactors=F, na.strings = c("NA", "n/a"))
 edu_pilot <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/113/Pilot_Education_cleaned_2011Nov17.csv",
                     stringsAsFactors=F, na.strings = c("NA", "n/a"))
+
+edu_661$src <- "661"
+edu_113$src <- "113"
+edu_pilot$src <- "pilot"
+
+edu_113$uuid <- sapply(paste(edu_113$gps, edu_113$photo), FUN=digest)
+edu_pilot$uuid <- sapply(paste(edu_pilot$gps, edu_pilot$photo), FUN=digest)
+
+# # lgas <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/lgas.csv", stringsAsFactors=F)
+# # 
+# # lga_source <- subset(lgas, select=c(lga_id, surveying_effort))
+# # 
+# # lga_source$surveying_effort <- recodeVar(lga_source$surveying_effort, 
+# #                                          src=c("148", "Others"),
+# #                                          tgt=c("661", "661"))
+# 
+# lga_source <- rename(lga_source, c("surveying_effort" = "source"))
 
 ####
 common_slugs <- names(edu_661)[(which(names(edu_661) %in% names(edu_113)))]
@@ -19,14 +38,22 @@ see <- function(nm, df=edu_113)
     table(df[,nm],exclude=NULL)
 }
 
-length(which(!names(edu_113) %in% names(edu_661)))
-edu_113$num_students_male
+na_num <- function(vec) length(which(is.na(vec)))
+
+na_prop <- function(vec) {
+    print(class(vec)) 
+    na_num(vec)/length(vec)
+}
+
+length(which(names(edu_113) %in% names(edu_661)))
+length(which(names(edu_pilot) %in% names(edu_113)))
+# edu_113$num_students_male
 
 
 #### adding new variable to 661
-
+# after cleaning999
 edu_661$chalkboard_each_classroom_yn <- edu_661$num_classrms_total <= edu_661$num_classrm_w_chalkboard
-
+# after cleaning999
 edu_661$num_textbooks <-  
     ifelse(edu_661$level_of_education %in% c('primary_only', 'preprimary_and_primary'),  
         edu_661$num_math_textbook_pry + edu_661$num_english_textbook_pry + 
@@ -42,19 +69,16 @@ edu_661$num_textbooks <-
     0)))
 
 
-edu_661$num_students_total_gender.num_students_total / 
-    (edu_661$num_toilet.num_toilet_boy + edu_661$num_toilet.num_toilet_girl + edu_661$num_toilet.num_toilet_both)
+# edu_661$num_students_total_gender.num_students_total / 
+#     (edu_661$num_toilet.num_toilet_boy + edu_661$num_toilet.num_toilet_girl + edu_661$num_toilet.num_toilet_both)
 
-### mapping names
+####
+### mapping 113 names
+
+# after cleaning999
 edu_113 <- rename(edu_113, c("days_no_potable_water_pastmth" = "days_no_potable_water",
-                  "new_stdnts_enroll_fee" = "fees.admission_new", #### including fees.tuition_new??
-                  "cont_stdnts_enroll_fee" = "fees.tuition_cont", 
-                  "textbooks_fee" = "fees.textbook", 
-                  "transport_fee" = "fees.transport", 
-                  "exams_fee" = "fees.exam_fee", 
-                  "pta_fee" = "fees.pta_fee", 
                   "num_unattached_desks" = "num_desks",
-                  "num_science_textbook_pry" = "num_textbooks_pry_sci",
+                  "num_textbooks_pry_sci" = "num_science_textbook_pry",
                   "lga" = "mylga",
                   "state" = "mylga_state", 
                   "zone"= "mylga_zone",
@@ -64,8 +88,8 @@ edu_113 <- rename(edu_113, c("days_no_potable_water_pastmth" = "days_no_potable_
                   "toilet_ventilated_improved" = "toilet.ventilated_improved", 
                   "toilet_pit_latrine_with_slab" = "toilet.pit_latrine_with_slab",
                   "power_generator" = "power_sources.generator", 
-                  "power_sources.solar_system" = "power_solar_system", 
-                  "power_sources.grid" = "power_grid_connection", 
+                  "power_solar_system" = "power_sources.solar_system", 
+                  "power_grid_connection" = "power_sources.grid", 
                   "funtioning_library_yn" = "functioning_library_yn"))
 
 
@@ -155,6 +179,23 @@ edu_113$pupil_toilet_ratio_facility <- (ifelse(edu_113$flush_toilet_drain_to == 
                                                       edu_113$slab_pit_latrine_number,
                                                       edu_113$education_improved_sanitation), 1, sum, na.rm=T)) / edu_113$num_students_total)
 
+
+edu_113$fees.admission_new <- as.logical(edu_113$new_stdnts_enroll_fee > 0)
+edu_113$fees.tuition_cont <- as.logical(edu_113$cont_stdnts_enroll_fee > 0)
+edu_113$fees.textbook <- as.logical(edu_113$textbooks_fee > 0)
+edu_113$fees.transport <- as.logical(edu_113$transport_fee > 0)
+edu_113$fees.exam_fee <- as.logical(edu_113$exams_fee > 0)
+edu_113$fees.pta_fee <- as.logical(edu_113$pta_fee > 0)
+
+
+
+# "cont_stdnts_enroll_fee" = "fees.tuition_cont", 
+# "textbooks_fee" = "fees.textbook", 
+# "transport_fee" = "fees.transport", 
+# "exams_fee" = "fees.exam_fee", 
+# "pta_fee" = "fees.pta_fee", 
+
+
 ed$covered_roof_good_condi <- edu_113$covered_roof_yn %in% c("roof_fence_good_condition", 'yes')
 
 
@@ -175,9 +216,13 @@ edu_pilot <- rename(edu_pilot, c("num_total_classrooms" = "num_classrms_total",
                                  "toilet_flush_or_pour_flush" = "toilet.flush_or_pour_flush_improved", 
                                  "toilet_ventilated_improved" = "toilet.ventilated_improved", 
                                  "toilet_pit_latrine_with_slab" = "toilet.pit_latrine_with_slab",
+                                 "days_no_water_any_source" = "days_no_water_pastmth"
                                  
                                  ))
 
+
+edu_pilot$days_no_water_any_source
+edu_113$days_no_water_pastmth
 
 ### Pilot new indicator
 edu_pilot$grid_proximity[edu_pilot$power_grid_connection == T] <- "connected_to_grid"
@@ -186,6 +231,8 @@ edu_pilot$num_textbooks <- apply(cbind(edu_pilot$num_textbooks_english,
                                        edu_pilot$num_textbooks_math, 
                                        edu_pilot$num_textbooks_social_sci,
                                        edu_pilot$num_textbooks_pry_sci), 1, sum, na.rm=T)
+
+edu_pilot$fees.transport <- as.logical(edu_pilot$transport_fee > 0)
 
 ###### All 3 new indicator:
 ed$potable_water <- ((e_p$days_no_potable_water < 7) & (e_p$water_none == FALSE))
@@ -200,4 +247,6 @@ common_slugs
 
 see("X_p_managed_by", edu_pilot)
                     
-        
+
+#### combining 661, 113 & pilot
+edu_total <- rbind.fill(edu_661, edu_113, edu_pilot)
