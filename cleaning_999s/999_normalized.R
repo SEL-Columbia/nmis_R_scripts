@@ -295,7 +295,7 @@ merged_education$times_tchr_pay_miss_pastyr <- as.numeric(merged_education$times
 
 
 ##knocking out 999 values
-merged_education <- e
+
 
 cellst(merged_education,
        c('num_students_male','num_students_female',
@@ -365,3 +365,9 @@ cellst(merged_education, 'num_students_total',
        which(merged_education$num_students_total =='9699'), NA_integer_)
 ##total
 saveRDS(merged_education, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Education_661_999Cleaned.rds")
+
+
+
+
+
+

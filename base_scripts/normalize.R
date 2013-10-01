@@ -4,11 +4,12 @@ require(plyr)
 require(doBy)
 require(digest)
 
-edu_661 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/merged/Education_661_Merged.csv", stringsAsFactors=F)
+edu_661 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/merged/Education_661_Merged.csv", 
+                    stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999"))
 edu_113 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/113/Educ_Baseline_PhaseII_all_merged_cleaned_2011Nov21.csv",
-                  stringsAsFactors=F, na.strings = c("NA", "n/a"))
+                  stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999"))
 edu_pilot <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/113/Pilot_Education_cleaned_2011Nov17.csv",
-                    stringsAsFactors=F, na.strings = c("NA", "n/a"))
+                    stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999"))
 
 edu_661$src <- "661"
 edu_113$src <- "113"
@@ -250,3 +251,18 @@ see("X_p_managed_by", edu_pilot)
 
 #### combining 661, 113 & pilot
 edu_total <- rbind.fill(edu_661, edu_113, edu_pilot)
+saveRDS(edu_total, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Edu774.rds")
+
+
+
+##########
+##Health##
+##########
+
+
+
+health_661 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/merged/Health_661_Merged.csv", stringsAsFactors=F)
+health_113 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/113/Health_PhII_RoundI&II&III_Clean_2011.10.21.csv",
+                    stringsAsFactors=F, na.strings = c("NA", "n/a"))
+health_pilot <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/113/Pilot_Data_Health_Clean_2011.11.18.csv",
+                      stringsAsFactors=F, na.strings = c("NA", "n/a"))
