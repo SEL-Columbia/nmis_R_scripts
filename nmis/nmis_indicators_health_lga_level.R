@@ -15,24 +15,24 @@ row.names(popu) <- as.character(popu$lga_id)
 # population figure within ddply is between the , and the last ) below
 lgah_summaries <- ddply(h, .(lga_id), summarize, population = popu[as.character(lga_id[[1]]),'pop_2006'])
 #other columns necessary for indicators
-h$routine_immunization <- (h$not_for_private_2.immunization.bcg_immunization == T | 
-                             h$not_for_private_2.immunization.bcg_immunization == T |
-                             h$not_for_private_2.immunization.opv_immuization == T |
-                             h$not_for_private_2.immunization.measles_immun == T |
-                             h$not_for_private_2.immunization.dpt_immunization == T |
-                             h$not_for_private_2.immunization.yellow_fever_immun == T |
-                             h$not_for_private_2.immunization.csm_immunization == T |
-                             h$not_for_private_2.immunization.hepb_immunization == T |
-                             h$not_for_private_2.immunization.tetanus_immun == T)
+h$routine_immunization <- (h$immunization.bcg_immunization == T | 
+                             h$immunization.bcg_immunization == T |
+                             h$immunization.opv_immuization == T |
+                             h$immunization.measles_immun == T |
+                             h$immunization.dpt_immunization == T |
+                             h$immunization.yellow_fever_immun == T |
+                             h$immunization.csm_immunization == T |
+                             h$immunization.hepb_immunization == T |
+                             h$immunization.tetanus_immun == T)
 h$health_no_child_user_fees <-                                           
-  h$not_for_private_2.child_tx_fees_yn == 'no'
+  h$child_tx_fees_yn == 'no'
 h$health_no_delivery_user_fees <-
-  h$not_for_private_2.fees_adults.paid_services_anc_delivery == F
+  h$fees_adults.paid_services_anc_delivery == F
 h$antenatal <-
   h$antenatal_care_yn == 'yes'
 h$family <-
   h$family_planning_yn == 'yes'
-h$separated <- h$not_for_private_1.waste_disposal.sharps_separated_yn == 'yes'
+h$separated <- h$sharps_separated_yn == 'yes'
 h$facility_open_247 <- h$facility_open_247_yn == 'yes'
 h$malaria_treatment_art <- h$malaria_treatment_artemisinin == 'yes' 
 h$tb_treatment <- h$tb_treatment_yn == 'yes'
@@ -71,13 +71,13 @@ lgah_facilities <- ddply(ih, .(lga_id),
               bool_proportion(df$inpatient_care_yn, TRUE),
             proportion_health_facilities_open_24_7 = 
               bool_proportion(df$facility_open_247, TRUE),              
-      num_doctors = sum(df$medical_staff_posted.num_doctors_posted, na.rm = TRUE),            
-      num_nursemidwives_midwives = sum(df$medical_staff_posted.num_nursemidwives_posted, na.rm = TRUE) + 
-              sum(df$medical_staff_posted.num_midwives_posted, na.rm = TRUE),            
-      num_nurses = sum(df$medical_staff_posted.num_nurses_posted, na.rm = TRUE),            
-      num_chews = sum(df$medical_staff_posted.num_chews_posted, na.rm = TRUE) + 
-              sum(df$medical_staff_posted.num_junior_chews_posted, na.rm = TRUE),            
-      num_lab_techs = sum(df$medical_staff_posted.lab_technicians_posted, na.rm = TRUE),             
+      num_doctors = sum(df$num_doctors_posted, na.rm = TRUE),            
+      num_nursemidwives_midwives = sum(df$num_nursemidwives_posted, na.rm = TRUE) + 
+              sum(df$num_midwives_posted, na.rm = TRUE),            
+      num_nurses = sum(df$num_nurses_posted, na.rm = TRUE),            
+      num_chews = sum(df$num_chews_posted, na.rm = TRUE) + 
+              sum(df$num_junior_chews_posted, na.rm = TRUE),            
+      num_lab_techs = sum(df$lab_technicians_posted, na.rm = TRUE),             
       proportion_staff_paid = bool_proportion(df$staff_paid_lastmth_yn, TRUE),            
                         proportion_health_facilities_routine_immunization =
                           bool_proportion(df$routine_immunization, TRUE),                     
@@ -131,15 +131,15 @@ lgah_facilities <- ddply(ih, .(lga_id),
     proportion_stockout_essential_meds = 
     bool_proportion(df$essential_meds_stockout, TRUE),                        
                     num_skilled_health_providers_per_1000 = 
-                      (sum(df$medical_staff_posted.num_doctors_posted, na.rm = TRUE) + 
-                         sum(df$medical_staff_posted.num_nursemidwives_posted, na.rm = TRUE) +
-                         sum(df$medical_staff_posted.num_nurses_posted, na.rm = TRUE) +
-                         sum(df$medical_staff_posted.num_midwives_posted, na.rm = TRUE)) /
+                      (sum(df$num_doctors_posted, na.rm = TRUE) + 
+                         sum(df$num_nursemidwives_posted, na.rm = TRUE) +
+                         sum(df$num_nurses_posted, na.rm = TRUE) +
+                         sum(df$num_midwives_posted, na.rm = TRUE)) /
                           (popu[as.character(df$lga_id[[1]]),1]/1000),                    
                     num_chews_per_1000 = 
-                      as.numeric((sum(df$medical_staff_posted.num_chews_posted, na.rm = TRUE) + 
-                         sum(df$medical_staff_posted.num_junior_chews_posted, na.rm = TRUE))) /
-                      as.numeric((popu[as.character(df$lga_id[[1]]),1]/1000)),
+                      as.numeric((sum(df$num_chews_posted, na.rm = TRUE) + 
+                         sum(df$num_junior_chews_posted, na.rm = TRUE))) /
+                      as.numeric((popu[as.character(df$lga_id[[1]]),1]/1000))
               
             # TODO: proportion_improved_water_source = ??
             # TODO: proportion_functional_sanitation = ??
