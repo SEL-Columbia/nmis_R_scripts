@@ -5,14 +5,11 @@ extraschema = setNames(data.frame(rbind(
   c("mylga", "select one", "LGA"),
   c("mylga_state", "select one", "State")), stringsAsFactors=FALSE),
                        c("name", "type", "label"))
-nastrings = c('999', '9999', '99999', '999999' , 'n/a')
 
-merged_education <- data.frame(formhubRead("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/merged/Education_661_Merged.csv",
-                                 "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/json_schemas/Education_05_06_2012.json",
-                                extraForm = extraschema, na.strings=nastrings), stringsAsFactors=FALSE)
-merged_health <- data.frame(formhubRead("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/merged/Health_661_Merged.csv",
-                               "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/json_schemas/Health_17_04_2012.json",
-                             extraForm = extraschema, na.strings=nastrings), stringsAsFactors=FALSE)
+merged_education <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/merged/Education_661_Merged.csv",
+                                 na.strings = c("999", "9999", "99999", "999999", "n/a", "NA"), stringsAsFactors=FALSE)
+merged_health <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/merged/Health_661_Merged.csv",
+                                na.strings = c("999", "9999", "99999", "999999", "n/a", "NA"), stringsAsFactors=FALSE)
 
 ###################
 #####Education#####
