@@ -53,8 +53,8 @@ cellst(h, 'immunization_price',
        which(h$immunization_price > 5000), NA_integer_)
 
 h$tb_treatment_price <- as.numeric(h$tb_treatment_price)
-cellst(h, 'immunization_price',
-       which(h$immunization_price == 9999), NA_integer_)
+cellst(h, 'tb_treatment_price',
+       which(h$tb_treatment_price == 9999), NA_integer_)
 
 h$malaria_treatment_price <- as.numeric(h$malaria_treatment_price)
 cellst(h, 'malaria_treatment_price',
