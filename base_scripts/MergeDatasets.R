@@ -14,40 +14,40 @@ raw_data <- function(basepath) {
 ###### READ #######
 education <- formhubRead("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/Education_05_06_2012_2013_05_15_12_00_14.csv",
                          "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/json_schemas/Education_05_06_2012.json",
-                         extraForm = extraSchema, dropCols=dropCols)
+                         extraForm = extraSchema, dropCols=dropCols, keepGroupNames=F)
 education2 <- formhubRead("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/Education_17_04_2012_2013_05_15_11_59_29.csv",
                          "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/json_schemas/Education_05_06_2012.json",
-                          extraForm = extraSchema, dropCols=dropCols)
+                          extraForm = extraSchema, dropCols=dropCols, keepGroupNames=F)
 education3 <- formhubRead("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/Education_22_05_2012_2013_05_14_13_41_23.csv",
                          "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/json_schemas/Education_05_06_2012.json",
-                          extraForm = extraSchema, dropCols=dropCols)
+                          extraForm = extraSchema, dropCols=dropCols, keepGroupNames=F)
 health <- formhubRead("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/Health_05_06_2012_2013_05_14_14_16_00.csv",
                       "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/json_schemas/Health_17_04_2012.json",
-                      extraForm = extraSchema, dropCols=dropCols)
+                      extraForm = extraSchema, dropCols=dropCols, keepGroupNames=F)
 health2 <- formhubRead("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/Health_17_04_2012_2013_05_15_11_45_47.csv",
                       "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/json_schemas/Health_17_04_2012.json",
-                       extraForm = extraSchema, dropCols=dropCols)
+                       extraForm = extraSchema, dropCols=dropCols, keepGroupNames=F)
 health3 <- formhubRead("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/Health_22_05_2012_2013_05_14_13_54_51.csv",
                       "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/json_schemas/Health_17_04_2012.json",
-                       extraForm = extraSchema, dropCols=dropCols)
+                       extraForm = extraSchema, dropCols=dropCols, keepGroupNames=F)
 water <- formhubRead("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/Water_05_06_2012_2012_11_30_10_54_44.csv",
                      "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/json_schemas/Water_05_06_2012.json",
-                     extraForm = extraSchema, dropCols=dropCols)
+                     extraForm = extraSchema, dropCols=dropCols, keepGroupNames=F)
 water2 <- formhubRead("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/Water_22_05_2012_2012_11_28_13_38_10.csv",
                      "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/json_schemas/Water_05_06_2012.json",
-                      extraForm = extraSchema, dropCols=dropCols)
+                      extraForm = extraSchema, dropCols=dropCols, keepGroupNames=F)
 water3 <- formhubRead("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/Water_24_04_2012_2012_11_28_13_40_08.csv",
                      "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/json_schemas/Water_05_06_2012.json",
-                      extraForm = extraSchema, dropCols=dropCols)
+                      extraForm = extraSchema, dropCols=dropCols, keepGroupNames=F)
 local <- formhubRead("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/Localities_05_06_2012_2013_05_24_12_25_37.csv",
                        "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/json_schemas/Localities_05_06_2012.json",
-                     extraForm = extraSchema, dropCols=dropCols, na.strings=na.strings)
+                     extraForm = extraSchema, dropCols=dropCols, na.strings=na.strings, keepGroupNames=F)
 local2 <- formhubRead("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/Localities_16_04_2012_2013_03_08_11_29_53.csv",
                        "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/json_schemas/Localities_16_04_2012.json",
-                      extraForm = extraSchema, dropCols=dropCols, na.strings=na.strings)
+                      extraForm = extraSchema, dropCols=dropCols, na.strings=na.strings, keepGroupNames=F)
 local3 <- formhubRead("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/Localities_22_05_2012_2013_03_08_11_45_37.csv",
                        "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/json_schemas/Localities_22_05_2012.json",
-                      extraForm = extraSchema, dropCols=dropCols, na.strings=na.strings)
+                      extraForm = extraSchema, dropCols=dropCols, na.strings=na.strings, keepGroupNames=F)
 
 stopifnot((names(education) == names(education2)) && (names(education2) == names(education3)) && (names(education3) == names(education)))
 stopifnot((names(health) == names(health2)) && (names(health2) == names(health3)) && (names(health3) == names(health)))

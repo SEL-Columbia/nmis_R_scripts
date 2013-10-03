@@ -26,14 +26,14 @@ lga_edu_data <- ddply(ie, .(lga_id), function(df) {
               schools_improved_sanitation = bool_proportion(df$improved_sanitation, TRUE),
               
               benches_school_ratio = ratio(df$num_benches, df$pj),
-              benches_pupil_ratio = ratio(df$num_benches, df$num_students_total_gender.num_students_total, df$pj),
+              benches_pupil_ratio = ratio(df$num_benches, df$num_students_total, df$pj),
               desks_school_ratio = ratio(df$num_desks, df$pj),
-              desks_pupil_ratio = ratio(df$num_desks, df$num_students_total_gender.num_students_total,  df$pj),
+              desks_pupil_ratio = ratio(df$num_desks, df$num_students_total,  df$pj),
               classrooms_num_chalkboards = sum(df$num_classrm_w_chalkboard, na.rm = TRUE),
               teachers_total = sum(df$num_tchrs.num_tchrs_total, na.rm = TRUE),
-              teachers_qualified = sum(df$num_tchrs_qualification.num_tchrs_w_nce, na.rm = TRUE),
+              teachers_qualified = sum(df$num_tchrs_w_nce, na.rm = TRUE),
               teachers_attended_training = sum(df$num_tchrs_attended_training, na.rm = TRUE),
-              txt_pupil_ratio = ratio(df$num_textbooks, df$num_students_total_gender.num_students_total,df$pj),
+              txt_pupil_ratio = ratio(df$num_textbooks, df$num_students_total,df$pj),
               percent_teaching_guides = bool_proportion(df$teacher_guide_yn, TRUE),
               schools_use_teaching_aids = icount(df$teacher_guide_yn),
                 num_primary_schools = icount(df$is_primary),
@@ -66,9 +66,9 @@ lga_edu_data <- ddply(ie, .(lga_id), function(df) {
               proportion_schools_gender_sep_toilet_juniorsec =
                 bool_proportion(df$gender_separated_toilets_yn, df$is_junior_secondary),
               pupil_toilet_ratio_primary = 
-                ratio(df$num_students_total_gender.num_students_total, df$num_toilet.num_toilet_total, df$is_primary),
+                ratio(df$num_students_total, df$num_toilet_total, df$is_primary),
               pupil_toilet_ratio_secondary = 
-                ratio(df$num_students_total_gender.num_students_total, df$num_toilet.num_toilet_total, df$is_junior_secondary),              
+                ratio(df$num_students_total, df$num_toilet_total, df$is_junior_secondary),              
           proportion_schools_power_access_primary =
             bool_proportion(df$power_access, df$is_primary),
           proportion_schools_power_access_juniorsec =
@@ -98,9 +98,9 @@ lga_edu_data <- ddply(ie, .(lga_id), function(df) {
               proportion_schools_fence_good_cond_juniorsec = 
                 bool_proportion(df$wall_fence_good_condi, df$is_junior_secondary),
           student_classroom_ratio_lga_primary =
-            ratio(df$num_students_total_gender.num_students_total, df$num_classrms_total, df$is_primary),
+            ratio(df$num_students_total, df$num_classrms_total, df$is_primary),
           student_classroom_ratio_lga_juniorsec =
-            ratio(df$num_students_total_gender.num_students_total, df$num_classrms_total, df$is_junior_secondary),
+            ratio(df$num_students_total, df$num_classrms_total, df$is_junior_secondary),
           proportion_schools_hold_classes_outside_primary =
             bool_proportion(df$classes_outside_yn, df$is_primary),
           proportion_schools_hold_classes_outside_juniorsec =
@@ -114,37 +114,37 @@ lga_edu_data <- ddply(ie, .(lga_id), function(df) {
           proportion_schools_multigrade_classrooms_juniorsec = 
             bool_proportion(df$multigrade_classrms, df$is_junior_secondary),             
                 proportion_schools_chalkboard_all_rooms_primary = 
-                  bool_proportion(df$chalkboard_each_classroom_yn,df$is_primary),                              
+                  bool_proportion(df$chalkboard_each_classroom_yn, df$is_primary),                              
                 proportion_schools_chalkboard_all_rooms_juniorsec = 
-                  bool_proportion(df$chalkboard_each_classroom_yn,df$is_junior_secondary),                                
+                  bool_proportion(df$chalkboard_each_classroom_yn, df$is_junior_secondary),                                
                 pupil_bench_ratio_lga_primary = 
-                  ratio(df$num_students_total_gender.num_students_total, 
+                  ratio(df$num_students_total, 
                         df$num_benches, df$is_primary),                                 
                 pupil_bench_ratio_lga_juniorsec =
-                  ratio(df$num_students_total_gender.num_students_total, 
+                  ratio(df$num_students_total, 
                         df$num_benches, df$is_junior_secondary),                            
                 pupil_desk_ratio_lga_primary =
-                  ratio(df$num_students_total_gender.num_students_total, 
+                  ratio(df$num_students_total, 
                         df$num_desks, df$is_primary),      
                 pupil_desk_ratio_lga_juniorsec = 
-                  ratio(df$num_students_total_gender.num_students_total, 
+                  ratio(df$num_students_total, 
                         df$num_desks, df$is_junior_secondary),    
           primary_school_pupil_teachers_ratio_lga =
-            ratio(df$num_students_total_gender.num_students_total, df$num_tchrs.num_tchrs_total, df$is_primary),
+            ratio(df$num_students_total, df$num_tchrs_total, df$is_primary),
           junior_secondary_school_pupil_teachers_ratio_lga =
-            ratio(df$num_students_total_gender.num_students_total, df$num_tchrs.num_tchrs_total, df$is_junior_secondary),
+            ratio(df$num_students_total, df$num_tchrs_total, df$is_junior_secondary),
           teacher_nonteachingstaff_ratio_lga_primary =
-            ratio(df$num_tchrs.num_tchrs_total, df$num_sr_staff_total + df$num_jr_staff_total, df$is_primary),
+            ratio(df$num_tchrs_total, df$num_sr_staff_total + df$num_jr_staff_total, df$is_primary),
           teacher_nonteachingstaff_ratio_lga_juniorsec =
-            ratio(df$num_tchrs.num_tchrs_total, df$num_sr_staff_total + df$num_jr_staff_total, df$is_junior_secondary),
+            ratio(df$num_tchrs_total, df$num_sr_staff_total + df$num_jr_staff_total, df$is_junior_secondary),
           proportion_teachers_nce_primary =
-            ratio(df$num_tchrs_with_nce, df$num_tchrs.num_tchrs_total, df$is_primary),
+            ratio(df$num_tchrs_with_nce, df$num_tchrs_total, df$is_primary),
           proportion_teachers_nce_juniorsec =
-            ratio(df$num_tchrs_with_nce, df$num_tchrs.num_tchrs_total, df$is_junior_secondary),
+            ratio(df$num_tchrs_with_nce, df$num_tchrs_total, df$is_junior_secondary),
           proportion_teachers_training_last_year_primary = 
-            ratio(df$num_tchrs_attended_training, df$num_tchrs.num_tchrs_total, df$is_primary),
+            ratio(df$num_tchrs_attended_training, df$num_tchrs_total, df$is_primary),
           proportion_teachers_training_last_year_juniorsec = 
-            ratio(df$num_tchrs_attended_training, df$num_tchrs.num_tchrs_total, df$is_junior_secondary),
+            ratio(df$num_tchrs_attended_training, df$num_tchrs_total, df$is_junior_secondary),
                 proportion_schools_delay_pay_primary =
                   bool_proportion(df$tchr_pay_delay, df$is_primary),
                 proportion_schools_delay_pay_juniorsec =
@@ -154,9 +154,9 @@ lga_edu_data <- ddply(ie, .(lga_id), function(df) {
                 proportion_schools_missed_pay_juniorsec =
                   bool_proportion(df$tchr_pay_miss, df$is_junior_secondary),
         num_textbooks_per_pupil_primary =
-          ratio(df$num_textbooks, df$num_students_total_gender.num_students_total,  df$is_primary),
+          ratio(df$num_textbooks, df$num_students_total,  df$is_primary),
         num_textbooks_per_pupil_juniorsec =
-          ratio(df$num_textbooks, df$num_students_total_gender.num_students_total, df$is_junior_secondary),
+          ratio(df$num_textbooks, df$num_students_total, df$is_junior_secondary),
         proportion_provide_exercise_books_primary =
           bool_proportion(df$provide_exercise_books_yn, df$is_primary),
         proportion_provide_exercise_books_juniorsec =
@@ -196,9 +196,9 @@ lga_edu_data <- ddply(ie, .(lga_id), function(df) {
                 num_other_level = icount(df$level_of_education %in%
                                            c('science_technical', 'vocational')),
                 student_teacher_ratio_lga = 
-                  ratio(df$num_students_total_gender.num_students_total, df$num_tchrs.num_tchrs_total),              
+                  ratio(df$num_students_total, df$num_tchrs_total),              
                 proportion_teachers_nce = 
-                  ratio(df$num_tchrs_with_nce, df$num_tchrs.num_tchrs_total),
+                  ratio(df$num_tchrs_with_nce, df$num_tchrs_total),
                 number_classrooms_need_major_repair = sum(df$num_classrms_need_maj_repairs, na.rm = TRUE)
                                             
               )})                   
