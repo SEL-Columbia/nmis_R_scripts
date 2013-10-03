@@ -18,18 +18,10 @@ edu_pilot$src <- "pilot"
 edu_113$uuid <- sapply(paste(edu_113$gps, edu_113$photo), FUN=digest)
 edu_pilot$uuid <- sapply(paste(edu_pilot$gps, edu_pilot$photo), FUN=digest)
 
-# # lgas <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/lgas.csv", stringsAsFactors=F)
-# # 
-# # lga_source <- subset(lgas, select=c(lga_id, surveying_effort))
-# # 
-# # lga_source$surveying_effort <- recodeVar(lga_source$surveying_effort, 
-# #                                          src=c("148", "Others"),
-# #                                          tgt=c("661", "661"))
-# 
-# lga_source <- rename(lga_source, c("surveying_effort" = "source"))
 
 ####
-common_slugs <- names(edu_661)[(which(names(edu_661) %in% names(edu_113)))]
+common_slugs_113 <- names(edu_661)[(which(names(edu_661) %in% names(edu_113)))]
+
 
 slugsearch <- function(nm, df=edu_661){
     names(df)[grep(nm, names(df), ignore.case=T)]
@@ -46,9 +38,9 @@ na_prop <- function(vec) {
     na_num(vec)/length(vec)
 }
 
-length(which(names(edu_113) %in% names(edu_661)))
-length(which(names(edu_pilot) %in% names(edu_113)))
-# edu_113$num_students_male
+# length(which(names(edu_113) %in% names(edu_661)))
+# length(which(names(edu_pilot) %in% names(edu_113)))
+# # edu_113$num_students_male
 
 
 #### adding new variable to 661
@@ -75,7 +67,6 @@ edu_661$num_textbooks <-
 
 ####
 ### mapping 113 names
-
 # after cleaning999
 edu_113 <- rename(edu_113, c("days_no_potable_water_pastmth" = "days_no_potable_water",
                   "num_unattached_desks" = "num_desks",
@@ -93,6 +84,10 @@ edu_113 <- rename(edu_113, c("days_no_potable_water_pastmth" = "days_no_potable_
                   "power_grid_connection" = "power_sources.grid", 
                   "funtioning_library_yn" = "functioning_library_yn"))
 
+mapped_113 <- c("days_no_potable_water", "num_desks", "num_science_textbook_pry", "water.pipe_water",
+                "water.tube_well", "toilet.flush_or_pour_flush_improved", "toilet.ventilated_improved",
+                "toilet.pit_latrine_with_slab", "power_sources.generator", "power_sources.solar_system",
+                "power_sources.grid", "functioning_library_yn")
 
 
 newname_113 <- c("days_no_electricity", "days_no_water_pastmth", "flush_toilet_number",
