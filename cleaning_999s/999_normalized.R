@@ -1,7 +1,7 @@
 source('base_scripts/InstallFormhub.R')
 source('./cleaning_999s/999_functions.R')
 
-merged_education <- edu_total
+merged_education <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Edu774.rds")
 
 
 merged_education$days_no_electricity <- as.numeric(merged_education$days_no_electricity)
@@ -251,18 +251,18 @@ cellst(merged_education, 'grid_months_broken', which(merged_education$grid_month
 
 
 
-
-####
 merged_education$new_stdnts_enroll_fee <- as.numeric(merged_education$new_stdnts_enroll_fee)
-merged_education$days_no_potable_water <- as.numeric(merged_education$days_no_potable_water)
-
 merged_education$cont_stdnts_enroll_fee <- as.numeric(merged_education$cont_stdnts_enroll_fee)
 cellst(merged_education, 'cont_stdnts_enroll_fee', which(merged_education$cont_stdnts_enroll_fee < 0), NA_integer_)
-
 merged_education$textbooks_fee <- as.numeric(merged_education$textbooks_fee)
 merged_education$transport_fee <- as.numeric(merged_education$transport_fee)
 merged_education$exams_fee <- as.numeric(merged_education$exams_fee)
 merged_education$pta_fee <- as.numeric(merged_education$pta_fee)
+
+
+#### all 3 sources
+merged_education$days_no_potable_water <- as.numeric(merged_education$days_no_potable_water)
+
 
 merged_education$num_desks <- as.numeric(merged_education$num_desks)
 merged_education$num_science_textbook_pry <- as.numeric(merged_education$num_science_textbook_pry)
@@ -279,18 +279,6 @@ merged_education$num_students_total <- as.numeric(merged_education$num_students_
 merged_education$times_tchr_pay_delay_pastyr <- as.numeric(merged_education$times_tchr_pay_delay_pastyr)
 
 merged_education$times_tchr_pay_miss_pastyr <- as.numeric(merged_education$times_tchr_pay_miss_pastyr)
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
