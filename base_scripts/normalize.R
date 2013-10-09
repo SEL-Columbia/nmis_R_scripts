@@ -40,21 +40,26 @@ na_prop <- function(vec) {
 }
 
 
-common_slug <- function(slug, df_names = c("edu_113", "edu_661", "edu_pilot"))
-{
-    dfs <- lapply(df_names, function(x) get(x))
-    names(dfs) <- df_names
-    
-    flgs <- sapply(dfs, function(x) slug %in% names(x))
-    
-    if(all(flgs) == T){
-        sprintf("%s is contained in all data sets",slug)
-    }
-    else{
-        sprintf("%s does NOT have slug:   %s", paste(names(dfs)[!flgs], collapse=", "), slug)
-    }
-}
 
+common_slug <- function(df_names)
+{
+    function(slug)
+    {
+        dfs <- lapply(df_names, function(x) get(x))
+        names(dfs) <- df_names
+        
+        flgs <- sapply(dfs, function(x) slug %in% names(x))
+        
+        if(all(flgs) == T){
+            sprintf("%s is contained in all data sets",slug)
+        }
+        else{
+            sprintf("%s does NOT have slug:   %s", paste(names(dfs)[!flgs], collapse=", "), slug)
+        }
+    }
+    
+}
+edu_common <- common_slug(c("edu_113", "edu_661", "edu_pilot"))
 
 # length(which(names(edu_113) %in% names(edu_661)))
 # length(which(names(edu_pilot) %in% names(edu_113)))
@@ -85,7 +90,7 @@ edu_113 <- rename(edu_113, c("days_no_potable_water_pastmth" = "days_no_potable_
 mapped_113 <- c("days_no_potable_water", "num_desks", "num_science_textbook_pry", "water.pipe_water",
                 "water.tube_well", "toilet.flush_or_pour_flush_improved", "toilet.ventilated_improved",
                 "toilet.pit_latrine_with_slab", "power_sources.generator", "power_sources.solar_system",
-                "power_sources.grid", "functioning_library_yn")
+                "power_sources.grid", "functioning_library_yn", "toilet.none")
 
 
 newname_113 <- c("days_no_electricity", "days_no_water_pastmth", "flush_toilet_number",
