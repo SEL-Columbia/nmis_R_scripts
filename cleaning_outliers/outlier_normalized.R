@@ -5,607 +5,385 @@ source('cleaning_outliers/outlier_functions.R')
 ###############################################################################################
 ######education################################################################################
 ###############################################################################################                    
-e <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Education_661_999Cleaned.rds")
-
-#total
-# e$num_toilet_total <- replace(e$num_toilet_boy, is.na(e$num_toilet_boy), 0) + 
-#   replace(e$num_toilet_girl, 
-#           is.na(e$num_toilet_girl), 0) + 
-#   replace(e$num_toilet_both, is.na(e$num_toilet_both), 0)
-#### above formulat doesn't apply to 113 & pilot data
-e$num_toilet_total[e$src == "661"] <- apply(cbind(e$num_toilet_boy[e$src == "661"], 
-                                                  e$num_toilet_girl[e$src == "661"], 
-                                                  e$num_toilet_both[e$src == "661"]),
-                                            1, sum, na.rm=T)
+edu_999 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Education_774_999Cleaned.rds")
 
 
-e$num_toilet_total <- 
-    ifelse(e$toilet.none == FALSE & e$num_toilet_total == 0, NA, e$num_toilet_total)
 
-e$num_students_total <-  replace(e$num_students_female, 
-                                 is.na(e$num_students_female), 0) +
-    replace(e$num_students_male, 
-            is.na(e$num_students_male), 0)
+edu_999$num_toilet_total[edu_999$src == "661"] <- apply(cbind(edu_999$num_toilet_boy[edu_999$src == "661"], 
+                                                              edu_999$num_toilet_girl[edu_999$src == "661"], 
+                                                              edu_999$num_toilet_both[edu_999$src == "661"]),
+                                                              1, sum, na.rm=T)
 
-e$num_tchrs_total <- replace(e$num_tchrs_male, is.na(e$num_tchrs_male), 0) + 
-    replace(e$num_tchrs_female, is.na(e$num_tchrs_female), 0) 
+edu_999$num_toilet_total[edu_999$src == "113"] <- apply(cbind(edu_999$vip_latrine_number[edu_999$src == "113"], 
+                                                              edu_999$slab_pit_latrine_number[edu_999$src == "113"]), 
+                                                              1, sum, na.rm=T)
+
+
+edu_999$num_toilet_total <- ifelse(edu_999$toilet.none == F & edu_999$num_toilet_total == 0,
+                                   NA, edu_999$num_toilet_total)
+
+edu_999$num_students_total <- apply(cbind(edu_999$num_students_female, 
+                                          edu_999$num_students_male), 
+                                           1, sum, na.rm=T)
+
+####### Adding num_tchr_mael & female for edu_113 before next line
+edu_999$num_tchrs_total <- apply(cbind(edu_999$num_tchrs_male, 
+                                       edu_999$num_tchrs_female), 
+                                       1, sum, na.rm=T)
 
 #dealing with total students problem
-e$test_f_p <- replace(e$num_pry_female, is.na(e$num_pry_female), 0) + 
-    replace(e$num_js_female, is.na(e$num_js_female), 0) + 
-    replace(e$num_ss_female, is.na(e$num_ss_female), 0)
+edu_999$test_f <- apply(cbind(edu_999$num_pry_female, 
+                              edu_999$num_js_female,
+                              edu_999$num_ss_female), 
+                              1, sum, na.rm=T)
 
-e$test_m_p <- replace(e$num_pry_male, is.na(e$num_pry_male),0) +
-    replace(e$num_js_male, is.na(e$num_js_male),0) + 
-    replace(e$num_ss_male, is.na(e$num_ss_male), 0)
+edu_999$test_m <- apply(cbind(edu_999$num_pry_male, 
+                              edu_999$num_js_male,
+                              edu_999$num_ss_male), 
+                              1, sum, na.rm=T)
 
-e$total <- e$test_f + e$test_m
+edu_999$total <- edu_999$test_f + edu_999$test_m
 
-e[which(e$total > e$num_students_total),"num_students_total"] <- 
-    e[which(e$total > e$num_students_total),"total"]
+edu_999[which(edu_999$total > edu_999$num_students_total),"num_students_total"] <- 
+                                        edu_999[which(edu_999$total > edu_999$num_students_total),"total"]
 
-#test <- subset(e, select=c(test_f, num_students_female, test_m, 
-#                          num_students_male, 
-#                         test_total, num_students_total), 
-#                         test_total > num_students_total)
-
-#old script paramaters
 #logic checks
-e <- outlierreplace(e, 'num_tchrs_male', 
-                    (e$num_tchrs_male > e$num_tchrs_total))
+edu_999 <- outlierreplace(edu_999, 'num_tchrs_male', 
+                    (edu_999$num_tchrs_male > edu_999$num_tchrs_total))
 
-e <- outlierreplace(e, 'num_tchrs_female', 
-                    (e$num_tchrs_female > e$num_tchrs_total))
+edu_999 <- outlierreplace(edu_999, 'num_tchrs_female', 
+                    (edu_999$num_tchrs_female > edu_999$num_tchrs_total))
 
-e <- outlierreplace(e, 'num_tchrs_w_nce',
-                    (e$num_tchrs_w_nce > e$num_tchrs_total))
+edu_999 <- outlierreplace(edu_999, 'num_tchrs_w_nce',
+                    (edu_999$num_tchrs_w_nce > edu_999$num_tchrs_total))
 
-e <- outlierreplace(e, 'num_tchrs_attended_training',
-                    (e$num_tchrs_attended_training > e$num_tchrs_total))
+edu_999 <- outlierreplace(edu_999, 'num_tchrs_attended_training',
+                    (edu_999$num_tchrs_attended_training > edu_999$num_tchrs_total))
 
-e <- outlierreplace(e, 'num_tchrs_total',
-                    (e$num_tchrs_total > 20 & 
-                         e$num_students_total == 0))
+edu_999 <- outlierreplace(edu_999, 'num_tchrs_total',
+                    (edu_999$num_tchrs_total > 20 & 
+                         edu_999$num_students_total == 0))
 
-e <- outlierreplace(e, 'num_tchrs_total',
-                    (e$num_tchrs_total > e$num_tchrs_male + 
-                         e$num_tchrs_female))
+edu_999 <- outlierreplace(edu_999, 'num_classrms_need_maj_repairs',
+                    (edu_999$num_classrms_need_maj_repairs > edu_999$num_classrms_total))
 
-e <- outlierreplace(e,'num_classrms_need_maj_repairs',
-                    (e$num_classrms_need_maj_repairs > e$num_classrms_total))
+edu_999 <- outlierreplace(edu_999, 'num_classrms_need_min_repairs',
+                    (edu_999$num_classrms_need_min_repairs > edu_999$num_classrms_total))
 
-e <- outlierreplace(e,'num_classrms_need_min_repairs',
-                    (e$num_classrms_need_min_repairs > e$num_classrms_total))
+edu_999 <- outlierreplace(edu_999, 'num_classrms_good_cond',
+                    (edu_999$num_classrms_good_cond > edu_999$num_classrms_total))
 
-e <- outlierreplace(e,'num_classrms_good_cond',
-                    (e$num_classrms_good_cond > e$num_classrms_total))
+edu_999 <- outlierreplace(edu_999, 'num_students_frthr_than_3km',
+                    (edu_999$num_classrms_good_cond > edu_999$num_students_total))
 
-e <- outlierreplace(e, 'num_students_frthr_than_3km',
-                    (e$num_classrms_good_cond > e$num_students_total))
+edu_999 <- outlierreplace(edu_999, 'num_classrms_good_cond',
+                    (edu_999$num_classrms_good_cond + edu_999$num_classrms_need_min_repairs + 
+                         edu_999$num_classrms_need_maj_repairs > edu_999$num_classrms_total))
 
-e <- outlierreplace(e, 'num_classrms_good_cond',
-                    (e$num_classrms_good_cond + e$num_classrms_need_min_repairs + 
-                         e$num_classrms_need_maj_repairs > e$num_classrms_total))
-e <- outlierreplace(e, 'num_classrms_need_min_repairs',
-                    (e$num_classrms_good_cond + e$num_classrms_need_min_repairs + 
-                         e$num_classrms_need_maj_repairs > e$num_classrms_total))
-e <- outlierreplace(e, 'num_classrms_need_maj_repairs',
-                    (e$num_classrms_good_cond + e$num_classrms_need_min_repairs + 
-                         e$num_classrms_need_maj_repairs > e$num_classrms_total))
-e <- outlierreplace(e, 'num_classrms_total',
-                    (e$num_classrms_good_cond + e$num_classrms_need_min_repairs + 
-                         e$num_classrms_need_maj_repairs > e$num_classrms_total))
+edu_999 <- outlierreplace(edu_999, 'num_classrms_need_min_repairs',
+                    (edu_999$num_classrms_good_cond + edu_999$num_classrms_need_min_repairs + 
+                         edu_999$num_classrms_need_maj_repairs > edu_999$num_classrms_total))
 
-e <- outlierreplace(e, 'num_students_total',
-                    (e$num_tchrs_total > 20 & 
-                         e$num_students_total == 0))
-e <- outlierreplace(e, 'num_students_total',
-                    e$num_students_total == 0)    
+edu_999 <- outlierreplace(edu_999, 'num_classrms_need_maj_repairs',
+                    (edu_999$num_classrms_good_cond + edu_999$num_classrms_need_min_repairs + 
+                         edu_999$num_classrms_need_maj_repairs > edu_999$num_classrms_total))
 
-e <- outlierreplace(e, 'num_students_total',
-                    (e$num_students_total == 0))
+edu_999 <- outlierreplace(edu_999, 'num_classrms_total',
+                    (edu_999$num_classrms_good_cond + edu_999$num_classrms_need_min_repairs + 
+                         edu_999$num_classrms_need_maj_repairs > edu_999$num_classrms_total))
 
-e <- outlierreplace(e, 'num_classrms_good_cond',
-                    (e$num_classrms_good_cond + e$num_classrms_need_min_repairs + 
-                         e$num_classrms_need_maj_repairs > e$num_classrms_total))
-e <- outlierreplace(e, 'num_classrms_need_min_repairs',
-                    (e$num_classrms_good_cond + e$num_classrms_need_min_repairs + 
-                         e$num_classrms_need_maj_repairs > e$num_classrms_total))
-e <- outlierreplace(e, 'num_classrms_need_maj_repairs',
-                    (e$num_classrms_good_cond + e$num_classrms_need_min_repairs + 
-                         e$num_classrms_need_maj_repairs > e$num_classrms_total))
-e <- outlierreplace(e, 'num_classrms_total',
-                    (e$num_classrms_good_cond + e$num_classrms_need_min_repairs + 
-                         e$num_classrms_need_maj_repairs > e$num_classrms_total))
+edu_999 <- outlierreplace(edu_999, 'num_students_total',
+                    (edu_999$num_tchrs_total > 20 & edu_999$num_students_total == 0))
+
+edu_999 <- outlierreplace(edu_999, 'num_students_total', edu_999$num_students_total == 0)    
+
+edu_999 <- outlierreplace(edu_999, 'num_students_total', (edu_999$num_students_total == 0))
+
+
 ##ratios
+edu_999$ratio_students_to_toilet <- replace(edu_999$num_students_total, 
+                                            is.na(edu_999$num_students_total), 0) /
+                                    replace(edu_999$num_toilet_total, 
+                                            is.na(edu_999$num_toilet_total), 0) 
 
-e$ratio_students_to_toilet <-   replace(e$num_students_total, 
-                                        is.na(e$num_students_total), 0) /
-    replace(e$num_toilet_total, is.na(e$num_toilet_total), 0) 
+edu_999$ratio_students_to_desks <-   replace(edu_999$num_students_total, 
+                                       is.na(edu_999$num_students_total), 0) / 
+                                    replace(edu_999$num_desks, 
+                                        is.na(edu_999$num_desks), 0) 
 
-e$ratio_students_to_desks <-   replace(e$num_students_total, 
-                                       is.na(e$num_students_total), 0) / 
-    replace(e$num_desks, is.na(e$num_desks), 0) 
-
-e$ratio_students_to_benches <-   replace(e$num_students_total, 
-                                         is.na(e$num_students_total), 0) /
-    replace(e$num_benches, is.na(e$num_benches), 0) 
+edu_999$ratio_students_to_benches <-   replace(edu_999$num_students_total, 
+                                         is.na(edu_999$num_students_total), 0) /
+                                       replace(edu_999$num_benches, 
+                                         is.na(edu_999$num_benches), 0) 
 
 ##textbooks
-e$ratio_pupil_math_pry_textbook <- replace(e$num_math_textbook_pry, 
-                                           is.na(e$num_math_textbook_pry), 0) / 
-    replace(e$num_pry_total,
-            is.na(e$num_pry_total), 0)
+################## OCt 9th 
 
-e$ratio_pupil_english_pry_textbook <- replace(e$num_english_textbook_pry, 
-                                              is.na(e$num_english_textbook_pry), 0) / 
-    replace(e$num_pry_total,
-            is.na(e$num_pry_total), 0) 
-e$ratio_pupil_socscience_pry_textbook <- replace(e$num_soc_science_textbook_pry, 
-                                                 is.na(e$num_soc_science_textbook_pry), 0) / 
-    replace(e$num_pry_total,
-            is.na(e$num_pry_total), 0)
-e$ratio_pupil_science_pry_textbook <- replace(e$num_science_textbook_pry, 
-                                              is.na(e$num_science_textbook_pry), 0) / 
-    replace(e$num_pry_total,
-            is.na(e$num_pry_total), 0)
+edu_999$ratio_pupil_math_pry_textbook <- replace(edu_999$num_math_textbook_pry, 
+                                           is.na(edu_999$num_math_textbook_pry), 0) / 
+                                        replace(edu_999$num_pry_total,
+                                            is.na(edu_999$num_pry_total), 0)
 
-e$ratio_pupil_math_js_textbook <- replace(e$num_math_textbook_js, 
-                                          is.na(e$num_math_textbook_js), 0) / 
-    replace(e$num_js_total,
-            is.na(e$num_js_total), 0)
-e$ratio_pupil_english_js_textbook <- replace(e$num_english_textbook_js, 
-                                             is.na(e$num_english_textbook_js), 0) / 
-    replace(e$num_js_total,
-            is.na(e$num_js_total), 0)
-e$ratio_pupil_socscience_js_textbook <- replace(e$num_soc_science_textbook_js, 
-                                                is.na(e$num_soc_science_textbook_js), 0) / 
-    replace(e$num_js_total,
-            is.na(e$num_js_total), 0)
-e$ratio_pupil_science_js_textbook <- replace(e$num_science_textbook_js, 
-                                             is.na(e$num_science_textbook_js), 0) / 
-    replace(e$num_js_total,
-            is.na(e$num_js_total), 0)  
+edu_999$ratio_pupil_english_pry_textbook <- replace(edu_999$num_english_textbook_pry, 
+                                              is.na(edu_999$num_english_textbook_pry), 0) / 
+    replace(edu_999$num_pry_total,
+            is.na(edu_999$num_pry_total), 0) 
+edu_999$ratio_pupil_socscience_pry_textbook <- replace(edu_999$num_soc_science_textbook_pry, 
+                                                 is.na(edu_999$num_soc_science_textbook_pry), 0) / 
+    replace(edu_999$num_pry_total,
+            is.na(edu_999$num_pry_total), 0)
+edu_999$ratio_pupil_science_pry_textbook <- replace(edu_999$num_science_textbook_pry, 
+                                              is.na(edu_999$num_science_textbook_pry), 0) / 
+    replace(edu_999$num_pry_total,
+            is.na(edu_999$num_pry_total), 0)
 
-e <- outlierreplace(e, 'num_math_textbook_pry', 
-                    between(e$ratio_pupil_math_pry_textbook, 10, Inf))
-e <- outlierreplace(e, 'num_english_textbook_pry', 
-                    between(e$ratio_pupil_english_pry_textbook, 10, Inf))
-e <- outlierreplace(e, 'num_soc_science_textbook_pry', 
-                    between(e$ratio_pupil_socscience_pry_textbook, 10, Inf))
-e <- outlierreplace(e, 'num_science_textbook_pry', 
-                    between(e$ratio_pupil_science_pry_textbook, 10, Inf))
-e <- outlierreplace(e, 'num_math_textbook_js', 
-                    between(e$ratio_pupil_math_js_textbook, 10, Inf))
-e <- outlierreplace(e, 'num_english_textbook_js', 
-                    between(e$ratio_pupil_english_js_textbook, 10, Inf))
-e <- outlierreplace(e, 'num_soc_science_textbook_js', 
-                    between(e$ratio_pupil_socscience_js_textbook, 10, Inf))
-e <- outlierreplace(e, 'num_science_textbook_js', 
-                    between(e$ratio_pupil_science_js_textbook, 10, Inf))
+edu_999$ratio_pupil_math_js_textbook <- replace(edu_999$num_math_textbook_js, 
+                                          is.na(edu_999$num_math_textbook_js), 0) / 
+    replace(edu_999$num_js_total,
+            is.na(edu_999$num_js_total), 0)
+edu_999$ratio_pupil_english_js_textbook <- replace(edu_999$num_english_textbook_js, 
+                                             is.na(edu_999$num_english_textbook_js), 0) / 
+    replace(edu_999$num_js_total,
+            is.na(edu_999$num_js_total), 0)
+edu_999$ratio_pupil_socscience_js_textbook <- replace(edu_999$num_soc_science_textbook_js, 
+                                                is.na(edu_999$num_soc_science_textbook_js), 0) / 
+    replace(edu_999$num_js_total,
+            is.na(edu_999$num_js_total), 0)
+edu_999$ratio_pupil_science_js_textbook <- replace(edu_999$num_science_textbook_js, 
+                                             is.na(edu_999$num_science_textbook_js), 0) / 
+    replace(edu_999$num_js_total,
+            is.na(edu_999$num_js_total), 0)  
+
+edu_999 <- outlierreplace(edu_999, 'num_math_textbook_pry', 
+                    between(edu_999$ratio_pupil_math_pry_textbook, 10, Inf))
+edu_999 <- outlierreplace(edu_999, 'num_english_textbook_pry', 
+                    between(edu_999$ratio_pupil_english_pry_textbook, 10, Inf))
+edu_999 <- outlierreplace(edu_999, 'num_soc_science_textbook_pry', 
+                    between(edu_999$ratio_pupil_socscience_pry_textbook, 10, Inf))
+edu_999 <- outlierreplace(edu_999, 'num_science_textbook_pry', 
+                    between(edu_999$ratio_pupil_science_pry_textbook, 10, Inf))
+edu_999 <- outlierreplace(edu_999, 'num_math_textbook_js', 
+                    between(edu_999$ratio_pupil_math_js_textbook, 10, Inf))
+edu_999 <- outlierreplace(edu_999, 'num_english_textbook_js', 
+                    between(edu_999$ratio_pupil_english_js_textbook, 10, Inf))
+edu_999 <- outlierreplace(edu_999, 'num_soc_science_textbook_js', 
+                    between(edu_999$ratio_pupil_socscience_js_textbook, 10, Inf))
+edu_999 <- outlierreplace(edu_999, 'num_science_textbook_js', 
+                    between(edu_999$ratio_pupil_science_js_textbook, 10, Inf))
 
 #new data points
 
-#e$pupil_class_ratio <- e$num_students_total/e$num_classrms_total
-#e <- outlierreplace(e, 'num_students_total', 
-#                  (e$pupil_class_ratio < 5 | e$pupil_class_ratio > 150))
-#e <- outlierreplace(e, 'num_classrms_total', 
-#                   (e$pupil_class_ratio < 5 | e$pupil_class_ratio > 150))
+#edu_999$pupil_class_ratio <- edu_999$num_students_total/edu_999$num_classrms_total
+#edu_999 <- outlierreplace(edu_999, 'num_students_total', 
+#                  (edu_999$pupil_class_ratio < 5 | edu_999$pupil_class_ratio > 150))
+#edu_999 <- outlierreplace(edu_999, 'num_classrms_total', 
+#                   (edu_999$pupil_class_ratio < 5 | edu_999$pupil_class_ratio > 150))
 
-e <- outlierreplace(e, 'num_students_female',
-                    (e$num_students_female > 11000))
-e <- outlierreplace(e, 'num_students_female',
-                    (e$num_students_female > 3000))
-e <- outlierreplace(e, 'num_students_male',
-                    (e$num_students_male > 2500  & e$num_classrms_total < 25))
-e <- outlierreplace(e, 'num_students_total',
-                    (e$num_students_total > 2000 & e$num_classrms_total < 25 &
-                         e$num_tchrs_total < 10))
-e <- outlierreplace(e, 'num_pry_female',
-                    (e$num_pry_female > 2000 & e$num_classrms_total < 25 &
-                         e$num_tchrs_total < 10))
-e <- outlierreplace(e, 'num_pry_male',
-                    (e$num_pry_male > 2000 & e$num_classrms_total < 25 &
-                         e$num_tchrs_total < 10))
-e <- outlierreplace(e, 'num_pry_total',
-                    (e$num_pry_total > 2500 & e$num_classrms_total < 25 &
-                         e$num_tchrs_total < 10))
-e <- outlierreplace(e, 'num_js_female',
-                    (e$num_js_female > 1250 & e$num_classrms_total < 25 &
-                         e$num_tchrs_total < 10))
-e <- outlierreplace(e, 'num_js_male',
-                    (e$num_js_male > 1250 & e$num_classrms_total < 25 &
-                         e$num_tchrs_total < 10))
+edu_999 <- outlierreplace(edu_999, 'num_students_female',
+                    (edu_999$num_students_female > 11000))
+edu_999 <- outlierreplace(edu_999, 'num_students_female',
+                    (edu_999$num_students_female > 3000))
+edu_999 <- outlierreplace(edu_999, 'num_students_male',
+                    (edu_999$num_students_male > 2500  & edu_999$num_classrms_total < 25))
+edu_999 <- outlierreplace(edu_999, 'num_students_total',
+                    (edu_999$num_students_total > 2000 & edu_999$num_classrms_total < 25 &
+                         edu_999$num_tchrs_total < 10))
+edu_999 <- outlierreplace(edu_999, 'num_pry_female',
+                    (edu_999$num_pry_female > 2000 & edu_999$num_classrms_total < 25 &
+                         edu_999$num_tchrs_total < 10))
+edu_999 <- outlierreplace(edu_999, 'num_pry_male',
+                    (edu_999$num_pry_male > 2000 & edu_999$num_classrms_total < 25 &
+                         edu_999$num_tchrs_total < 10))
+edu_999 <- outlierreplace(edu_999, 'num_pry_total',
+                    (edu_999$num_pry_total > 2500 & edu_999$num_classrms_total < 25 &
+                         edu_999$num_tchrs_total < 10))
+edu_999 <- outlierreplace(edu_999, 'num_js_female',
+                    (edu_999$num_js_female > 1250 & edu_999$num_classrms_total < 25 &
+                         edu_999$num_tchrs_total < 10))
+edu_999 <- outlierreplace(edu_999, 'num_js_male',
+                    (edu_999$num_js_male > 1250 & edu_999$num_classrms_total < 25 &
+                         edu_999$num_tchrs_total < 10))
 
-e <- outlierreplace(e, 'num_js_total',
-                    (e$num_js_total > 2500 & e$num_classrms_total < 25 &
-                         e$num_tchrs_total < 10))
+edu_999 <- outlierreplace(edu_999, 'num_js_total',
+                    (edu_999$num_js_total > 2500 & edu_999$num_classrms_total < 25 &
+                         edu_999$num_tchrs_total < 10))
 
-e <- outlierreplace(e, 'num_ss_female',
-                    (e$num_ss_female > 1250 & e$num_classrms_total < 25 &
-                         e$num_tchrs_total < 10))
-e <- outlierreplace(e, 'num_ss_male',
-                    (e$num_ss_male > 1250 & e$num_classrms_total < 25 &
-                         e$num_tchrs_total < 10))
-e <- outlierreplace(e, 'num_ss_total',
-                    (e$num_ss_total > 2500 & e$num_classrms_total < 25 &
-                         e$num_tchrs_total < 10))
-e <- outlierreplace(e, 'num_ss_total',
-                    (e$km_to_catchment_area > 30))
-e <- outlierreplace(e, 'km_to_catchment_area',
-                    (e$km_to_catchment_area > 55))                    
-e <- outlierreplace(e, 'km_to_secondary_school',
-                    (e$km_to_secondary_school > 25))
-e <- outlierreplace(e, 'num_students_frthr_than_3km',
-                    (e$num_students_frthr_than_3km > 1250))            
-e <- outlierreplace(e, 'num_toilet_girl',
-                    (e$num_toilet_girl > 750))            
-e <- outlierreplace(e, 'num_toilet_both',
-                    (e$num_toilet_both > 1000))            
-e <- outlierreplace(e, 'num_toilet_total',
-                    (e$num_toilet_total > 1000))                        
-e <- outlierreplace(e, 'num_tchrs_male',
-                    (e$num_tchrs_male > 100))
-e <- outlierreplace(e, 'num_tchrs_female',
-                    (e$num_tchrs_female > 100))
-e <- outlierreplace(e, 'num_tchrs_w_nce',
-                    (e$num_tchrs_w_nce > 100))
-e <- outlierreplace(e, 'num_tchrs_w_nce_plus',
-                    (e$num_tchrs_w_nce_plus > 100))            
-e <- outlierreplace(e, 'num_sr_staff_total',
-                    (e$num_sr_staff_total > 75))
-e <- outlierreplace(e, 'num_jr_staff_total',
-                    (e$num_jr_staff_total > 50))
-e <- outlierreplace(e, 'num_tchrs_attended_training',
-                    (e$num_tchrs_attended_training > 100))
-e <- outlierreplace(e, 'num_classrms_total',
-                    (e$num_tchrs_attended_training > 99))
-e <- outlierreplace(e, 'num_classrms_total',
-                    (e$num_classrms_total == 0))
-e <- outlierreplace(e, 'num_classrms_need_min_repairs',
-                    (e$num_classrms_need_min_repairs > 50))
-e <- outlierreplace(e, 'num_classrms_need_maj_repairs',
-                    (e$num_classrms_need_maj_repairs > 50))
+edu_999 <- outlierreplace(edu_999, 'num_ss_female',
+                    (edu_999$num_ss_female > 1250 & edu_999$num_classrms_total < 25 &
+                         edu_999$num_tchrs_total < 10))
+edu_999 <- outlierreplace(edu_999, 'num_ss_male',
+                    (edu_999$num_ss_male > 1250 & edu_999$num_classrms_total < 25 &
+                         edu_999$num_tchrs_total < 10))
+edu_999 <- outlierreplace(edu_999, 'num_ss_total',
+                    (edu_999$num_ss_total > 2500 & edu_999$num_classrms_total < 25 &
+                         edu_999$num_tchrs_total < 10))
+edu_999 <- outlierreplace(edu_999, 'num_ss_total',
+                    (edu_999$km_to_catchment_area > 30))
+edu_999 <- outlierreplace(edu_999, 'km_to_catchment_area',
+                    (edu_999$km_to_catchment_area > 55))                    
+edu_999 <- outlierreplace(edu_999, 'km_to_secondary_school',
+                    (edu_999$km_to_secondary_school > 25))
+edu_999 <- outlierreplace(edu_999, 'num_students_frthr_than_3km',
+                    (edu_999$num_students_frthr_than_3km > 1250))            
+edu_999 <- outlierreplace(edu_999, 'num_toilet_girl',
+                    (edu_999$num_toilet_girl > 750))            
+edu_999 <- outlierreplace(edu_999, 'num_toilet_both',
+                    (edu_999$num_toilet_both > 1000))            
+edu_999 <- outlierreplace(edu_999, 'num_toilet_total',
+                    (edu_999$num_toilet_total > 1000))                        
+edu_999 <- outlierreplace(edu_999, 'num_tchrs_male',
+                    (edu_999$num_tchrs_male > 100))
+edu_999 <- outlierreplace(edu_999, 'num_tchrs_female',
+                    (edu_999$num_tchrs_female > 100))
+edu_999 <- outlierreplace(edu_999, 'num_tchrs_w_nce',
+                    (edu_999$num_tchrs_w_nce > 100))
+edu_999 <- outlierreplace(edu_999, 'num_tchrs_w_nce_plus',
+                    (edu_999$num_tchrs_w_nce_plus > 100))            
+edu_999 <- outlierreplace(edu_999, 'num_sr_staff_total',
+                    (edu_999$num_sr_staff_total > 75))
+edu_999 <- outlierreplace(edu_999, 'num_jr_staff_total',
+                    (edu_999$num_jr_staff_total > 50))
+edu_999 <- outlierreplace(edu_999, 'num_tchrs_attended_training',
+                    (edu_999$num_tchrs_attended_training > 100))
+edu_999 <- outlierreplace(edu_999, 'num_classrms_total',
+                    (edu_999$num_tchrs_attended_training > 99))
+edu_999 <- outlierreplace(edu_999, 'num_classrms_total',
+                    (edu_999$num_classrms_total == 0))
+edu_999 <- outlierreplace(edu_999, 'num_classrms_need_min_repairs',
+                    (edu_999$num_classrms_need_min_repairs > 50))
+edu_999 <- outlierreplace(edu_999, 'num_classrms_need_maj_repairs',
+                    (edu_999$num_classrms_need_maj_repairs > 50))
 #absolute example
-e <- outlierreplace(e, 'num_classrms_good_cond',
-                    (e$num_classrms_good_cond > 260))                    
+edu_999 <- outlierreplace(edu_999, 'num_classrms_good_cond',
+                    (edu_999$num_classrms_good_cond > 260))                    
 #ratio/ combining other data points example
-#e <- outlierreplace(e, 'num_desks',
-#     between(e$ratio_students_to_desks, 750, Inf))
-e <- outlierreplace(e, 'num_desks',
-                    (e$num_desks > 2500))
-e <- outlierreplace(e, 'num_benches',
-                    (e$num_benches > 2500))
-e <- outlierreplace(e, 'num_classrm_w_chalkboard',
-                    (e$num_classrm_w_chalkboard > e$num_classrms_total))      
+#edu_999 <- outlierreplace(edu_999, 'num_desks',
+#     between(edu_999$ratio_students_to_desks, 750, Inf))
+edu_999 <- outlierreplace(edu_999, 'num_desks',
+                    (edu_999$num_desks > 2500))
+edu_999 <- outlierreplace(edu_999, 'num_benches',
+                    (edu_999$num_benches > 2500))
+edu_999 <- outlierreplace(edu_999, 'num_classrm_w_chalkboard',
+                    (edu_999$num_classrm_w_chalkboard > edu_999$num_classrms_total))      
 #another absolute
-e <- outlierreplace(e, 'num_math_textbook_pry',
-                    (e$num_math_textbook_pry > 3000))      
-e <- outlierreplace(e, 'num_english_textbook_pry',
-                    (e$num_english_textbook_pry > 3000))      
-e <- outlierreplace(e, 'num_soc_science_textbook_pry',
-                    (e$num_soc_science_textbook_pry > 3000))      
-e <- outlierreplace(e, 'num_science_textbook_pry',
-                    (e$num_science_textbook_pry > 3000))      
-e <- outlierreplace(e, 'num_math_textbook_js',
-                    (e$num_math_textbook_js > 3000))      
-e <- outlierreplace(e, 'num_english_textbook_js',
-                    (e$num_english_textbook_js > 3000))      
-e <- outlierreplace(e, 'num_soc_science_textbook_js',
-                    (e$num_soc_science_textbook_js > 3000))      
-e <- outlierreplace(e, 'num_science_textbook_js',
-                    (e$num_science_textbook_js > 3000))      
-e <- outlierreplace(e, 'num_exercise_books_per_student_pry',
-                    which((e$num_exercise_books_per_student_pry > 19800) | 
-                              (e$num_students_total * 8 < 
-                                   e$num_exercise_books_per_student_pry)))
-e <- outlierreplace(e, 'num_exercise_books_per_student_jss',
-                    which((e$num_exercise_books_per_student_jss > 34000) | 
-                              (e$num_students_total * 8 < 
-                                   e$num_exercise_books_per_student_jss)))  
-e <- outlierreplace(e, 'ratio_students_to_toilet',
-                    between(e$ratio_students_to_toilet, 1000, Inf))      
-e <- outlierreplace(e, 'ratio_students_to_desks',
-                    between(e$ratio_students_to_desks, 1000, Inf)) 
-e <- outlierreplace(e, 'ratio_students_to_benches',
-                    between(e$ratio_students_to_benches, 1000, Inf)) 
+edu_999 <- outlierreplace(edu_999, 'num_math_textbook_pry',
+                    (edu_999$num_math_textbook_pry > 3000))      
+edu_999 <- outlierreplace(edu_999, 'num_english_textbook_pry',
+                    (edu_999$num_english_textbook_pry > 3000))      
+edu_999 <- outlierreplace(edu_999, 'num_soc_science_textbook_pry',
+                    (edu_999$num_soc_science_textbook_pry > 3000))      
+edu_999 <- outlierreplace(edu_999, 'num_science_textbook_pry',
+                    (edu_999$num_science_textbook_pry > 3000))      
+edu_999 <- outlierreplace(edu_999, 'num_math_textbook_js',
+                    (edu_999$num_math_textbook_js > 3000))      
+edu_999 <- outlierreplace(edu_999, 'num_english_textbook_js',
+                    (edu_999$num_english_textbook_js > 3000))      
+edu_999 <- outlierreplace(edu_999, 'num_soc_science_textbook_js',
+                    (edu_999$num_soc_science_textbook_js > 3000))      
+edu_999 <- outlierreplace(edu_999, 'num_science_textbook_js',
+                    (edu_999$num_science_textbook_js > 3000))      
+edu_999 <- outlierreplace(edu_999, 'num_exercise_books_per_student_pry',
+                    which((edu_999$num_exercise_books_per_student_pry > 19800) | 
+                              (edu_999$num_students_total * 8 < 
+                                   edu_999$num_exercise_books_per_student_pry)))
+edu_999 <- outlierreplace(edu_999, 'num_exercise_books_per_student_jss',
+                    which((edu_999$num_exercise_books_per_student_jss > 34000) | 
+                              (edu_999$num_students_total * 8 < 
+                                   edu_999$num_exercise_books_per_student_jss)))  
+edu_999 <- outlierreplace(edu_999, 'ratio_students_to_toilet',
+                    between(edu_999$ratio_students_to_toilet, 1000, Inf))      
+edu_999 <- outlierreplace(edu_999, 'ratio_students_to_desks',
+                    between(edu_999$ratio_students_to_desks, 1000, Inf)) 
+edu_999 <- outlierreplace(edu_999, 'ratio_students_to_benches',
+                    between(edu_999$ratio_students_to_benches, 1000, Inf)) 
 
-e$ratio_students_to_toilet <-   zeroIfNA(e$num_students_total) /
-    zeroIfNA(e$num_toilet_total)
+edu_999$ratio_students_to_toilet <-   zeroIfNA(edu_999$num_students_total) /
+    zeroIfNA(edu_999$num_toilet_total)
 
-e$ratio_students_to_toilet <- 
-    ifelse(e$ratio_students_to_toilet == 0, NA, e$ratio_students_to_toilet)
+edu_999$ratio_students_to_toilet <- 
+    ifelse(edu_999$ratio_students_to_toilet == 0, NA, edu_999$ratio_students_to_toilet)
 
-e$ratio_students_to_desks <-   replace(e$num_students_total, 
-                                       is.na(e$num_students_total), 0) / 
-    replace(e$num_desks, is.na(e$num_desks), 0) 
-e$ratio_students_to_desks <- 
-    ifelse(e$ratio_students_to_desks == 0, NA, e$ratio_students_to_desks)
+edu_999$ratio_students_to_desks <-   replace(edu_999$num_students_total, 
+                                       is.na(edu_999$num_students_total), 0) / 
+    replace(edu_999$num_desks, is.na(edu_999$num_desks), 0) 
+edu_999$ratio_students_to_desks <- 
+    ifelse(edu_999$ratio_students_to_desks == 0, NA, edu_999$ratio_students_to_desks)
 
-e$ratio_students_to_benches <-   replace(e$num_students_total, 
-                                         is.na(e$num_students_total), 0) /
-    replace(e$num_benches, is.na(e$num_benches), 0) 
-e$ratio_students_to_benches <- 
-    ifelse(e$ratio_students_to_benches == 0, NA, e$ratio_students_to_benches)
+edu_999$ratio_students_to_benches <-   replace(edu_999$num_students_total, 
+                                         is.na(edu_999$num_students_total), 0) /
+    replace(edu_999$num_benches, is.na(edu_999$num_benches), 0) 
+edu_999$ratio_students_to_benches <- 
+    ifelse(edu_999$ratio_students_to_benches == 0, NA, edu_999$ratio_students_to_benches)
 
 ##textbooks
-e$ratio_pupil_math_pry_textbook <- replace(e$num_math_textbook_pry, 
-                                           is.na(e$num_math_textbook_pry), 0) / 
-    replace(e$num_pry_total,
-            is.na(e$num_pry_total), 0)
+edu_999$ratio_pupil_math_pry_textbook <- replace(edu_999$num_math_textbook_pry, 
+                                           is.na(edu_999$num_math_textbook_pry), 0) / 
+    replace(edu_999$num_pry_total,
+            is.na(edu_999$num_pry_total), 0)
 
-e$ratio_pupil_english_pry_textbook <- replace(e$num_english_textbook_pry, 
-                                              is.na(e$num_english_textbook_pry), 0) / 
-    replace(e$num_pry_total,
-            is.na(e$num_pry_total), 0) 
-e$ratio_pupil_socscience_pry_textbook <- replace(e$num_soc_science_textbook_pry, 
-                                                 is.na(e$num_soc_science_textbook_pry), 0) / 
-    replace(e$num_pry_total,
-            is.na(e$num_pry_total), 0)
-e$ratio_pupil_science_pry_textbook <- replace(e$num_science_textbook_pry, 
-                                              is.na(e$num_science_textbook_pry), 0) / 
-    replace(e$num_pry_total,
-            is.na(e$num_pry_total), 0)
+edu_999$ratio_pupil_english_pry_textbook <- replace(edu_999$num_english_textbook_pry, 
+                                              is.na(edu_999$num_english_textbook_pry), 0) / 
+    replace(edu_999$num_pry_total,
+            is.na(edu_999$num_pry_total), 0) 
+edu_999$ratio_pupil_socscience_pry_textbook <- replace(edu_999$num_soc_science_textbook_pry, 
+                                                 is.na(edu_999$num_soc_science_textbook_pry), 0) / 
+    replace(edu_999$num_pry_total,
+            is.na(edu_999$num_pry_total), 0)
+edu_999$ratio_pupil_science_pry_textbook <- replace(edu_999$num_science_textbook_pry, 
+                                              is.na(edu_999$num_science_textbook_pry), 0) / 
+    replace(edu_999$num_pry_total,
+            is.na(edu_999$num_pry_total), 0)
 
-e$ratio_pupil_math_js_textbook <- replace(e$num_math_textbook_js, 
-                                          is.na(e$num_math_textbook_js), 0) / 
-    replace(e$num_js_total,
-            is.na(e$num_js_total), 0)
-e$ratio_pupil_english_js_textbook <- replace(e$num_english_textbook_js, 
-                                             is.na(e$num_english_textbook_js), 0) / 
-    replace(e$num_js_total,
-            is.na(e$num_js_total), 0)
-e$ratio_pupil_socscience_js_textbook <- replace(e$num_soc_science_textbook_js, 
-                                                is.na(e$num_soc_science_textbook_js), 0) / 
-    replace(e$num_js_total,
-            is.na(e$num_js_total), 0)
-e$ratio_pupil_science_js_textbook <- replace(e$num_science_textbook_js, 
-                                             is.na(e$num_science_textbook_js), 0) / 
-    replace(e$num_js_total,
-            is.na(e$num_js_total), 0)  
+edu_999$ratio_pupil_math_js_textbook <- replace(edu_999$num_math_textbook_js, 
+                                          is.na(edu_999$num_math_textbook_js), 0) / 
+    replace(edu_999$num_js_total,
+            is.na(edu_999$num_js_total), 0)
+edu_999$ratio_pupil_english_js_textbook <- replace(edu_999$num_english_textbook_js, 
+                                             is.na(edu_999$num_english_textbook_js), 0) / 
+    replace(edu_999$num_js_total,
+            is.na(edu_999$num_js_total), 0)
+edu_999$ratio_pupil_socscience_js_textbook <- replace(edu_999$num_soc_science_textbook_js, 
+                                                is.na(edu_999$num_soc_science_textbook_js), 0) / 
+    replace(edu_999$num_js_total,
+            is.na(edu_999$num_js_total), 0)
+edu_999$ratio_pupil_science_js_textbook <- replace(edu_999$num_science_textbook_js, 
+                                             is.na(edu_999$num_science_textbook_js), 0) / 
+    replace(edu_999$num_js_total,
+            is.na(edu_999$num_js_total), 0)  
 #other ratios
-e$num_toilet_total <- replace(e$num_toilet_boy, is.na(e$num_toilet_boy), 0) + 
-    replace(e$num_toilet_girl, 
-            is.na(e$num_toilet_girl), 0) + 
-    replace(e$num_toilet_both, is.na(e$num_toilet_both), 0)
+edu_999$num_toilet_total <- replace(edu_999$num_toilet_boy, is.na(edu_999$num_toilet_boy), 0) + 
+    replace(edu_999$num_toilet_girl, 
+            is.na(edu_999$num_toilet_girl), 0) + 
+    replace(edu_999$num_toilet_both, is.na(edu_999$num_toilet_both), 0)
 
-e$num_toilet_total <- 
-    ifelse(e$toilet.none == "FALSE" & e$num_toilet_total == 0, NA, e$num_toilet_total)
+edu_999$num_toilet_total <- 
+    ifelse(edu_999$toilet.none == "FALSE" & edu_999$num_toilet_total == 0, NA, edu_999$num_toilet_total)
 
-e$num_students_total <-  replace(e$num_students_female, 
-                                 is.na(e$num_students_female), 0) +
-    replace(e$num_students_male, 
-            is.na(e$num_students_male), 0)
+edu_999$num_students_total <-  replace(edu_999$num_students_female, 
+                                 is.na(edu_999$num_students_female), 0) +
+    replace(edu_999$num_students_male, 
+            is.na(edu_999$num_students_male), 0)
 
-e$num_students_total <- 
-    ifelse(e$num_students_total == 0, NA, e$num_students_total)
+edu_999$num_students_total <- 
+    ifelse(edu_999$num_students_total == 0, NA, edu_999$num_students_total)
 
-e$num_tchrs_total <- replace(e$num_tchrs_male, is.na(e$num_tchrs_male), 0) + 
-    replace(e$num_tchrs_female, is.na(e$num_tchrs_female), 0) 
+edu_999$num_tchrs_total <- replace(edu_999$num_tchrs_male, is.na(edu_999$num_tchrs_male), 0) + 
+    replace(edu_999$num_tchrs_female, is.na(edu_999$num_tchrs_female), 0) 
 
-e <- outlierreplace(e, 'ratio_students_to_toilet',
-                    between(e$ratio_students_to_toilet, 1000,Inf))      
-e <- outlierreplace(e, 'ratio_students_to_desks',
-                    between(e$ratio_students_to_desks, 1000, Inf)) 
-e <- outlierreplace(e, 'ratio_students_to_benches',
-                    between(e$ratio_students_to_benches, 1000,Inf)) 
+edu_999 <- outlierreplace(edu_999, 'ratio_students_to_toilet',
+                    between(edu_999$ratio_students_to_toilet, 1000,Inf))      
+edu_999 <- outlierreplace(edu_999, 'ratio_students_to_desks',
+                    between(edu_999$ratio_students_to_desks, 1000, Inf)) 
+edu_999 <- outlierreplace(edu_999, 'ratio_students_to_benches',
+                    between(edu_999$ratio_students_to_benches, 1000,Inf)) 
 
 #### TODO: investigate why these are in the data at all; constraints should have knocked these out #####
 
 # replace all classroom indicators if they are below total classrooms
-e <- outlierreplace(e, 'num_classrms_need_min_repairs',e$num_classrms_need_min_repairs > e$num_classrms_total) 
-e <- outlierreplace(e, 'num_classrms_need_maj_repairs',e$num_classrms_need_maj_repairs > e$num_classrms_total) 
+edu_999 <- outlierreplace(edu_999, 'num_classrms_need_min_repairs',edu_999$num_classrms_need_min_repairs > edu_999$num_classrms_total) 
+edu_999 <- outlierreplace(edu_999, 'num_classrms_need_maj_repairs',edu_999$num_classrms_need_maj_repairs > edu_999$num_classrms_total) 
 
 ##writing out.rds
-saveRDS(e, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Education_661_outliercleaned.rds")
+saveRDS(edu_999, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Education_661_outliercleaned.rds")
 rm(e)                     
-
-
-###############################################################################################
-######health###################################################################################
-###############################################################################################                    
-h <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Health_661_999Cleaned.rds")
-
-#old script paramaters 
-h <- outlierreplace(h, 'num_doctors_active',
-                    (h$num_doctors_active > 12 & 
-                         (h$facility_type != "teachinghospital" & 
-                              h$facility_type != "federalmedicalcentre")))
-
-h <- outlierreplace(h, 'num_doctors_active',
-                    (h$num_doctors_active > 20 & 
-                         (h$facility_type == "teachinghospital" | 
-                              h$facility_type == "federalmedicalcentre")))
-
-h <- outlierreplace(h, 'num_nurses_active',
-                    (h$num_nurses_active > 16 & 
-                         (h$facility_type != "teachinghospital" & 
-                              h$facility_type != "federalmedicalcentre")))
-
-h <- outlierreplace(h, 'num_nurses_active',
-                    (h$num_nurses_active > 24 & 
-                         (h$facility_type == "teachinghospital" | 
-                              h$facility_type == "federalmedicalcentre")))
-
-h <- outlierreplace(h, 'num_midwives_active',
-                    (h$num_midwives_active > 24 & 
-                         (h$facility_type == "teachinghospital" | 
-                              h$facility_type == "federalmedicalcentre")))
-
-h <- outlierreplace(h, 'num_nursemidwives_active',
-                    (h$num_nursemidwives_active > 16 & 
-                         (h$facility_type != "teachinghospital" & 
-                              h$facility_type != "federalmedicalcentre")))
-
-h <- outlierreplace(h, 'num_nursemidwives_active',
-                    (h$num_nursemidwives_active > 24 & 
-                         (h$facility_type == "teachinghospital" | 
-                              h$facility_type == "federalmedicalcentre")))
-
-h <- outlierreplace(h, 'num_nursemidwives_active',
-                    (h$num_nursemidwives_active > 50))
-
-h <- outlierreplace(h, 'num_junior_chews_active',
-                    (h$num_junior_chews_active > 50))
-
-#new data points
-
-h <- outlierreplace(h, 'facility_type',
-                    (((h$num_doctors_posted < 30 & 
-                           h$num_doctors_posted != 0) & 
-                          (h$num_midwives_posted < 30 & 
-                               h$num_midwives_posted != 0) &
-                          (h$num_nurses_posted < 30 & 
-                               h$num_nurses_posted != 0)) &
-                         (h$facility_type == "teachinghospital" | 
-                              h$facility_type == "federalmedicalcentre")))
-
-h <- outlierreplace(h, 'num_doctors_posted',
-                    ((h$num_doctors_posted > 500 | 
-                          h$num_doctors_posted < 100) & 
-                         (h$facility_type == "teachinghospital"  |
-                              h$facility_type == "federalmedicalcentre")
-                    ))
-
-h <- outlierreplace(h, 'num_nurses_posted',
-                    (h$num_nurses_posted < 100 &
-                         (h$facility_type == "teachinghospital" | 
-                              h$facility_type == "federalmedicalcentre")))
-
-h <- outlierreplace(h, 'num_midwives_posted',
-                    (h$num_midwives_posted < 100 & 
-                         (h$facility_type == "teachinghospital" | 
-                              h$facility_type == "federalmedicalcentre")))
-
-h <- outlierreplace(h, 'num_nursemidwives_posted',
-                    (h$num_nursemidwives_posted < 50 &
-                         (h$facility_type == "teachinghospital" | 
-                              h$facility_type == "federalmedicalcentre")))
-
-h <- outlierreplace(h, 'num_midwives_posted',
-                    (h$num_midwives_posted > 16 & 
-                         (h$facility_type != "teachinghospital" & 
-                              h$facility_type != "federalmedicalcentre")))
-
-h <- outlierreplace(h, 'num_nurses_posted',
-                    (h$num_nurses_posted > 16 & 
-                         (h$facility_type != "teachinghospital" & 
-                              h$facility_type != "federalmedicalcentre")))            
-
-h <- outlierreplace(h, 'num_nursemidwives_posted',
-                    (h$num_nursemidwives_posted > 16 & 
-                         (h$facility_type != "teachinghospital" & 
-                              h$facility_type != "federalmedicalcentre")))
-
-h <- outlierreplace(h, 'num_cho_posted',
-                    (h$num_cho_posted > 16 & 
-                         (h$facility_type != "teachinghospital" & 
-                              h$facility_type != "federalmedicalcentre")))
-
-
-h <- outlierreplace(h, 'num_cho_posted',
-                    (h$num_cho_posted > 24 &
-                         (h$facility_type == "teachinghospital" | 
-                              h$facility_type == "federalmedicalcentre")))
-
-h <- outlierreplace(h, 'num_chews_posted',
-                    (h$num_chews_posted > 50 & 
-                         (h$facility_type != "teachinghospital" & 
-                              h$facility_type != "federalmedicalcentre")))
-
-h <- outlierreplace(h, 'num_chews_posted',
-                    (h$num_chews_posted > 50 &
-                         (h$facility_type == "teachinghospital" | 
-                              h$facility_type == "federalmedicalcentre")))
-
-h <- outlierreplace(h, 'num_junior_chews_posted',
-                    (h$num_junior_chews_posted > 50 & 
-                         (h$facility_type != "teachinghospital" & 
-                              h$facility_type != "federalmedicalcentre")))   
-
-h <- outlierreplace(h, 'num_junior_chews_posted',
-                    (h$num_junior_chews_posted > 24 &
-                         (h$facility_type == "teachinghospital" | 
-                              h$facility_type == "federalmedicalcentre")))
-
-h <- outlierreplace(h, 'pharmacists_posted',
-                    (h$pharmacists_posted > 5 & 
-                         (h$facility_type != "teachinghospital" & 
-                              h$facility_type != "federalmedicalcentre")))
-
-h <- outlierreplace(h, 'pharmacists_posted',
-                    (h$pharmacists_posted < 5 &
-                         (h$facility_type == "teachinghospital" | 
-                              h$facility_type == "federalmedicalcentre")))
-
-h <- outlierreplace(h, 'environmental_health_officers_posted',
-                    (h$environmental_health_officers_posted > 6 & 
-                         (h$facility_type != "teachinghospital" & 
-                              h$facility_type != "federalmedicalcentre")))      
-
-h <- outlierreplace(h, 'lab_technicians_posted',
-                    (h$lab_technicians_posted > 4 & 
-                         (h$facility_type != "teachinghospital" & 
-                              h$facility_type != "federalmedicalcentre")))
-
-h <- outlierreplace(h, 'pharma_technicians_posted',
-                    (h$pharma_technicians_posted > 5 & 
-                         (h$facility_type != "teachinghospital" & 
-                              h$facility_type != "federalmedicalcentre")))
-
-h <- outlierreplace(h, 'medical_records_officers_posted',
-                    (h$medical_records_officers_posted > 4 & 
-                         (h$facility_type != "teachinghospital" & 
-                              h$facility_type != "federalmedicalcentre")))
-
-# 
-h <- outlierreplace(h, 'inpatient_care_num_beds',
-                    (h$inpatient_care_num_beds > 50 & 
-                         (h$facility_type != "teachinghospital" & 
-                              h$facility_type != "federalmedicalcentre")))
-
-h <- outlierreplace(h, 'num_flush_or_pour_flush_piped',
-                    (h$num_flush_or_pour_flush_piped > 20 & 
-                         (h$facility_type != "teachinghospital" & 
-                              h$facility_type != "federalmedicalcentre")))
-
-h <- outlierreplace(h, 'num_flush_other',
-                    (h$num_flush_other > 10 & 
-                         (h$facility_type != "teachinghospital" & 
-                              h$facility_type != "federalmedicalcentre")))
-
-h <- outlierreplace(h, 'num_vip_latrine',
-                    (h$num_vip_latrine > 6 & 
-                         (h$facility_type != "teachinghospital" & 
-                              h$facility_type != "federalmedicalcentre")))
-
-h <- outlierreplace(h, 'num_pit_w_slab',
-                    (h$num_pit_w_slab > 8 & 
-                         (h$facility_type != "teachinghospital" & 
-                              h$facility_type != "federalmedicalcentre")))
-
-h <- outlierreplace(h, 'num_open_pit_latrine',
-                    (h$num_open_pit_latrine > 4 & 
-                         (h$facility_type != "teachinghospital" & 
-                              h$facility_type != "federalmedicalcentre")))
-
-h <- outlierreplace(h, 'num_bucket_system',
-                    (h$num_bucket_system > 10 & 
-                         (h$facility_type != "teachinghospital" & 
-                              h$facility_type != "federalmedicalcentre")))
-
-h <- outlierreplace(h, 'num_bucket_system',
-                    (h$num_bucket_system > 10 & 
-                         (h$facility_type == "teachinghospital" | 
-                              h$facility_type == "federalmedicalcentre")))
-
-saveRDS(h, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Health_661_outliercleaned.rds")
-rm(h)
-
-###############################################################################################
-######water####################################################################################
-############################################################################################### 
-water_pilot <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Water_661_999Cleaned_Reclassified.csv", 
-                        stringsAsFactors=FALSE)
-saveRDS(water_pilot, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Water_661_outliercleaned.rds")
 
