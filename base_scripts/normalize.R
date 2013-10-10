@@ -129,6 +129,10 @@ newname_113 <- c("days_no_electricity", "days_no_water_pastmth", "flush_toilet_n
 
 # after cleaning999
 edu_661$chalkboard_each_classroom_yn <- edu_661$num_classrms_total <= edu_661$num_classrm_w_chalkboard
+
+edu_999$chalkboard_each_classroom_yn[edu_999$src == '661'] <- edu_999$num_classrms_total[edu_999$src == '661'] <= 
+                                                                    edu_999$num_classrm_w_chalkboard[edu_999$src == '661']
+
 # after cleaning999
 edu_661$num_textbooks <-  
     ifelse(edu_661$level_of_education %in% c('primary_only', 'preprimary_and_primary'),  
@@ -166,9 +170,6 @@ edu_999$num_tchrs_female[edu_999$src == "113"] <- apply(cbind(edu_999$num_tchrs_
                                                               edu_999$num_tchrs_female_part_time[edu_999$src == "113"]), 
                                                       1, sum, na.rm=T)
 #####
-
-
-
 # adding num_tchrs_w_nce to e113
 edu_113$num_tchrs_w_nce <- apply(cbind(edu_113$tchrs_male_nce, 
                                        edu_113$tchrs_female_nce, 
@@ -190,11 +191,13 @@ edu_999$num_classrms_total[edu_999$src == "113"] <- apply(cbind(edu_999$num_clas
                                                                 edu_999$num_classrms_need_maj_repairs[edu_999$src == "113"]),
                                                                 1, sum, na.rm=T)
 
-
-#num_toilet_total
+#######################
+######num_toilet_total#
+# type conversion
 edu_113$vip_latrine_number <- as.numeric(edu_113$vip_latrine_number)
 edu_113$slab_pit_latrine_number <- as.numeric(edu_113$slab_pit_latrine_number)
 
+# adding new vars
 edu_113$num_toilet_total <- apply(cbind(edu_113$vip_latrine_number, 
                                         edu_113$slab_pit_latrine_number), 
                                         1, sum, na.rm=T)
@@ -211,24 +214,32 @@ edu_999$num_benches[edu_999$src == "113"] <- apply(cbind(edu_999$num_attached_be
 edu_113$num_benches <- apply(cbind(edu_113$num_attached_benches, 
                                    edu_113$num_unattached_benches), 1, sum, na.rm=T)
 
+#########
+##done###
+#########
 
-########
 #######
-
-
-
-edu_113$ratio_students_to_benches <- replace(edu_113$num_students_total, is.na(edu_113$num_students_total), 0) / 
-                                                    replace(edu_113$num_benches, is.na(edu_113$num_benches), 0) 
-
-edu_113$unique_lga <- paste(edu_113$mylga_state, edu_113$mylga, sep='_')
-
+#######
+# only these vars shall be created before cleaning 999
 edu_113$school_managed <- ifelse(edu_113$school_managed_fed_gov, "fed_gov",
-                             ifelse(edu_113$school_managed_st_gov, "st_gov",
-                                ifelse(edu_113$school_managed_loc_gov, "loc_gov",
-                                   ifelse(edu_113$school_managed_priv_profit, "priv_profit",
-                                      ifelse(edu_113$school_managed_priv_noprofit, "priv_noprofit",
-                                        ifelse(edu_113$school_managed_other | !is.na(edu_113$school_managed_other_specify), "other",
-                                            NA))))))
+                                 ifelse(edu_113$school_managed_st_gov, "st_gov",
+                                        ifelse(edu_113$school_managed_loc_gov, "loc_gov",
+                                               ifelse(edu_113$school_managed_priv_profit, "priv_profit",
+                                                      ifelse(edu_113$school_managed_priv_noprofit, "priv_noprofit",
+                                                             ifelse(edu_113$school_managed_other | !is.na(edu_113$school_managed_other_specify), "other",
+                                                                    NA))))))
+edu_113$fees.admission_new <- as.logical(edu_113$new_stdnts_enroll_fee > 0)
+edu_113$fees.tuition_cont <- as.logical(edu_113$cont_stdnts_enroll_fee > 0)
+edu_113$fees.textbook <- as.logical(edu_113$textbooks_fee > 0)
+edu_113$fees.transport <- as.logical(edu_113$transport_fee > 0)
+edu_113$fees.exam_fee <- as.logical(edu_113$exams_fee > 0)
+edu_113$fees.pta_fee <- as.logical(edu_113$pta_fee > 0)
+
+
+###### After 999
+# edu_113$ratio_students_to_benches <- replace(edu_113$num_students_total, is.na(edu_113$num_students_total), 0) / 
+#                                                     replace(edu_113$num_benches, is.na(edu_113$num_benches), 0) 
+edu_113$unique_lga <- paste(edu_113$mylga_state, edu_113$mylga, sep='_')
 
 edu_113$grid_proximity[edu_113$power_grid_connection == T] <- "connected_to_grid"
 
@@ -242,6 +253,7 @@ edu_113$num_textbooks <- apply(cbind(edu_113$num_textbooks_english,
 #                                 edu_113$toilet.ventilated_improved | 
 #                                 edu_113$toilet.pit_latrine_with_slab)
 
+
 edu_113$pupil_toilet_ratio_facility <- (ifelse(edu_113$flush_toilet_drain_to == "improved", 
                                           apply(cbind(edu_113$flush_toilet_number, 
                                                       edu_113$vip_latrine_number,
@@ -250,20 +262,7 @@ edu_113$pupil_toilet_ratio_facility <- (ifelse(edu_113$flush_toilet_drain_to == 
                                                       edu_113$slab_pit_latrine_number,
                                                       edu_113$education_improved_sanitation), 1, sum, na.rm=T)) / edu_113$num_students_total)
 
-edu_113$fees.admission_new <- as.logical(edu_113$new_stdnts_enroll_fee > 0)
-edu_113$fees.tuition_cont <- as.logical(edu_113$cont_stdnts_enroll_fee > 0)
-edu_113$fees.textbook <- as.logical(edu_113$textbooks_fee > 0)
-edu_113$fees.transport <- as.logical(edu_113$transport_fee > 0)
-edu_113$fees.exam_fee <- as.logical(edu_113$exams_fee > 0)
-edu_113$fees.pta_fee <- as.logical(edu_113$pta_fee > 0)
 
-
-
-# "cont_stdnts_enroll_fee" = "fees.tuition_cont", 
-# "textbooks_fee" = "fees.textbook", 
-# "transport_fee" = "fees.transport", 
-# "exams_fee" = "fees.exam_fee", 
-# "pta_fee" = "fees.pta_fee", 
 
 
 #################
