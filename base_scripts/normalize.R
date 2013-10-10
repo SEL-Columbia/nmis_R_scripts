@@ -40,21 +40,26 @@ na_prop <- function(vec) {
 }
 
 
-common_slug <- function(slug, df_names = c("edu_113", "edu_661", "edu_pilot"))
-{
-    dfs <- lapply(df_names, function(x) get(x))
-    names(dfs) <- df_names
-    
-    flgs <- sapply(dfs, function(x) slug %in% names(x))
-    
-    if(all(flgs) == T){
-        sprintf("%s is contained in all data sets",slug)
-    }
-    else{
-        sprintf("%s does NOT have slug:   %s", paste(names(dfs)[!flgs], collapse=", "), slug)
-    }
-}
 
+common_slug <- function(df_names)
+{
+    function(slug)
+    {
+        dfs <- lapply(df_names, function(x) get(x))
+        names(dfs) <- df_names
+        
+        flgs <- sapply(dfs, function(x) slug %in% names(x))
+        
+        if(all(flgs) == T){
+            sprintf("%s is contained in all data sets",slug)
+        }
+        else{
+            sprintf("%s does NOT have slug:   %s", paste(names(dfs)[!flgs], collapse=", "), slug)
+        }
+    }
+    
+}
+edu_common <- common_slug(c("edu_113", "edu_661", "edu_pilot"))
 
 # length(which(names(edu_113) %in% names(edu_661)))
 # length(which(names(edu_pilot) %in% names(edu_113)))
@@ -85,7 +90,7 @@ edu_113 <- rename(edu_113, c("days_no_potable_water_pastmth" = "days_no_potable_
 mapped_113 <- c("days_no_potable_water", "num_desks", "num_science_textbook_pry", "water.pipe_water",
                 "water.tube_well", "toilet.flush_or_pour_flush_improved", "toilet.ventilated_improved",
                 "toilet.pit_latrine_with_slab", "power_sources.generator", "power_sources.solar_system",
-                "power_sources.grid", "functioning_library_yn")
+                "power_sources.grid", "functioning_library_yn", "toilet.none")
 
 
 newname_113 <- c("days_no_electricity", "days_no_water_pastmth", "flush_toilet_number",
@@ -148,23 +153,69 @@ edu_661$num_textbooks <-
 ###New Variable in 113###
 #########################
 
+# Creating Num_tchrs_male & female for 113 source
 edu_113$num_tchrs_male <- apply(cbind(edu_113$num_tchrs_male_full_time, edu_113$num_tchrs_male_part_time), 1,
-                                 sum, na.rm=T)
-
-edu_113$num_tchrs_female <- apply(cbind(edu_113$num_tchrs_female_full_time, edu_113$num_tchrs_female_part_time), 1,
                                 sum, na.rm=T)
+edu_113$num_tchrs_female <- apply(cbind(edu_113$num_tchrs_female_full_time, edu_113$num_tchrs_female_part_time), 1,
+                                  sum, na.rm=T)
+# re-wrote to accommodate the combined data set
+edu_999$num_tchrs_male[edu_999$src == "113"] <- apply(cbind(edu_999$num_tchrs_male_full_time[edu_999$src == "113"], 
+                                                            edu_999$num_tchrs_male_part_time[edu_999$src == "113"]), 
+                                                            1, sum, na.rm=T)
+edu_999$num_tchrs_female[edu_999$src == "113"] <- apply(cbind(edu_999$num_tchrs_female_full_time[edu_999$src == "113"], 
+                                                              edu_999$num_tchrs_female_part_time[edu_999$src == "113"]), 
+                                                      1, sum, na.rm=T)
+#####
 
+
+
+# adding num_tchrs_w_nce to e113
 edu_113$num_tchrs_w_nce <- apply(cbind(edu_113$tchrs_male_nce, 
                                        edu_113$tchrs_female_nce, 
                                        edu_113$tchrs_male_other_w_nce,
                                        edu_113$tchrs_female_other_w_nce), 1, sum, na.rm=T)
-
-edu_113$num_benches <- apply(cbind(edu_113$num_attached_benches, 
-                                   edu_113$num_unattached_benches), 1, sum, na.rm=T)
+# re-wrote to accommodate edu_774 data
+edu_999$num_tchrs_w_nce[edu_999$src == "113"] <- apply(cbind(edu_999$tchrs_male_nce[edu_999$src == "113"], 
+                                                            edu_999$tchrs_female_nce[edu_999$src == "113"], 
+                                                            edu_999$tchrs_male_other_w_nce[edu_999$src == "113"],
+                                                            edu_999$tchrs_female_other_w_nce[edu_999$src == "113"]),
+                                                            1, sum, na.rm=T)
 
 edu_113$num_classrms_total <- apply(cbind(edu_113$num_classrms_good_cond, 
                                           edu_113$num_classrms_need_min_repairs, 
                                           edu_113$num_classrms_need_maj_repairs), 1, sum, na.rm=T)
+
+edu_999$num_classrms_total[edu_999$src == "113"] <- apply(cbind(edu_999$num_classrms_good_cond[edu_999$src == "113"], 
+                                                                edu_999$num_classrms_need_min_repairs[edu_999$src == "113"], 
+                                                                edu_999$num_classrms_need_maj_repairs[edu_999$src == "113"]),
+                                                                1, sum, na.rm=T)
+
+
+#num_toilet_total
+edu_113$vip_latrine_number <- as.numeric(edu_113$vip_latrine_number)
+edu_113$slab_pit_latrine_number <- as.numeric(edu_113$slab_pit_latrine_number)
+
+edu_113$num_toilet_total <- apply(cbind(edu_113$vip_latrine_number, 
+                                        edu_113$slab_pit_latrine_number), 
+                                        1, sum, na.rm=T)
+
+edu_999$num_toilet_total[edu_999$src == "113"] <- apply(cbind(edu_999$vip_latrine_number[edu_999$src == "113"], 
+                                                              edu_999$slab_pit_latrine_number[edu_999$src == "113"]), 
+                                                        1, sum, na.rm=T)
+
+
+edu_999$num_benches[edu_999$src == "113"] <- apply(cbind(edu_999$num_attached_benches[edu_999$src == "113"], 
+                                                         edu_999$num_unattached_benches[edu_999$src == "113"]),
+                                                        1, sum, na.rm=T)
+
+edu_113$num_benches <- apply(cbind(edu_113$num_attached_benches, 
+                                   edu_113$num_unattached_benches), 1, sum, na.rm=T)
+
+
+########
+#######
+
+
 
 edu_113$ratio_students_to_benches <- replace(edu_113$num_students_total, is.na(edu_113$num_students_total), 0) / 
                                                     replace(edu_113$num_benches, is.na(edu_113$num_benches), 0) 
@@ -214,11 +265,6 @@ edu_113$fees.pta_fee <- as.logical(edu_113$pta_fee > 0)
 # "exams_fee" = "fees.exam_fee", 
 # "pta_fee" = "fees.pta_fee", 
 
-#####
-#####
-#####
-ed$covered_roof_good_condi <- edu_113$covered_roof_yn %in% c("roof_fence_good_condition", 'yes')
-
 
 #################
 #################
@@ -238,8 +284,10 @@ edu_pilot <- rename(edu_pilot, c("num_total_classrooms" = "num_classrms_total",
                                  "toilet_ventilated_improved" = "toilet.ventilated_improved", 
                                  "toilet_pit_latrine_with_slab" = "toilet.pit_latrine_with_slab",
                                  "days_no_water_any_source" = "days_no_water_pastmth",
-                                 "toilet_none" = "toilet.none"
-                                 ))
+                                 "toilet_none" = "toilet.none",
+                                 "X_p_num_improved_sanitation" = "num_toilet_total",
+                                 "num_tchrs_male_full_time" = "num_tchrs_male",
+                                 "num_tchrs_female_full_time" = "num_tchrs_female"))
 
 
 
@@ -258,51 +306,28 @@ edu_pilot$num_textbooks <- apply(cbind(edu_pilot$num_textbooks_english,
 edu_pilot$fees.transport <- as.logical(edu_pilot$transport_fee > 0)
 
 
-
+ed$covered_roof_good_condi <- edu_113$covered_roof_yn %in% c("roof_fence_good_condition", 'yes')
 
 
 
 
 ###### All 3 new indicator:
-ed$potable_water <- ((e_p$days_no_potable_water < 7) & (e_p$water_none == FALSE))
-
-
-
-
-slugsearch("manage", edu_113)
-slugsearch("manage", edu_pilot)
-slugsearch("manage", edu_661)
-common_slugs
-
-see("X_p_managed_by", edu_pilot)
                     
 
 #### combining 661, 113 & pilot
 edu_total <- rbind.fill(edu_661, edu_113, edu_pilot)
 
 
-
 ###############################################
 ####mapping values and standardize the type####
 ###############################################
-
+ed$potable_water <- ((e_p$days_no_potable_water < 7) & (e_p$water_none == FALSE))
 edu_total$toilet.none <- as.logical(edu_total$toilet.none)
 
-
+edu_total$vip_latrine_number <- as.numeric(edu_total$vip_latrine_number)
+edu_total$slab_pit_latrine_number <- as.numeric(edu_total$slab_pit_latrine_number)
 
 
 saveRDS(edu_total, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Edu774.rds")
 
 
-
-##########
-##Health##
-##########
-
-
-
-health_661 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/merged/Health_661_Merged.csv", stringsAsFactors=F)
-health_113 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/113/Health_PhII_RoundI&II&III_Clean_2011.10.21.csv",
-                    stringsAsFactors=F, na.strings = c("NA", "n/a"))
-health_pilot <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/113/Pilot_Data_Health_Clean_2011.11.18.csv",
-                      stringsAsFactors=F, na.strings = c("NA", "n/a"))

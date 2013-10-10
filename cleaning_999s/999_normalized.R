@@ -339,6 +339,9 @@ cellst(merged_education, 'km_to_catchment_area',
 cellst(merged_education, 'num_students_frthr_than_3km', 
        which(merged_education$num_students_frthr_than_3km == 999 | merged_education$num_students_frthr_than_3km >= 9000), 
        NA_integer_) # 999 considered as outlier
+cellst(merged_education, 'num_students_total',which(merged_education$num_students_total < 0), NA_integer_)
+
+
 
 #individual cells
 cellst(merged_education, 'num_tchrs_qualification.num_tchrs_w_nce',
@@ -352,7 +355,7 @@ cellst(merged_education, 'num_students_total',
 cellst(merged_education, 'num_students_total',
        which(merged_education$num_students_total =='9699'), NA_integer_)
 ##total
-saveRDS(merged_education, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Education_661_999Cleaned.rds")
+saveRDS(merged_education, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Education_774_999Cleaned.rds")
 
 
 
