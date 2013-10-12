@@ -22,7 +22,7 @@ edu_pilot$uuid <- sapply(paste(edu_pilot$gps, edu_pilot$photo), FUN=digest)
 ####
 common_slugs_113 <- names(edu_661)[(which(names(edu_661) %in% names(edu_113)))]
 edu_common <- common_slug(c("edu_113", "edu_661", "edu_pilot"))
-
+edu_class <- common_type(c("edu_113", "edu_661", "edu_pilot"))
 ########################
 #### Mapping Names #####
 ########################
@@ -63,7 +63,8 @@ edu_pilot <- rename(edu_pilot, c("num_total_classrooms" = "num_classrms_total",
                                  "X_p_num_improved_sanitation" = "num_toilet_total",
                                  "num_tchrs_male_full_time" = "num_tchrs_male",
                                  "num_tchrs_female_full_time" = "num_tchrs_female",
-                                 "water_none" = "water.none"))
+                                 "water_none" = "water.none",
+                                 "power_grid_connection" = "power_sources.grid"))
 
 mapped_113 <- c("days_no_potable_water", "num_desks", "num_science_textbook_pry", "water.pipe_water",
                 "water.tube_well", "toilet.flush_or_pour_flush_improved", "toilet.ventilated_improved",
@@ -141,6 +142,17 @@ edu_113$slab_pit_latrine_number <- as.numeric(edu_113$slab_pit_latrine_number)
 edu_total$toilet.none <- as.logical(edu_total$toilet.none)
 edu_total$water.none <- as.logical(edu_total$water.none)
 
+edu_total$natl_curriculum_yn <- as.logical(recodeVar(edu_total$natl_curriculum_yn,
+                                          c('yes', 'no'),
+                                          c(TRUE, FALSE)))
+### Need to solve this on Monday
+# edu_total$borehole_tubewell_repair_time <- as.logical(recodeVar(edu_total$borehole_tubewell_repair_time,
+#                                                      c('yes', 'no'),
+#                                                      c(TRUE, FALSE)))
+
+
+borehole_tubewell_repair_time
+
 ################
 #### output ####
 ################
@@ -210,8 +222,6 @@ edu_661$num_textbooks <-
                          0)))
 
 #~^ 113
-edu_113$grid_proximity[edu_113$power_grid_connection == T] <- "connected_to_grid"
-
 edu_113$num_textbooks <- apply(cbind(edu_113$num_textbooks_english, 
                                      edu_113$num_textbooks_math, 
                                      edu_113$num_textbooks_social_sci,
@@ -236,4 +246,3 @@ edu_pilot$num_textbooks <- apply(cbind(edu_pilot$num_textbooks_english,
                                        edu_pilot$num_textbooks_social_sci,
                                        edu_pilot$num_textbooks_pry_sci), 1, sum, na.rm=T)
 
-edu_pilot$grid_proximity[edu_pilot$power_grid_connection == T] <- "connected_to_grid"

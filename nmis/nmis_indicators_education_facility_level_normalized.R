@@ -35,16 +35,18 @@ edu_sub$improved_sanitation <- edu_outlier$toilet.flush_or_pour_flush_improved =
                                     edu_outlier$toilet.ventilated_improved == T | 
                                     edu_outlier$toilet.pit_latrine_with_slab == T
 
-edu_sub$phcn_electricity <- edu_outlier$grid_proximity == 'connected_to_grid'
+
+edu_sub$phcn_electricity <- ifelse(edu_outlier$src == "661", 
+                                   edu_outlier$grid_proximity == 'connected_to_grid',
+                                   edu_outlier$power_sources.grid == T)
 ################
 ##################
 
 edu_sub$school_1kmplus_catchment_area <- edu_outlier$km_to_catchment_area > 1
-# school_1kmplus_catchment_area = km_to_catchment_area > 1
 edu_sub$num_classrms_need_maj_repairs <- edu_outlier$num_classrms_need_maj_repairs
 edu_sub$num_tchrs_with_nce <- edu_outlier$num_tchrs_w_nce
 
-edu_sub$num_textbooks <-  
+edu_sub$num_textbooks <- ifelse(edu_outlier$src == "661",
     ifelse(edu_outlier$level_of_education %in% c('primary_only', 'preprimary_and_primary'),  
            edu_outlier$num_math_textbook_pry + edu_outlier$num_english_textbook_pry + 
                edu_outlier$num_soc_science_textbook_pry + edu_outlier$num_science_textbook_pry,
@@ -56,10 +58,22 @@ edu_sub$num_textbooks <-
                              edu_outlier$num_soc_science_textbook_pry + edu_outlier$num_science_textbook_pry +
                              edu_outlier$manuals_js.num_math_textbook_js + edu_outlier$manuals_js.num_english_textbook_js + 
                              edu_outlier$manuals_js.num_soc_science_textbook_js + edu_outlier$manuals_js.num_science_textbook_js,
-                         0)))
+                         0))), ifelse(edu_outlier$src == "113", 
+                                apply(cbind(edu_outlier$num_textbooks_english, 
+                                            edu_outlier$num_textbooks_math, 
+                                            edu_outlier$num_textbooks_social_sci), 1, sum, na.rm=T),
+                                      apply(cbind(edu_outlier$num_textbooks_english, 
+                                                  edu_outlier$num_textbooks_math, 
+                                                  edu_outlier$num_textbooks_social_sci,
+                                                  edu_outlier$num_textbooks_pry_sci), 1, sum, na.rm=T)))
+                                      
+                                
+## Fix the num_textbooks outlier issuse, take 0.95 quantile(1300) as the cutt off 
+edu_sub$num_textbooks <- ifelse(edu_sub$num_textbooks > 2000, NA, edu_sub$num_textbooks)
+    
 edu_sub$textbook_to_pupil_ratio <- edu_sub$num_textbooks / edu_outlier$num_students_total
 
-edu_sub$natl_curriculum_yn <- edu_outlier$natl_curriculum_yn == 'yes'
+edu_sub$natl_curriculum_yn <- edu_outlier$natl_curriculum_yn 
 
 ## ACCESS ##
 # see school_1kmplus_catchment_area from above
@@ -67,8 +81,13 @@ edu_sub$school_1kmplus_secondary_school <- edu_outlier$km_to_secondary_school > 
 edu_sub$students_living_3kmplus_school <- edu_outlier$num_students_frthr_than_3km
 
 ## PARTICIPATION ##
-edu_sub$male_to_female_student_ratio <- edu_outlier$num_students_male / 
-    edu_outlier$num_students_female
+edu_sub$male_to_female_student_ratio <- edu_outlier$num_students_male / edu_outlier$num_students_female
+
+
+
+
+###OCt/11
+
 
 ## Infrastructure: Water & San ##
 edu_sub$functional_water <- 

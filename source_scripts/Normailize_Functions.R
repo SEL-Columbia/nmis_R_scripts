@@ -78,7 +78,9 @@ common_type <- function(df_names)
             tmp_class <- my_class(df_names[i])
             if (is.na(tmp_class) == F){
                 flgs[j] <- tmp_class
+                names(flgs)[j] <- df_names[i]
                 j <- j+1
+                
             }
         }
         
@@ -88,8 +90,8 @@ common_type <- function(df_names)
             cat(paste('\n', slug, "has same type in all data.frame.\n The Type of", slug, "is: ", flgs[2]))
         }else{
             warning(paste('\n',slug, " is NOT same in all data.frame"))
-            cat(names(flgs))
-            cat(flgs)
+            warning(paste(names(flgs), collapse=", "))
+            warning(paste(flgs, collapse=", "))
         }
     }
     
