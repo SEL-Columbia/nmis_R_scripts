@@ -2,11 +2,7 @@ source('base_scripts/InstallFormhub.R')
 source('source_scripts/NMIS_Functions.R')
 source('cleaning_outliers/outlier_functions.R')
 
-###############################################################################################
-######education################################################################################
-###############################################################################################                    
 edu_999 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Education_774_999Cleaned.rds")
-
 
 #Adding necessary indicators:
 
@@ -17,6 +13,10 @@ edu_999$num_toilet_total[edu_999$src == "661"] <- apply(cbind(edu_999$num_toilet
                                                               edu_999$num_toilet_girl[edu_999$src == "661"], 
                                                               edu_999$num_toilet_both[edu_999$src == "661"]),
                                                         1, sum, na.rm=T)
+
+edu_999$chalkboard_each_classroom_yn[edu_999$src == "661"] <- (edu_999$num_classrms_total[edu_999$src == "661"] <= 
+                                                                   edu_999$num_classrm_w_chalkboard[edu_999$src == "661"])
+
 
 edu_999$num_toilet_total[edu_999$src == "113"] <- apply(cbind(edu_999$vip_latrine_number[edu_999$src == "113"], 
                                                               edu_999$slab_pit_latrine_number[edu_999$src == "113"]), 
@@ -45,9 +45,12 @@ edu_999$num_benches[edu_999$src == "113"] <- apply(cbind(edu_999$num_attached_be
                                                          edu_999$num_unattached_benches[edu_999$src == "113"]),
                                                    1, sum, na.rm=T)
 
+edu_999$potable_water <- ((edu_999$days_no_potable_water < 7) & (edu_999$water.none == FALSE))
 
 
-# Outlier Cleaning stars here:
+######################################
+#### Outlier Cleaning stars here: ####
+######################################
 edu_999$num_toilet_total <- ifelse(edu_999$toilet.none == F & edu_999$num_toilet_total == 0,
                                    NA, edu_999$num_toilet_total)
 
