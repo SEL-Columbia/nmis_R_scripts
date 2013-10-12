@@ -2,23 +2,29 @@ require(plyr)
 require(doBy)
 require(digest)
 
-
+# search for slug_names that contain part of the input string 
 slugsearch <- function(nm, df=edu_661){
     names(df)[grep(nm, names(df), ignore.case=T)]
 }
 
+# Basically the table function, but shows NA value
 see <- function(nm, df=edu_113)
 {
     table(df[,nm],exclude=NULL)
 }
 
+#returns number of NAs in specific column
 na_num <- function(vec) length(which(is.na(vec)))
 
+#returns proportion of NAs in specific column
 na_prop <- function(vec) {
     print(class(vec)) 
     na_num(vec)/length(vec)
 }
 
+#Takes a list/vector of string(names of the Data.frame) 
+# and returns a function that take a STRING(slug_name/variable_name)
+# Which checks if the slug_name is contained in the list of the input data.frames.
 common_slug <- function(df_names)
 {
     function(slug)
@@ -38,6 +44,9 @@ common_slug <- function(df_names)
     
 }
 
+#Takes a list/vector of string(names of the Data.frame) 
+# and returns a function that take a STRING(slug_name/variable_name)
+# Which checks if the CLASS of input slug is identical in input data.frames .
 common_type <- function(df_names)
 {
     #Define the compareson function campare all other elements with 1st element and see if they'r all equal
@@ -86,8 +95,3 @@ common_type <- function(df_names)
     
 }
 
-
-edu_class <- common_type(c("edu_113", "edu_661", "edu_pilot"))
-slug = "classes_outside_yn"
-
-edu_class(slug)
