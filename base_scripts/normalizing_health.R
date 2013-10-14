@@ -1,8 +1,6 @@
-
 ##########
 ##Health##
 ##########
-
 setwd("~/Code/nmis_R_scripts/")
 require(plyr)
 require(doBy)
@@ -96,7 +94,9 @@ h_113 <- rename(h_113, c("bucket_system_number" = "num_bucket_system",
                          "lab_tests_malaria_microscopy" = "lab_tests.malaria_microscopy",
                          "lab_tests_pregnancy" = "lab_tests.pregnancy",
                          "lab_tests_tb_microscopy" = "lab_tests.tb_microscopy",
-                         "lab_tests_hiv_testing" = "lab_tests.hiv_testing"
+                         "lab_tests_hiv_testing" = "lab_tests.hiv_testing",
+                         "paid_services_routine_visit" = "fees_adults.paid_services_routine_visit",
+                         "medication_iv_fluid" = "medication.iv_fluid"
                          ))
 
 
@@ -108,7 +108,7 @@ mapped_113 <- c("num_bucket_system", "num_flush_other", "num_vip_latrine", "num_
                 "medication.oral_contraceptives", "medication.injectable_contracept", "immunization.measles_immun",
                 "immunization.opv_immuization", "immunization.dpt_immunization", "immunization.tetanus_immun",
                 "immunization.csm_immunization", "lab_tests.malaria_rdt", "lab_tests.malaria_microscopy", 
-                "lab_tests.tb_microscopy", "lab_tests.hiv_testing")
+                "lab_tests.tb_microscopy", "lab_tests.hiv_testing", "medication_iv_fluid")
 
 
 newname_113 <- 
@@ -143,8 +143,8 @@ malaria_treatment_yn
 malaria_treatment_srvcs_itn
 sti_treatment_yn
 hiv_tx_srvcs_pmtct_services
-emoc_parenteral1 #yn equivalent in 661 (this is TF)
-emoc_antibiotics #yn equivalent in 661 (this is TF)
+emoc_parenteral1
+emoc_antibiotics #yn equivalent in 661 (this is TF) => emoc_antibiotics_yn
 comprehensive_obstetrics_yn
 emoc_antibiotics
 medication_oxytocin
@@ -158,7 +158,8 @@ sti_tx_srvcs_condoms
 hiv_tx_srvcs_condoms
 supplies_available_condoms
 child_health_yn
-vaccines_stored_yn #yn equivalent in 661 (this is TF)
+vaccines_stored_yn #yn equivalent in 661 (this is TF) => vaccine_storage_yn
+paid_services_inpatient_stay #yn equiv => inpatient_care_yn
 child_health_vaccine_carriers
 sti_tx_srvcs_penicilling
 sti_tx_srvcs_doxycycline
@@ -177,7 +178,9 @@ slab_pit_latrine_not_working
 toilet_types_flush_or_pour_flush
 flush_toilet_drain_to
 flush_toilet_not_working
-
+paid_services_child_health
+paid_services_hiv_treatment
+paid_services_tb_treatment
 
 
 
