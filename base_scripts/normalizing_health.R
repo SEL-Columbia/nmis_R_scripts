@@ -2,15 +2,14 @@
 ##Health##
 ##########
 setwd("~/Code/nmis_R_scripts/")
-require(plyr)
-require(doBy)
-require(digest)
+source("source_scripts/Normailize_Functions.R")
 
-h_661 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/merged/Health_661_Merged.csv", stringsAsFactors=F)
+h_661 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/merged/Health_661_Merged.csv", 
+                  stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999"))
 h_113 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/113/Health_PhII_RoundI&II&III_Clean_2011.10.21.csv",
-                  stringsAsFactors=F, na.strings = c("NA", "n/a"))
+                  stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999"))
 h_pilot <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/113/Pilot_Data_Health_Clean_2011.11.18.csv",
-                    stringsAsFactors=F, na.strings = c("NA", "n/a"))
+                    stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999"))
 
 #adding source column 
 h_661$src <- "661"
@@ -21,54 +20,36 @@ h_pilot$src <- "pilot"
 h_113$uuid <- sapply(paste(h_113$gps, h_113$photo), FUN=digest)
 h_pilot$uuid <- sapply(paste(h_pilot$gps, h_pilot$photo), FUN=digest)
 
+
 ####
 common_slugs_113 <- names(h_661)[(which(names(h_661) %in% names(h_113)))]
+h_common <- common_slug(c("h_113", "h_661", "h_pilot"))
+h_class <- common_type(c("h_113", "h_661", "h_pilot"))
 
 
-slugsearch <- function(nm, df=h_661){
-  names(df)[grep(nm, names(df), ignore.case=T)]
-}
-see <- function(nm, df=h_113)
-{
-  table(df[,nm],exclude=NULL)
-}
+########################
+#### Mapping Names #####
+########################
+#661
+h_661 <- rename(h_661, c("fees_adults.paid_services_routine_visit" = "paid_services_routine_visit",
+                         "fees_adults.paid_services_lab_testing" = "paid_services_lab_testing",
+                         "fees_adults.paid_services_medication" = "paid_services_medication",
+                         "fees_adults.paid_services_registration" = "paid_services_registration",
+                         "fees_adults.paid_services_routine_anc_visit" = "paid_services_routine_anc_visit",
+                         "fees_adults.paid_services_contraceptives" = "paid_services_contraceptives",
+                         "fees_adults.paid_services_anc_delivery" = "paid_services_anc_delivery",
+                         "fees_adults.paid_services_immunization" = "paid_services_immunization",
+                         "fees_adults.paid_services_malaria_treatment" = "paid_services_malaria_treatment"
+                          ))
 
-na_num <- function(vec) length(which(is.na(vec)))
+mapped_661 <- c("paid_services_routine_visit", "paid_services_lab_testing", "paid_services_medication",
+                "paid_services_registration", "paid_services_routine_anc_visit", "paid_services_contraceptives",
+                "paid_services_anc_delivery", "paid_services_immunization", "paid_services_malaria_treatment")
 
-na_prop <- function(vec) {
-  print(class(vec)) 
-  na_num(vec)/length(vec)
-}
+# 113
+#go through cleaning 999's => onwards
 
-common_slug <- function(slug, df_names = c("h_113", "h_661", "h_pilot"))
-{
-  dfs <- lapply(df_names, function(x) get(x))
-  names(dfs) <- df_names
-  
-  flgs <- sapply(dfs, function(x) slug %in% names(x))
-  
-  if(all(flgs) == T){
-    sprintf("%s is contained in all data sets",slug)
-  }
-  else{
-    sprintf("%s does NOT have slug:   %s", paste(names(dfs)[!flgs], collapse=", "), slug)
-  }
-}
-
-
-# length(which(names(h_113) %in% names(h_661)))
-# length(which(names(h_pilot) %in% names(h_113)))
-
-
-
-#### adding new variable to 661
-####
-### mapping 113 names
-
-
-#go through cleaning 999's and run commun_slug
-
-
+##113
 h_113 <- rename(h_113, c("bucket_system_number" = "num_bucket_system",
                          "flush_toilet_number" = "num_flush_other", 
                          "vip_latrine_number" = "num_vip_latrine", 
@@ -99,9 +80,6 @@ h_113 <- rename(h_113, c("bucket_system_number" = "num_bucket_system",
                          "medication_iv_fluid" = "medication.iv_fluid"
                          ))
 
-
-#go back to rest of pipeline and do these changes?? nah. 
-
 mapped_113 <- c("num_bucket_system", "num_flush_other", "num_vip_latrine", "num_pit_w_slab", "lab_tests.pregnancy",
                 "num_open_pit_latrine", "equipment.scale", "equipment.bp_machine", "lab_tests.hemoglobin_testing",
                 "lab_tests_urine_testing", "supplies.needles_and_tubing", "equipment.emoc_antishock_garment",
@@ -111,78 +89,81 @@ mapped_113 <- c("num_bucket_system", "num_flush_other", "num_vip_latrine", "num_
                 "lab_tests.tb_microscopy", "lab_tests.hiv_testing", "medication_iv_fluid")
 
 
-newname_113 <- 
-facility_owner_manager
-num_doctors_fulltime
-num_midwives_fulltime
-num_nursemidwives_fulltime
-num_chews_fulltime
-num_jr_chews_fulltime
-num_chos_fulltime
-vaccines_strg_type  
-emergency_transport_ambulance
-emergency_transport_keke_napep
-water_sources_borehole_tube_well
-water_sources_tap_outside
-water_sources_tap_in_compound
-toilet_types_vip_latrine
-toilet_types_pit_w_slab
-toilet_types_flush_or_pour_flush
-power_sources_grid
-compr_oc_available_24_7
-emoc_available_24_7
-malaria_treatment_sulphadoxine
-antimalarials_stockout_yn
-antibiotics_stockout_yn
-equipment_emergency_transport
-public_transport_funct_yn
-power_sources_generator
-power_sources_solar
-power_sources_grid
-malaria_treatment_yn
-malaria_treatment_srvcs_itn
-sti_treatment_yn
-hiv_tx_srvcs_pmtct_services
-emoc_parenteral1
-emoc_antibiotics #yn equivalent in 661 (this is TF) => emoc_antibiotics_yn
-comprehensive_obstetrics_yn
-emoc_antibiotics
-medication_oxytocin
-emoc_uterotonic2
-emoc_oxytocin
-emoc_misoprotol
-compr_oc_oxytocin
-compr_oc_misoprotol
-compr_oc_antishock_garment
-sti_tx_srvcs_condoms
-hiv_tx_srvcs_condoms
-supplies_available_condoms
-child_health_yn
-vaccines_stored_yn #yn equivalent in 661 (this is TF) => vaccine_storage_yn
-paid_services_inpatient_stay #yn equiv => inpatient_care_yn
-child_health_vaccine_carriers
-sti_tx_srvcs_penicilling
-sti_tx_srvcs_doxycycline
-sti_tx_srvcs_ciprofloxacin
-sti_treatment_yn
-child_health_ampicillin
-child_health_ciprofloxain
-child_health_yn
-medication_anti_biotics
-toilet_types_vip_latrine
-toilet_types_pit_w_slab
-toilet_types_flush_or_pour_flush
-flush_toilet_drain_to
-vip_latrine_not_working
-slab_pit_latrine_not_working
-toilet_types_flush_or_pour_flush
-flush_toilet_drain_to
-flush_toilet_not_working
-paid_services_child_health
-paid_services_hiv_treatment
-paid_services_tb_treatment
+
+##pilot
+
+h_pilot <- rename(h_pilot, c("" = "", 
+                             
+                             
+                             
+                             ))
 
 
+newname_113 <- c("antibiotics_stockout_yn", "antimalarials_stockout_yn", 
+                 "malaria_treatment_sulphadoxine", "emoc_parenteral1","paid_services_tb_treatment",
+                 "emoc_available_24_7", "toilet_types_flush_or_pour_flush",
+                 "power_sources_grid", "compr_oc_available_24_7", "toilet_types_pit_w_slab", 
+                 "toilet_types_vip_latrine", "water_sources_tap_in_compound",
+                 "water_sources_tap_outside", "water_sources_borehole_tube_well", 
+                 "emergency_transport_keke_napep", "emergency_transport_ambulance", 
+                 "vaccines_strg_type", "num_chos_fulltime", "num_nursemidwives_fulltime",
+                 "num_jr_chews_fulltime", "num_chews_fulltime", "facility_owner_manager", 
+                 "num_doctors_fulltime", "num_midwives_fulltime", "child_health_yn"
+                 "hiv_tx_srvcs_pmtct_services", "sti_treatment_yn", "malaria_treatment_yn", 
+                 "malaria_treatment_srvcs_itn", "equipment_emergency_transport", 
+                 "public_transport_funct_yn", "power_sources_generator", "power_sources_grid", 
+                 "power_sources_solar", "comprehensive_obstetrics_yn", "emoc_antibiotics",
+                 "medication_oxytocin", "emoc_uterotonic2", "emoc_misoprotol", "emoc_oxytocin", 
+                 "compr_oc_oxytocin", "compr_oc_misoprotol", "compr_oc_antishock_garment", 
+                 "sti_tx_srvcs_condoms", "hiv_tx_srvcs_condoms", "supplies_available_condoms",
+                 "child_health_yn", "child_health_vaccine_carriers", "sti_tx_srvcs_penicilling", 
+                 "sti_tx_srvcs_doxycycline", "sti_tx_srvcs_ciprofloxacin", "flush_toilet_drain_to",
+                 "child_health_ampicillin", "sti_treatment_yn", "child_health_ciprofloxain", 
+                 "medication_anti_biotics", "toilet_types_vip_latrine", "toilet_types_pit_w_slab",
+                 "flush_toilet_drain_to", "toilet_types_flush_or_pour_flush", "vip_latrine_not_working", 
+                 "toilet_types_flush_or_pour_flush", "slab_pit_latrine_not_working",
+                 "flush_toilet_not_working", "paid_services_child_health", "paid_services_hiv_treatment"
+                  )
+
+#######
+#Adding Few vars before cleaning 999
+#######
+h_661$facility_owner_manager <- as.character(ifelse(h$facility_owner_manager.federalgovernment,
+                                                    "federalgovrenment",
+                                                    ifelse(h$facility_owner_manager.stategovernment,
+                                                           "stategovrenment",
+                                                           ifelse(h$facility_owner_manager.lga,
+                                                                  "lga",
+                                                                  ifelse(h$facility_owner_manager.private_forprofit,
+                                                                         "private_forprofit",
+                                                                         ifelse(h$facility_owner_manager.charitable_ngo,
+                                                                                "private_notforprofit",
+                                                                                ifelse(h$facility_owner_manager.religious_org,
+                                                                                       "church_mission",
+                                                                                       NA_character_)))))))
+
+##drop facility_owner_manager.federalgovernment etc. etc.
+
+
+
+#fix!
+
+h_661$emoc_antibiotics_yn <- as.logical(recodeVar(h_661$emoc_antibiotics_yn, 
+                                                c('yes', 'no'),
+                                                  c(TRUE, FALSE)))   
+
+
+##################################
+#### combining 661, 113 & pilot
+#################################
+# edu_total <- rbind.fill(edu_661, edu_113, edu_pilot)
+
+
+
+
+###############################################
+####mapping values and standardize the type####
+###############################################
 
 
 
