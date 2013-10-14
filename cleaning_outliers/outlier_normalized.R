@@ -14,8 +14,8 @@ edu_999$num_toilet_total[edu_999$src == "661"] <- apply(cbind(edu_999$num_toilet
                                                               edu_999$num_toilet_both[edu_999$src == "661"]),
                                                         1, sum, na.rm=T)
 
-edu_999$chalkboard_each_classroom_yn[edu_999$src == "661"] <- (edu_999$num_classrms_total[edu_999$src == "661"] <= 
-                                                                   edu_999$num_classrm_w_chalkboard[edu_999$src == "661"])
+# edu_999$chalkboard_each_classroom_yn[edu_999$src == "661"] <- (edu_999$num_classrms_total[edu_999$src == "661"] <= 
+#                                                                    edu_999$num_classrm_w_chalkboard[edu_999$src == "661"])
 
 
 edu_999$num_toilet_total[edu_999$src == "113"] <- apply(cbind(edu_999$vip_latrine_number[edu_999$src == "113"], 

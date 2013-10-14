@@ -102,10 +102,9 @@ edu_sub$pupil_toilet_ratio_facility <- ifelse(is.infinite(edu_sub$pupil_toilet_r
 
 # can't trust the xform calculations because of "999" numbers
 ## Infrastructure: Building Structure ##
-edu_sub$power_access <- 
-    (as.logical(edu_outlier$power_sources.generator) & edu_outlier$generator_funct_yn == 'yes') |
-    (as.logical(edu_outlier$power_sources.solar_system) & edu_outlier$solar_funct_yn == 'yes') |
-    (as.logical(edu_outlier$power_sources.grid) & edu_outlier$grid_funct_yn == 'yes')
+edu_sub$power_access <- (edu_outlier$power_sources.generator & edu_outlier$generator_funct_yn) |
+                        (edu_outlier$power_sources.solar_system & edu_outlier$solar_funct_yn) |
+                        (edu_outlier$power_sources.grid & edu_outlier$grid_funct_yn)
 
 edu_sub$num_classrms_need_min_repairs <- edu_outlier$num_classrms_need_min_repairs
 edu_sub$covered_roof_good_condi <- edu_outlier$covered_roof_good_condi
@@ -169,5 +168,5 @@ e_774 <- subset(e_774, dist_fake <= 35 | is.na(dist_fake))
 
 
 
-saveRDS(x_y_killa(edu_sub), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Education_661_NMIS_Facility.rds")
-saveRDS(x_y_killa(e_661), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Education_661_ALL_FACILITY_INDICATORS.rds")
+saveRDS(x_y_killa(edu_sub), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Education_774_NMIS_Facility.rds")
+saveRDS(x_y_killa(e_774), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Education_774_ALL_FACILITY_INDICATORS.rds")
