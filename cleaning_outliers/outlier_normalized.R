@@ -393,6 +393,8 @@ edu_999 <- outlierreplace(edu_999, 'num_classrms_need_min_repairs',
 edu_999 <- outlierreplace(edu_999, 'num_classrms_need_maj_repairs',
                           edu_999$num_classrms_need_maj_repairs > edu_999$num_classrms_total) 
 
+edu_999 <- outlierreplace(edu_999, 'num_students_total',
+                          edu_999$num_students_total > 2355)
 ##writing out.rds
 saveRDS(edu_999, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Education_774_outliercleaned.rds")
 rm(edu_999)

@@ -5,11 +5,11 @@ source("source_scripts/Normailize_Functions.R")
 
 
 edu_661 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/merged/Education_661_Merged.csv", 
-                    stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999"))
+                    stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999", ""))
 edu_113 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/113/Educ_Baseline_PhaseII_all_merged_cleaned_2011Nov21.csv",
-                  stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999"))
+                  stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999", ""))
 edu_pilot <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/113/Pilot_Education_cleaned_2011Nov17.csv",
-                    stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999"))
+                    stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999", ""))
 
 edu_661$src <- "661"
 edu_113$src <- "113"
@@ -64,7 +64,8 @@ edu_pilot <- rename(edu_pilot, c("num_total_classrooms" = "num_classrms_total",
                                  "num_tchrs_male_full_time" = "num_tchrs_male",
                                  "num_tchrs_female_full_time" = "num_tchrs_female",
                                  "water_none" = "water.none",
-                                 "power_grid_connection" = "power_sources.grid"))
+                                 "power_grid_connection" = "power_sources.grid",
+                                 "funtioning_library_yn" = "functioning_library_yn"))
 
 mapped_113 <- c("days_no_potable_water", "num_desks", "num_science_textbook_pry", "water.pipe_water",
                 "water.tube_well", "toilet.flush_or_pour_flush_improved", "toilet.ventilated_improved",
@@ -124,6 +125,10 @@ edu_661$covered_roof_good_condi <- edu_661$covered_roof_yn == "yes_good_conditio
 edu_113$covered_roof_good_condi <- edu_113$covered_roof_yn %in% c("roof_fence_good_condition", 'yes')
 edu_pilot$covered_roof_good_condi <- edu_pilot$covered_roof_yn %in% c("roof_fence_good_condition", 'yes')
 
+edu_113$multigrade_teaching_yn <- NA
+edu_113$times_tchr_pay_delay_pastyr <- as.integer(edu_113$times_tchr_pay_delay_pastyr)
+edu_113$times_tchr_pay_miss_pastyr <- as.integer(edu_113$times_tchr_pay_miss_pastyr)
+
                 
 ##################################
 #### combining 661, 113 & pilot
@@ -142,17 +147,69 @@ edu_113$slab_pit_latrine_number <- as.numeric(edu_113$slab_pit_latrine_number)
 edu_total$toilet.none <- as.logical(edu_total$toilet.none)
 edu_total$water.none <- as.logical(edu_total$water.none)
 
+edu_113$times_tchr_pay_delay_pastyr <- as.integer(edu_113$times_tchr_pay_delay_pastyr)
+edu_113$times_tchr_pay_miss_pastyr <- as.integer(edu_113$times_tchr_pay_miss_pastyr)
+
+
 edu_total$natl_curriculum_yn <- as.logical(recodeVar(edu_total$natl_curriculum_yn,
                                           c('yes', 'no'),
                                           c(TRUE, FALSE)))
-### Need to solve this on Monday
-# edu_total$borehole_tubewell_repair_time <- as.logical(recodeVar(edu_total$borehole_tubewell_repair_time,
-#                                                      c('yes', 'no'),
-#                                                      c(TRUE, FALSE)))
 
+edu_total$sports_fee_exempt_yn <- as.logical(recodeVar(edu_total$sports_fee_exempt_yn,
+                                                     c('yes', 'no'),
+                                                     c(TRUE, FALSE)))
 
-borehole_tubewell_repair_time
+edu_total$in_kind_fees_yn <- as.logical(recodeVar(edu_total$in_kind_fees_yn,
+                                                       c('yes', 'no'),
+                                                       c(TRUE, FALSE)))
 
+edu_total$booklist_per_class_yn <- as.logical(recodeVar(edu_total$booklist_per_class_yn,
+                                                  c('yes', 'no'),
+                                                  c(TRUE, FALSE)))
+
+edu_total$borehole_tubewell_repair_time <- as.logical(recodeVar(edu_total$borehole_tubewell_repair_time,
+                                                     c('yes', 'fixed_more_than_month', 'fixed_within_day',
+                                                       'fixed_within_month', 'fixed_within_week', 'never_broken',
+                                                       'not_fixed', 'no'),
+                                                     c(TRUE, TRUE, TRUE, TRUE,TRUE, TRUE,
+                                                       FALSE, FALSE)))
+
+edu_total$generator_funct_yn <- as.logical(recodeVar(edu_total$generator_funct_yn,
+                                                        c('yes', 'no'),
+                                                        c(TRUE, FALSE)))
+edu_total$solar_funct_yn <- as.logical(recodeVar(edu_total$solar_funct_yn,
+                                                     c('yes', 'no'),
+                                                     c(TRUE, FALSE)))
+edu_total$grid_funct_yn <- as.logical(recodeVar(edu_total$grid_funct_yn,
+                                                     c('yes', 'no'),
+                                                     c(TRUE, FALSE)))
+
+edu_total$classes_outside_yn <- as.logical(recodeVar(edu_total$classes_outside_yn,
+                                                c('yes', 'no'),
+                                                c(TRUE, FALSE)))
+
+edu_total$two_shifts_yn <- as.logical(recodeVar(edu_total$two_shifts_yn,
+                                                     c('yes', 'no'),
+                                                     c(TRUE, FALSE)))
+
+edu_total$provide_exercise_books_yn <- as.logical(recodeVar(edu_total$provide_exercise_books_yn,
+                                                c('yes', 'no'),
+                                                c(TRUE, FALSE)))
+
+edu_total$provide_pens_yn <- as.logical(recodeVar(edu_total$provide_pens_yn,
+                                                c('yes', 'no'),
+                                                c(TRUE, FALSE)))
+
+edu_total$teacher_guide_yn <- as.logical(recodeVar(edu_total$teacher_guide_yn,
+                                                  c('yes', 'no'),
+                                                  c(TRUE, FALSE)))
+
+edu_total$functioning_library_yn <- as.logical(recodeVar(edu_total$functioning_library_yn,
+                                                  c('yes', 'no'),
+                                                  c(TRUE, FALSE)))
+
+# edu_sub$teacher_guide_yn <- edu_outlier$teacher_guide_yn == 'yes' 
+# edu_sub$functioning_library_yn <- edu_outlier$functioning_library_yn == 'yes'
 ################
 #### output ####
 ################

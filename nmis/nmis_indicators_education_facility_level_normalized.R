@@ -83,44 +83,56 @@ edu_sub$students_living_3kmplus_school <- edu_outlier$num_students_frthr_than_3k
 ## PARTICIPATION ##
 edu_sub$male_to_female_student_ratio <- edu_outlier$num_students_male / edu_outlier$num_students_female
 
-
-
-
-###OCt/11
-
-
 ## Infrastructure: Water & San ##
-edu_sub$functional_water <- 
-    (edu_outlier$borehole_tubewell_repair_time == "yes")
+edu_sub$functional_water <- edu_outlier$borehole_tubewell_repair_time == TRUE
 # notes: water.tube_well = borehole or tubewell; not including "protected" wells here; 
 # repair_time is really a question about functionality
-edu_sub$gender_separated_toilets_yn <- (edu_outlier$num_toilet_boy > 1) & (edu_outlier$num_toilet_girl > 1)
-edu_sub$pupil_toilet_ratio_facility <- edu_outlier$num_students_total / 
-    (edu_outlier$num_toilet_boy + edu_outlier$num_toilet_girl + edu_outlier$num_toilet_both)
-# can't trust the xform calculations because of "999" numbers
 
+
+
+edu_sub$gender_separated_toilets_yn <- (edu_outlier$num_toilet_boy > 1) & (edu_outlier$num_toilet_girl > 1)
+
+edu_sub$pupil_toilet_ratio_facility <- edu_outlier$num_students_total / apply(cbind(edu_outlier$num_toilet_boy, 
+                                                                                    edu_outlier$num_toilet_girl, 
+                                                                                    edu_outlier$num_toilet_both),
+                                                                              1, sum, na.rm=T)
+          
+edu_sub$pupil_toilet_ratio_facility <- ifelse(is.infinite(edu_sub$pupil_toilet_ratio_facility),
+                                              NA, edu_sub$pupil_toilet_ratio_facility)
+
+# can't trust the xform calculations because of "999" numbers
 ## Infrastructure: Building Structure ##
 edu_sub$power_access <- 
     (as.logical(edu_outlier$power_sources.generator) & edu_outlier$generator_funct_yn == 'yes') |
     (as.logical(edu_outlier$power_sources.solar_system) & edu_outlier$solar_funct_yn == 'yes') |
     (as.logical(edu_outlier$power_sources.grid) & edu_outlier$grid_funct_yn == 'yes')
+
 edu_sub$num_classrms_need_min_repairs <- edu_outlier$num_classrms_need_min_repairs
-edu_sub$covered_roof_good_condi <- (edu_outlier$covered_roof_yn == 'yes_good_condition')
+edu_sub$covered_roof_good_condi <- edu_outlier$covered_roof_good_condi
 edu_sub$num_classrms_total <- edu_outlier$num_classrms_total
 
 ## Infrastructure: Health and Safety ##
-edu_sub$access_clinic_dispensary <- edu_outlier$health_services_yn == 'yes_clinic_dispensary'
-edu_sub$access_first_aid <- edu_outlier$health_services_yn == 'first_aid_kit'
-edu_sub$wall_fence_good_condi <- (edu_outlier$boundary_wall_fence_yn == 'yes_good_condition')
+edu_sub$access_clinic_dispensary <- edu_outlier$health_services_yn %in% c('yes_clinic_dispensary', 
+                                                                          'health_services_clinic')
 
+edu_sub$access_first_aid <- edu_outlier$health_services_yn %in% c('first_aid_kit', 
+                                                                  "health_services_clinic", 
+                                                                  "health_services_aid_kit")
+
+edu_sub$wall_fence_good_condi <- edu_outlier$boundary_wall_fence_yn %in% c("yes_good_condition", 
+                                                                           "roof_fence_good_condition",
+                                                                           "yes")
 ## Infrastructure: Learning Environment ##
 edu_sub$pupil_classrm_ratio <- edu_outlier$num_students_total / edu_outlier$num_classrms_total
 # actually, lets just make sure to re-calculate totals in the outlier scripts
-edu_sub$classes_outside_yn <- edu_outlier$classes_outside_yn == 'yes'
-edu_sub$two_shifts_yn <- edu_outlier$two_shifts_yn == 'yes'
-edu_sub$multigrade_classrms <- edu_outlier$multigrade_teaching_yn == 'yes_not_enough_space' | 
-    edu_outlier$multigrade_teaching_yn == 'yes_no_teacher_no_space' |
-    edu_outlier$multigrade_teaching_yn == 'yes_not_enough_teacher'
+edu_sub$classes_outside_yn <- edu_outlier$classes_outside_yn 
+edu_sub$two_shifts_yn <- edu_outlier$two_shifts_yn
+
+edu_sub$multigrade_classrms <- edu_outlier$multigrade_teaching_yn %in% c('yes_not_enough_space',
+                                                                         'yes_no_teacher_no_space',
+                                                                         'yes_not_enough_teacher')
+edu_sub$multigrade_classrms[edu_sub$src == "113"] <- (edu_outlier$num_classrooms_multiple_use[edu_outlier$src == "113"] >=1) 
+
 
 ## Furniture ##
 edu_sub$pupil_bench_ratio <- edu_outlier$num_students_total / edu_outlier$num_benches
@@ -138,24 +150,24 @@ edu_sub$tchr_pay_miss <- edu_outlier$times_tchr_pay_miss_pastyr > 0
 
 ## Curriculum Issues ##
 edu_sub$textbook_to_pupil_ratio <- edu_sub$num_textbooks / edu_outlier$num_students_total
-edu_sub$provide_exercise_books_yn <- edu_outlier$provide_exercise_books == 'yes'
-edu_sub$provide_pens_yn <- edu_outlier$provide_pens_yn == 'yes'
-edu_sub$teacher_guide_yn <- edu_outlier$teacher_guide_yn == 'yes' 
-edu_sub$functioning_library_yn <- edu_outlier$functioning_library_yn == 'yes'
+edu_sub$provide_exercise_books_yn <- edu_outlier$provide_exercise_books_yn 
+edu_sub$provide_pens_yn <- edu_outlier$provide_pens_yn 
+edu_sub$teacher_guide_yn <- edu_outlier$teacher_guide_yn 
+edu_sub$functioning_library_yn <- edu_outlier$functioning_library_yn 
 
 
 #Adding distant to every facility
 #combining calculated result back to original data
-edu_sub <- lga_boudary_dist(ed, gps_col="gps")
-education_661_comp <- ed
-e_661 <- merge(ed, e_661_left, by="uuid")
+edu_sub <- lga_boudary_dist(edu_sub, gps_col="gps")
+# education_661_comp <- edu_sub
+e_774 <- merge(edu_sub, e_774_left, by="uuid")
 
 
 #Delete all those have dist >= 35 km
-education_661_comp <- subset(education_661_comp, dist_fake <= 35 | is.na(dist_fake))
-e_661 <- subset(e_661, dist_fake <= 35 | is.na(dist_fake))
+edu_sub <- subset(edu_sub, dist_fake <= 35 | is.na(dist_fake))
+e_774 <- subset(e_774, dist_fake <= 35 | is.na(dist_fake))
 
 
 
-saveRDS(x_y_killa(education_661_comp), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Education_661_NMIS_Facility.rds")
-saveRDS(x_y_killa(e_661), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Education_661_ALL_FACILITY_INDICATORS.rds")
+saveRDS(x_y_killa(edu_sub), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Education_661_NMIS_Facility.rds")
+saveRDS(x_y_killa(e_661), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Education_661_ALL_FACILITY_INDICATORS.rds")
