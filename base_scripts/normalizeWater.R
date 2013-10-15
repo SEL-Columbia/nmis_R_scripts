@@ -1,14 +1,18 @@
 setwd("~/work/r/nmis_R_scripts/")
 source("source_scripts/Normailize_Functions.R")
 
-water_661 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/merged/Water_661_Merged.csv", 
-                    stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999", ""))
+# water_661 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/merged/Water_661_Merged.csv", 
+#                     stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999", ""))
+
+water_661 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Water_661_999Cleaned_Reclassified.csv", 
+                          stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999", ""))
 
 water_113 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/113/Water_Baseline_PhaseII_all_merged_cleaned_2011Nov21.csv", 
                       stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999", ""))
 
 water_pilot <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/113/Pilot_Water_cleaned_2011Aug29.csv", 
                       stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999", ""))
+
 
 water_661$src <- "661"
 water_113$src <- "113"
