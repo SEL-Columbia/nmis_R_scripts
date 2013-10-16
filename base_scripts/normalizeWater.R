@@ -32,13 +32,12 @@ water_class <- common_type(c("water_113", "water_661", "water_pilot"))
 ########################
 
 ### 113 names
-
 water_113 <- rename(water_113, 
                     c("geocodeoffacility" = 'gps',
                       "water_source_used_today_yn" = "water_functional_yn"
                       ))
 
-
+### pilot names
 water_pilot <- rename(water_pilot, 
                       c("geocodeoffacility" = 'gps',
                         "water_source_used_today_yn" = "water_functional_yn"
@@ -46,9 +45,11 @@ water_pilot <- rename(water_pilot,
 
 
 
+
 ##########################
 #Standardize column value#
 ##########################
+
 water_113$water_source_type <- recodeVar(water_113$water_source_type, 
 										c("borehole", "tube_well"),
 										c("borehole_tube_well", "borehole_tube_well")
@@ -74,44 +75,6 @@ water_pilot$lift_mechanism <- recodeVar(water_pilot$lift_mechanism,
                                         c("fuel_pump", "electricity_pump", "rope_pulley", 
                                             "dk")
                                         )
-
-
-#####Combine
-water_total <- rbind.fill(water_661, water_113, water_pilot)
-
-##### Standardize after combine 3 sources
-water_total$reason_not_used <-ifelse(water_total$src == "661", 
-									water_total$reason_not_used, 
-									   ifelse(water_total$reasons_not_used_pump_broken,
-		                                    "pump_broken",
-		                               ifelse(water_total$reasons_not_used_lift_broken,
-		                                	"lift_broken",
-		                               ifelse(water_total$reasons_not_used_no_diesel,
-		                               		"no_diesel",
-		                               ifelse(water_total$reasons_not_used_no_electricity,
-		                               		"no_electricity",
-		                               ifelse(water_total$reasons_not_used_missing_parts,
-		                               		"missing_parts",
-		                               ifelse(water_total$reasons_not_used_tap_broken,
-		                               		"tap_broken",
-		                               ifelse(water_total$reasons_not_used_under_constreas,
-		                               		"under_const",
-		                               ifelse(water_total$reasons_not_used_bad_quality,
-		                               		"bad_quality",
-		                               ifelse(water_total$reasons_not_used_dry_well,
-		                               		"dry_well",
-		                               ifelse(water_total$reasons_not_used_other,
-		                               		"other",
-		                               ifelse(water_total$reasons_not_used_dk,
-		                               		"dk",
-		                               	NA))))))))))))
-
-
-# water_total$water_functional_yn <- as.logical(recodeVar(water_total$water_functional_yn,
-#                                                       c("yes", "no"),
-#                                                       c(TRUE, FALSE),
-#                                                       default = NA))
-# 
 
 #######
 #Adding Few vars before Combining
@@ -184,12 +147,52 @@ water_pilot$water_point_type <-
          	NA)))))))
 
 water_661$distribution_type <-
-  		ifelse(w$water_scheme_type == "water_source",
+  		ifelse(water_661$water_scheme_type == "water_source",
         	"Stand Alone Water Point",
-      	ifelse(w$water_outlet_connection == "outlet_within_100m",
+      	ifelse(water_661$water_outlet_connection == "outlet_within_100m",
         	"Water Scheme, Source within 100m",
-      	ifelse(w$water_outlet_connection == "outlet_btw_100m_1km",
+      	ifelse(water_661$water_outlet_connection == "outlet_btw_100m_1km",
         	"Water Scheme, Source within 1km",
-      	ifelse(w$water_outlet_connection == "outlet_more_1km",
+      	ifelse(water_661$water_outlet_connection == "outlet_more_1km",
         	"Water Scheme, Source further than 1km",
-      		NA))))
+      		NA))))  
+
+
+#####Combine
+water_total <- rbind.fill(water_661, water_113, water_pilot)
+
+##### Standardize after combine 3 sources
+water_total$reason_not_used <-ifelse(water_total$src == "661", 
+									water_total$reason_not_used, 
+									   ifelse(water_total$reasons_not_used_pump_broken,
+		                                    "pump_broken",
+		                               ifelse(water_total$reasons_not_used_lift_broken,
+		                                	"lift_broken",
+		                               ifelse(water_total$reasons_not_used_no_diesel,
+		                               		"no_diesel",
+		                               ifelse(water_total$reasons_not_used_no_electricity,
+		                               		"no_electricity",
+		                               ifelse(water_total$reasons_not_used_missing_parts,
+		                               		"missing_parts",
+		                               ifelse(water_total$reasons_not_used_tap_broken,
+		                               		"tap_broken",
+		                               ifelse(water_total$reasons_not_used_under_constreas,
+		                               		"under_const",
+		                               ifelse(water_total$reasons_not_used_bad_quality,
+		                               		"bad_quality",
+		                               ifelse(water_total$reasons_not_used_dry_well,
+		                               		"dry_well",
+		                               ifelse(water_total$reasons_not_used_other,
+		                               		"other",
+		                               ifelse(water_total$reasons_not_used_dk,
+		                               		"dk",
+		                               	NA))))))))))))
+
+
+# water_total$water_functional_yn <- as.logical(recodeVar(water_total$water_functional_yn,
+#                                                       c("yes", "no"),
+#                                                       c(TRUE, FALSE),
+#                                                       default = NA))
+# 
+saveRDS(water_total, '~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Water_774_normalized_999clean.rds')
+  		        	      	        	      	        	      	        	  		         	        	   		        	   		        	   		        	   		        	 		         	   		        	  		         	        	   		        	   		        	   		        	   		        	   		        	   		        	   		        	   		                                                                                                                                                                                                                                                                                                    
