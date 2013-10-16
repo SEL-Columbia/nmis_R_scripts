@@ -9,6 +9,10 @@ lgas <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/lgas.csv"
 water_774 <- subset(water_774, !duplicated(water_774$uuid))
 stopifnot(!anyDuplicated(water_774$uuid))
 
+water_774 <- subset(water_774, select=-c(pop_2006, lga, state, zone,
+                                         area_sq_km, surveying_effort, pop_density_2006,
+                                         unique_lga, latitude, longitude))
+
 water_sub <- merge_non_redundant(lgas, water_774, by="lga_id")
 stopifnot(nrow(water_sub) == nrow(water_774)) #otherwise calculations below will be wrong
 
@@ -16,12 +20,10 @@ water_sub <- subset(water_sub, select=c("photo", "state", "lga", "lga_id", "uuid
                               "community", "ward", "lift_mechanism"))
 
 ## GENERAL ##
-water_sub$water_point_type <- recodeVar(water_774$water_point_type,
-                                        c("Overhead Tank (10,000)"),
-                                        c("Overhead Tank (1,000)"))
+water_sub$water_point_type <- water_774$water_point_type
 
 #improved# 
-water_sub$is_improved <- water_sub$water_point_type %in% c('Borehole','Handpump','Tap',
+water_sub$is_improved <- water_sub$water_point_type %in% c('Borehole','Handpump','Tap',"Overhead Tank (10,000)",
                                                  'Overhead Tank (1,000)','Rainwater Harvesting System')
 #lift mechanism#
 water_sub$lift_mechanism <- recodeVar(water_774$lift_mechanism,
@@ -81,4 +83,4 @@ water_774 <- subset(water_774, dist_fake <= 35 | is.na(dist_fake))
 
 
 saveRDS(x_y_killa(water_sub_nearbypoints), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Water_774_NMIS_Facility.rds")
-saveRDS(x_y_killa(water_774), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Water_113_ALL_FACILITY_INDICATORS.rds")
+saveRDS(x_y_killa(water_774), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Water_774_ALL_FACILITY_INDICATORS.rds")
