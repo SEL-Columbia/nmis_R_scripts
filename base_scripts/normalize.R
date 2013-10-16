@@ -2,6 +2,7 @@
 # source("base_scripts/InstallFormhub.R")
 setwd("~/work/r/nmis_R_scripts/")
 source("source_scripts/Normailize_Functions.R")
+source("source_scripts/NMIS_Functions.R")
 
 
 edu_661 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/merged/Education_661_Merged.csv", 
@@ -219,15 +220,14 @@ edu_total$functioning_library_yn <- as.logical(recodeVar(edu_total$functioning_l
 ################
 #### output ####
 ################
-edu_total$unique_lga <- NULL
+# Final cleaning remove lga_id = NA and duplicated UUID rows
+edu_total <- subset(edu_total, !(duplicated(edu_total$uuid) | is.na(edu_total$lga_id)))
+
 lgas <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/lgas.csv")
+lgas <- subset(lgas, select=-c(latitude, longitude))
 
-lgas <- subset(lgas, select=c("lga_id", "unique_lga"))
-edu_total <- merge(edu_total, lgas, by="lga_id")
+edu_total <- merge_non_redundant(lgas, edu_total, by="lga_id")
 saveRDS(edu_total, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Edu774.rds")
-
-
-
 ################################
 ##### Added in outlier & 999####
 ################################

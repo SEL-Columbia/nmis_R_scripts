@@ -1,17 +1,19 @@
 setwd("~/work/r/nmis_R_scripts/")
 source("source_scripts/Normailize_Functions.R")
+source("source_scripts/NMIS_Functions.R")
 
-# water_661 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/merged/Water_661_Merged.csv", 
-#                     stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999", ""))
-
-water_661 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Water_661_999Cleaned_Reclassified.csv", 
-                          stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999", ""))
+water_661 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/merged/Water_661_Merged.csv", 
+                    stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999", ""))
 
 water_113 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/113/Water_Baseline_PhaseII_all_merged_cleaned_2011Nov21.csv", 
                       stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999", ""))
 
 water_pilot <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/113/Pilot_Water_cleaned_2011Aug29.csv", 
                       stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999", ""))
+
+reclassify <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/reclassify_final_148.csv", 
+                       stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999", ""))
+reclassify <- subset(reclassify, select=c(uuid, Classification))    
 
 
 water_661$src <- "661"
@@ -26,6 +28,14 @@ water_pilot$uuid <- sapply(paste(water_pilot$gps, water_pilot$photo), FUN=digest
 common_slugs_113 <- names(water_661)[(which(names(water_661) %in% names(water_pilot)))]
 water_common <- common_slug(c("water_113", "water_661", "water_pilot"))
 water_class <- common_type(c("water_113", "water_661", "water_pilot"))
+
+####
+#### Merge reclassify data back to 661 data
+####
+
+water_661 <- merge(water_661, reclassify, by="uuid", all.x=T)
+water_661 <- water_661[!duplicated(water_661$uuid),]
+
 ########################
 ########################
 #### Mapping Names #####
@@ -42,9 +52,6 @@ water_pilot <- rename(water_pilot,
                       c("geocodeoffacility" = 'gps',
                         "water_source_used_today_yn" = "water_functional_yn"
                       ))
-
-
-
 
 ##########################
 #Standardize column value#
@@ -76,13 +83,30 @@ water_pilot$lift_mechanism <- recodeVar(water_pilot$lift_mechanism,
                                             "dk")
                                         )
 
+water_661$Classification <- recodeVar(water_661$Classification, 
+                                        c('No Photo', 'No_photo', 'no_photo', 
+                                          'ten_thousand_ovehead', 'unimproved '),
+                                        c("no_photo", "no_photo", "no_photo", 
+                                          'ten_thousand_overhead', "unimproved")
+                                        )
+#Delete records with no_photo or remove in classification column
+water_661 <- subset(water_661,! Classification %in% c("remove", "no_photo"))
+
 #######
 #Adding Few vars before Combining
 #######
+water_661$water_point_type <- ifelse(!is.na(water_661$Classification), 
+                                     water_661$Classification, 
+                              ifelse(!is.na(water_661$water_source_type),
+                                     water_661$water_source_type, 
+                              ifelse(!is.na(water_661$water_scheme_type),
+                                     water_661$water_scheme_type, 
+                              NA)))
+
 water_661$water_point_type <- 
         ifelse(water_661$water_point_type == "handpump",
             "Handpump",
-        ifelse(water_661$water_point_type %in% c('ten_thousand_overhead', 'ten_thousand_ovehead'),
+        ifelse(water_661$water_point_type == 'ten_thousand_overhead',
             "Overhead Tank (10,000)",
         ifelse(water_661$water_point_type == "one_thousand_overhead",
             "Overhead Tank (1,000)",
@@ -200,5 +224,9 @@ water_total$water_functional_yn <- recodeVar(water_total$water_functional_yn,
 #                                                       c(TRUE, FALSE),
 #                                                       default = NA))
 # 
+
+
+# Final Cleaning remove rows without lga_id or duplicated uuid
+water_total <- subset(water_total, !(duplicated(water_total$uuid) | is.na(water_total$lga_id)))
 saveRDS(water_total, '~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Water_774_normalized_999clean.rds')
   		        	      	        	      	        	      	        	  		         	        	   		        	   		        	   		        	   		        	 		         	   		        	  		         	        	   		        	   		        	   		        	   		        	   		        	   		        	   		        	   		                                                                                                                                                                                                                                                                                                    

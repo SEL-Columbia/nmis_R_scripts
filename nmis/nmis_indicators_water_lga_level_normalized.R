@@ -3,10 +3,6 @@ source("source_scripts/NMIS_Functions.R")
 
 water_774 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Water_774_ALL_FACILITY_INDICATORS.rds")
 
-# merge in population
-lgapops <- subset(read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/lgas.csv"), select=c("lga_id", "pop_2006"))
-
-water_774 <- merge_strict(lgapops, water_774, by='lga_id')
 water_774 <- rename(water_774, c("pop_2006" = "Population"))
 
 iw774 <- idata.frame(water_774)

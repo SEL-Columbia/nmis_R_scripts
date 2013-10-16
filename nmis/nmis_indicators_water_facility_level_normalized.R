@@ -4,23 +4,26 @@ source("source_scripts/NMIS_Functions.R")
 
 water_774 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Water_774_normalized_999clean.rds")
 lgas <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/lgas.csv")
+lgas <- subset(lgas, select=-c(latitude, longitude))
 
 # put in uuids, and make sure there are no duplicates
 water_774 <- subset(water_774, !duplicated(water_774$uuid))
 stopifnot(!anyDuplicated(water_774$uuid))
-
-water_774 <- subset(water_774, select=-c(pop_2006, lga, state, zone,
-                                         area_sq_km, surveying_effort, pop_density_2006,
-                                         unique_lga, latitude, longitude))
+water_774 <- subset(water_774, !is.na(water_774$lga_id))
+stopifnot(!any(is.na(water_774$lga_id)))
 
 water_sub <- merge_non_redundant(lgas, water_774, by="lga_id")
 stopifnot(nrow(water_sub) == nrow(water_774)) #otherwise calculations below will be wrong
 
+
+water_774 <- water_sub
 water_sub <- subset(water_sub, select=c("photo", "state", "lga", "lga_id", "uuid", "gps",
                               "community", "ward", "lift_mechanism"))
 
 ## GENERAL ##
 water_sub$water_point_type <- water_774$water_point_type
+
+water_sub$formhub_photo_id <- water_sub$photo
 
 #improved# 
 water_sub$is_improved <- water_sub$water_point_type %in% c('Borehole','Handpump','Tap',"Overhead Tank (10,000)",
