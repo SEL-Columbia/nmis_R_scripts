@@ -106,13 +106,19 @@ newname_113 <- c("days_no_electricity", "days_no_water_pastmth", "flush_toilet_n
 #Adding Few vars before cleaning 999
 #######
 
-edu_113$school_managed <- ifelse(edu_113$school_managed_fed_gov, "fed_gov",
-                                 ifelse(edu_113$school_managed_st_gov, "st_gov",
-                                        ifelse(edu_113$school_managed_loc_gov, "loc_gov",
-                                               ifelse(edu_113$school_managed_priv_profit, "priv_profit",
-                                                      ifelse(edu_113$school_managed_priv_noprofit, "priv_noprofit",
-                                                             ifelse(edu_113$school_managed_other | !is.na(edu_113$school_managed_other_specify), "other",
-                                                                    NA))))))
+edu_113$school_managed <- ifelse(edu_113$school_managed_fed_gov, 
+                                 "fed_gov",
+                          ifelse(edu_113$school_managed_st_gov, 
+                                 "st_gov",
+                          ifelse(edu_113$school_managed_loc_gov, 
+                                 "loc_gov",
+                          ifelse(edu_113$school_managed_priv_profit, 
+                                 "priv_profit",
+                          ifelse(edu_113$school_managed_priv_noprofit, 
+                                 "priv_noprofit",
+                          ifelse(edu_113$school_managed_other | !is.na(edu_113$school_managed_other_specify),
+                                 "other",
+                                NA))))))
 
 edu_113$fees.admission_new <- as.logical(edu_113$new_stdnts_enroll_fee > 0)
 edu_113$fees.tuition_cont <- as.logical(edu_113$cont_stdnts_enroll_fee > 0)
