@@ -60,7 +60,7 @@ h_p$phcn_electricity <- hp$power_sources_grid == T
 h_p$maternal_health_delivery_services_24_7 <- (hp$emergency_obstetrics_yn=='yes' & 
                                             (hp$compr_oc_available_24_7==T | hp$emoc_available_24_7 == T))
 
-h_p$essential_meds_stockout <- (hp$antimalarials_stockout_yn == 'yes' | #hp$antidiarrheal_stockout_yn == 'yes' | 
+h_p$essential_meds_stockout <- (hp$antimalarials_stockout_yn == 'yes' |  
                                   hp$antibiotics_stockout_yn == 'yes') 
 h_p$emergency_transport_currently_functioning <- (hp$equipment_emergency_transport == T & hp$daily_pub_transport_p == 'yes')
                                      
