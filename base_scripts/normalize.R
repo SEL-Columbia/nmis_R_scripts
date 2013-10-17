@@ -164,55 +164,6 @@ edu_total$borehole_tubewell_repair_time <- as.logical(recodeVar(edu_total$boreho
                                                                 c(TRUE, TRUE, TRUE, TRUE,TRUE, TRUE,
                                                                   FALSE, FALSE)))
 
-# edu_total$natl_curriculum_yn <- as.logical(recodeVar(edu_total$natl_curriculum_yn,
-#                                           c('yes', 'no'),
-#                                           c(TRUE, FALSE)))
-# 
-# edu_total$sports_fee_exempt_yn <- as.logical(recodeVar(edu_total$sports_fee_exempt_yn,
-#                                                      c('yes', 'no'),
-#                                                      c(TRUE, FALSE)))
-# 
-# edu_total$in_kind_fees_yn <- as.logical(recodeVar(edu_total$in_kind_fees_yn,
-#                                                        c('yes', 'no'),
-#                                                        c(TRUE, FALSE)))
-# 
-# edu_total$booklist_per_class_yn <- as.logical(recodeVar(edu_total$booklist_per_class_yn,
-#                                                   c('yes', 'no'),
-#                                                   c(TRUE, FALSE)))
-# edu_total$generator_funct_yn <- as.logical(recodeVar(edu_total$generator_funct_yn,
-#                                                         c('yes', 'no'),
-#                                                         c(TRUE, FALSE)))
-# edu_total$solar_funct_yn <- as.logical(recodeVar(edu_total$solar_funct_yn,
-#                                                      c('yes', 'no'),
-#                                                      c(TRUE, FALSE)))
-# edu_total$grid_funct_yn <- as.logical(recodeVar(edu_total$grid_funct_yn,
-#                                                      c('yes', 'no'),
-#                                                      c(TRUE, FALSE)))
-
-# edu_total$classes_outside_yn <- as.logical(recodeVar(edu_total$classes_outside_yn,
-#                                                 c('yes', 'no'),
-#                                                 c(TRUE, FALSE)))
-# 
-# edu_total$two_shifts_yn <- as.logical(recodeVar(edu_total$two_shifts_yn,
-#                                                      c('yes', 'no'),
-#                                                      c(TRUE, FALSE)))
-# 
-# edu_total$provide_exercise_books_yn <- as.logical(recodeVar(edu_total$provide_exercise_books_yn,
-#                                                 c('yes', 'no'),
-#                                                 c(TRUE, FALSE)))
-# 
-# edu_total$provide_pens_yn <- as.logical(recodeVar(edu_total$provide_pens_yn,
-#                                                 c('yes', 'no'),
-#                                                 c(TRUE, FALSE)))
-# 
-# edu_total$teacher_guide_yn <- as.logical(recodeVar(edu_total$teacher_guide_yn,
-#                                                   c('yes', 'no'),
-#                                                   c(TRUE, FALSE)))
-# 
-# edu_total$functioning_library_yn <- as.logical(recodeVar(edu_total$functioning_library_yn,
-#                                                   c('yes', 'no'),
-#                                                   c(TRUE, FALSE)))
-
 yes_no_columns <- c("functioning_library_yn", "teacher_guide_yn", "provide_pens_yn",
                     "provide_exercise_books_yn", "two_shifts_yn", "classes_outside_yn",
                     "grid_funct_yn", "solar_funct_yn", "generator_funct_yn", 
