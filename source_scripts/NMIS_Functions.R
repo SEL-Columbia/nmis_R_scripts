@@ -264,7 +264,7 @@ facility_update <- function(df, edu_bool, facility_name_col, community_col="comm
 lga_boudary_dist <- function(df, gps_col)
 {
 
-    ni_shp <- readShapePoly('~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/nga_lgas/nga_lgas.shp')
+    ni_shp <- readShapePoly('~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/nga_lgas/nga_lgas_with_corrected_id.shp')
     regions <- setNames(slot(ni_shp, "polygons"), ni_shp@data$lga_id)
 
     regions <- lapply(regions, function(x) SpatialPolygons(list(x)))
@@ -366,7 +366,7 @@ lga_boudary_dist <- function(df, gps_col)
     
     
     final <- rbind.fill(df, df2)
-    hist(final$dist_fake, nclass=50)
+    hist(final$dist_fake, nclass=200)
     
     return(final)
 

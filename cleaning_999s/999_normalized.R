@@ -151,15 +151,9 @@ cellst(merged_education, 'uniforms_fee',
 
 merged_education$sports_fee <- as.numeric(merged_education$sports_fee)
 
-merged_education$sports_fee_exempt_yn[merged_education$sports_fee_exempt_yn != "yes" & merged_education$sports_fee_exempt_yn != "no"] <- NA #unless yes or no, eliminate
-
 merged_education$num_students_exempt <- as.numeric(merged_education$num_students_exempt)  # answer of "all" and "o" eliminated
 cellst(merged_education, 'num_students_exempt',
        which(merged_education$num_students_exempt > 8000), NA_integer_) #20 of "9999" has eliminated
-
-merged_education$in_kind_fees_yn[merged_education$in_kind_fees_yn != "yes" & merged_education$in_kind_fees_yn != "no"] <- NA
-
-merged_education$booklist_per_class_yn[merged_education$booklist_per_class_yn != "yes" & merged_education$booklist_per_class_yn != "no"] <- NA
 
 merged_education$annual_budget_amt_received <- as.numeric(merged_education$annual_budget_amt_received)
 
@@ -420,6 +414,11 @@ cellst(merged_education, 'num_students_total',
 cellst(merged_education, 'days_no_potable_water', 
        which(merged_education$days_no_potable_water < 0), NA_integer_)
 
+cellst(merged_education, 'num_toilet_boy', 
+       which(merged_education$num_toilet_boy < 0 | merged_education$num_toilet_boy >= 999), NA_integer_)
+
+cellst(merged_education, 'num_toilet_girl', 
+       which(merged_education$num_toilet_girl < 0 | merged_education$num_toilet_boy >= 999), NA_integer_)
 
 #individual cells
 cellst(merged_education, 'num_tchrs_qualification.num_tchrs_w_nce',
