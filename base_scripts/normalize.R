@@ -24,6 +24,7 @@ edu_pilot$uuid <- sapply(paste(edu_pilot$gps, edu_pilot$photo), FUN=digest)
 common_slugs_113 <- names(edu_661)[(which(names(edu_661) %in% names(edu_113)))]
 edu_common <- common_slug(c("edu_113", "edu_661", "edu_pilot"))
 edu_class <- common_type(c("edu_113", "edu_661", "edu_pilot"))
+
 ########################
 #### Mapping Names #####
 ########################

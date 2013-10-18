@@ -64,7 +64,7 @@ common_type <- function(df_names)
             out <- tryCatch(
                 out <- class(get(df_name)[,slug]),
                 error=function(cond) {
-                    message(paste("data fram doesnt have slug:", df_name))
+                    message(paste(df_name, ":data frame doesnt have this slug"))
                     message(cond)
                     # Choose a return value in case of error
                     return(NA)
