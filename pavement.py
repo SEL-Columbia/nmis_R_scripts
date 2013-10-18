@@ -25,25 +25,38 @@ def find_R_scripts(base_directory='.'):
     return scripts
 
 
-@task
 def find_reads_and_writes(debug=False):
+    """ Goes through all the R scripts in the current directory, and finds
+        all the files that are being read and written in these R scripts.
+        Output: {
+                    script_name: {
+                        inputs: [filename1, filename2, ...],
+                        outputs: [file1, file2, ...]
+                    }, ...
+                }
+        """
     def file_exists_print_if_not(f, script):
-        fileexists = path(f.replace('~', os.path.expanduser('~'))).exists()
-        if not fileexists:
+        """ Checks if a file f (read or written by script) exists.
+            If file doesn't exist; may mean an error in the script. """
+        file_exists = path(f.replace('~', os.path.expanduser('~'))).exists()
+        if not file_exists:
             sys.stderr.write("File does not exist: " + f +
                              '; in script ' + script + '\n')
-        return fileexists
+        return file_exists
 
-    def only_existing_files(fnames, rscript):
+    def only_existing_files(fnames, script):
+        """ Filters a list of files to return only those that exist in fs.
+            Uses custom function that prints message on non-existence. """
         return [fname for fname in fnames
-                if file_exists_print_if_not(fname, rscript)]
+                if file_exists_print_if_not(fname, script)]
 
-    def read_excluding_comments(fname):
-        f = open(fname, 'r')
-        lines = f.readlines()
-        f.close()
-        comment = re.compile(r'^\s*#')
-        lines = [line for line in lines if not comment.match(line)]
+    def read_excluding_comments(fname, commentchar='#'):
+        """ Read a filename (R script) and return its contents, excluding
+            any lines that start wit the comment character.  """
+        with open(fname, 'r') as f:
+            lines = f.readlines()
+        comment_exp = re.compile(r'^\s*' + commentchar)
+        lines = [line for line in lines if not comment_exp.match(line)]
         return '\n'.join(lines)
 
     # Functions that read files (filename assumed to be first argument)
@@ -59,12 +72,18 @@ def find_reads_and_writes(debug=False):
         text = read_excluding_comments(rscript)
         deps[rscript] = {'inputs': [], 'outputs': []}
         for rf in read_functions:
+            # Find FILENAME in text such as: read.csv("FILENAME"
+            # where " and ' are interchangeable
             in_deps = re.findall(rf + r'''\(["']([^'"]*)["']''', text)
             deps[rscript]['inputs'] = deps[rscript]['inputs'] + in_deps
         for wf in write_functions:
-            out_deps = re.findall(wf + r'''\([^"]*["']([^"']*)["']''', text)
+            # Find FILENAME in text such as: write.csv(... "FILENAME"
+            # where " and ' are interchangeable
+            out_deps = re.findall(wf + r'''\([^"']*["']([^"']*)["']''', text)
             deps[rscript]['outputs'] = deps[rscript]['outputs'] + out_deps
         for rwf in rw_functions:
+            # Find INF, OUTF in text such as: file.copy("INF", "OUTF", ...
+            # where " and ' are interchangeable
             inouts = re.findall(rwf +
                                 r'''\(["']([^"']*)["'],\s*["']([^'"]*)["']''',
                                 text)
