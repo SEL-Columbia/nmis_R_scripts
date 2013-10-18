@@ -2,7 +2,7 @@ source("base_scripts/InstallFormhub.R")
 load_packages_with_install(c("foreign", "gdata", "plyr"))
 
 # load hnlss lga state mapping data
-ref <- read.xls("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/source_data/Nigeria Master Codes_SP.xlsx")
+ref <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/source_data/Nigeria Master Codes_SP.csv")
 ref <- ref[,c("LGA_id", "lg_hnlss", "state_hnlss")]
 
 #Read skilled birth data and add lga id
@@ -159,6 +159,14 @@ final_total <- merge(final_total, other_edu, by='lga_id', all=T)
 
 
 final_total <- subset(final_total, !is.na(lga_id) & lga_id %in% 1:774 & !duplicated(lga_id))
+
+
+######################################
+###    Combining DHS 2008 data     ###
+######################################
+dhs_2008 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/source_data/dhs_2008.csv" )
+
+final_total <- merge(final_total, dhs_2008, by = "lga_id")
 
 saveRDS(final_total, '~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/output_data/external_data.rds')
 

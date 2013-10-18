@@ -182,7 +182,7 @@ cellst(merged_education, 'km_to_catchment_area',
        which(merged_education$km_to_catchment_area >= 999 ), NA_integer_)
 
 cellst(merged_education, 'num_students_frthr_than_3km', 
-       which(merged_education$num_students_frthr_than_3km == 999 | merged_education$num_students_frthr_than_3km >= 9000), 
+       which(merged_education$num_students_frthr_than_3km >= 9000), 
        NA_integer_) # 999 considered as outlier
 
 cellst(merged_education, 'num_students_total', 
