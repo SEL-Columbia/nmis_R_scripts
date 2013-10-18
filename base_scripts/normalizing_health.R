@@ -41,7 +41,10 @@ h_661 <- rename(h_661, c("fees_adults.paid_services_routine_visit" = "paid_servi
                          "fees_adults.paid_services_contraceptives" = "paid_services_contraceptives",
                          "fees_adults.paid_services_anc_delivery" = "paid_services_anc_delivery",
                          "fees_adults.paid_services_immunization" = "paid_services_immunization",
-                         "fees_adults.paid_services_malaria_treatment" = "paid_services_malaria_treatment"
+                         "fees_adults.paid_services_malaria_treatment" = "paid_services_malaria_treatment",
+                         "power_sources.grid" = "power_sources_grid",
+                         "power_sources.solar" = "power_sources_solar",
+                         "power_sources.generator" = "power_sources_generator"
                           ))
 
 mapped_661 <- c("paid_services_routine_visit", "paid_services_lab_testing", "paid_services_medication",
@@ -119,22 +122,20 @@ newname_113 <- c("antibiotics_stockout_yn", "antimalarials_stockout_yn",
 
 ##pilot facility scriptin (somewhere else?)
 #be sure to include in NEW list below if you decide to leave here + delete ones that are mentioned in comments
-h_pilot$delivery_services_yn <- as.character(recodeVar(h_pilot$emergency_obstetrics_yn,
-                                                       c('yes', 'no'),
-                                                       c('yes', 'no')))
 
-h_pilot$maternal_health_delivery_services_24_7 <- 
-  (h_pilot$emergency_obstetrics_yn=='yes' & 
-     (h_pilot$compr_oc_available_24_7==T | h_pilot$emoc_available_24_7 == T))
+#TODO: health follow up: all NA
+h_pilot$sulpha_and_antenatal <- as.character(ifelse((h_pilot$malaria_treatment_sulphadoxine == T & 
+                                                       h_pilot$antenatal_care_yn == "yes"),
+                                                    "yes", NA_character_))
+#TODO: health... make sure the two are the same exact formula 
+h_pilot$lab_tests_pregnancy_calc <- (h_pilot$lab_tests_pregnancy == T & 
+                                       h_pilot$laboratory_yn == 'yes')   
+h_pilot$lab_tests_stool_calc <- h_pilot$lab_tests_pregnancy_calc
 
 h_pilot$essential_meds_stockout <- (hp$antimalarials_stockout_yn == 'yes' |
                                        hp$antibiotics_stockout_yn == 'yes') 
-            #can delete these variables.... not used elsewhere
-
 h_pilot$emergency_transport_currently_functioning <- 
                     (h_pilot$equipment_emergency_transport == T & h_pilot$daily_pub_transport_p == 'yes')
-            #can delete these variables.... not used elsewhere
-
 h_pilot$power_access_and_functional <- (((h_pilot$power_sources_generator == T &
                                             h_pilot$generator_funct_yn == 'yes') |
                                        (h_pilot$power_sources_solar == T &
@@ -142,37 +143,24 @@ h_pilot$power_access_and_functional <- (((h_pilot$power_sources_generator == T &
                                        (h_pilot$power_sources_grid == T &
                                           h_pilot$grid_funct_yn == 'yes')) &
                                       (as.numeric(h_pilot$days_no_electricity) <= 7)) 
-            #can delete these variables.... not used elsewhere
-
-#TODO: health follow up
-h_pilot$sulpha_and_antenatal <- as.character(ifelse((h_pilot$malaria_treatment_sulphadoxine == T & 
-                                                       h_pilot$antenatal_care_yn == "yes"),
-                                                    "yes", NA_character_))
-      #can delete malaria_treatment_sulphadoxine
-
 h_pilot$has_itns <- (h_pilot$malaria_treatment_yn == 'yes' & (h_pilot$malaria_treatment_srvcs_itn == T |
                         h_pilot$supplies_available_bednets == T))       
-      #can delete all three
-
 h_pilot$hiv_tx_srvcs_pmtct_services_calc <- h_pilot$sti_treatment_yn == 'yes'
-
+h_pilot$delivery_services_yn <- as.character(recodeVar(h_pilot$emergency_obstetrics_yn,
+                                                       c('yes', 'no'),
+                                                       c('yes', 'no')))
+h_pilot$maternal_health_delivery_services_24_7 <- 
+  (h_pilot$emergency_obstetrics_yn=='yes' & 
+     (h_pilot$compr_oc_available_24_7==T | h_pilot$emoc_available_24_7 == T))
 h_pilot$lab_tests_hemoglobin_testing_calc <- (h_pilot$laboratory_yn == 'yes' &
                                                 h_pilot$lab_tests_hemoglobin_testing == T)
-        #can delete lab_tests_hemoglobin_testing
-
 h_pilot$lab_tests_urine_testing <- (h_pilot$laboratory_yn == 'yes' &
                                       h_pilot$lab_tests_urine_testing == T)
-        #can delete lab_tests_urine_testing
-
 h_pilot$iv_antibiotics_yn_calc <- (h_pilot$comprehensive_obstetrics_yn == 'yes' & 
-                                 h_pilot$emoc_antibiotics == T) 
-        #can delete both
-
+                                 h_pilot$emoc_antibiotics == T)     
 h_pilot$condoms_yn <- (h_pilot$sti_tx_srvcs_condoms == T | 
                      h_pilot$hiv_tx_srvcs_condoms == T | 
                      h_pilot$supplies_available_condoms == T)
-          #can delete all three
-
 h_pilot$family_planning_pill_calc_calc <- (h_pilot$family_planning_pill == T  & h_pilot$family_planning_yn == 'yes') 
 h_pilot$family_planning_injectables_calc_calc <- (h_pilot$family_planning_pill == T & h_pilot$family_planning_yn == 'yes')                                                
 h_pilot$family_planning_iud_calc <- (h_pilot$family_planning_iud == T & h_pilot$family_planning_yn == 'yes')  
@@ -186,9 +174,38 @@ h_pilot$child_health_hepb_immunization_calc <- (h_pilot$child_health_immunizatio
 h_pilot$child_health_bcg_immunization_calc  <- (h_pilot$child_health_immunization_p == T & h_pilot$child_health_yn == 'yes')       
 h_pilot$child_health_yellow_fever_immun_calc <- (h_pilot$child_health_immunization_p == T & h_pilot$child_health_yn == 'yes')  
 h_pilot$child_health_csm_immunization_calc <- (h_pilot$child_health_immunization_p == T & h_pilot$child_health_yn == 'yes')
+h_pilot$vaccines_fridge_freezer <- h_pilot$vaccines_stored_yn == "yes"
+h_pilot$improved_water_supply <-  h_pilot$water_sources_yn_p == "yes"
+h_pilot$improved_sanitation <- h_pilot$num_toilets_improved_p > 0
+h_pilot$malaria_testing <- (h_pilot$lab_tests_malaria_rdt == T | 
+                              h_pilot$lab_tests_malaria_microscopy == T) & 
+  (h_pilot$laboratory_yn == "yes") 
+h_pilot$lab_tests_tb_microscopy_calc <- (h_pilot$lab_tests_tb_microscopy == T & 
+                                           h_pilot$laboratory_yn == 'yes')
+h_pilot$lab_tests_hiv_testing_calc <- (h_pilot$lab_tests_hiv_testing == T & 
+                                         h_pilot$laboratory_yn == 'yes')
+h_pilot$health_no_user_fees <- (h_pilot$paid_services_routine_visit == T | h_pilot$paid_services_lab_testing == T | 
+                              h_pilot$paid_services_inpatient_stay == T | h_pilot$paid_services_medication == T | 
+                              h_pilot$paid_services_routine_anc_visit == T | h_pilot$paid_services_contraceptives == T | 
+                              h_pilot$paid_services_anc_delivery == T | h_pilot$paid_services_child_health == T | 
+                              h_pilot$paid_services_hiv_treatment == T | h_pilot$paid_services_tb_treatment == T | 
+                              h_pilot$paid_services_malaria_treatment == T)  
 
-          # delete: family_planning_pill, family_planning_iud, 
-          # family_planning_implants, family_planning_sterilization_m, child_health_immunization_p
+
+
+
+#droppin from pilot
+# paid_services_inpatient_stay, paid_services_lab_testing, paid_services_routine_visit
+# days_no_electricity, antibiotics_stockout_yn, antimalarials_stockout_yn, equipment_emergency_transport
+# emoc_antibiotics, comprehensive_obstetrics_yn, lab_tests_hemoglobin_testing, malaria_treatment_yn
+# supplies_available_bednets,  malaria_treatment_srvcs_itn, malaria_treatment_sulphadoxine
+# family_planning_pill, family_planning_iud, lab_tests_malaria_microscopy, lab_tests_malaria_rdt
+# family_planning_implants, family_planning_sterilization_m, child_health_immunization_p,
+# vaccines_stored_yn, water_sources_yn_p, num_toilets_improved_p, lab_tests_tb_microscopy
+# lab_tests_hiv_testing_calc,lab_tests_pregnancy, sti_tx_srvcs_condoms, hiv_tx_srvcs_condoms
+# supplies_available_condoms, sti_treatment_yn, lab_tests_urine_testing, power_sources_generator
+# generator_funct_yn, power_sources_solar, solar_funct_yn, power_sources_grid, grid_funct_yn
+# daily_pub_transport_p, paid_services_hiv_treatment, paid_services_tb_treatment, paid_services_contraceptives
 
 
 
@@ -198,10 +215,6 @@ h_pilot$transport_to_referral <-  as.character(ifelse(h_pilot$transport_to_refer
                                                       ifelse(h_pilot$transport_to_referral_keke == T,
                                                              "keke",
                                                              NA_character_)))
-
-
-
-
 h_pilot <- rename(h_pilot, c("lga" = "mylga",
                              "state" = "mylga_state",
                              "zone" = "my_zone",
@@ -212,28 +225,12 @@ h_pilot <- rename(h_pilot, c("lga" = "mylga",
                              "num_jr_chews_fulltime" = "num_junior_chews_posted",
                              "num_chos_fulltime" = "num_cho_posted",
                              "num_nurses_fulltime" = "num_nurses_posted",
-                             "num_lab_techs_fulltime" = "lab_technicians_posted",
-                             "" = "",
-                             "" = "",
-                             "" = "",
-                             "" = "",
-                             "" = ""
-                             ))
+                             "num_lab_techs_fulltime" = "lab_technicians_posted"))
 
-
-
-
-newname_pilot <- c("vaccines_stored_yn", "transport_to_referral", "vaccines_stored_yn", 
-                   "delivery_services_yn", "water_sources_yn_p", "num_toilets_improved_p",
-                   "emoc_available_24_7", "compr_oc_available_24_7", "emergency_obstetrics_yn",
-                   "sti_treatment_yn", "", "",
-                   "", "", "",
-                   "", "", "",
-                   "", "", "",
-                   "", "", "",
-                    ))
-
-
+#lga level stuff...
+newname_pilot <- c("emoc_available_24_7", "paid_services_anc_delivery", 
+                   "compr_oc_available_24_7", 
+                   "paid_services_malaria_treatment", "paid_services_child_health")
 
 #######
 #adding/subtracting vars before cleaning 999
@@ -265,7 +262,7 @@ h_661 <- subset(h_661, select=-c(facility_owner_manager.private_forprofit, facil
                                 facility_owner_manager.religious_org, facility_owner_manager.stategovernment,
                                 facility_owner_manager.lga, facility_owner_manager.none,
                                 facility_owner_manager_other, facility_owner_manager.federalgovernment))      
-                 
+h_pilot <-                  
 
 
 ##################################

@@ -52,7 +52,7 @@ h_p$num_chews_and_chos <- rowSums(hp[, c("num_chews_fulltime",
 h_p$vaccines_fridge_freezer <- hp$vaccines_stored_yn == "yes"
 h_p$emergency_transport <- (hp$transport_to_referral_ambulance == T | hp$transport_to_referral_keke == T)
 h_p$improved_water_supply <-   (hp$water_sources_yn_p == "yes")
-h_p$improved_sanitation <- hp$num_toilets_improved_p >0
+h_p$improved_sanitation <- hp$num_toilets_improved_p > 0
 h_p$phcn_electricity <- hp$power_sources_grid == T
 ######################
 ####################

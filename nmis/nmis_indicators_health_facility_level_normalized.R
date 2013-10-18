@@ -34,8 +34,9 @@ h$owner_manager <- ifelse(h_total$facility_owner_manager == 'lga', "public",
                                                       ifelse(h_total$facility_owner_manager == 'private_forprofit', "private",
                                                              ifelse(h_total$facility_owner_manager == 'private_notforprofit', "private",
                                                                     NA_character_)))))))
-h$maternal_health_delivery_services <- 
-  (h_total$delivery_services_yn == 'yes')
+h$maternal_health_delivery_services <- ifelse(h_total$src != pilot,
+                            h_total$delivery_services_yn == 'yes',
+                                h_total$maternal_health_delivery_services)
 h$skilled_birth_attendant <- 
   (rowSums(cbind(h_total$num_doctors_posted, 
                  h_total$num_nurses_posted,
@@ -44,28 +45,32 @@ h$num_chews_and_chos <-
   (rowSums(cbind(h_total$num_chews_posted,
                  h_total$num_junior_chews_posted,
                  h_total$num_cho_posted), na.rm=T))
-h$vaccines_fridge_freezer <- 
+h$vaccines_fridge_freezer <- ifelse(h_total$src != 'pilot',
   (h_total$vaccine_storage_type.refrigerator == T & 
-     h_total$vaccine_storage_type.freezer == T ) | 
-  (h_total$vaccines_stored_yn == "yes")
+     h_total$vaccine_storage_type.freezer == T ),
+                 h_total$vaccines_fridge_freezer) 
 h$emergency_transport <- 
   (h_total$transport_to_referral %in% c('ambulance', 'keke'))
-h$improved_water_supply <- (h_total$water_sources.tap_in_compound == T | 
+h$improved_water_supply <- ifelse(h_total$src != 'pilot',
+                            (h_total$water_sources.tap_in_compound == T | 
                               h_total$water_sources.tap_outside == T | 
-                              h_total$water_sources.borehole_tube_well == T) | 
-  (h_total$water_sources_yn_p)
-h$improved_sanitation <- 
+                              h_total$water_sources.borehole_tube_well == T),
+                                  h_total$improved_water_supply)
+h$improved_sanitation <- ifelse(h_total$src != 'pilot',
   (h_total$num_vip_latrine > 0) | 
   (h_total$num_pit_w_slab > 0) | 
-  (h_total$num_flush_or_pour_flush_piped > 0) | 
-  (h_total$num_toilets_improved_p >0)
+  (h_total$num_flush_or_pour_flush_piped > 0),
+                        h_total$improved_sanitation)
+
 h$phcn_electricity <- h_total$power_sources_grid == T
 
 #######################
 #########################
 
 h$maternal_health_delivery_services_24_7 <- ifelse(h_total$src != "pilot",
-                                                   (h_total$facility_open_247_yn == 'yes' & h_total$delivery_services_yn == 'yes' & h_total$delivery_skilled_birth_247_yn == 'yes'),
+                                                   (h_total$facility_open_247_yn == 'yes' & 
+                                                      h_total$delivery_services_yn == 'yes' & 
+                                                      h_total$delivery_skilled_birth_247_yn == 'yes'),
                                                    h$maternal_health_delivery_services_24_7)
 
 h$facility_open_247_yn <- h_total$facility_open_247_yn == 'yes'   
@@ -99,9 +104,9 @@ h$emergency_transport_currently_functioning <- ifelse(h_total$src != 'pilot',
                                                       (h_total$transport_to_referral != 'none'), 
                                                       h_total$emergency_transport_currently_functioning)
 
-h$power_access_and_functional <- ifelse(h$src != "pilot",
-                                        h$power_sources.none != F, 
-                                        h$power_access_and_functional)
+h$power_access_and_functional <- ifelse(h_total$src != "pilot",
+                                        h_total$power_sources.none != F, 
+                                        h_total$power_access_and_functional)
 
 h$comprehensive_obstetrics_yn <- h_total$emergency_obstetrics_yn == 'yes' & h_total$c_section_yn == 'yes'
 
@@ -133,7 +138,9 @@ h$staff_paid_lastmth_yn <-
 ##### M.HEALTH: ANTENATAL #####
 ###############################
 
-h$sulpha_and_antenatal <- h_total$antenatal_care_malaria_prlx == 'yes'
+h$sulpha_and_antenatal <- ifelse(h_total$src != "pilot",
+                      h_total$antenatal_care_malaria_prlx == 'yes',
+                            h_total$sulpha_and_antenatal)    
 
 h$has_itns <- ifelse(h_total$src != "pilot",
                      h_total$supplies.insecticide_treated_bednets == T,
@@ -149,10 +156,11 @@ h$scale_yn <- (h_total$equipment.scale == T &
 h$equipment_bp_machine <- (h_total$equipment.bp_machine == T & 
                              h_total$bp_machine_funct_yn == "yes")   
 
-h$hiv_tx_srvcs_pmtct_services_calc <- ifelse(h_total$src != "sti_treatment_yn"
+h$hiv_tx_srvcs_pmtct_services_calc <- ifelse(h_total$src != "pilot",
                                              (h_total$medication.nevirapine == T | 
                                                 h_total$medication.arvs == T |
-                                                h_total$medication.azt == T))
+                                                h_total$medication.azt == T),
+                                             h_total$hiv_tx_srvcs_pmtct_services_calc)
 
 h$lab_tests_hemoglobin_testing_calc <- ifelse(h_total$src != "pilot",
                                               h_total$lab_tests.hemoglobin_testing == T,
@@ -298,9 +306,10 @@ h$equipment_refrigerator <- h_total$vaccine_storage_type.refrigerator
 ###################
 ##### MALARIA #####
 ###################
-h$malaria_testing <- 
+h$malaria_testing <- ifelse(h_total$src != "pilot", 
   (h_total$lab_tests.malaria_rdt == T | 
-     h_total$lab_tests.malaria_microscopy == T) 
+     h_total$lab_tests.malaria_microscopy == T),
+                h$malaria_testing)                            
 
 h$malaria_treatment_artemisinin <- h_total$malaria_treatment_artemisinin == 'yes'
 
@@ -332,9 +341,13 @@ h$uterotonics_yn_calc <- h_total$medication.uterotonics == T
 ##### DIAGNOSTICS #####
 #######################
 
-h$lab_tests_pregnancy_calc <- h_total$lab_tests.pregnancy    
+h$lab_tests_pregnancy_calc <- ifelse(h_total$src != "pilot", 
+                                h_total$lab_tests.pregnancy,
+                                     h_total$lab_tests_pregnancy_calc)
 
-h$lab_tests_stool_calc <- h_total$lab_tests.stool
+h$lab_tests_stool_calc <- ifelse(h_total$src != "pilot", 
+                                h_total$lab_tests.stool,
+                                     h_total$lab_tests_stool_calc)
 
 h$lab_tests_hemoglobin_testing_calc <- h_total$lab_tests.hemoglobin_testing
 
@@ -357,7 +370,9 @@ h$improved_sanitation_and_functional <- (h_total$vip_latrine_functional_yn == 'y
 ##### TUBERCULOSIS #####
 ########################
 
-h$lab_tests_tb_microscopy_calc <- h_total$lab_tests.tb_microscopy == T   
+h$lab_tests_tb_microscopy_calc <- ifelse(h_total$src != "pilot", 
+                                    h_total$lab_tests.tb_microscopy == T,
+                                     h_total$lab_tests_tb_microscopy_calc)
 
 h$tb_treatment_yn <- h_total$tb_treatment_yn == 'yes'
 
@@ -365,7 +380,9 @@ h$tb_treatment_yn <- h_total$tb_treatment_yn == 'yes'
 ##### HIV #####
 ###############
 
-h$lab_tests_hiv_testing_calc <- h_total$lab_tests.hiv_testing == T
+h$lab_tests_hiv_testing_calc <- ifelse(h_total$src != "pilot", 
+                                    h_total$lab_tests.hiv_testing == T,
+                                       h_total$lab_tests_hiv_testing_calc)
 
 h$hiv_treatment_yn <- h_total$medication.arvs == T
 
@@ -373,9 +390,10 @@ h$hiv_treatment_yn <- h_total$medication.arvs == T
 ##### CURATIVE CARE #####
 #########################
 
-h$health_no_user_fees <- 
-  h_total$adult_tx_fees_yn == 'yes' |                                          
-  h_total$child_tx_fees_yn == 'yes'                                         
+h$health_no_user_fees <- ifelse(h_total$src != "pilot", 
+                            h_total$adult_tx_fees_yn == 'yes' |                                          
+                            h_total$child_tx_fees_yn == 'yes',
+                              h_total$health_no_user_fees)    
 
 h$iv_medications_yn <- h_total$medication.iv_fluid   
 
