@@ -6,11 +6,11 @@ source("source_scripts/NMIS_Functions.R")
 
 
 edu_661 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/merged/Education_661_Merged.csv", 
-                    stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999", ""))
+                    stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999", "99999", "999999", ""))
 edu_113 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/113/Educ_Baseline_PhaseII_all_merged_cleaned_2011Nov21.csv",
-                  stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999", ""))
+                  stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999", "99999", "999999", ""))
 edu_pilot <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/113/Pilot_Education_cleaned_2011Nov17.csv",
-                    stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999", ""))
+                    stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999", "99999", "999999", ""))
 
 edu_661$src <- "661"
 edu_113$src <- "113"
@@ -158,66 +158,24 @@ edu_total$water.none <- as.logical(edu_total$water.none)
 edu_113$times_tchr_pay_delay_pastyr <- as.integer(edu_113$times_tchr_pay_delay_pastyr)
 edu_113$times_tchr_pay_miss_pastyr <- as.integer(edu_113$times_tchr_pay_miss_pastyr)
 
-
-edu_total$natl_curriculum_yn <- as.logical(recodeVar(edu_total$natl_curriculum_yn,
-                                          c('yes', 'no'),
-                                          c(TRUE, FALSE)))
-
-edu_total$sports_fee_exempt_yn <- as.logical(recodeVar(edu_total$sports_fee_exempt_yn,
-                                                     c('yes', 'no'),
-                                                     c(TRUE, FALSE)))
-
-edu_total$in_kind_fees_yn <- as.logical(recodeVar(edu_total$in_kind_fees_yn,
-                                                       c('yes', 'no'),
-                                                       c(TRUE, FALSE)))
-
-edu_total$booklist_per_class_yn <- as.logical(recodeVar(edu_total$booklist_per_class_yn,
-                                                  c('yes', 'no'),
-                                                  c(TRUE, FALSE)))
-
 edu_total$borehole_tubewell_repair_time <- as.logical(recodeVar(edu_total$borehole_tubewell_repair_time,
-                                                     c('yes', 'fixed_more_than_month', 'fixed_within_day',
-                                                       'fixed_within_month', 'fixed_within_week', 'never_broken',
-                                                       'not_fixed', 'no'),
-                                                     c(TRUE, TRUE, TRUE, TRUE,TRUE, TRUE,
-                                                       FALSE, FALSE)))
+                                                                c('yes', 'fixed_more_than_month', 'fixed_within_day',
+                                                                  'fixed_within_month', 'fixed_within_week', 'never_broken',
+                                                                  'not_fixed', 'no'),
+                                                                c(TRUE, TRUE, TRUE, TRUE,TRUE, TRUE,
+                                                                  FALSE, FALSE)))
 
-edu_total$generator_funct_yn <- as.logical(recodeVar(edu_total$generator_funct_yn,
-                                                        c('yes', 'no'),
-                                                        c(TRUE, FALSE)))
-edu_total$solar_funct_yn <- as.logical(recodeVar(edu_total$solar_funct_yn,
-                                                     c('yes', 'no'),
-                                                     c(TRUE, FALSE)))
-edu_total$grid_funct_yn <- as.logical(recodeVar(edu_total$grid_funct_yn,
-                                                     c('yes', 'no'),
-                                                     c(TRUE, FALSE)))
+yes_no_columns <- c("functioning_library_yn", "teacher_guide_yn", "provide_pens_yn",
+                    "provide_exercise_books_yn", "two_shifts_yn", "classes_outside_yn",
+                    "grid_funct_yn", "solar_funct_yn", "generator_funct_yn", 
+                    "booklist_per_class_yn", "in_kind_fees_yn", "sports_fee_exempt_yn",
+                    "natl_curriculum_yn")
 
-edu_total$classes_outside_yn <- as.logical(recodeVar(edu_total$classes_outside_yn,
-                                                c('yes', 'no'),
-                                                c(TRUE, FALSE)))
+# numeric type conversion and ASSERTION(sort of)
+edu_total <- yes_no_batch(edu_total, yes_no_columns)
+check_type <- batch_type(edu_total, yes_no_columns)
+stopifnot(all(check_type %in% c("logical")))
 
-edu_total$two_shifts_yn <- as.logical(recodeVar(edu_total$two_shifts_yn,
-                                                     c('yes', 'no'),
-                                                     c(TRUE, FALSE)))
-
-edu_total$provide_exercise_books_yn <- as.logical(recodeVar(edu_total$provide_exercise_books_yn,
-                                                c('yes', 'no'),
-                                                c(TRUE, FALSE)))
-
-edu_total$provide_pens_yn <- as.logical(recodeVar(edu_total$provide_pens_yn,
-                                                c('yes', 'no'),
-                                                c(TRUE, FALSE)))
-
-edu_total$teacher_guide_yn <- as.logical(recodeVar(edu_total$teacher_guide_yn,
-                                                  c('yes', 'no'),
-                                                  c(TRUE, FALSE)))
-
-edu_total$functioning_library_yn <- as.logical(recodeVar(edu_total$functioning_library_yn,
-                                                  c('yes', 'no'),
-                                                  c(TRUE, FALSE)))
-
-# edu_sub$teacher_guide_yn <- edu_outlier$teacher_guide_yn == 'yes' 
-# edu_sub$functioning_library_yn <- edu_outlier$functioning_library_yn == 'yes'
 ################
 #### output ####
 ################

@@ -1,6 +1,7 @@
 require(plyr)
 require(doBy)
 require(digest)
+require(stringr)
 
 # search for slug_names that contain part of the input string 
 slugsearch <- function(nm, df=edu_661){
@@ -97,3 +98,45 @@ common_type <- function(df_names)
     
 }
 
+numeric_batch <- function(df, list_of_column_names)
+{
+    l_ply(list_of_column_names, function(col) {
+        df[,col] <<- as.numeric(df[,col])
+    })
+    
+    return(df)
+}
+
+yes_no_converter <- function(vec)
+{
+    num_yn <- length(grep("(yes|no)", vec,ignore.case=T))
+    num_itm <- length(which(!is.na(vec)))
+    yn_prop <- num_yn/num_itm
+    
+    if (yn_prop > 0.99){
+        cat(sprintf("All of the values are yes and no"))
+        cat("\n")
+    }else{
+        warning(sprintf("yes and no values has only a proportion of %.3f", yn_prop))
+    }
+    vec <- as.logical(recodeVar(vec,
+                                c('yes', 'no'),
+                                c(TRUE, FALSE)))
+    return(vec)
+    
+}
+
+yes_no_batch <- function(df, list_of_column_names)
+{
+    l_ply(list_of_column_names, function(col) {
+        df[,col] <<- yes_no_converter(df[,col])
+    })
+    
+    return(df)
+}
+
+batch_type <- function(df, list_of_column_names)
+{
+    types <- unlist(lapply(list_of_column_names, function(x) class(df[,x])))
+    return(types)
+}
