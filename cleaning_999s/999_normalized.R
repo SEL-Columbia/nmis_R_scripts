@@ -198,7 +198,7 @@ cellst(merged_education, 'num_toilet_girl',
        which(merged_education$num_toilet_girl < 0 | merged_education$num_toilet_boy >= 999), NA_integer_)
 
 #individual cells
-cellst(merged_education, 'num_tchrs_qualification.num_tchrs_w_nce',
+cellst(merged_education, 'num_tchrs_w_nce',
        which(merged_education$uuid =='6c7dd1bf-82c7-46e1-8ab0-ad85baada470' | merged_education$uuid =='41dff099-4e14-4fdf-9f49-300b7c1f5c8f' ), NA_integer_)
 cellst(merged_education, c('num_tchrs_total', 'num_tchrs_female', 'num_students_total', 'num_students_male', 'num_tchrs_male', 'num_students_female'),
        which(merged_education$uuid =='ab52fe42-1525-46dd-945a-f5fef4566c16'), NA_integer_)

@@ -54,11 +54,6 @@ edu_999$num_students_total <- apply(cbind(edu_999$num_students_female,
                                           edu_999$num_students_male), 
                                            1, sum, na.rm=T)
 
-####### Adding num_tchr_mael & female for edu_113 before next line
-edu_999$num_tchrs_total <- apply(cbind(edu_999$num_tchrs_male, 
-                                       edu_999$num_tchrs_female), 
-                                       1, sum, na.rm=T)
-
 #dealing with total students problem
 edu_999$test_f <- apply(cbind(edu_999$num_pry_female, 
                               edu_999$num_js_female,
@@ -91,6 +86,10 @@ edu_999 <- outlierreplace(edu_999, 'num_tchrs_attended_training',
 edu_999 <- outlierreplace(edu_999, 'num_tchrs_total',
                     (edu_999$num_tchrs_total > 20 & 
                          edu_999$num_students_total == 0))
+
+edu_999 <- outlierreplace(edu_999, 'num_tchrs_total',
+                    (edu_999$num_tchrs_total > e$num_tchrs_male + 
+                         edu_999$num_tchrs_female))
 
 edu_999 <- outlierreplace(edu_999, 'num_classrms_need_maj_repairs',
                     (edu_999$num_classrms_need_maj_repairs > edu_999$num_classrms_total))
@@ -380,6 +379,11 @@ edu_999$ratio_students_to_benches <- ifelse(edu_999$ratio_students_to_benches ==
 
 edu_999$num_students_total <- ifelse(edu_999$num_students_total == 0, NA, 
                                      edu_999$num_students_total)
+
+edu_999$num_tchrs_total <- apply(cbind(edu_999$num_tchrs_male, 
+                                        edu_999$num_tchrs_female), 
+                                        1, sum, na.rm=T)
+
 
 #### TODO: investigate why these are in the data at all; constraints should have knocked these out #####
 

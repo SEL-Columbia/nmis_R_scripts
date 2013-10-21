@@ -82,6 +82,7 @@ edu_sub$male_to_female_student_ratio <- edu_outlier$num_students_male / edu_outl
 
 ## Infrastructure: Water & San ##
 edu_sub$functional_water <- edu_outlier$borehole_tubewell_repair_time == TRUE
+edu_sub$potable_water <- edu_outlier$potable_water
 # notes: water.tube_well = borehole or tubewell; not including "protected" wells here; 
 # repair_time is really a question about functionality
 
