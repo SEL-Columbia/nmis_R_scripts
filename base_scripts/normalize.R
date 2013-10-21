@@ -32,7 +32,7 @@ edu_class <- common_type(c("edu_113", "edu_661", "edu_pilot"))
 ### 113 names
 edu_113 <- rename(edu_113, c("days_no_potable_water_pastmth" = "days_no_potable_water",
                              "num_unattached_desks" = "num_desks",
-                             "num_textbooks_pry_sci" = "num_science_textbook_pry",
+#                              "num_textbooks_pry_sci" = "num_science_textbook_pry",
                              "lga" = "mylga",
                              "state" = "mylga_state", 
                              "zone"= "mylga_zone",

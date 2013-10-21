@@ -18,13 +18,12 @@ rm(nm_774)
 edu_sub$facility_name <- edu_sub$school_name
 edu_sub$facility_type <- edu_sub$level_of_education
 edu_sub$education_type <- edu_outlier$education_type
-edu_sub$owner_manager <- ifelse(edu_outlier$school_managed == "fed_gov", "public",
-                           ifelse(edu_outlier$school_managed == "loc_gov", "public",
-                                  ifelse(edu_outlier$school_managed == "st_gov", "public",
-                                         ifelse(edu_outlier$school_managed == "priv_profit", "private",      
-                                                ifelse(edu_outlier$school_managed == "priv_noprofit", "private",      
-                                                       ifelse(edu_outlier$school_managed == "faith_org", "private",      
-                                                              NA_character_))))))
+
+edu_sub$owner_manager <- recodeVar(edu_outlier$school_managed, 
+                          c("fed_gov", "loc_gov", "st_gov", "priv_profit", "priv_noprofit", "faith_org"),
+                          c("public", "public", "public", "private", "private", "private"),
+                          default=NA)
+
 edu_sub$num_tchrs_total <- edu_outlier$num_tchrs_total
 edu_sub$num_students_total <- edu_outlier$num_students_total
 edu_sub$num_classrms_total <- edu_outlier$num_classrms_total
@@ -44,30 +43,28 @@ edu_sub$phcn_electricity <- ifelse(edu_outlier$src == "661",
 
 edu_sub$school_1kmplus_catchment_area <- edu_outlier$km_to_catchment_area > 1
 edu_sub$num_classrms_need_maj_repairs <- edu_outlier$num_classrms_need_maj_repairs
-edu_sub$num_tchrs_with_nce <- edu_outlier$num_tchrs_w_nce
 
-edu_sub$num_textbooks <- ifelse(edu_outlier$src == "661",
-    ifelse(edu_outlier$level_of_education %in% c('primary_only', 'preprimary_and_primary'),  
-           edu_outlier$num_math_textbook_pry + edu_outlier$num_english_textbook_pry + 
+
+edu_sub$num_textbooks <- 
+    ifelse(edu_outlier$src == "661",
+        ifelse(edu_outlier$level_of_education %in% c('primary_only', 'preprimary_and_primary'),  
+               edu_outlier$num_math_textbook_pry + edu_outlier$num_english_textbook_pry + 
                edu_outlier$num_soc_science_textbook_pry + edu_outlier$num_science_textbook_pry,
-           ifelse(edu_outlier$level_of_education %in% c('junior_and_senior_sec', 'juniors_sec_only'),
-                  edu_outlier$manuals_js.num_math_textbook_js + edu_outlier$manuals_js.num_english_textbook_js + 
-                      edu_outlier$manuals_js.num_soc_science_textbook_js + edu_outlier$manuals_js.num_science_textbook_js,
-                  ifelse(edu_outlier$level_of_education %in% c('primary_and_junior_sec', 'primary_junior_and_senior_sec'),
-                         edu_outlier$num_math_textbook_pry + edu_outlier$num_english_textbook_pry + 
-                             edu_outlier$num_soc_science_textbook_pry + edu_outlier$num_science_textbook_pry +
-                             edu_outlier$manuals_js.num_math_textbook_js + edu_outlier$manuals_js.num_english_textbook_js + 
-                             edu_outlier$manuals_js.num_soc_science_textbook_js + edu_outlier$manuals_js.num_science_textbook_js,
-                         0))), ifelse(edu_outlier$src == "113", 
-                                apply(cbind(edu_outlier$num_textbooks_english, 
-                                            edu_outlier$num_textbooks_math, 
-                                            edu_outlier$num_textbooks_social_sci), 1, sum, na.rm=T),
-                                      apply(cbind(edu_outlier$num_textbooks_english, 
-                                                  edu_outlier$num_textbooks_math, 
-                                                  edu_outlier$num_textbooks_social_sci,
-                                                  edu_outlier$num_textbooks_pry_sci), 1, sum, na.rm=T)))
+        ifelse(edu_outlier$level_of_education %in% c('junior_and_senior_sec', 'juniors_sec_only'),
+               edu_outlier$num_math_textbook_js + edu_outlier$num_english_textbook_js + 
+               edu_outlier$num_soc_science_textbook_js + edu_outlier$num_science_textbook_js,
+        ifelse(edu_outlier$level_of_education %in% c('primary_and_junior_sec', 'primary_junior_and_senior_sec'),
+               edu_outlier$num_math_textbook_pry + edu_outlier$num_english_textbook_pry + 
+               edu_outlier$num_soc_science_textbook_pry + edu_outlier$num_science_textbook_pry +
+               edu_outlier$num_math_textbook_js + edu_outlier$num_english_textbook_js + 
+               edu_outlier$num_soc_science_textbook_js + edu_outlier$num_science_textbook_js,
+               0))),  
+            apply(cbind(edu_outlier$num_textbooks_english, 
+                        edu_outlier$num_textbooks_math, 
+                        edu_outlier$num_textbooks_social_sci,
+                        edu_outlier$num_textbooks_pry_sci), 1, sum, na.rm=T))
                                       
-                                
+
 ## Fix the num_textbooks outlier issuse, take 0.95 quantile(1300) as the cutt off 
 edu_sub$num_textbooks <- ifelse(edu_sub$num_textbooks > 2000, NA, edu_sub$num_textbooks)
     
@@ -92,10 +89,9 @@ edu_sub$functional_water <- edu_outlier$borehole_tubewell_repair_time == TRUE
 
 edu_sub$gender_separated_toilets_yn <- (edu_outlier$num_toilet_boy > 1) & (edu_outlier$num_toilet_girl > 1)
 
-edu_sub$pupil_toilet_ratio_facility <- edu_outlier$num_students_total / apply(cbind(edu_outlier$num_toilet_boy, 
-                                                                                    edu_outlier$num_toilet_girl, 
-                                                                                    edu_outlier$num_toilet_both),
-                                                                              1, sum, na.rm=T)
+edu_sub$pupil_toilet_ratio_facility <- edu_outlier$num_students_total / edu_outlier$num_toilet_total)
+
+
           
 edu_sub$pupil_toilet_ratio_facility <- ifelse(is.infinite(edu_sub$pupil_toilet_ratio_facility),
                                               NA, edu_sub$pupil_toilet_ratio_facility)
@@ -159,7 +155,7 @@ edu_sub$functioning_library_yn <- edu_outlier$functioning_library_yn
 #combining calculated result back to original data
 edu_sub <- lga_boudary_dist(edu_sub, gps_col="gps")
 # education_661_comp <- edu_sub
-e_774 <- merge(edu_sub, e_774_left, by="uuid")
+e_774 <- merge_non_redundant(edu_sub, e_774_left, by="uuid")
 
 
 #Delete all those have dist >= 35 km
