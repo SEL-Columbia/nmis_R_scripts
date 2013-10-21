@@ -1,42 +1,33 @@
 source("base_scripts/InstallFormhub.R")
 source("source_scripts/NMIS_Functions.R")
+#title script......
 
 #reading in data
-h <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Health_661_outliercleaned.rds")
+health_rds <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Health_661_outliercleaned.rds")
 lga_661 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/661.csv")
+
 ##throw out all values from 113 LGAs that were resampled in 661
-h <- merge(h, lga_661, by="lga_id")
+# health <- merge(health_rds, lga_661, by="lga_id")
 
-#new data set
-hh <- subset(h, select=c("uuid", "mylga", "mylga_state", "mylga_zone", "lga_id", "photo",
-                         "unique_lga"))
-h$`_id` <- h$uuid
-h$formhub_photo_id <- h$photo
-h$gps <- h_total$geocodeoffacility
-
-
-nm_661 <- names(h)[! names(h) %in% names(hh)]
-nm_661 <- c(nm_661, "uuid")
-h_661_left <- subset(h, select=nm_661)
-rm(nm_661)
-
+#new data set "health_normalized"
+health_normalized <- subset(health, select=c("uuid", "mylga", "mylga_state", "mylga_zone", "lga_id", "photo",
+                         "unique_lga", "facility_name", "facility_type"))
+health_normalized$formhub_photo_id <- health$photo
+health_normalized$gps <- health$geocodeoffacility
 
 ####################
 ##### SNAPSHOT #####
 ####################
-h$facility_name <- h_total$facility_name
-h$facility_type <- h_total$facility_type
-h$owner_manager <- ifelse(h_total$facility_owner_manager == 'lga', "public", 
-                          ifelse(h_total$facility_owner_manager == 'federalgovrenment', "public", 
-                                 ifelse(h_total$facility_owner_manager == 'stategovrenment', "public",
-                                        ifelse(h_total$facility_owner_manager == 'community', "public",
-                                               ifelse(h_total$facility_owner_manager == 'church_mission', "private", 
-                                                      ifelse(h_total$facility_owner_manager == 'private_forprofit', "private",
-                                                             ifelse(h_total$facility_owner_manager == 'private_notforprofit', "private",
-                                                                    NA_character_)))))))
-h$maternal_health_delivery_services <- ifelse(h_total$src != pilot,
-                            h_total$delivery_services_yn == 'yes',
-                                h_total$maternal_health_delivery_services)
+health_normalized$owner_manager <- ifelse(h_total$facility_owner_manager %in% 
+                                        c('lga', 'community', 'federalgovernment'), 
+                                          "public",
+                                    ifelse(h_total$facility_owner_manager %in% 
+                                          c('church_mission', 'private_forprofit', 'private_notforprofit'),
+                                           "private",
+                                                NA_character_))
+h$maternal_health_delivery_services <- ifelse(health$src != c('pilot', '113'),
+                            health$delivery_services_yn == 'yes',
+                                health$maternal_health_delivery_services)
 h$skilled_birth_attendant <- 
   (rowSums(cbind(h_total$num_doctors_posted, 
                  h_total$num_nurses_posted,
@@ -45,7 +36,7 @@ h$num_chews_and_chos <-
   (rowSums(cbind(h_total$num_chews_posted,
                  h_total$num_junior_chews_posted,
                  h_total$num_cho_posted), na.rm=T))
-h$vaccines_fridge_freezer <- ifelse(h_total$src != 'pilot',
+h$vaccines_fridge_freezer <- ifelse(h_total$src != c('pilot', '113'),
   (h_total$vaccine_storage_type.refrigerator == T & 
      h_total$vaccine_storage_type.freezer == T ),
                  h_total$vaccines_fridge_freezer) 
@@ -67,7 +58,7 @@ h$phcn_electricity <- h_total$power_sources_grid == T
 #######################
 #########################
 
-h$maternal_health_delivery_services_24_7 <- ifelse(h_total$src != "pilot",
+h$maternal_health_delivery_services_24_7 <- ifelse(h_total$src != c('pilot', '113'),
                                                    (h_total$facility_open_247_yn == 'yes' & 
                                                       h_total$delivery_services_yn == 'yes' & 
                                                       h_total$delivery_skilled_birth_247_yn == 'yes'),
@@ -75,7 +66,7 @@ h$maternal_health_delivery_services_24_7 <- ifelse(h_total$src != "pilot",
 
 h$facility_open_247_yn <- h_total$facility_open_247_yn == 'yes'   
 
-h$essential_meds_stockout <- ifelse(h$total != "pilot",
+h$essential_meds_stockout <- ifelse(h$total != c('pilot', '113'),
                                     (h_total$antibiotics_oral_stockout_yn == 'yes' |
                                        h_total$antibiotics_musc_stockout_yn == 'yes' | 
                                        h_total$antibiotics_iv_stockout_yn == 'yes' |
@@ -100,15 +91,16 @@ h$essential_meds_stockout <- ifelse(h$total != "pilot",
                                     h_total$essential_meds_stockout)                
 
 
-h$emergency_transport_currently_functioning <- ifelse(h_total$src != 'pilot',
+h$emergency_transport_currently_functioning <- ifelse(h_total$src != c('pilot', '113'),
                                                       (h_total$transport_to_referral != 'none'), 
                                                       h_total$emergency_transport_currently_functioning)
 
-h$power_access_and_functional <- ifelse(h_total$src != "pilot",
+h$power_access_and_functional <- ifelse(h_total$src != c('pilot', '113'),
                                         h_total$power_sources.none != F, 
                                         h_total$power_access_and_functional)
 
 h$comprehensive_obstetrics_yn <- h_total$emergency_obstetrics_yn == 'yes' & h_total$c_section_yn == 'yes'
+
 
 ####################
 ##### STAFFING #####
@@ -138,7 +130,7 @@ h$staff_paid_lastmth_yn <-
 ##### M.HEALTH: ANTENATAL #####
 ###############################
 
-h$sulpha_and_antenatal <- ifelse(h_total$src != "pilot",
+h$sulpha_and_antenatal <- ifelse(h_total$src != c("pilot", "113"),
                       h_total$antenatal_care_malaria_prlx == 'yes',
                             h_total$sulpha_and_antenatal)    
 

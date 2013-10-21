@@ -19,8 +19,6 @@ nm_p <- c(nm_p, "uuid")
 h_p_left <- subset(h_pilot, select=nm_p)
 rm(subnm, nm_p)
 
-
-
 #todo <- names(h_661)
 hp <- h_pilot
 

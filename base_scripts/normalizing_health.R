@@ -51,12 +51,29 @@ mapped_661 <- c("paid_services_routine_visit", "paid_services_lab_testing", "pai
                 "paid_services_registration", "paid_services_routine_anc_visit", "paid_services_contraceptives",
                 "paid_services_anc_delivery", "paid_services_immunization", "paid_services_malaria_treatment")
 
-# 113
-#go through cleaning 999's => onwards
 
 ##113
-h_113 <- rename(h_113, c("bucket_system_number" = "num_bucket_system",
+h_113 <- rename(h_113, c("lga" = "mylga",
+                         "state" = "mylga_state",
+                         "zone" = "my_zone",
+                         "num_doctors_fulltime" = "num_doctors_posted",
+                         "num_midwives_fulltime" = "num_midwives_posted",
+                         "num_nurses_fulltime" = "num_nurses_posted",
+                         "num_nursemidwives_fulltime" = "num_nursemidwives_posted",
+                         "num_chos_fulltime" = "num_cho_posted",
+                         "num_chews_fulltime" = "num_chews_posted",
+                         "num_jr_chews_fulltime" = "num_junior_chews_posted",
+                         "num_lab_techs_fulltime" = "lab_technicians_posted",
+                         "bucket_system_number" = "num_bucket_system",
                          "flush_toilet_number" = "num_flush_other", 
+                         "water_sources_tap_in_compound" = "water_sources.tap_in_compound", 
+                         "water_sources_tap_outside" = "water_sources.tap_outside",
+                         "water_sources_borehole_tube_well" = "water_sources.borehole_tube_well",
+                         "toilet_types_flush_or_pour_flush" = "num_flush_or_pour_flush_piped",
+                         
+                         
+                         
+                         
                          "vip_latrine_number" = "num_vip_latrine", 
                          "slab_pit_latrine_number" = "num_pit_w_slab", 
                          "open_pit_latrine_number" = "num_open_pit_latrine",
@@ -82,8 +99,7 @@ h_113 <- rename(h_113, c("bucket_system_number" = "num_bucket_system",
                          "lab_tests_tb_microscopy" = "lab_tests.tb_microscopy",
                          "lab_tests_hiv_testing" = "lab_tests.hiv_testing",
                          "paid_services_routine_visit" = "fees_adults.paid_services_routine_visit",
-                         "medication_iv_fluid" = "medication.iv_fluid"
-                         ))
+                         "medication_iv_fluid" = "medication.iv_fluid"))
 
 mapped_113 <- c("num_bucket_system", "num_flush_other", "num_vip_latrine", "num_pit_w_slab", "lab_tests.pregnancy",
                 "num_open_pit_latrine", "equipment.scale", "equipment.bp_machine", "lab_tests.hemoglobin_testing",
@@ -93,36 +109,62 @@ mapped_113 <- c("num_bucket_system", "num_flush_other", "num_vip_latrine", "num_
                 "immunization.csm_immunization", "lab_tests.malaria_rdt", "lab_tests.malaria_microscopy", 
                 "lab_tests.tb_microscopy", "lab_tests.hiv_testing", "medication_iv_fluid")
 
-newname_113 <- c("antibiotics_stockout_yn", "antimalarials_stockout_yn", 
-                 "malaria_treatment_sulphadoxine", "emoc_parenteral1","paid_services_tb_treatment",
-                 "emoc_available_24_7", "toilet_types_flush_or_pour_flush",
-                 "power_sources_grid", "compr_oc_available_24_7", "toilet_types_pit_w_slab", 
-                 "toilet_types_vip_latrine", "water_sources_tap_in_compound",
-                 "water_sources_tap_outside", "water_sources_borehole_tube_well", 
-                 "emergency_transport_keke_napep", "emergency_transport_ambulance", 
-                 "vaccines_strg_type", "num_chos_fulltime", "num_nursemidwives_fulltime",
-                 "num_jr_chews_fulltime", "num_chews_fulltime", "facility_owner_manager", 
-                 "num_doctors_fulltime", "num_midwives_fulltime", "child_health_yn"
-                 "hiv_tx_srvcs_pmtct_services", "sti_treatment_yn", "malaria_treatment_yn", 
-                 "malaria_treatment_srvcs_itn", "equipment_emergency_transport", 
-                 "public_transport_funct_yn", "power_sources_generator", "power_sources_grid", 
-                 "power_sources_solar", "comprehensive_obstetrics_yn", "emoc_antibiotics",
-                 "medication_oxytocin", "emoc_uterotonic2", "emoc_misoprotol", "emoc_oxytocin", 
-                 "compr_oc_oxytocin", "compr_oc_misoprotol", "compr_oc_antishock_garment", 
-                 "sti_tx_srvcs_condoms", "hiv_tx_srvcs_condoms", "supplies_available_condoms",
-                 "child_health_yn", "child_health_vaccine_carriers", "sti_tx_srvcs_penicilling", 
-                 "sti_tx_srvcs_doxycycline", "sti_tx_srvcs_ciprofloxacin", "flush_toilet_drain_to",
-                 "child_health_ampicillin", "sti_treatment_yn", "child_health_ciprofloxain", 
-                 "medication_anti_biotics", "toilet_types_vip_latrine", "toilet_types_pit_w_slab",
-                 "flush_toilet_drain_to", "toilet_types_flush_or_pour_flush", "vip_latrine_not_working", 
-                 "toilet_types_flush_or_pour_flush", "slab_pit_latrine_not_working",
-                 "flush_toilet_not_working", "paid_services_child_health", "paid_services_hiv_treatment"
-                      )
+newname_113 <- c("", "", "",
+                   "", "", "",
+                   "", "", "",
+                   "", "", "",
+                   "", "", "",
+                   "", "", "",
+                   "", "", "",
+                   "", "", "",
+                   "", "", "",
+                   "", "", "",
+                   "", "", "",
+                   "", "", "",)
+
+##113 facility scriptin
+h_113$maternal_health_delivery_services <- h_113$emergency_obstetrics_yn  == 'yes'
+h_113$vaccines_fridge_freezer <- ifelse(h_113$vaccines_strg_type == "solar_refrigeration", T,
+                                     ifelse(h_113$vaccines_strg_type == "grid_refrigeration", T,
+                                            ifelse(h_113$vaccines_strg_type == "lpg_refrigeration", T,
+                                                   ifelse(h_113$vaccines_strg_type == "", T,
+                                                          NA_character_))))
+h_113$transport_to_referral <-  ifelse(h_113$emergency_transport_ambulance == "TRUE",
+                                              "ambulance",
+                                  ifelse(h_113$emergency_transport_keke_napep,
+                                                "keke", NA_character_))
+
+h_113$maternal_health_delivery_services_24_7 <- (h_113$emergency_obstetrics_yn=='yes' & 
+                                                    (h_113$compr_oc_available_24_7==T | 
+                                                        h_113$emoc_available_24_7 == T))
+
+h_113$sulpha_and_antenatal <- (h_113$malaria_treatment_sulphadoxine == T & 
+                                  (h_113$antenatal_care_yn == "yes"))
+
+h_113$essential_meds_stockout <- (h_113$antimalarials_stockout_yn == 'yes' | 
+                                      h_113$antidiarrheal_stockout_yn == 'yes' | 
+                                        h_113$antibiotics_stockout_yn == 'yes') 
+
+h_113$emergency_transport_currently_functioning <-  (h_113$equipment_emergency_transport == T & 
+                                                    h_113$public_transport_funct_yn == 'yes')
+
+h_113$power_access_and_functional <- (((h_113$power_sources_generator == T &
+                                       h_113$generator_funct_yn == 'yes') |
+                                      (h_113$power_sources_solar == T &
+                                         h_113$solar_funct_yn == 'yes') |
+                                      (h_113$power_sources_grid == T &
+                                         h_113$grid_funct_yn == 'yes')) &
+                                     (as.numeric(h_113$days_no_electricity) <= 7))
 
 
-##pilot facility scriptin (somewhere else?)
-#be sure to include in NEW list below if you decide to leave here + delete ones that are mentioned in comments
 
+
+
+
+
+
+
+##pilot facility scriptin
 #TODO: health follow up: all NA
 h_pilot$sulpha_and_antenatal <- as.character(ifelse((h_pilot$malaria_treatment_sulphadoxine == T & 
                                                        h_pilot$antenatal_care_yn == "yes"),
@@ -132,6 +174,7 @@ h_pilot$lab_tests_pregnancy_calc <- (h_pilot$lab_tests_pregnancy == T &
                                        h_pilot$laboratory_yn == 'yes')   
 h_pilot$lab_tests_stool_calc <- h_pilot$lab_tests_pregnancy_calc
 
+h_pilot$maternal_health_delivery_services <- h_pilot$emergency_obstetrics_yn=='yes'
 h_pilot$essential_meds_stockout <- (hp$antimalarials_stockout_yn == 'yes' |
                                        hp$antibiotics_stockout_yn == 'yes') 
 h_pilot$emergency_transport_currently_functioning <- 
@@ -179,7 +222,7 @@ h_pilot$improved_water_supply <-  h_pilot$water_sources_yn_p == "yes"
 h_pilot$improved_sanitation <- h_pilot$num_toilets_improved_p > 0
 h_pilot$malaria_testing <- (h_pilot$lab_tests_malaria_rdt == T | 
                               h_pilot$lab_tests_malaria_microscopy == T) & 
-  (h_pilot$laboratory_yn == "yes") 
+                                      (h_pilot$laboratory_yn == "yes") 
 h_pilot$lab_tests_tb_microscopy_calc <- (h_pilot$lab_tests_tb_microscopy == T & 
                                            h_pilot$laboratory_yn == 'yes')
 h_pilot$lab_tests_hiv_testing_calc <- (h_pilot$lab_tests_hiv_testing == T & 
@@ -190,31 +233,12 @@ h_pilot$health_no_user_fees <- (h_pilot$paid_services_routine_visit == T | h_pil
                               h_pilot$paid_services_anc_delivery == T | h_pilot$paid_services_child_health == T | 
                               h_pilot$paid_services_hiv_treatment == T | h_pilot$paid_services_tb_treatment == T | 
                               h_pilot$paid_services_malaria_treatment == T)  
-
-
-
-
-#droppin from pilot
-# paid_services_inpatient_stay, paid_services_lab_testing, paid_services_routine_visit
-# days_no_electricity, antibiotics_stockout_yn, antimalarials_stockout_yn, equipment_emergency_transport
-# emoc_antibiotics, comprehensive_obstetrics_yn, lab_tests_hemoglobin_testing, malaria_treatment_yn
-# supplies_available_bednets,  malaria_treatment_srvcs_itn, malaria_treatment_sulphadoxine
-# family_planning_pill, family_planning_iud, lab_tests_malaria_microscopy, lab_tests_malaria_rdt
-# family_planning_implants, family_planning_sterilization_m, child_health_immunization_p,
-# vaccines_stored_yn, water_sources_yn_p, num_toilets_improved_p, lab_tests_tb_microscopy
-# lab_tests_hiv_testing_calc,lab_tests_pregnancy, sti_tx_srvcs_condoms, hiv_tx_srvcs_condoms
-# supplies_available_condoms, sti_treatment_yn, lab_tests_urine_testing, power_sources_generator
-# generator_funct_yn, power_sources_solar, solar_funct_yn, power_sources_grid, grid_funct_yn
-# daily_pub_transport_p, paid_services_hiv_treatment, paid_services_tb_treatment, paid_services_contraceptives
-
-
-
-##these stay here...
 h_pilot$transport_to_referral <-  as.character(ifelse(h_pilot$transport_to_referral_ambulance == T,
                                                       "ambulance",
                                                       ifelse(h_pilot$transport_to_referral_keke == T,
                                                              "keke",
                                                              NA_character_)))
+
 h_pilot <- rename(h_pilot, c("lga" = "mylga",
                              "state" = "mylga_state",
                              "zone" = "my_zone",
@@ -227,17 +251,36 @@ h_pilot <- rename(h_pilot, c("lga" = "mylga",
                              "num_nurses_fulltime" = "num_nurses_posted",
                              "num_lab_techs_fulltime" = "lab_technicians_posted"))
 
-#lga level stuff...
-newname_pilot <- c("emoc_available_24_7", "paid_services_anc_delivery", 
-                   "compr_oc_available_24_7", 
-                   "paid_services_malaria_treatment", "paid_services_child_health")
+mapped_pilot <- c("mylga", "mylga_state", "my_zone", "num_doctors_posted", "num_midwives_fulltime", 
+                  "num_nursemidwives_posted", "num_chews_posted", "num_junior_chews_posted",
+                  "num_cho_posted", "num_nurses_posted", "lab_technicians_posted") 
+
+newname_pilot <- c("child_health_bcg_immunization_calc", "child_health_dpt_immunization_calc", 
+                   "child_health_dpt_immunization_calc", "child_health_tetanus_immun_calc", 
+                   "child_health_hepb_immunization_calc", "child_health_yellow_fever_immun_calc",
+                   "vaccines_fridge_freezer", "child_health_csm_immunization_calc", 
+                   "improved_water_supply", "family_planning_pill_calc_calc", 
+                   "family_planning_injectables_calc_calc", "family_planning_iud_calc",
+                   "family_planning_implants_calc", "child_health_measles_immun_calc", 
+                   "child_health_opv_immuization_calc", "sterilization_yn_calc", 
+                   "emergency_transport_currently_functioning", "lab_tests_stool_calc", 
+                   "sulpha_and_antenatal", "lab_tests_pregnancy_calc", "essential_meds_stockout",
+                   "hiv_tx_srvcs_pmtct_services_calc", "delivery_services_yn", "has_itns", 
+                   "power_access_and_functional", "maternal_health_delivery_services_24_7",
+                   "lab_tests_hemoglobin_testing_calc", "iv_antibiotics_yn_calc", "condoms_yn", 
+                   "lab_tests_urine_testing", "lab_tests_hiv_testing_calc", "malaria_testing",
+                   "improved_sanitation", "lab_tests_tb_microscopy_calc", "health_no_user_fees",
+                   #lga level stuff...  
+                   "emoc_available_24_7", "paid_services_anc_delivery", 
+                   "compr_oc_available_24_7", "paid_services_malaria_treatment", 
+                   "paid_services_child_health")
 
 #######
-#adding/subtracting vars before cleaning 999
+# adding/subtracting vars before cleaning 999 ...PUT BEFORE new_661
 #######
 #661
 h_661$facility_owner_manager <- as.character(ifelse(h$facility_owner_manager.federalgovernment,
-                                                    "federalgovrenment",
+                                                    "federalgovernment",
                                                     ifelse(h$facility_owner_manager.stategovernment,
                                                            "stategovrenment",
                                                            ifelse(h$facility_owner_manager.lga,
@@ -257,21 +300,35 @@ h_661$emoc_antibiotics_yn <- as.logical(recodeVar(h_661$emoc_antibiotics_yn,
                                                   c('yes', 'no'),
                                                   c(TRUE, FALSE)))   
 
+#113
+h_113$facility_owner_manager <- recodeVar(h_113$facility_owner_manager,
+                                            c('federalgovrenment'),
+                                            c('federalgovernment'))
+
 #droppin'
 h_661 <- subset(h_661, select=-c(facility_owner_manager.private_forprofit, facility_owner_manager.charitable_ngo,
                                 facility_owner_manager.religious_org, facility_owner_manager.stategovernment,
                                 facility_owner_manager.lga, facility_owner_manager.none,
-                                facility_owner_manager_other, facility_owner_manager.federalgovernment))      
-h_pilot <-                  
+                                facility_owner_manager_other, facility_owner_manager.federalgovernment))                       
 
+
+#droppin from pilot
+# paid_services_inpatient_stay, paid_services_lab_testing, paid_services_routine_visit
+# days_no_electricity, antibiotics_stockout_yn, antimalarials_stockout_yn, equipment_emergency_transport
+# emoc_antibiotics, comprehensive_obstetrics_yn, lab_tests_hemoglobin_testing, malaria_treatment_yn
+# supplies_available_bednets,  malaria_treatment_srvcs_itn, malaria_treatment_sulphadoxine
+# family_planning_pill, family_planning_iud, lab_tests_malaria_microscopy, lab_tests_malaria_rdt
+# family_planning_implants, family_planning_sterilization_m, child_health_immunization_p,
+# vaccines_stored_yn, water_sources_yn_p, num_toilets_improved_p, lab_tests_tb_microscopy
+# lab_tests_hiv_testing_calc,lab_tests_pregnancy, sti_tx_srvcs_condoms, hiv_tx_srvcs_condoms
+# supplies_available_condoms, sti_treatment_yn, lab_tests_urine_testing, power_sources_generator
+# generator_funct_yn, power_sources_solar, solar_funct_yn, power_sources_grid, grid_funct_yn
+# daily_pub_transport_p, paid_services_hiv_treatment, paid_services_tb_treatment, paid_services_contraceptives
 
 ##################################
 #### combining 661, 113 & pilot
 #################################
-# edu_total <- rbind.fill(edu_661, edu_113, edu_pilot)
-
-
-
+h_total <- rbind.fill(h_661, h_113, h_pilot)
 
 ###############################################
 ####mapping values and standardize the type####
