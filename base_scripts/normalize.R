@@ -230,7 +230,6 @@ edu_113$num_toilet_total <- apply(cbind(edu_113$vip_latrine_number,
 edu_113$num_benches <- apply(cbind(edu_113$num_attached_benches, 
                                    edu_113$num_unattached_benches), 1, sum, na.rm=T)
 
-
 edu_113$ratio_students_to_benches <- replace(edu_113$num_students_total, is.na(edu_113$num_students_total), 0) / 
     replace(edu_113$num_benches, is.na(edu_113$num_benches), 0) 
 
