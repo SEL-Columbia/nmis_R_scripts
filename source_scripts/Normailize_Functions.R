@@ -107,8 +107,9 @@ numeric_batch <- function(df, list_of_column_names)
     return(df)
 }
 
-yes_no_converter <- function(vec)
+yes_no_converter <- function(df, col_name)
 {
+    vec <- df[,col_name]
     num_yn <- length(grep("(yes|no)", vec,ignore.case=T))
     num_itm <- length(which(!is.na(vec)))
     yn_prop <- num_yn/num_itm
@@ -117,11 +118,11 @@ yes_no_converter <- function(vec)
         cat(sprintf("All of the values are yes and no"))
         cat("\n")
     }else{
-        warning(sprintf("yes and no values has only a proportion of %.3f", yn_prop))
+        warning(sprintf("%s: yes and no values has only a proportion of %.3f", col_name, yn_prop))
     }
     vec <- as.logical(recodeVar(vec,
-                                c('yes', 'no'),
-                                c(TRUE, FALSE)))
+                                c('yes', 'no', 'TRUE', 'FALSE'),
+                                c(TRUE, FALSE, TRUE, FALSE)))
     return(vec)
     
 }
@@ -129,7 +130,7 @@ yes_no_converter <- function(vec)
 yes_no_batch <- function(df, list_of_column_names)
 {
     l_ply(list_of_column_names, function(col) {
-        df[,col] <<- yes_no_converter(df[,col])
+        df[,col] <<- yes_no_converter(df,col)
     })
     
     return(df)
