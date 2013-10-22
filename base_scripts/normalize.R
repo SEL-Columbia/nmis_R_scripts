@@ -165,13 +165,29 @@ edu_total$borehole_tubewell_repair_time <- as.logical(recodeVar(edu_total$boreho
                                                                 c(TRUE, TRUE, TRUE, TRUE,TRUE, TRUE,
                                                                   FALSE, FALSE)))
 
-yes_no_columns <- c("functioning_library_yn", "teacher_guide_yn", "provide_pens_yn",
-                    "provide_exercise_books_yn", "two_shifts_yn", "classes_outside_yn",
-                    "grid_funct_yn", "solar_funct_yn", "generator_funct_yn", 
-                    "booklist_per_class_yn", "in_kind_fees_yn", "sports_fee_exempt_yn",
-                    "natl_curriculum_yn")
+yes_no_columns <- c("functioning_library_yn", "teacher_guide_yn", "provide_pens_yn", 
+                    "provide_exercise_books_yn", "two_shifts_yn", "classes_outside_yn", 
+                    "grid_funct_yn", "solar_funct_yn", "generator_funct_yn", "booklist_per_class_yn", 
+                    "in_kind_fees_yn", "sports_fee_exempt_yn", "natl_curriculum_yn", 
+                    "nomadic_school_yn", "road_yn", "all_weather_road_yn", "flush_improved_functional_yn", 
+                    "flush_unimproved_functional_yn", "vip_latrine_functional_yn", 
+                    "slab_pit_latrine_functional_yn", "open_pit_latrine_functional_yn", 
+                    "bucket_system_functional_yn", "school_provide_meals_yn", "school_code_yn", 
+                    "boarding_school_yn", "daily_public_transport_yn", "other_funct_yn", 
+                    "temporary_structure_yn", "gender_separated_toilets_yn", "landline_funct_yn", 
+                    "mobile_phone_funct_yn", "mobile_signal_funct_yn", "computer_funct_yn", 
+                    "computer_student_use_funct_yn", "internet_funct_yn", "printer_funct_yn", 
+                    "info_tech_other_funct_yn", "tchrs_quarters_yn", "tchrs_quarters_sufficient_yn", 
+                    "tchrs_on_time_yn", "admit_more_students_yn", "new_stdnts_enroll_fee_exempt_yn", 
+                    "cont_stdnts_enroll_fee_exempt_yn", "textbooks_fee_exempt_yn", 
+                    "materials_fee_exempt_yn", "uniforms_fee_exempt_yn", "transport_fee_exempt_yn", 
+                    "exams_fee_exempt_yn", "pta_fee_exempt_yn", "ube_cash_direct_yn", 
+                    "etf_cash_direct_yn", "lga_cash_direct_yn", "ngo_cash_direct_yn", 
+                    "school_fees_cash_direct_yn", "other_cash_direct_yn", "sports_area_yn", 
+                    "unattached_benches_yn", "chalkboard_each_classroom_yn", "enroll_data_by_age_yn", 
+                    "X_p_water_nearby_yn", "provide_notebooks_yn")
 
-# numeric type conversion and ASSERTION(sort of)
+# logical type conversion and ASSERTION(sort of)
 edu_total <- yes_no_batch(edu_total, yes_no_columns)
 check_type <- batch_type(edu_total, yes_no_columns)
 stopifnot(all(check_type %in% c("logical")))
