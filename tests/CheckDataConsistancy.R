@@ -1,5 +1,3 @@
-edu_norm <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Education_774_NMIS_Facility.rds")
-edu_orig <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/pipeline_data_copy/nmis/data_774/Education_774_NMIS_Facility.csv", stringsAsFactors=F)
 
 check_connsistency <- function(df1, df2){
     
@@ -64,28 +62,20 @@ compare_value <- function(df1,df2,name_string)
     
     combined_df <- subset(combined_df, select=c(left,right, "uuid", "src"))
     
+    left_type <- class(combined_df[,left])
+    right_type <- class(combined_df[,right])
+    if (left_type != right_type){
+        warning(sprintf("Type of data is not consistent: %s, %s", left_type, right_type))
+    }
     
     diff <- combined_df[which(combined_df[,left] != combined_df[,right]),]
     cat(paste(name_string, ":", sep=" "))
     print(table(diff$src))
-#     print(mean(diff[,left] - diff[,right]))
     print(head(diff))
-    plot(diff[,left]/diff[,right]-1)
     
+    if (left_type %in% c("numeric", "integer") & right_type %in% c("numeric", "integer")){
+        print(mean(diff[,left] - diff[,right]))
+        print(summary(diff[,left] - diff[,right]))
+        plot(diff[,left]/diff[,right]-1)
+    }
 }
-
-
-
-test <- check_connsistency(edu_norm, edu_orig)
-f_d_nm <- names(test)
-name_string <- f_d_nm[4]
-name_string
-
-edu_113$natl_curriculum_yn
-
-f_d_nm[10]
-compare_value(edu_norm, edu_orig, f_d_nm[16])
-
-
-"teacher_nonteachingstaff_ratio"
-# definition is different in 113 & 661

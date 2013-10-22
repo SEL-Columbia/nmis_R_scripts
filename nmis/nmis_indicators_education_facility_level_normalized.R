@@ -136,7 +136,14 @@ edu_sub$pupil_desk_ratio <- edu_outlier$num_students_total / edu_outlier$num_des
 
 ## Adequacy of Staffing ##
 edu_sub$pupil_tchr_ratio <- edu_outlier$num_students_total / edu_outlier$num_tchrs_total
-edu_sub$teacher_nonteachingstaff_ratio <- edu_outlier$num_tchrs_total / (edu_outlier$num_sr_staff_total)
+edu_sub$teacher_nonteachingstaff_ratio <- edu_outlier$num_tchrs_total / 
+                                                apply(cbind(edu_outlier$num_sr_staff_total,
+                                                            edu_outlier$num_jr_staff_total),
+                                                      1, sum, na.rm=T)
+                                                      
+
+apply(cbind(edu_outlier$num_textbooks_english, 
+            edu_outlier$num_textbooks_math, 
 edu_sub$num_tchrs_with_nce <- edu_outlier$num_tchrs_w_nce
 edu_sub$num_tchrs_attended_training <- edu_outlier$num_tchrs_attended_training
 
