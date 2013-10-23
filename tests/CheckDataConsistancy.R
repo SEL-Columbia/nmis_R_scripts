@@ -71,10 +71,13 @@ compare_value <- function(df1,df2,name_string)
     diff <- combined_df[which(combined_df[,left] != combined_df[,right]),]
     cat(paste(name_string, ":", sep=" "))
     print(table(diff$src))
+    cat("sample difference in data:\n")
     print(head(diff))
     
     if (left_type %in% c("numeric", "integer") & right_type %in% c("numeric", "integer")){
+        cat("average of the difference: \n")
         print(mean(diff[,left] - diff[,right]))
+        cat("summary of the difference: \n")
         print(summary(diff[,left] - diff[,right]))
         plot(diff[,left]/diff[,right]-1)
     }

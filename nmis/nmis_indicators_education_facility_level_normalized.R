@@ -90,7 +90,7 @@ edu_sub$potable_water <- edu_outlier$potable_water
 
 edu_sub$gender_separated_toilets_yn <- (edu_outlier$num_toilet_boy > 1) & (edu_outlier$num_toilet_girl > 1)
 
-edu_sub$pupil_toilet_ratio_facility <- edu_outlier$num_students_total / edu_outlier$num_toilet_total)
+edu_sub$pupil_toilet_ratio_facility <- edu_outlier$num_students_total / edu_outlier$num_toilet_total
 
 
           
@@ -139,11 +139,8 @@ edu_sub$pupil_tchr_ratio <- edu_outlier$num_students_total / edu_outlier$num_tch
 edu_sub$teacher_nonteachingstaff_ratio <- edu_outlier$num_tchrs_total / 
                                                 apply(cbind(edu_outlier$num_sr_staff_total,
                                                             edu_outlier$num_jr_staff_total),
-                                                      1, sum, na.rm=T)
+                                                1, sum, na.rm=T)
                                                       
-
-apply(cbind(edu_outlier$num_textbooks_english, 
-            edu_outlier$num_textbooks_math, 
 edu_sub$num_tchrs_with_nce <- edu_outlier$num_tchrs_w_nce
 edu_sub$num_tchrs_attended_training <- edu_outlier$num_tchrs_attended_training
 

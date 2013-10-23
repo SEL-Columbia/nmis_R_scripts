@@ -4,54 +4,6 @@ source("source_scripts/Normailize_Functions.R")
 
 merged_education <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Edu774.rds")
 
-numeric_column_list <- c("slab_pit_latrine_number", "vip_latrine_not_working", "vip_latrine_number",
-                         "flush_toilet_not_working", "flush_toilet_number", "days_no_water_pastmth",
-                         "days_no_electricity", "slab_pit_latrine_not_working", "open_pit_latrine_number",
-                         "open_pit_latrine_not_working", "bucket_system_number", "bucket_system_not_working",
-                         "other_toilets_number", "other_toilets_not_working", "times_building_cleaned_lastmth",
-                         "times_trash_disposed_lastmth", "num_tchrs_male_full_time", "num_tchrs_male_part_time",
-                         "num_tchrs_female_full_time", "num_tchrs_female_part_time", "tchrs_male_below_ssce", 
-                         "tchrs_female_below_ssce", "tchrs_male_ssce_wasc", "tchrs_female_ssce_wasc",
-                         "tchrs_male_grade2", "tchrs_female_grade2", "tchrs_male_ond", 
-                         "tchrs_female_ond", "tchrs_male_nce", "tchrs_female_nce", 
-                         "tchrs_male_pgde", "tchrs_female_pgde", "tchrs_male_b_ed",
-                         "tchrs_female_b_ed", "tchrs_male_other_w_nce", "tchrs_female_other_w_nce",
-                         "tchrs_female_other_wo_nce", "num_sr_staff_male", "num_sr_staff_female",
-                         "num_jr_staff_male", "num_jr_staff_female", "days_school_understaffed",
-                         "days_school_understaffed_closed", "school_max_num_students", "admit_more_num_students",
-                         "materials_fee", "uniforms_fee", "sports_fee", 
-                         "num_students_exempt", "annual_budget_amt_received", "num_tchrs_paid_fed_gov", 
-                         "num_tchrs_payrl_st_gov", "num_tchrs_othr_payrl_st_gov", "num_tchrs_paid_loc_gov",
-                         "num_tchrs_paid_prvt_for_profit", "num_tchrs_paid_prvt_non_profit", "num_tchrs_paid_other_src",
-                         "num_tchrs_no_salary", "num_students_scholarship", "scholarship_amt", 
-                         "num_library_materials", "times_new_materials_added", "num_classrms_unused",
-                         "num_classrooms_multiple_use", "num_other_rooms", "num_sections_pry1",
-                         "num_sections_pry2", "num_sections_pry3", "num_sections_pry4",
-                         "num_sections_pry5", "num_sections_pry6", "num_sections_js1", 
-                         "num_sections_js2", "num_sections_js3", "num_sections_js1",
-                         "num_attached_benches", "num_attached_benches_unused", "num_unattached_benches",
-                         "num_unattached_benches_unused", "num_unattached_desks_unused", "num_textbooks_english",
-                         "num_textbooks_math", "num_textbooks_social_sci", "num_exercise_books", 
-                         "tchrs_male_other_wo_nce", "num_tchrs_attended_training", "num_tchrs_attended_last_day",
-                         "grid_months_broken", "new_stdnts_enroll_fee", "cont_stdnts_enroll_fee",
-                         "textbooks_fee", "transport_fee", "exams_fee", "pta_fee", "days_no_potable_water",
-                         "num_desks", "num_science_textbook_pry", "num_students_frthr_than_3km",
-                         "num_students_male", "num_students_female", "num_students_total", 
-                         "times_tchr_pay_delay_pastyr", "times_tchr_pay_miss_pastyr")
-
-num_names <- names(merged_education)[grep("^num.+", names(merged_education), )]
-numeric_column_list <- unique(c(numeric_column_list, num_names))
-
-# TO DO: remove next 2 line, just for checking all "num" headed columns have numeric value
-num_names_type <- lapply(num_names, function(x) head(table(merged_education[,x], exclude=NULL)))
-print(num_names_type)
-
-# numeric type conversion and ASSERTION(sort of)
-merged_education <- numeric_batch(merged_education, numeric_column_list)
-
-check_type <- batch_type(merged_education, numeric_column_list)
-stopifnot(all(check_type %in% c("integer", "numeric")))
-
 #Here starts 999 cleaning
 cellst(merged_education, 'tchrs_male_ssce_wasc',
        which(merged_education$tchrs_male_ssce_wasc == 99), NA_integer_) #one data entry was 99  
