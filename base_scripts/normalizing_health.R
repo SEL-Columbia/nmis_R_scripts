@@ -69,22 +69,10 @@ h_113 <- rename(h_113, c("lga" = "mylga",
                          "open_pit_latrine_number" = "num_open_pit_latrine",
                          "equipment_bp_machine" = "equipment.bp_machine",
                          "emoc_needles_tubing" = "supplies.needles_and_tubing",
-                         "emoc_enough_antishock_garment" = "equipment.emoc_antishock_garment",
                          "medication_oral_contraceptives" = "medication.oral_contraceptives",
                          "medication_injectable_contracept" = "medication.injectable_contracept",
-                         "child_health_measles_immun" = "immunization.measles_immun",
-                         "child_health_opv_immuization" = "immunization.opv_immuization",
-                         "child_health_dpt_immunization" = "immunization.dpt_immunization", 
-                         "child_health_tetanus_immun" = "immunization.tetanus_immun",
-                         "child_health_hepb_immunization" = "immunization.hepb_immunization",
-                         "child_health_bcg_immunization" = "immunization.bcg_immunization",
-                         "child_health_yellow_fever_immun" = "immunization.yellow_fever_immun",
-                         "child_health_csm_immunization" = "immunization.csm_immunization",
                          "lab_tests_malaria_rdt" = "lab_tests.malaria_rdt",
                          "lab_tests_malaria_microscopy" = "lab_tests.malaria_microscopy",
-                         "lab_tests_pregnancy" = "lab_tests.pregnancy",
-                         "lab_tests_tb_microscopy" = "lab_tests.tb_microscopy",
-                         "lab_tests_hiv_testing" = "lab_tests.hiv_testing",
                          "medication_antihistamines" = "medication.antihistamines",
                          "medication_anti_diarrheals" = "medication.anti_diarrheals",
                          "medication_anti_pyretics" = "medication.anti_pyretics",
@@ -140,9 +128,13 @@ h_661 <- subset(h_661, select=-c(facility_owner_manager.private_forprofit, facil
 h_661$power_sources_grid <- (h_661$grid_proximity == 'connected_to_grid' | 
                                h_661$local_grid_proximity == 'connected_to_local_grid')
 
-h_661$toilets_yn <- recodeVar(h_661$toilets_yn,
+h_661$toilets_yn <- as.logical(recodeVar(h_661$toilets_yn,
                                 c('no_toilets_available', 'toilets_available'),
-                                  c(FALSE, TRUE), default=NA)
+                                  c(FALSE, TRUE), default=NA))
+
+h_661$child_health_growth_monitor <-  (h_661$weighing_scale_funct_yn == 'yes') & 
+                                        h_661$equipment.scale &
+                                          h_661$supplies.muac_tape
 
 #113
 h_113$medication.antibiotic_oral <- ((h_113$sti_tx_srvcs_penicilling | h_113$sti_tx_srvcs_doxycycline | 
@@ -169,11 +161,40 @@ h_113$medication.iv_fluid <- h_113$medication_iv_fluid |
                               ((h_113$supplies.needles_and_tubing & h_113$emergency_obstetrics_yn == 'yes') | 
                               (h_113$emoc_parenteral1 | h_113$emoc_antibiotics))
 
-h_113$lab_tests.hemoglobin_testing <- h_113$laboratory_yn == 'yes' & h_113$lab_tests_hemoglobin_testing
+h_113$lab_tests.hemoglobin_testing <- h_113$lab_tests_hemoglobin_testing & h_113$laboratory_yn == 'yes' 
+h_113$lab_tests.urine_testing <- h_113$lab_tests_urine_testing & h_113$laboratory_yn == 'yes' 
+h_113$lab_tests.hiv_testing <- h_113$lab_tests_hiv_testing & h_113$laboratory_yn == 'yes'
+h_113$lab_tests.tb_microscopy <- h_113$lab_tests_tb_microscopy & h_113$laboratory_yn == 'yes'
+#TODO: health... make sure lab_tests_pregnancy_calc + lab_tests_stool_calc are the same exact formula 
+h_113$lab_tests.stool <- h_113$lab_tests_pregnancy & h_113$laboratory_yn == 'yes'
+h_113$lab_tests_pregnancy_calc <- h_113$lab_tests_pregnancy & h_113$laboratory_yn == 'yes'
+h_113$medication.iud <- h_113$family_planning_iud & h_113$family_planning_yn == 'yes'
+h_113$medication.implants <- h_113$family_planning_implants & h_113$family_planning_yn == 'yes'
+h_113$child_health_measles_immun_calc <- h_113$child_health_measles_immun & h_113$child_health_yn == 'yes'
+h_113$immunization.opv_immuization <- h_113$child_health_opv_immuization & h_113$child_health_yn == 'yes'
+h_113$immunization.dpt_immunization <- h_113$child_health_dpt_immunization & h_113$child_health_yn == 'yes'  
+h_113$immunization.tetanus_immun <- h_113$child_health_tetanus_immun & h_113$child_health_yn == 'yes' 
+h_113$immunization.hepb_immunization <- h_113$child_health_hepb_immunization & h_113$child_health_yn == 'yes'
+h_113$child_health_bcg_immunization_calc <-  h_113$child_health_bcg_immunization & h_113$child_health_yn == 'yes' 
+h_113$child_health_yellow_fever_immun_calc <- h_113$child_health_yellow_fever_immun  & h_113$child_health_yn == 'yes'
+h_113$immunization.csm_immunization <- h_113$child_health_csm_immunization == T & h_113$child_health_yn == 'yes'
 
-h_113$lab_tests.urine_testing <- h_113$laboratory_yn == 'yes' & h_113$lab_tests_urine_testing
+h_113$supplies.insecticide_treated_bednets <- h_113$malaria_treatment_yn == 'yes' & 
+                                                (h_113$malaria_treatment_srvcs_itn | 
+                                                  h_113$supplies_available_bednets)
+
+h_113$equipment.emoc_antishock_garment <- ((h_113$emoc_antishock_garment & h_113$emoc_enough_antishock_garment) & 
+                                             h_113$emergency_obstetrics_yn == 'yes') | 
+                                          ((h_113$emoc_antishock_garment & h_113$compr_oc_antishock_garment) & 
+                                             h_113$comprehensive_obstetrics_yn == 'yes')
+
+h_113$supplies.condoms <- h_113$sti_tx_srvcs_condoms | h_113$hiv_tx_srvcs_condoms | h_113$supplies_available_condoms
 
 #pilot
+h_pilot$family_planning_iud <- as.logical(recodeVar(h_pilot$family_planning_iud,
+                                         c('', 'yes'),
+                                         c(FALSE, TRUE), default=NA))
+
 h_pilot$facility_type <- recodeVar(h_pilot$facility_type,
                                    c('healthpost','dispensary',
                                      'wardmodelprimaryhealthcarecentre'),
@@ -185,6 +206,32 @@ h_pilot$transport_to_referral <-  ifelse(h_pilot$transport_to_referral_ambulance
                                     ifelse(h_pilot$transport_to_referral_keke,
                                           "keke", NA))
 
+h_pilot$lab_tests.hemoglobin_testing <- h_pilot$lab_tests_hemoglobin_testing & h_pilot$laboratory_yn == 'yes' 
+h_pilot$lab_tests.urine_testing <- h_pilot$lab_tests_urine_testing & h_pilot$laboratory_yn == 'yes'
+h_pilot$lab_tests.hiv_testing <- h_pilot$lab_tests_hiv_testing & h_pilot$laboratory_yn == 'yes'
+h_pilot$lab_tests.tb_microscopy <- h_pilot$lab_tests_tb_microscopy & h_pilot$laboratory_yn == 'yes'
+h_pilot$lab_tests.stool <- h_pilot$lab_tests_pregnancy & h_pilot$laboratory_yn == 'yes'
+h_pilot$lab_tests_pregnancy_calc <- h_pilot$lab_tests_pregnancy & h_pilot$laboratory_yn == 'yes'   
+h_pilot$supplies.condoms <- h_pilot$sti_tx_srvcs_condoms | h_pilot$hiv_tx_srvcs_condoms | h_pilot$supplies_available_condoms
+h_pilot$medication.iud <- h_pilot$family_planning_iud & h_pilot$family_planning_yn == 'yes'  
+h_pilot$medication.implants <- h_pilot$family_planning_implants & h_pilot$family_planning_yn == 'yes'
+h_pilot$child_health_measles_immun_calc <- h_pilot$child_health_immunization_p & h_pilot$child_health_yn == 'yes'  
+h_pilot$immunization.opv_immuization <- h_pilot$child_health_immunization_p & h_pilot$child_health_yn == 'yes'
+h_pilot$immunization.dpt_immunization <- h_pilot$child_health_immunization_p & h_pilot$child_health_yn == 'yes'
+h_pilot$immunization.tetanus_immun <- h_pilot$child_health_immunization_p & h_pilot$child_health_yn == 'yes'
+h_pilot$immunization.hepb_immunization <- h_pilot$child_health_immunization_p & h_pilot$child_health_yn == 'yes'
+h_pilot$child_health_bcg_immunization_calc  <- h_pilot$child_health_immunization_p & h_pilot$child_health_yn == 'yes'
+h_pilot$child_health_yellow_fever_immun_calc <- h_pilot$child_health_immunization_p & h_pilot$child_health_yn == 'yes'
+h_pilot$immunization.csm_immunization <- h_pilot$child_health_immunization_p & h_pilot$child_health_yn == 'yes'
+
+h_pilot$supplies.insecticide_treated_bednets <- (h_pilot$malaria_treatment_yn == 'yes' & 
+                                                   (h_pilot$malaria_treatment_srvcs_itn == 'yes' |
+                                                      h_pilot$supplies_available_bednets))
+#TODO: health follow up: all NA
+h_pilot$antenatal_care_malaria_prlx <- ifelse((h_pilot$malaria_treatment_sulphadoxine & 
+                                                  h_pilot$antenatal_care_yn == 'yes'),
+                                                    TRUE, NA)
+
 
 ##################################
 #### combining 661, 113 & pilot
@@ -195,7 +242,7 @@ health_total <- rbind.fill(h_661, h_113, h_pilot)
 ####mapping values and standardize the type####
 ###############################################
 
-yes_no_columns <- c("private_yn", "road_yn", "all_weather_road_yn", "generator_funct_yn", 
+yes_no_columns <- c("private_yn", "road_yn", "all_weather_road_yn", "generator_funct_yn", "medication_folic_acid",
                     "solar_funct_yn", "grid_funct_yn", "vaccine_storage_yn", "oxygen_funct_yn",  
                     "flush_improved_functional_yn", "flush_unimproved_functional_yn", "malaria_treatment_artemisinin",
                     "vip_latrine_functional_yn", "slab_pit_latrine_functional_yn", "syringes_stockout_yn",
@@ -209,22 +256,21 @@ yes_no_columns <- c("private_yn", "road_yn", "all_weather_road_yn", "generator_f
                     "family_planning_yn", "inpatient_care_yn", "laboratory_yn", "laboratory_functional_yn", 
                     "staff_outreach_particip_yn", "thermometer_funct_yn", "weighing_scale_funct_yn", 
                     "bp_machine_funct_yn", "sterilizer_funct_yn", "xray_funct_yn", "gloves_stockout_yn",
-                    "ultra_sound_funct_yn", "aspirator_funct_yn", "extractor_funct_yn", 
+                    "ultra_sound_funct_yn", "aspirator_funct_yn", "extractor_funct_yn", "compr_oc_blood_transfusions",
                     "ambubag_funct_yn", "neonatal_mask_funct_yn", "iv_kits_funct_yn", "iud_stockout_yn",
                     "suction_funct_yn", "antibiotics_oral_stockout_yn", "antibiotics_musc_stockout_yn", 
                     "antibiotics_iv_stockout_yn", "iv_fliud_stockout_yn", "ort_stockout_yn", 
                     "uterotonics_stockout_yn", "antidiarrheal_stockout_yn", "antipyretics_stockout_yn", 
-                    "act_stockout_yn", "sulphadoxine_stockout_yn", "arvs_stockout_yn", 
-                    "nevirapine_stockout_yn", "azt_stockout_yn", "tb_meds_stockout_yn", 
+                    "act_stockout_yn", "sulphadoxine_stockout_yn", "arvs_stockout_yn", "family_planning_pill",
+                    "nevirapine_stockout_yn", "azt_stockout_yn", "tb_meds_stockout_yn", "family_planning_injectables",
                     "sedatives_stockout_yn", "antihistamines_stockout_yn", "anticonvulsants_stockout_yn", 
                     "oral_contacept_stockout_yn", "inject_contacept_stockout_yn", "implants_stockout_yn",
-                    "iron_stockout_yn", "folic_acid_stockout_yn", "vitamin_a_stockout_yn", 
+                    "iron_stockout_yn", "folic_acid_stockout_yn", "vitamin_a_stockout_yn", "family_planning_sterilization_m",
                     "bcg_immun_stockout_yn", "opv_immun_stockout_yn", "measles_immun_stockout_yn", 
-                    "dpt_immun_stockout_yn", "yfever_immun_stockout_yn", "csm_immun_stockout_yn", 
-                    "hepb_immun_stockout_yn", "tetanus_immun_stockout_yn", "adult_tx_fees_yn", 
-                    "child_tx_fees_yn", "vaccines_stored_yn", "gender_separated_toilets_yn", 
-                    "separate_toilets_for_staff_yn", "med_waste_separated_yn", "landline_funct_yn", 
-                    "mobile_phone_funct_yn", "mobile_signal_funct_yn", "computer_funct_yn", 
+                    "dpt_immun_stockout_yn", "yfever_immun_stockout_yn", "csm_immun_stockout_yn", "vaccines_stored_yn",  
+                    "hepb_immun_stockout_yn", "tetanus_immun_stockout_yn", "adult_tx_fees_yn", "gender_separated_toilets_yn",
+                    "separate_toilets_for_staff_yn", "med_waste_separated_yn", "landline_funct_yn", "child_tx_fees_yn", 
+                    "mobile_phone_funct_yn", "mobile_signal_funct_yn", "computer_funct_yn", "family_planning_sterilization_f", 
                     "internet_funct_yn", "printer_funct_yn", "staff_quarters_sufficient_yn", 
                     "staff_paid_lastmth_yn", "staff_paid_6mths_yn", "primary_routine_care_yn", 
                     "malaria_treatment_yn", "sti_treatment_yn", "hiv_treatment_yn", "forceps_funct_yn",
@@ -242,6 +288,20 @@ yes_no_columns <- c("private_yn", "road_yn", "all_weather_road_yn", "generator_f
 health_total <- yes_no_batch(health_total, yes_no_columns)
 check_type <- batch_type(health_total, yes_no_columns)
 stopifnot(all(check_type %in% c("logical")))
+
+
+# numeric_column_list <-
+
+
+num_names <- names(merged_health)[grep("^num.+", names(merged_health), )]
+
+
+# numeric type conversion and ASSERTION(sort of)
+merged_health <- numeric_batch(merged_health, numeric_column_list)
+
+check_type <- batch_type(merged_health, numeric_column_list)
+stopifnot(all(check_type %in% c("integer", "numeric")))
+
 
 
 

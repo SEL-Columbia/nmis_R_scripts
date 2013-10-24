@@ -29,70 +29,77 @@ health_sub$owner_manager <- recodeVar(health_outlier$facility_owner_manager,
                                                 'church_mission', 'private_forprofit', 'private_notforprofit'), 
                                           c('public', 'public', 'public','public', 
                                               'private', 'private', 'private'), default=NA)  
+
 health_sub$maternal_health_delivery_services <- ifelse(health_outlier$src != c('pilot', '113'),
                                                         health_outlier$delivery_services_yn,
                                                           health_outlier$maternal_health_delivery_services)
+
 health_sub$skilled_birth_attendant <- 
   (rowSums(cbind(health_outlier$num_doctors_posted, 
                  health_outlier$num_nurses_posted,
                  health_outlier$num_nursemidwives_posted), na.rm=T) > 0)
+
 health_sub$num_chews_and_chos <-
   (rowSums(cbind(health_outlier$num_chews_posted,
                  health_outlier$num_junior_chews_posted,
                  health_outlier$num_cho_posted), na.rm=T))
-health_sub$vaccines_fridge_freezer <- ifelse(health_outlier$src != c('pilot', '113'),
-  (health_outlier$vaccine_storage_type.refrigerator == T & 
-     health_outlier$vaccine_storage_type.freezer == T ),
-                 health_outlier$vaccines_fridge_freezer) 
-health_sub$emergency_transport <- 
-  (health_outlier$transport_to_referral %in% c('ambulance', 'keke'))
-health_sub$improved_water_supply <- ifelse(health_outlier$src != 'pilot',
-                            (health_outlier$water_sources.tap_in_compound == T | 
-                              health_outlier$water_sources.tap_outside == T | 
-                              health_outlier$water_sources.borehole_tube_well == T),
-                                  health_outlier$improved_water_supply)
-health_sub$improved_sanitation <- ifelse(health_outlier$src != 'pilot',
-  (health_outlier$num_vip_latrine > 0) | 
-  (health_outlier$num_pit_w_slab > 0) | 
-  (health_outlier$num_flush_or_pour_flush_piped > 0),
-                        health_outlier$improved_sanitation)
 
-health_sub$phcn_electricity <- health_outlier$power_sources_grid == T
+health_sub$vaccines_fridge_freezer <- ifelse(health_outlier$src != c('pilot', '113'),
+                                          (health_outlier$vaccine_storage_type.refrigerator & 
+                                           health_outlier$vaccine_storage_type.freezer),
+                                         health_outlier$vaccines_fridge_freezer) 
+
+health_sub$emergency_transport <- 
+  health_outlier$transport_to_referral %in% c('ambulance', 'keke')
+
+health_sub$improved_water_supply <- ifelse(health_outlier$src != 'pilot',
+                            (health_outlier$water_sources.tap_in_compound | 
+                              health_outlier$water_sources.tap_outside | 
+                              health_outlier$water_sources.borehole_tube_well),
+                                  health_outlier$improved_water_supply)
+
+health_sub$improved_sanitation <- ifelse(health_outlier$src != 'pilot',
+                                      (health_outlier$num_vip_latrine > 0) | 
+                                      (health_outlier$num_pit_w_slab > 0) | 
+                                      (health_outlier$num_flush_or_pour_flush_piped > 0),
+                                    health_outlier$improved_sanitation)
+
+health_sub$phcn_electricity <- health_outlier$power_sources_grid
 
 #######################
 #########################
 
 health_sub$maternal_health_delivery_services_24_7 <- ifelse(health_outlier$src != c('pilot', '113'),
-                                                   (health_outlier$facility_open_247_yn == 'yes' & 
-                                                      health_outlier$delivery_services_yn == 'yes' & 
-                                                      health_outlier$delivery_skilled_birth_247_yn == 'yes'),
+                                                   (health_outlier$facility_open_247_yn & 
+                                                      health_outlier$delivery_services_yn & 
+                                                       health_outlier$delivery_skilled_birth_247_yn),
                                                    health_submaternal_health_delivery_services_24_7)
 
-health_sub$facility_open_247_yn <- health_outlier$facility_open_247_yn == 'yes'   
+health_sub$facility_open_247_yn <- health_outlier$facility_open_247_yn   
 
 health_sub$essential_meds_stockout <- ifelse(health_subtotal != c('pilot', '113'),
-                                    (health_outlier$antibiotics_oral_stockout_yn == 'yes' |
-                                       health_outlier$antibiotics_musc_stockout_yn == 'yes' | 
-                                       health_outlier$antibiotics_iv_stockout_yn == 'yes' |
-                                       health_outlier$iv_fliud_stockout_yn == 'yes' |
-                                       health_outlier$ort_stockout_yn == 'yes' |
-                                       health_outlier$uterotonics_stockout_yn == 'yes' |
-                                       health_outlier$antidiarrheal_stockout_yn == 'yes' |
-                                       health_outlier$antipyretics_stockout_yn == 'yes' |
-                                       health_outlier$act_stockout_yn == 'yes' |
-                                       health_outlier$sulphadoxine_stockout_yn == 'yes' |
-                                       health_outlier$arvs_stockout_yn == 'yes' |
-                                       health_outlier$nevirapine_stockout_yn == 'yes' |
-                                       health_outlier$azt_stockout_yn == 'yes' |
-                                       health_outlier$tb_meds_stockout_yn == 'yes' |
-                                       health_outlier$sedatives_stockout_yn == 'yes' |
-                                       health_outlier$antihistamines_stockout_yn == 'yes' |
-                                       health_outlier$anticonvulsants_stockout_yn == 'yes' |
-                                       health_outlier$oral_contacept_stockout_yn == 'yes' |
-                                       health_outlier$inject_contacept_stockout_yn == 'yes' |
-                                       health_outlier$implants_stockout_yn == 'yes' |
-                                       health_outlier$iud_stockout_yn == 'yes'),
-                                    health_outlier$essential_meds_stockout)                
+                                    (health_outlier$antibiotics_oral_stockout_yn |
+                                       health_outlier$antibiotics_musc_stockout_yn | 
+                                       health_outlier$antibiotics_iv_stockout_yn |
+                                       health_outlier$iv_fliud_stockout_yn |
+                                       health_outlier$ort_stockout_yn |
+                                       health_outlier$uterotonics_stockout_yn |
+                                       health_outlier$antidiarrheal_stockout_yn |
+                                       health_outlier$antipyretics_stockout_yn |
+                                       health_outlier$act_stockout_yn |
+                                       health_outlier$sulphadoxine_stockout_yn |
+                                       health_outlier$arvs_stockout_yn |
+                                       health_outlier$nevirapine_stockout_yn |
+                                       health_outlier$azt_stockout_yn |
+                                       health_outlier$tb_meds_stockout_yn |
+                                       health_outlier$sedatives_stockout_yn |
+                                       health_outlier$antihistamines_stockout_yn |
+                                       health_outlier$anticonvulsants_stockout_yn |
+                                       health_outlier$oral_contacept_stockout_yn |
+                                       health_outlier$inject_contacept_stockout_yn |
+                                       health_outlier$implants_stockout_yn |
+                                       health_outlier$iud_stockout_yn),
+                                  health_outlier$essential_meds_stockout)                
 
 
 health_sub$emergency_transport_currently_functioning <- ifelse(health_outlier$src != c('pilot', '113'),
@@ -103,7 +110,7 @@ health_sub$power_access_and_functional <- ifelse(health_outlier$src != c('pilot'
                                         health_outlier$power_sources.none != F, 
                                         health_outlier$power_access_and_functional)
 
-health_sub$comprehensive_obstetrics_yn <- health_outlier$emergency_obstetrics_yn == 'yes' & health_outlier$c_section_yn == 'yes'
+health_sub$comprehensive_obstetrics_yn <- health_outlier$emergency_obstetrics_yn & health_outlier$c_section_yn
 
 
 ####################
@@ -120,87 +127,72 @@ health_sub$num_nursemidwives_fulltime <-
   (rowSums(cbind(health_outlier$num_midwives_posted,
                  health_outlier$num_nursemidwives_posted), na.rm=T))
 
-health_sub$num_doctors_fulltime <- 
-  health_outlier$num_doctors_posted
+health_sub$num_doctors_fulltime <- health_outlier$num_doctors_posted
 
-health_sub$num_lab_techs_fulltime <- 
-  health_outlier$lab_technicians_posted
+health_sub$num_lab_techs_fulltime <- health_outlier$lab_technicians_posted
 
-health_sub$staff_paid_lastmth_yn <-   
-  (health_outlier$staff_paid_1mths_yn == 'yes' | 
-     health_outlier$staff_paid_3mths_yn == 'yes')
+health_sub$staff_paid_lastmth_yn <- health_outlier$staff_paid_1mths_yn | health_outlier$staff_paid_3mths_yn
 
 ###############################
 ##### M.HEALTH: ANTENATAL #####
 ###############################
 
-health_sub$sulpha_and_antenatal <- ifelse(health_outlier$src != c("pilot", "113"),
-                      health_outlier$antenatal_care_malaria_prlx,
-                            health_outlier$sulpha_and_antenatal)    
+health_sub$sulpha_and_antenatal <- ifelse(health_outlier$src != "113",
+                                            health_outlier$antenatal_care_malaria_prlx,
+                                      health_outlier$sulpha_and_antenatal)    
 
-health_sub$has_itns <- ifelse(health_outlier$src != c("pilot", "113"),
-                     health_outlier$supplies.insecticide_treated_bednets == T,
-                     health_outlier$has_itns)
+health_sub$has_itns <- health_outlier$supplies.insecticide_treated_bednets
 
-health_sub$medication_iron_tablets <- health_outlier$supplements.iron == T
+health_sub$medication_iron_tablets <- health_outlier$supplements.iron
 
-health_sub$medication_folic_acid <- health_outlier$medication_folic_acid == 'yes'  
+health_sub$medication_folic_acid <- health_outlier$medication_folic_acid 
 
-health_sub$scale_yn <- (health_outlier$equipment.scale == T & 
-                 health_outlier$weighing_scale_funct_yn == "yes")
+health_sub$scale_yn <- health_outlier$equipment.scale & health_outlier$weighing_scale_funct_yn
 
-health_sub$equipment_bp_machine <- (health_outlier$equipment.bp_machine == T & 
-                             health_outlier$bp_machine_funct_yn == "yes")   
+health_sub$equipment_bp_machine <- health_outlier$equipment.bp_machine & health_outlier$bp_machine_funct_yn
 
 health_sub$hiv_tx_srvcs_pmtct_services_calc <- ifelse(health_outlier$src != c('pilot', '113'),
-                                             (health_outlier$medication.nevirapine == T | 
-                                                health_outlier$medication.arvs == T |
-                                                health_outlier$medication.azt == T),
-                                             health_outlier$hiv_tx_srvcs_pmtct_services_calc)
+                                                       (health_outlier$medication.nevirapine | 
+                                                        health_outlier$medication.arvs |
+                                                        health_outlier$medication.azt),
+                                                  health_outlier$hiv_tx_srvcs_pmtct_services_calc)
 
-health_sub$lab_tests_hemoglobin_testing_calc <- ifelse(health_outlier$src != c('pilot', '113'),
-                                              health_outlier$lab_tests.hemoglobin_testing == T,
-                                              health_outlier$lab_tests_hemoglobin_testing_calc)
-
-health_sub$lab_tests_urine_testing_calc <- ifelse(health_outlier$src != c('pilot', '113'),
-                                         health_outlier$lab_tests.urine_testing == T,
-                                         health_outlier$lab_tests_urine_testing_calc)                    
+health_sub$lab_tests_hemoglobin_testing_calc <- health_outlier$lab_tests.hemoglobin_testing
+                                              
+health_sub$lab_tests_urine_testing_calc <- health_outlier$lab_tests.urine_testing
 
 ##################################
 ##### M.HEALTH: OBSTETRICS 1 #####
 ##################################
 
-health_sub$mobile_signal_funct_yn <-  
-  (health_outlier$phone_signal_strength == 'low_signal_strength' | 
-     health_outlier$phone_signal_strength == 'high_signal_strength') &  
-  health_outlier$info_tech_available.mobile_facility == T
+health_sub$mobile_signal_funct_yn <-  (health_outlier$phone_signal_strength == 'low_signal_strength' | 
+                                          health_outlier$phone_signal_strength == 'high_signal_strength') &  
+                                            health_outlier$info_tech_available.mobile_facility 
 
 health_sub$iv_antibiotics_yn_calc <- ifelse(health_outlier$src != c('pilot', '113'),
-                                   (health_outlier$emoc_antibiotics == T | health_outlier$medication.antibiotic_iv == T),
-                                   health_outlier$iv_antibiotics_yn_calc)
+                                              (health_outlier$emoc_antibiotics | 
+                                               health_outlier$medication.antibiotic_iv),
+                                        health_outlier$iv_antibiotics_yn_calc)
 
-health_sub$emoc_vacuum_extractor <- health_outlier$emoc_vacuum_extractor_yn == "yes"
+health_sub$emoc_vacuum_extractor <- health_outlier$emoc_vacuum_extractor_yn
 
-health_sub$emoc_forceps <- (health_outlier$equipment.emoc_forceps == T & 
-                     health_outlier$forceps_funct_yn == "yes")
+health_sub$emoc_forceps <- health_outlier$equipment.emoc_forceps & health_outlier$forceps_funct_yn
 
-health_sub$compr_oc_c_sections <- health_outlier$c_section_yn == 'yes' 
+health_sub$compr_oc_c_sections <- health_outlier$c_section_yn
 
 ##################################
 ##### M.HEALTH: OBSTETRICS 2 #####
 ##################################
 
 health_sub$uterotonics_yn_calc <- ifelse(health_outlier$src != '113',
-                          health_outlier$emoc_uterotonics_yn == 'yes',
-                                health_outlier$uterotonics_yn_calc)
+                                          health_outlier$emoc_uterotonics_yn,
+                                        health_outlier$uterotonics_yn_calc)
 
-health_sub$antishock_garment_yn <- ifelse(health_outlier$src != '113',
-                            health_outlier$equipment.emoc_antishock_garment == T,
-                                 health_outlier$antishock_garment_yn)           
+health_sub$antishock_garment_yn <- health_outlier$equipment.emoc_antishock_garment
+                                 
+health_sub$emoc_parenteral_anticonvulsant <- health_outlier$emoc_parenteral_anticonvulsant_yn 
 
-health_sub$emoc_parenteral_anticonvulsant <- health_outlier$emoc_parenteral_anticonvulsant_yn == 'yes'
-
-#health_subskilled_birth_attendant <- 
+#health_sub$skilled_birth_attendant <- 
 #       (rowSums(cbind(health_outlier$num_doctors_posted, 
 #      health_outlier$num_nurses_posted,
 #     health_outlier$num_nursemidwives_posted), na.rm=T) > 0)
@@ -220,85 +212,60 @@ health_sub$at_least_four_skilled_birth_attendants <-
                  health_outlier$num_nurses_posted,
                  health_outlier$num_nursemidwives_posted), na.rm=T) > 3)
 
-health_sub$compr_oc_blood_transfusions <- health_outlier$compr_oc_blood_transfusions == 'yes'
+health_sub$compr_oc_blood_transfusions <- health_outlier$compr_oc_blood_transfusions
 
 #####################################
 ##### M.HEALTH: FAMILY PLANNING #####
 #####################################
-health_sub$condoms_yn <- ifelse(health_outlier$src != c('pilot', '113'),
-                        health_outlier$supplies.condoms == T,
-                          health_outlier$condoms_yn)     
+health_sub$condoms_yn <- health_outlier$supplies.condoms                         
 
 health_sub$family_planning_pill_calc_calc <- ifelse(health_outlier$src != c('pilot', '113'),
-                                           health_outlier$family_planning_pill == 'yes',
+                                           health_outlier$family_planning_pill,
                                             health_outlier$family_planning_pill_calc_calc)               
 
 health_sub$family_planning_injectables_calc_calc <- ifelse(health_outlier$src != c('pilot', '113'),
-                                                  health_outlier$family_planning_injectables == 'yes',
+                                                  health_outlier$family_planning_injectables,
                                                     health_outlier$family_planning_injectables_calc_calc)
 
-health_sub$family_planning_iud_calc <- ifelse(health_outlier$src != c('pilot', '113'),
-                                     health_outlier$medication.iud == T,
-                                      health_outlier$family_planning_iud_calc)                         
+health_sub$family_planning_iud_calc <- health_outlier$medication.iud
 
-health_sub$family_planning_implants_calc <- ifelse(health_outlier$src != c('pilot', '113'),
-                                          health_outlier$medication.implants == T,
-                                            health_outlier$family_planning_implants_calc)
+health_sub$family_planning_implants_calc <- health_outlier$medication.implants
 
 health_sub$sterilization_yn_calc <- ifelse(health_outlier$src != c('pilot', '113'),
-                                  (health_outlier$family_planning_sterilization_m == 'yes' | 
-                                     health_outlier$family_planning_sterilization_f == 'yes'),
-                                       health_outlier$sterilization_yn_calc)
+                                              (health_outlier$family_planning_sterilization_m | 
+                                               health_outlier$family_planning_sterilization_f),
+                                             health_outlier$sterilization_yn_calc)
 
 ###########################
 ##### CHILD NUTRITION #####
 ###########################
 
-health_sub$child_health_growth_monitor <- 
-  (health_outlier$weighing_scale_funct_yn == "yes" & 
-     health_outlier$equipment.scale == T &
-       health_outlier$supplies.muac_tape == T)
-
+health_sub$child_health_growth_monitor <- health_outlier$child_health_growth_monitor
+  
 ##############################
 ##### CHILD IMMUNIZATION #####
 ##############################
 
-health_sub$child_health_measles_immun_calc <- ifelse(health_outlier$src != c('pilot', '113'),
-                                              health_outlier$immunization.measles_immun,
-                                                health_outlier$child_health_measles_immun_calc)
+health_sub$child_health_measles_immun_calc <- health_outlier$immunization.measles_immun
 
-health_sub$child_health_opv_immuization_calc <- ifelse(health_outlier$src != c('pilot', '113'),
-                                                health_outlier$immunization.opv_immuization,
-                                                  health_outlier$child_health_opv_immuization_calc)
+health_sub$child_health_opv_immuization_calc <- health_outlier$immunization.opv_immuization
 
-health_sub$child_health_dpt_immunization_calc <- ifelse(health_outlier$src != c('pilot', '113'),
-                                                health_outlier$immunization.dpt_immunization,
-                                                 health_outlier$child_health_dpt_immunization_calc)
+health_sub$child_health_dpt_immunization_calc <- health_outlier$immunization.dpt_immunization
 
-health_sub$child_health_tetanus_immun_calc <- ifelse(health_outlier$src != c('pilot', '113'),
-                                            health_outlier$immunization.tetanus_immun,
-                                            health_outlier$child_health_tetanus_immun_calc)
+health_sub$child_health_tetanus_immun_calc <- health_outlier$immunization.tetanus_immun
+                                            
+health_sub$child_health_hepb_immunization_calc <- health_outlier$immunization.hepb_immunization                                                
 
-health_sub$child_health_hepb_immunization_calc <- ifelse(health_outlier$src != c('pilot', '113'),
-                                                health_outlier$immunization.hepb_immunization,
-                                                health_outlier$child_health_hepb_immunization_calc)
+health_sub$child_health_bcg_immunization_calc <- health_outlier$immunization.bcg_immunization
 
-health_sub$child_health_bcg_immunization_calc <- ifelse(health_outlier$src != c('pilot', '113'),
-                                               health_outlier$immunization.bcg_immunization,
-                                               health_outlier$child_health_bcg_immunization_calc)
-
-health_sub$child_health_yellow_fever_immun_calc <- ifelse(health_outlier$src != c('pilot', '113'),
-                                                 health_outlier$immunization.yellow_fever_immun,
-                                                 health_outlier$child_health_yellow_fever_immun_calc)
-
-health_sub$child_health_csm_immunization_calc <- ifelse(health_outlier$src != c('pilot', '113'),
-                                               health_outlier$immunization.csm_immunization,
-                                               health_outlier$child_health_csm_immunization_calc)
+health_sub$child_health_yellow_fever_immun_calc <- health_outlier$immunization.yellow_fever_immun
+                                                 
+health_sub$child_health_csm_immunization_calc <- health_outlier$immunization.csm_immunization
 
 health_sub$vaccines_icepack_calc <- ifelse(health_outlier$src != '113',
-                              (health_outlier$vaccine_storage_type.cold_chain_box == T & 
-                              health_outlier$vaccine_storage_type.vaccine_carrier == T ),
-                                health_outlier$health_subvaccines_icepack_calc)
+                                              (health_outlier$vaccine_storage_type.cold_chain_box & 
+                                              health_outlier$vaccine_storage_type.vaccine_carrier),
+                                            health_outlier$health_subvaccines_icepack_calc)
 
 health_sub$equipment_refrigerator <- health_outlier$vaccine_storage_type.refrigerator
 
@@ -340,15 +307,9 @@ health_sub$uterotonics_yn_calc <- health_outlier$medication.uterotonics
 ##### DIAGNOSTICS #####
 #######################
 
-health_sub$lab_tests_pregnancy_calc <- ifelse(health_outlier$src != c('pilot', '113'), 
-                                health_outlier$lab_tests.pregnancy,
-                                     health_outlier$lab_tests_pregnancy_calc)
+health_sub$lab_tests_pregnancy_calc <- health_outlier$lab_tests.pregnancy
 
-health_sub$lab_tests_stool_calc <- ifelse(health_outlier$src = c('pilot', '113'), 
-                                health_outlier$lab_tests.stool,
-                                     health_outlier$lab_tests_stool_calc)
-
-health_sub$lab_tests_hemoglobin_testing_calc <- health_outlier$lab_tests.hemoglobin_testing
+health_sub$lab_tests_stool_calc <- health_outlier$lab_tests.stool
 
 health_sub$num_lab_techs_fulltime <- health_outlier$lab_technicians_posted
 
@@ -370,9 +331,7 @@ health_sub$improved_sanitation_and_functional <- ifelse(health_outlier$src != c(
 ##### TUBERCULOSIS #####
 ########################
 
-health_sub$lab_tests_tb_microscopy_calc <- ifelse(health_outlier$src != c('pilot', '113'), 
-                                    health_outlier$lab_tests.tb_microscopy,
-                                     health_outlier$lab_tests_tb_microscopy_calc)
+health_sub$lab_tests_tb_microscopy_calc <- health_outlier$lab_tests.tb_microscopy
 
 health_sub$tb_treatment_yn <- health_outlier$tb_treatment_yn
 
@@ -399,13 +358,10 @@ health_sub$iv_medications_yn <- health_outlier$medication.iv_fluid
 
 health_sub$inpatient_care_yn <- health_outlier$inpatient_care_yn
 
-
-
 #Adding distant to every facility
 #combining calculated result back to original data
 health_sub <- lga_boudary_dist(health_sub, gps_col="gps")
 health_774 <- merge_non_redundant(health_sub, h_774_left, by="uuid")
-
 
 #Delete all those have dist >= 35 km
 health_sub <- subset(health_sub, dist_fake <= 35 | is.na(dist_fake))
