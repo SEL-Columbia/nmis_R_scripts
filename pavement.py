@@ -120,7 +120,7 @@ def make_dependency_graph(filename='dependency_graph', ext='pdf'):
             graph.add_edge(pydot.Edge(nodes[script], nodes[o]))
     try:
         filename = "%s.%s" % (filename, ext)
-        graph.write(filename)
+        graph.write(filename, format=ext)
     except pydot.InvocationException:  # happens if graphviz isn't installed
         print "You need to install graphviz to create a dependency graph"
 
