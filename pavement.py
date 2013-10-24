@@ -1,4 +1,4 @@
-from paver.easy import task, path, sys, sh
+from paver.easy import task, sh
 import re
 import os
 import os.path
@@ -8,17 +8,14 @@ import os.path
     the directory in which this pavement.py is placed.
 """
 
-ROOT_DIR = os.path.join(os.path.expanduser('~'),
-                        'Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning')
 
-
-def find_R_scripts(base_directory='.'):
+def find_r_scripts(base_directory='.'):
     """ Return a list of all the R scripts in given base directory.
     """
     scripts = []
-    for root, dirs, files in os.walk(base_directory):
-        for f in files:
-            filename = os.path.join(root, f)
+    for root, _, files in os.walk(base_directory):
+        for my_file in files:
+            filename = os.path.join(root, my_file)
             if filename.endswith('.R') or filename.endswith('.r'):
                 scripts.append(filename)
     #print scripts
@@ -35,21 +32,6 @@ def find_reads_and_writes(debug=False):
                     }, ...
                 }
         """
-    def file_exists_print_if_not(f, script):
-        """ Checks if a file f (read or written by script) exists.
-            If file doesn't exist; may mean an error in the script. """
-        file_exists = path(f.replace('~', os.path.expanduser('~'))).exists()
-        if not file_exists:
-            sys.stderr.write("File does not exist: " + f +
-                             '; in script ' + script + '\n')
-        return file_exists
-
-    def only_existing_files(fnames, script):
-        """ Filters a list of files to return only those that exist in fs.
-            Uses custom function that prints message on non-existence. """
-        return [fname for fname in fnames
-                if file_exists_print_if_not(fname, script)]
-
     def read_excluding_comments(fname, commentchar='#'):
         """ Read a filename (R script) and return its contents, excluding
             any lines that start wit the comment character.  """
@@ -60,13 +42,13 @@ def find_reads_and_writes(debug=False):
         return '\n'.join(lines)
 
     # Functions that read files (filename assumed to be first argument)
-    read_functions = ['read\.csv', 'formhubRead', 'load', 'readRDS']
+    read_functions = [r'read.csv', r'formhubRead', r'load', r'readRDS']
     # Functions that write files (filename assumed to be first argument)
-    write_functions = ['write\.csv', 'save', 'saveRDS']
+    write_functions = [r'write.csv', r'save', r'saveRDS']
     # Functions that read+write files (filename in first argument is assumed
     #   to be a read operation; second argument is assumed to be a write)
-    rw_functions = ['file\.copy']
-    rscripts = find_R_scripts()
+    rw_functions = [r'file.copy']
+    rscripts = find_r_scripts()
     deps = {}
     for rscript in rscripts:
         text = read_excluding_comments(rscript)
@@ -99,10 +81,10 @@ def find_reads_and_writes(debug=False):
 
 
 @task
-def make_dependency_graph(filename='dependency_graph', format='pdf'):
+def make_dependency_graph(filename='dependency_graph', ext='pdf'):
     """ Goes through all the R scripts in the current directory, finds all
     \t\t\t files being read and written, creates a dependency graph, & outputs
-    \t\t\t it to filename.format (given that format is supported by graphviz)
+    \t\t\t it to filename.ext (given that ext is supported by graphviz)
     \t\t\t Requires: graphviz to be installed, python module pydot. """
     import pydot
     deps = find_reads_and_writes()
@@ -137,14 +119,14 @@ def make_dependency_graph(filename='dependency_graph', format='pdf'):
             o = strip(outfile)
             graph.add_edge(pydot.Edge(nodes[script], nodes[o]))
     try:
-        filename = "%s.%s" % (filename, format)
+        filename = "%s.%s" % (filename, ext)
         graph.write(filename)
     except pydot.InvocationException:  # happens if graphviz isn't installed
         print "You need to install graphviz to create a dependency graph"
 
 
 @task
-def make_makefile(dryrun=False):
+def make_makefile():
     """ Goes through all the R scripts in the current directory, finds all
     \t\t\t files being read and written, and writes out makefile.
     \t\t\t Given RSCRIPT that has infiles INF1, INF2 and outfiles OUTF1, OUTF2
