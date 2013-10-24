@@ -130,9 +130,8 @@ yes_no_converter <- function(df, col_name)
 yes_no_batch <- function(df, list_of_column_names)
 {
     l_ply(list_of_column_names, function(col) {
-        df[,col] <<- yes_no_converter(df,col)
+        df[,col] <<- yes_no_converter(df=df, col_name=col)
     })
-    
     return(df)
 }
 
