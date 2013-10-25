@@ -219,14 +219,13 @@ water_total$pay_for_water_yn <- recodeVar(water_total$pay_for_water_yn,
 water_total$water_functional_yn <- recodeVar(water_total$water_functional_yn, 
                                           c('yes', 'no', 'dk', 'do_not_know'), 
                                           c('Yes', 'No', "Don't Know", "Don't Know"))
-# water_total$water_functional_yn <- as.logical(recodeVar(water_total$water_functional_yn,
-#                                                       c("yes", "no"),
-#                                                       c(TRUE, FALSE),
-#                                                       default = NA))
-# 
 
 
 # Final Cleaning remove rows without lga_id or duplicated uuid
+lgas <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/lgas.csv")
+lgas <- subset(lgas, select=-c(latitude, longitude))
+water_total <- merge_non_redundant(lgas, water_total, by="lga_id")
 water_total <- subset(water_total, !(duplicated(water_total$uuid) | is.na(water_total$lga_id)))
+
 saveRDS(water_total, '~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Water_774_normalized_999clean.rds')
   		        	      	        	      	        	      	        	  		         	        	   		        	   		        	   		        	   		        	 		         	   		        	  		         	        	   		        	   		        	   		        	   		        	   		        	   		        	   		        	   		                                                                                                                                                                                                                                                                                                    
