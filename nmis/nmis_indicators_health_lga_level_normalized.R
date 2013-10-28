@@ -5,15 +5,16 @@
 source("base_scripts/InstallFormhub.R")
 source("source_scripts/NMIS_Functions.R")
 
-health774 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Health_774_ALL_FACILITY_INDICATORS.rds")
+health_774 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Health_774_ALL_FACILITY_INDICATORS.rds")
 
 #reading in data for population based calculations 
 popu <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/lgas.csv")
 row.names(popu) <- as.character(popu$lga_id)
   # population figure within ddply is between the , and the last ) below
-lgah_summaries <- ddply(h, .(lga_id), summarize, population = popu[as.character(lga_id[[1]]),'pop_2006'])
+lgah_summaries <- ddply(health_774, .(lga_id), summarize, population = popu[as.character(lga_id[[1]]),'pop_2006'])
 
-ihealth774 <- idata.frame(health774)
+#changing into idata.frame
+ihealth774 <- idata.frame(health_774)
 
 ####################
 #####indicators#####

@@ -59,13 +59,13 @@ health_sub$emergency_transport <-
   health_outlier$transport_to_referral %in% c('ambulance', 'keke')
 
 health_sub$improved_water_supply <- ifelse(health_outlier$src == 'pilot',
-                                              water_sources_yn_p,                                         
+                                            health_outlier$water_sources_yn_p,                                         
                                     (health_outlier$water_sources.tap_in_compound | 
                                       health_outlier$water_sources.tap_outside | 
                                       health_outlier$water_sources.borehole_tube_well))
 
 health_sub$improved_sanitation <- ifelse(health_outlier$src == 'pilot',
-                                         num_toilets_improved_p > 0,  
+                                          health_outlier$num_toilets_improved_p > 0,  
                                     ((health_outlier$num_vip_latrine > 0) | 
                                       (health_outlier$num_pit_w_slab > 0) | 
                                       (health_outlier$num_flush_or_pour_flush_piped > 0)))                                
@@ -85,7 +85,7 @@ health_sub$maternal_health_delivery_services_24_7 <- ifelse(health_outlier$src =
 
 health_sub$facility_open_247_yn <- health_outlier$facility_open_247_yn 
 
-health_sub$essential_meds_stockout <- ifelse(health_subtotal == '661',
+health_sub$essential_meds_stockout <- ifelse(health_outlier$src == '661',
                                     (health_outlier$antibiotics_oral_stockout_yn |
                                        health_outlier$antibiotics_musc_stockout_yn | 
                                        health_outlier$antibiotics_iv_stockout_yn |
@@ -107,11 +107,11 @@ health_sub$essential_meds_stockout <- ifelse(health_subtotal == '661',
                                        health_outlier$inject_contacept_stockout_yn |
                                        health_outlier$implants_stockout_yn |
                                        health_outlier$iud_stockout_yn),
-                                 ifelse(health_subtotal == '113',       
+                                 ifelse(health_outlier$src == '113',       
                                           (health_outlier$antimalarials_stockout_yn | 
                                              health_outlier$antidiarrheal_stockout_yn | 
                                              health_outlier$antibiotics_stockout_yn),
-                                 ifelse(health_subtotal == 'pilot',                   
+                                 ifelse(health_outlier$src == 'pilot',                   
                                           (health_outlier$antimalarials_stockout_yn | 
                                              health_outlier$antibiotics_stockout_yn), NA)))  
 
@@ -124,11 +124,9 @@ health_sub$emergency_transport_currently_functioning <- ifelse(health_outlier$sr
                                                                (health_outlier$equipment_emergency_transport & 
                                                                  health_outlier$daily_pub_transport_p), NA)))
                                                
-
-health_sub$power_access_and_functional <- ifelse(health_outlier$src == '661',
-                                        health_outlier$power_sources.none != F, 
-                                                 health_sub$power_access_and_functional)  
-
+health_sub$power_access_and_functional[health_outlier$src == '661'] <- 
+                                        health_outlier$power_sources.none[health_outlier$src == '661']
+                                        
 health_sub$comprehensive_obstetrics_yn <- health_outlier$emergency_obstetrics_yn & health_outlier$c_section_yn
 
 
@@ -176,9 +174,10 @@ health_sub$hiv_tx_srvcs_pmtct_services_calc <- ifelse(health_outlier$src == '661
                                                         health_outlier$medication.arvs |
                                                         health_outlier$medication.azt),
                                                 ifelse(health_outlier$src == '113',
-                                                      (h_113$sti_treatment_yn & h_113$hiv_tx_srvcs_pmtct_services),
+                                                      (health_outlier$sti_treatment_yn & 
+                                                       health_outlier$hiv_tx_srvcs_pmtct_services),
                                                    ifelse(health_outlier$src == 'pilot',
-                                                      h_pilot$sti_treatment_yn, NA)))
+                                                          health_outlier$sti_treatment_yn, NA)))
 
 health_sub$lab_tests_hemoglobin_testing_calc <- health_outlier$lab_tests.hemoglobin_testing
                                               
@@ -196,7 +195,7 @@ health_sub$iv_antibiotics_yn_calc <- ifelse(health_outlier$src == '661',
                                               (health_outlier$emoc_antibiotics | 
                                                health_outlier$medication.antibiotic_iv),
                                       ifelse(health_outlier$src == '113', 
-                                            (health_outlier$emoc_needles_tubing | 
+                                            (health_outlier$supplies.needles_and_tubing | 
                                                 (health_outlier$emoc_parenteral1 | 
                                                    health_outlier$emoc_antibiotics) & 
                                                health_outlier$emergency_obstetrics_yn) | 
@@ -253,12 +252,12 @@ health_sub$compr_oc_blood_transfusions <- health_outlier$compr_oc_blood_transfus
 #####################################
 health_sub$condoms_yn <- health_outlier$supplies.condoms                         
 
-health_sub$family_planning_pill_calc_calc <- ifelse(health_outlier$src == '661'
+health_sub$family_planning_pill_calc_calc <- ifelse(health_outlier$src == '661',
                                                     health_outlier$family_planning_pill,
                                               ifelse(health_outlier$src == '113',                                                    
                                                     (health_outlier$family_planning_pill & 
                                                        health_outlier$family_planning_yn) |
-                                                      (health_outlier$medication_oral_contraceptives),
+                                                      (health_outlier$medication.oral_contraceptives),
                                               ifelse(health_outlier$src == 'pilot',    
                                                     (health_outlier$family_planning_pill & 
                                                       health_outlier$family_planning_yn), NA)))               
@@ -268,7 +267,7 @@ health_sub$family_planning_injectables_calc_calc <- ifelse(health_outlier$src ==
                                                      ifelse(health_outlier$src == '113',
                                                              (health_outlier$family_planning_injectables & 
                                                                 health_outlier$family_planning_yn) |
-                                                             (health_outlier$medication_injectable_contracept),
+                                                             (health_outlier$medication.injectable_contracept),
                                                       ifelse(health_outlier$src == 'pilot',
                                                               (health_outlier$family_planning_pill & 
                                                               health_outlier$family_planning_yn), NA)))                                                
@@ -321,7 +320,7 @@ health_sub$equipment_refrigerator <- health_outlier$vaccine_storage_type.refrige
 ###################
 ##### MALARIA #####
 ###################
-health_sub$malaria_testing <- ifelse(health_outlier$src == '661'
+health_sub$malaria_testing <- ifelse(health_outlier$src == '661',
                                         (health_outlier$lab_tests.malaria_rdt | 
                                          health_outlier$lab_tests.malaria_microscopy),
                                ((health_outlier$lab_tests_malaria_rdt | 
@@ -333,7 +332,7 @@ health_sub$malaria_treatment_artemisinin <- health_outlier$malaria_treatment_art
 health_sub$malaria_treatment_sulphadoxine <- health_outlier$medication.sulphadoxine
 
 health_sub$paid_services_malaria_treatment <- 
-  (health_outlier$fees_adults.paid_services_malaria_treatment == F | 
+  (health_outlier$paid_services_malaria_treatment == F | 
      health_outlier$fees_children.ch_paid_malaria_treatment == F)
 
 ################
@@ -427,21 +426,23 @@ health_sub$routine_immunization <- health_outlier$immunization.bcg_immunization 
                                      health_outlier$immunization.hepb_immunization |
                                      health_outlier$immunization.tetanus_immun
 
-health_sub$health_no_delivery_user_fees <- health_outlier$fees_adults.paid_services_anc_delivery == F
+health_sub$health_no_delivery_user_fees <- health_outlier$paid_services_anc_delivery == F
 
 health_sub$health_no_child_user_fees <- health_outlier$child_tx_fees_yn == F
 
 
 #Adding distant to every facility
+#adding sector column
 #combining calculated result back to original data
 health_sub <- lga_boudary_dist(health_sub, gps_col="gps")
+health_sub$sector <- "health"
 health_774 <- merge_non_redundant(health_sub, h_774_left, by="uuid")
 
 #Delete all those have dist >= 35 km
 health_sub <- subset(health_sub, dist_fake <= 35 | is.na(dist_fake))
 health_774 <- subset(health_774, dist_fake <= 35 | is.na(dist_fake))
 
-
-saveRDS(x_y_killa(health_sub), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Health_661_NMIS_Facility.rds")
-saveRDS(x_y_killa(health_774), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_661/Health_661_ALL_FACILITY_INDICATORS.rds")
+#writing out
+saveRDS(x_y_killa(health_sub), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Health_774_NMIS_Facility.rds")
+saveRDS(x_y_killa(health_774), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Health_774_ALL_FACILITY_INDICATORS.rds")
 

@@ -1,7 +1,6 @@
 #####################################################################################################################
 ##Normalizing Health Data: 661, 113, Pilot ##########################################################################
 #####################################################################################################################
-setwd("~/Code/nmis_R_scripts/")
 source("source_scripts/Normailize_Functions.R")
 source("source_scripts/NMIS_Functions.R")
 
@@ -260,7 +259,7 @@ yes_no_columns <- c("private_yn", "road_yn", "all_weather_road_yn", "generator_f
                     "ultra_sound_funct_yn", "aspirator_funct_yn", "extractor_funct_yn", "compr_oc_blood_transfusions",
                     "ambubag_funct_yn", "neonatal_mask_funct_yn", "iv_kits_funct_yn", "iud_stockout_yn",
                     "suction_funct_yn", "antibiotics_oral_stockout_yn", "antibiotics_musc_stockout_yn", 
-                    "antibiotics_iv_stockout_yn", "iv_fliud_stockout_yn", "ort_stockout_yn", 
+                    "antibiotics_iv_stockout_yn", "iv_fliud_stockout_yn", "ort_stockout_yn", "emoc_available_24_7",
                     "uterotonics_stockout_yn", "antidiarrheal_stockout_yn", "antipyretics_stockout_yn", 
                     "act_stockout_yn", "sulphadoxine_stockout_yn", "arvs_stockout_yn", "family_planning_pill",
                     "nevirapine_stockout_yn", "azt_stockout_yn", "tb_meds_stockout_yn", "family_planning_injectables",
@@ -272,13 +271,13 @@ yes_no_columns <- c("private_yn", "road_yn", "all_weather_road_yn", "generator_f
                     "hepb_immun_stockout_yn", "tetanus_immun_stockout_yn", "adult_tx_fees_yn", "gender_separated_toilets_yn",
                     "separate_toilets_for_staff_yn", "med_waste_separated_yn", "landline_funct_yn", "child_tx_fees_yn", 
                     "mobile_phone_funct_yn", "mobile_signal_funct_yn", "computer_funct_yn", "family_planning_sterilization_f", 
-                    "internet_funct_yn", "printer_funct_yn", "staff_quarters_sufficient_yn", 
-                    "staff_paid_lastmth_yn", "staff_paid_6mths_yn", "primary_routine_care_yn", 
+                    "internet_funct_yn", "printer_funct_yn", "staff_quarters_sufficient_yn", "water_sources_yn_p",
+                    "staff_paid_lastmth_yn", "staff_paid_6mths_yn", "primary_routine_care_yn", "compr_oc_available_24_7",
                     "malaria_treatment_yn", "sti_treatment_yn", "hiv_treatment_yn", "forceps_funct_yn",
                     "child_health_yn", "comprehensive_obstetrics_yn", "inpatient_care_enough_beds_yn", 
                     "surgical_theatre_funct_yn", "refrigerator_funct_yn", "public_transport_funct_yn", 
                     "public_transport_shared_yn", "antimalarials_stockout_yn", "antimalarials_expired_yn", 
-                    "antidiarrheal_expired_yn", "antipyretics_expired_yn", "arvs_expired_yn", 
+                    "antidiarrheal_expired_yn", "antipyretics_expired_yn", "arvs_expired_yn", "daily_pub_transport_p",
                     "tb_meds_expired_yn", "antibiotics_stockout_yn", "antibiotics_expired_yn", 
                     "iron_tablets_stockout_yn", "iron_tablets_expired_yn", "folic_acid_expired_yn", 
                     "iv_fliud_expired_yn", "cough_meds_stockout_yn", "cough_meds_expired_yn", 
