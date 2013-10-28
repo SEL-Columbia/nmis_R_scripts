@@ -64,6 +64,8 @@ water_sub$distribution_type <- recodeVar(water_774$distribution_type,
 #combining calculated result back to original data
 ###113
 water_sub <- lga_boudary_dist(water_sub, gps_col="gps")
+water_sub$sector <- "water"
+
 water_774 <- merge_non_redundant(water_sub, water_774, by="uuid")
 
 

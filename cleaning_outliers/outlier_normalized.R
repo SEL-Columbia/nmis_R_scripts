@@ -88,7 +88,7 @@ edu_999 <- outlierreplace(edu_999, 'num_tchrs_total',
                          edu_999$num_students_total == 0))
 
 edu_999 <- outlierreplace(edu_999, 'num_tchrs_total',
-                    (edu_999$num_tchrs_total > e$num_tchrs_male + 
+                    (edu_999$num_tchrs_total > edu_999$num_tchrs_male + 
                          edu_999$num_tchrs_female))
 
 edu_999 <- outlierreplace(edu_999, 'num_classrms_need_maj_repairs',
@@ -107,25 +107,7 @@ edu_999 <- outlierreplace(edu_999, 'num_classrms_good_cond',
                     (edu_999$num_classrms_good_cond + edu_999$num_classrms_need_min_repairs + 
                          edu_999$num_classrms_need_maj_repairs > edu_999$num_classrms_total))
 
-edu_999 <- outlierreplace(edu_999, 'num_classrms_need_min_repairs',
-                    (edu_999$num_classrms_good_cond + edu_999$num_classrms_need_min_repairs + 
-                         edu_999$num_classrms_need_maj_repairs > edu_999$num_classrms_total))
-
-edu_999 <- outlierreplace(edu_999, 'num_classrms_need_maj_repairs',
-                    (edu_999$num_classrms_good_cond + edu_999$num_classrms_need_min_repairs + 
-                         edu_999$num_classrms_need_maj_repairs > edu_999$num_classrms_total))
-
-edu_999 <- outlierreplace(edu_999, 'num_classrms_total',
-                    (edu_999$num_classrms_good_cond + edu_999$num_classrms_need_min_repairs + 
-                         edu_999$num_classrms_need_maj_repairs > edu_999$num_classrms_total))
-
-edu_999 <- outlierreplace(edu_999, 'num_students_total',
-                    (edu_999$num_tchrs_total > 20 & edu_999$num_students_total == 0))
-
 edu_999 <- outlierreplace(edu_999, 'num_students_total', edu_999$num_students_total == 0)    
-
-edu_999 <- outlierreplace(edu_999, 'num_students_total', (edu_999$num_students_total == 0))
-
 
 ##ratios
 edu_999$ratio_students_to_toilet <- replace(edu_999$num_students_total, 
@@ -212,10 +194,10 @@ edu_999 <- outlierreplace(edu_999, 'num_science_textbook_js',
 
 #new data points
 
-#edu_999$pupil_class_ratio <- edu_999$num_students_total/edu_999$num_classrms_total
-#edu_999 <- outlierreplace(edu_999, 'num_students_total', 
+# edu_999$pupil_class_ratio <- edu_999$num_students_total/edu_999$num_classrms_total
+# edu_999 <- outlierreplace(edu_999, 'num_students_total', 
 #                  (edu_999$pupil_class_ratio < 5 | edu_999$pupil_class_ratio > 150))
-#edu_999 <- outlierreplace(edu_999, 'num_classrms_total', 
+# edu_999 <- outlierreplace(edu_999, 'num_classrms_total', 
 #                   (edu_999$pupil_class_ratio < 5 | edu_999$pupil_class_ratio > 150))
 
 edu_999 <- outlierreplace(edu_999, 'num_students_female',
@@ -227,11 +209,6 @@ edu_999 <- outlierreplace(edu_999, 'num_students_male',
 
 edu_999 <- outlierreplace(edu_999, 'num_students_total',
                                 (edu_999$num_students_total > 2000 & 
-                                 edu_999$num_classrms_total < 25 &
-                                 edu_999$num_tchrs_total < 10))
-
-edu_999 <- outlierreplace(edu_999, 'num_pry_female',
-                                (edu_999$num_pry_female > 2000 & 
                                  edu_999$num_classrms_total < 25 &
                                  edu_999$num_tchrs_total < 10))
 
@@ -260,18 +237,8 @@ edu_999 <- outlierreplace(edu_999, 'num_js_total',
                                  edu_999$num_classrms_total < 25 &
                                  edu_999$num_tchrs_total < 10))
 
-edu_999 <- outlierreplace(edu_999, 'num_ss_female',
-                                (edu_999$num_ss_female > 1250 &
-                                 edu_999$num_classrms_total < 25 &
-                                 edu_999$num_tchrs_total < 10))
-
 edu_999 <- outlierreplace(edu_999, 'num_ss_male',
                                 (edu_999$num_ss_male > 1250 & 
-                                 edu_999$num_classrms_total < 25 &
-                                 edu_999$num_tchrs_total < 10))
-
-edu_999 <- outlierreplace(edu_999, 'num_ss_total',
-                                (edu_999$num_ss_total > 2500 & 
                                  edu_999$num_classrms_total < 25 &
                                  edu_999$num_tchrs_total < 10))
 
@@ -280,50 +247,59 @@ edu_999 <- outlierreplace(edu_999, 'num_ss_total',
 
 edu_999 <- outlierreplace(edu_999, 'km_to_catchment_area',
                     (edu_999$km_to_catchment_area > 55))                    
+
 edu_999 <- outlierreplace(edu_999, 'km_to_secondary_school',
                     (edu_999$km_to_secondary_school > 25))
+
 edu_999 <- outlierreplace(edu_999, 'num_students_frthr_than_3km',
                     (edu_999$num_students_frthr_than_3km > 1250))            
-edu_999 <- outlierreplace(edu_999, 'num_toilet_girl',
-                    (edu_999$num_toilet_girl > 750))            
-edu_999 <- outlierreplace(edu_999, 'num_toilet_both',
-                    (edu_999$num_toilet_both > 1000))            
-edu_999 <- outlierreplace(edu_999, 'num_toilet_total',
-                    (edu_999$num_toilet_total > 1000))                        
+
 edu_999 <- outlierreplace(edu_999, 'num_tchrs_male',
                     (edu_999$num_tchrs_male > 100))
+
 edu_999 <- outlierreplace(edu_999, 'num_tchrs_female',
                     (edu_999$num_tchrs_female > 100))
+
 edu_999 <- outlierreplace(edu_999, 'num_tchrs_w_nce',
                     (edu_999$num_tchrs_w_nce > 100))
+
 edu_999 <- outlierreplace(edu_999, 'num_tchrs_w_nce_plus',
                     (edu_999$num_tchrs_w_nce_plus > 100))            
+
 edu_999 <- outlierreplace(edu_999, 'num_sr_staff_total',
                     (edu_999$num_sr_staff_total > 75))
+
 edu_999 <- outlierreplace(edu_999, 'num_jr_staff_total',
                     (edu_999$num_jr_staff_total > 50))
+
 edu_999 <- outlierreplace(edu_999, 'num_tchrs_attended_training',
                     (edu_999$num_tchrs_attended_training > 100))
+
 edu_999 <- outlierreplace(edu_999, 'num_classrms_total',
                     (edu_999$num_tchrs_attended_training > 99))
+
 edu_999 <- outlierreplace(edu_999, 'num_classrms_total',
                     (edu_999$num_classrms_total == 0))
+
 edu_999 <- outlierreplace(edu_999, 'num_classrms_need_min_repairs',
                     (edu_999$num_classrms_need_min_repairs > 50))
+
 edu_999 <- outlierreplace(edu_999, 'num_classrms_need_maj_repairs',
                     (edu_999$num_classrms_need_maj_repairs > 50))
 #absolute example
 edu_999 <- outlierreplace(edu_999, 'num_classrms_good_cond',
                     (edu_999$num_classrms_good_cond > 260))                    
+
 #ratio/ combining other data points example
-#edu_999 <- outlierreplace(edu_999, 'num_desks',
-#     between(edu_999$ratio_students_to_desks, 750, Inf))
+edu_999 <- outlierreplace(edu_999, 'num_desks',
+     between(edu_999$ratio_students_to_desks, 750, Inf))
+
 edu_999 <- outlierreplace(edu_999, 'num_desks',
                     (edu_999$num_desks > 2500))
+
 edu_999 <- outlierreplace(edu_999, 'num_benches',
                     (edu_999$num_benches > 2500))
-edu_999 <- outlierreplace(edu_999, 'num_classrm_w_chalkboard',
-                    (edu_999$num_classrm_w_chalkboard > edu_999$num_classrms_total))      
+
 #another absolute
 edu_999 <- outlierreplace(edu_999, 'num_math_textbook_pry',
                     (edu_999$num_math_textbook_pry > 3000))    
@@ -390,8 +366,6 @@ edu_999$num_tchrs_total <- apply(cbind(edu_999$num_tchrs_male,
 # replace all classroom indicators if they are below total classrooms
 edu_999 <- outlierreplace(edu_999, 'num_classrms_need_min_repairs', 
                           edu_999$num_classrms_need_min_repairs > edu_999$num_classrms_total) 
-edu_999 <- outlierreplace(edu_999, 'num_classrms_need_maj_repairs',
-                          edu_999$num_classrms_need_maj_repairs > edu_999$num_classrms_total) 
 
 edu_999 <- outlierreplace(edu_999, 'num_students_total',
                           edu_999$num_students_total > 2355)

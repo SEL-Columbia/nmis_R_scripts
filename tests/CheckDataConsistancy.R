@@ -1,8 +1,8 @@
 
 check_connsistency <- function(df1, df2){
     
-    df1_nm <- names(edu_norm)
-    df2_nm <- names(edu_orig)
+    df1_nm <- names(df1)
+    df2_nm <- names(df2)
     
     # Asserting that "uuid" must be contained in both data
     stopifnot("uuid" %in% df1_nm & "uuid" %in% df2_nm)

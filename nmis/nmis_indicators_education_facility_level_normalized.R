@@ -151,6 +151,8 @@ edu_sub$textbook_to_pupil_ratio <- edu_sub$num_textbooks / edu_outlier$num_stude
 #Adding distant to every facility
 #combining calculated result back to original data
 edu_sub <- lga_boudary_dist(edu_sub, gps_col="gps")
+edu_sub$sector <- "education"
+
 e_774 <- merge_non_redundant(edu_sub, e_774_left, by="uuid")
 
 
