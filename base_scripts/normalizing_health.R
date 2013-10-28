@@ -222,6 +222,10 @@ h_pilot$immunization.bcg_immunization  <- h_pilot$child_health_immunization_p & 
 h_pilot$immunization.yellow_fever_immun <- h_pilot$child_health_immunization_p & h_pilot$child_health_yn == 'yes'
 h_pilot$immunization.csm_immunization <- h_pilot$child_health_immunization_p & h_pilot$child_health_yn == 'yes'
 
+h_pilot$delivery_services_yn <- as.logical(recodeVar(h_pilot$emergency_obstetrics_yn,
+                                                     c('yes', 'no'),
+                                                     c(TRUE, FALSE))) 
+
 h_pilot$supplies.insecticide_treated_bednets <- (h_pilot$malaria_treatment_yn == 'yes' & 
                                                    (h_pilot$malaria_treatment_srvcs_itn == 'yes' |
                                                       h_pilot$supplies_available_bednets))
@@ -293,7 +297,7 @@ numeric_column_list <- c("medical_records_officers_active", "medical_records_off
                          "num_nurses_active", "num_nursemidwives_active", "num_cho_active", "contraceptives_price",
                          "num_chews_active", "num_junior_chews_active", "num_pharm_techs_fulltime", 
                          "num_med_assistants_fulltime", "num_med_rcrds_officers_fulltime", "km_to_referral_facility",
-                         "num_facilities", "num_midwives_fulltime", "num_toilets_improved_p")
+                         "num_facilities", "num_midwives_fulltime", "num_toilets_improved_p", "days_no_potable_water_pastmth")
 
 # logical type conversion and ASSERTION(sort of)
 health_total <- yes_no_batch(health_total, yes_no_columns)

@@ -66,9 +66,9 @@ health_sub$improved_water_supply <- ifelse(health_outlier$src == 'pilot',
 
 health_sub$improved_sanitation <- ifelse(health_outlier$src == 'pilot',
                                          num_toilets_improved_p > 0,  
-                                  (health_outlier$num_vip_latrine > 0) | 
-                                  (health_outlier$num_pit_w_slab > 0) | 
-                                  (health_outlier$num_flush_or_pour_flush_piped > 0))                                
+                                    ((health_outlier$num_vip_latrine > 0) | 
+                                      (health_outlier$num_pit_w_slab > 0) | 
+                                      (health_outlier$num_flush_or_pour_flush_piped > 0)))                                
 
 health_sub$phcn_electricity <- health_outlier$power_sources_grid
 
@@ -79,9 +79,9 @@ health_sub$maternal_health_delivery_services_24_7 <- ifelse(health_outlier$src =
                                                          (health_outlier$facility_open_247_yn & 
                                                             health_outlier$delivery_services_yn & 
                                                              health_outlier$delivery_skilled_birth_247_yn),
-                                                     health_outlier$emergency_obstetrics_yn & 
+                                                      (health_outlier$emergency_obstetrics_yn & 
                                                        (health_outlier$compr_oc_available_24_7 | 
-                                                          health_outlier$emoc_available_24_7))                                                  
+                                                          health_outlier$emoc_available_24_7)))                                                  
 
 health_sub$facility_open_247_yn <- health_outlier$facility_open_247_yn 
 
@@ -225,7 +225,7 @@ health_sub$uterotonics_yn_calc <- ifelse(health_outlier$src == '113',
                                             ((health_outlier$compr_oc_oxytocin | 
                                                 health_outlier$compr_oc_misoprotol) & 
                                                health_outlier$comprehensive_obstetrics_yn)),
-                                         health_outlier$emoc_uterotonics_yn)
+                                     health_outlier$emoc_uterotonics_yn)
 
 health_sub$antishock_garment_yn <- health_outlier$equipment.emoc_antishock_garment
                                  
@@ -263,19 +263,25 @@ health_sub$family_planning_pill_calc_calc <- ifelse(health_outlier$src == '661'
                                                     (health_outlier$family_planning_pill & 
                                                       health_outlier$family_planning_yn), NA)))               
                                                     
-health_sub$family_planning_injectables_calc_calc <- ifelse(health_outlier$src != c('pilot', '113'),
-                                                  health_outlier$family_planning_injectables,
-                                                    health_outlier$family_planning_injectables_calc_calc)
-
+health_sub$family_planning_injectables_calc_calc <- ifelse(health_outlier$src == '661',
+                                                              health_outlier$family_planning_injectables,
+                                                     ifelse(health_outlier$src == '113',
+                                                             (health_outlier$family_planning_injectables & 
+                                                                health_outlier$family_planning_yn) |
+                                                             (health_outlier$medication_injectable_contracept),
+                                                      ifelse(health_outlier$src == 'pilot',
+                                                              (health_outlier$family_planning_pill & 
+                                                              health_outlier$family_planning_yn), NA)))                                                
+                         
 health_sub$family_planning_iud_calc <- health_outlier$medication.iud
 
 health_sub$family_planning_implants_calc <- health_outlier$medication.implants
 
-health_sub$sterilization_yn_calc <- ifelse(health_outlier$src != c('pilot', '113'),
+health_sub$sterilization_yn_calc <- ifelse(health_outlier$src == '661',
                                               (health_outlier$family_planning_sterilization_m | 
-                                               health_outlier$family_planning_sterilization_f),
-                                             health_outlier$sterilization_yn_calc)
-
+                                               health_outlier$family_planning_sterilization_f),      
+                                      (health_outlier$family_planning_sterilization_m & 
+                                         health_outlier$family_planning_yn))  
 ###########################
 ##### CHILD NUTRITION #####
 ###########################
@@ -302,20 +308,25 @@ health_sub$child_health_yellow_fever_immun_calc <- health_outlier$immunization.y
                                                  
 health_sub$child_health_csm_immunization_calc <- health_outlier$immunization.csm_immunization
 
-health_sub$vaccines_icepack_calc <- ifelse(health_outlier$src != '113',
-                                              (health_outlier$vaccine_storage_type.cold_chain_box & 
-                                              health_outlier$vaccine_storage_type.vaccine_carrier),
-                                            health_outlier$health_subvaccines_icepack_calc)
-
+health_sub$vaccines_icepack_calc <- ifelse(health_outlier$src == '113',
+                                             ((health_outlier$vaccines_stored_yn & 
+                                               health_outlier$vaccines_strg_type == 'vaccine_carriers_icepacks') |
+                                              (health_outlier$child_health_vaccine_carriers & 
+                                               health_outlier$child_health_yn)),                                           
+                                           (health_outlier$vaccine_storage_type.cold_chain_box & 
+                                              health_outlier$vaccine_storage_type.vaccine_carrier))
+                                           
 health_sub$equipment_refrigerator <- health_outlier$vaccine_storage_type.refrigerator
 
 ###################
 ##### MALARIA #####
 ###################
-health_sub$malaria_testing <- ifelse(health_outlier$src != c('pilot', '113'), 
-                              (health_outlier$lab_tests.malaria_rdt | 
-                               health_outlier$lab_tests.malaria_microscopy),
-                                  health_submalaria_testing)                            
+health_sub$malaria_testing <- ifelse(health_outlier$src == '661'
+                                        (health_outlier$lab_tests.malaria_rdt | 
+                                         health_outlier$lab_tests.malaria_microscopy),
+                               ((health_outlier$lab_tests_malaria_rdt | 
+                                  health_outlier$lab_tests_malaria_microscopy) & 
+                                    (health_outlier$laboratory_yn)))
 
 health_sub$malaria_treatment_artemisinin <- health_outlier$malaria_treatment_artemisinin 
 
@@ -357,16 +368,16 @@ health_sub$num_lab_techs_fulltime <- health_outlier$lab_technicians_posted
 ##### INFRASTRUCTURE #####
 ##########################
 
-health_sub$potable_water_access <- (as.numeric(health_outlier$days_no_potable_water_pastmth) <= 23)
-health_sub$improved_sanitation_and_functional <- ifelse(health_outlier$src != c('pilot', '113') 
-                                          (health_outlier$vip_latrine_functional_yn & 
-                                             health_outlier$num_vip_latrine > 0) | 
-                                          (health_outlier$slab_pit_latrine_functional_yn & 
-                                             health_outlier$num_pit_w_slab > 0) | 
-                                          (health_outlier$flush_improved_functional_yn &   
-                                             health_outlier$num_flush_or_pour_flush_piped > 0),
-                                        health_subimproved_sanitation_and_functional)           
+health_sub$potable_water_access <- (health_outlier$days_no_potable_water_pastmth <= 23)
 
+health_sub$improved_sanitation_and_functional <- ifelse(health_outlier$src == '661',
+                                                          (health_outlier$vip_latrine_functional_yn & 
+                                                             health_outlier$num_vip_latrine > 0) | 
+                                                          (health_outlier$slab_pit_latrine_functional_yn & 
+                                                             health_outlier$num_pit_w_slab > 0) | 
+                                                          (health_outlier$flush_improved_functional_yn &   
+                                                             health_outlier$num_flush_or_pour_flush_piped > 0),
+                                                    health_outlier$improved_sanitation_and_functional)           
 ########################
 ##### TUBERCULOSIS #####
 ########################
@@ -379,9 +390,10 @@ health_sub$tb_treatment_yn <- health_outlier$tb_treatment_yn
 ##### HIV #####
 ###############
 
-health_sub$lab_tests_hiv_testing_calc <- ifelse(health_outlier$src != c('pilot', '113'), 
-                                    health_outlier$lab_tests.hiv_testing,
-                                       health_outlier$lab_tests_hiv_testing_calc)
+health_sub$lab_tests_hiv_testing_calc <- ifelse(health_outlier$src == '661',
+                                                  health_outlier$lab_tests.hiv_testing,
+                                            (health_outlier$lab_tests_hiv_testing & 
+                                             health_outlier$laboratory_yn))
 
 health_sub$hiv_treatment_yn <- health_outlier$medication.arvs
 
@@ -389,17 +401,23 @@ health_sub$hiv_treatment_yn <- health_outlier$medication.arvs
 ##### CURATIVE CARE #####
 #########################
 
-health_sub$health_no_user_fees <- ifelse(health_outlier$src != c('pilot', '113'), 
-                            health_outlier$adult_tx_fees_yn |                                          
-                            health_outlier$child_tx_fees_yn,
-                              health_outlier$health_no_user_fees)    
+health_sub$health_no_user_fees <- ifelse(health_outlier$src == '661',
+                                          (health_outlier$adult_tx_fees_yn |                                          
+                                           health_outlier$child_tx_fees_yn),
+                                   (health_outlier$paid_services_routine_visit | health_outlier$paid_services_lab_testing | 
+                                     health_outlier$paid_services_inpatient_stay | health_outlier$paid_services_medication | 
+                                     health_outlier$paid_services_registration | health_outlier$paid_services_routine_anc_visit | 
+                                     health_outlier$paid_services_anc_delivery | health_outlier$paid_services_child_health |
+                                     health_outlier$paid_services_immunization | health_outlier$paid_services_hiv_treatment |
+                                     health_outlier$paid_services_tb_treatment | health_outlier$paid_services_malaria_treatment |
+                                     health_outlier$paid_services_contraceptives))
 
 health_sub$iv_medications_yn <- health_outlier$medication.iv_fluid     
 
 health_sub$inpatient_care_yn <- health_outlier$inpatient_care_yn
 
 #For LGA level
-health_sub$routine_immunization <- (health_outlier$immunization.bcg_immunization | 
+health_sub$routine_immunization <- health_outlier$immunization.bcg_immunization | 
                                      health_outlier$immunization.bcg_immunization |
                                      health_outlier$immunization.opv_immuization |
                                      health_outlier$immunization.measles_immun |
@@ -407,7 +425,7 @@ health_sub$routine_immunization <- (health_outlier$immunization.bcg_immunization
                                      health_outlier$immunization.yellow_fever_immun |
                                      health_outlier$immunization.csm_immunization |
                                      health_outlier$immunization.hepb_immunization |
-                                     health_outlier$immunization.tetanus_immun)
+                                     health_outlier$immunization.tetanus_immun
 
 health_sub$health_no_delivery_user_fees <- health_outlier$fees_adults.paid_services_anc_delivery == F
 
