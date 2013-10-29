@@ -22,7 +22,7 @@ e$num_students_total_gender.num_students_total <- rowSums(e[, c("num_students_fe
                                                                 "num_students_male")], na.rm=T)
 e$num_desks <- e$X_p_num_total_desk
 e$km_to_secondary_school <- as.numeric(e$km_to_secondary_school)
-e$num_toilet.num_toilet_total <- e$X_p_num_improved_sanitation
+e$num_toilet_total <- e$X_p_num_improved_sanitation
 
 
 ie <- idata.frame(e)
