@@ -165,7 +165,7 @@ hh$mobile_signal_funct_yn <-
   h$phone_signal_strength == 'high_signal_strength') &  
   h$info_tech_available.mobile_facility == T
 
-hh$iv_antibiotics_yn_calc <- h$emoc_antibiotics_yn == 'yes' | h$medication.antibiotic_iv == T
+hh$iv_antibiotics_yn_calc <- h$emoc_antibiotics == T | h$medication.antibiotic_iv == T
    
 hh$emoc_vacuum_extractor <- h$emoc_vacuum_extractor_yn == "yes"
 

@@ -42,8 +42,8 @@ health <- data.frame(lga = c('ukwa_east', 'kaiama', 'miga'),
                             proportion_health_facilities_tb_treatment = c('0.2631579', '0.1875', '0.2272727'),
                             proportion_health_facilities_tb_testing = c('0.05263158', '0.0625', '0.04545455'),
                             proportion_any_power_access = c('0.4210526', '0.28125', '0'),
-                            #TODO: proportion_improved_water_source = c('??', '??', '??'),
-                            #TODO: proportion_functional_sanitation = c('??', '??', '??'), 
+                            #proportion_improved_water_source = c('??', '??', '??'),
+                            #proportion_functional_sanitation = c('??', '??', '??'), 
                             proportion_mobile_coverage = c('0', '0.5', NA), 
                             proportion_health_facilities_med_waste_separated = c('0.6315789', '0.71875', '0.6818182'),
                             proportion_stockout_essential_meds = c('0.6842105', '0.25', NA),
@@ -220,4 +220,18 @@ write.csv(water, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/outputs/h
           row.names=F)
 rm(ukiez, kaiamz, mikaz)
 
-  
+#health data checks
+source("source_scripts/NMIS_Functions.R")
+source("tests/CheckDataConsistancy.R")
+
+health_norm <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Health_774_ALL_FACILITY_INDICATORS.rds")
+health_orig <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/pipeline_data_copy/nmis/data_774/Health_774_NMIS_Facility.csv", stringsAsFactors=F)
+
+test <- check_connsistency(health_norm, health_orig)
+
+f_d_nm <- names(test)
+
+compare_value(health_norm, health_orig, f_d_nm[1:2])
+
+
+

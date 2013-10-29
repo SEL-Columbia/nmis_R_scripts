@@ -35,7 +35,7 @@ ed$owner_manager <- ifelse(e_113$school_managed_fed_gov, "public",
 ed$num_tchrs_total <- e_113$num_tchrs_total
 ed$num_students_total <- e_113$num_students_total
 ed$num_classrms_total <- e_113$num_classrms_total
-ed$chalkboard_each_classroom_yn <- e_113$num_classrms_total <= e_113$chalkboard_each_classroom_yn
+
 ed$improved_water_supply <- (e_113$water_pipe_water == T | e_113$water_tube_well == T)
 ed$improved_sanitation <- (e_113$toilet_flush_or_pour_flush == T| e_113$toilet_ventilated_improved == T | e_113$toilet_pit_latrine_with_slab)
 ed$phcn_electricity <- e_113$power_grid_connection == T

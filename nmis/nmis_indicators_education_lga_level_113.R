@@ -31,7 +31,7 @@ e$num_desks <- rowSums(e[, c("num_unattached_desks", "num_unattached_desks_unuse
 #serious outliers below
 e$slab_pit_latrine_number <- as.numeric(e$slab_pit_latrine_number)
 e$vip_latrine_number <- as.numeric(e$vip_latrine_number)
-e$num_toilet <- rowSums(e[, c("vip_latrine_number", "slab_pit_latrine_number")], 
+e$num_toilet_total <- rowSums(e[, c("vip_latrine_number", "slab_pit_latrine_number")], 
                         na.rm=T)
 
 
@@ -81,9 +81,9 @@ lga_edu_data <- ddply(ie, .(lga_id), function(df) {
     proportion_schools_gender_sep_toilet_juniorsec =
       bool_proportion(df$gender_separated_toilets_yn, df$is_junior_secondary),
     pupil_toilet_ratio_primary = 
-      ratio(df$num_students_total, df$num_toilet, df$is_primary),
+      ratio(df$num_students_total, df$num_toilet_total, df$is_primary),
     pupil_toilet_ratio_secondary = 
-      ratio(df$num_students_total, df$num_toilet, df$is_junior_secondary),     
+      ratio(df$num_students_total, df$num_toilet_total, df$is_junior_secondary),     
     proportion_schools_power_access_primary =
       bool_proportion(df$power_access, df$is_primary),
     proportion_schools_power_access_juniorsec =
