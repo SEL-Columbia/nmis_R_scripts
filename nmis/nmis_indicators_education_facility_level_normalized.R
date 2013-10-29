@@ -126,7 +126,7 @@ edu_sub$pupil_classrm_ratio <- edu_outlier$num_students_total / edu_outlier$num_
 edu_sub$multigrade_classrms <- edu_outlier$multigrade_teaching_yn %in% c('yes_not_enough_space',
                                                                          'yes_no_teacher_no_space',
                                                                          'yes_not_enough_teacher')
-edu_sub$multigrade_classrms[edu_sub$src %in% c("113", "pilot")] <- (edu_outlier$num_classrooms_multiple_use[edu_outlier$src ==  %in% c("113", "pilot")] >=1) 
+edu_sub$multigrade_classrms[edu_sub$src %in% c("113", "pilot")] <- (edu_outlier$num_classrooms_multiple_use[edu_outlier$src %in% c("113", "pilot")] >=1) 
 
 
 ## Furniture ##

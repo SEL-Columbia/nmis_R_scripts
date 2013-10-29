@@ -354,9 +354,9 @@ edu_999$ratio_students_to_benches <- ifelse(edu_999$ratio_students_to_benches ==
                                             edu_999$ratio_students_to_benches)
 
 ######## May need to delete next 3 lines after discussion
-edu_999$test_m <- apply(cbind(edu_999$num_students_male, 
-                              edu_999$num_students_female), 
-                        1, sum, na.rm=T)
+edu_999$num_students_total <- apply(cbind(edu_999$num_students_male, 
+                                          edu_999$num_students_female), 
+                                        1, sum, na.rm=T)
 
 edu_999$num_students_total <- ifelse(edu_999$num_students_total == 0, NA, 
                                      edu_999$num_students_total)
