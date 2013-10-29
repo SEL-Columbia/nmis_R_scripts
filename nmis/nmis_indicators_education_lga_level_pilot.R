@@ -71,9 +71,9 @@ lga_edu_data <- ddply(ie, .(lga_id), function(df) {
     proportion_schools_gender_sep_toilet_juniorsec =
       bool_proportion(df$gender_separated_toilets_yn, df$is_junior_secondary),
     pupil_toilet_ratio_primary = 
-      ratio(df$num_students_total_gender.num_students_total, df$num_toilet.num_toilet_total, df$is_primary),
+      ratio(df$num_students_total_gender.num_students_total, df$num_toilet_total, df$is_primary),
     pupil_toilet_ratio_secondary = 
-      ratio(df$num_students_total_gender.num_students_total, df$num_toilet.num_toilet_total, df$is_junior_secondary),              
+      ratio(df$num_students_total_gender.num_students_total, df$num_toilet_total, df$is_junior_secondary),              
     #         proportion_schools_power_access_primary =
     #             bool_proportion(df$power_access, df$is_primary), #poweraccess NOT EXIST and power_generator/solar_fun_yn NOT EXSIT
     #         proportion_schools_power_access_juniorsec =
