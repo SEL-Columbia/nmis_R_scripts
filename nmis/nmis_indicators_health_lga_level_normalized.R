@@ -117,10 +117,8 @@ lga_health_data <- ddply(ihealth774, .(lga_id), function(df) {
                            )})                     
 
 ###### SUMMING UP #########
-lga_health_all <- lga_health_data
-
 ##writing out##
-saveRDS(x_y_killa(lga_health_all), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/normalized_final/Health_LGA_level_774.rds")
+saveRDS(x_y_killa(lga_health_data), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/normalized_final/Health_LGA_level_774.rds")
 
 
 

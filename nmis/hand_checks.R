@@ -220,4 +220,18 @@ write.csv(water, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/outputs/h
           row.names=F)
 rm(ukiez, kaiamz, mikaz)
 
-  
+#health data checks
+source("source_scripts/NMIS_Functions.R")
+source("tests/CheckDataConsistancy.R")
+
+health_norm <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Health_774_ALL_FACILITY_INDICATORS.rds")
+health_orig <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/pipeline_data_copy/nmis/data_774/Health_774_NMIS_Facility.csv", stringsAsFactors=F)
+
+test <- check_connsistency(health_norm, health_orig)
+
+f_d_nm <- names(test)
+
+compare_value(health_norm, health_orig, f_d_nm[1:2])
+
+
+

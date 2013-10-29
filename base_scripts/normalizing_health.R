@@ -41,7 +41,8 @@ h_661 <- rename(h_661, c("fees_adults.paid_services_routine_visit" = "paid_servi
                          "power_sources.grid" = "power_sources_grid",
                          "power_sources.solar" = "power_sources_solar",
                          "power_sources.generator" = "power_sources_generator",
-                         "sharps_separated_yn"= "med_waste_separated_yn"))
+                         "sharps_separated_yn"= "med_waste_separated_yn",
+                         "power_sources.none" = "power_sources_none"))
 
 #113
 h_113 <- rename(h_113, c("lga" = "mylga",
@@ -162,8 +163,6 @@ h_113$lab_tests.hemoglobin_testing <- h_113$lab_tests_hemoglobin_testing & h_113
 h_113$lab_tests.urine_testing <- h_113$lab_tests_urine_testing & h_113$laboratory_yn == 'yes' 
 h_113$lab_tests.hiv_testing <- h_113$lab_tests_hiv_testing & h_113$laboratory_yn == 'yes'
 h_113$lab_tests.tb_microscopy <- h_113$lab_tests_tb_microscopy & h_113$laboratory_yn == 'yes'
-#TODO: health... make sure lab_tests_pregnancy_calc + lab_tests_stool_calc are the same exact formula 
-h_113$lab_tests.stool <- h_113$lab_tests_pregnancy & h_113$laboratory_yn == 'yes'
 h_113$lab_tests_pregnancy_calc <- h_113$lab_tests_pregnancy & h_113$laboratory_yn == 'yes'
 h_113$medication.iud <- h_113$family_planning_iud & h_113$family_planning_yn == 'yes'
 h_113$medication.implants <- h_113$family_planning_implants & h_113$family_planning_yn == 'yes'
@@ -207,7 +206,6 @@ h_pilot$lab_tests.hemoglobin_testing <- h_pilot$lab_tests_hemoglobin_testing & h
 h_pilot$lab_tests.urine_testing <- h_pilot$lab_tests_urine_testing & h_pilot$laboratory_yn == 'yes'
 h_pilot$lab_tests.hiv_testing <- h_pilot$lab_tests_hiv_testing & h_pilot$laboratory_yn == 'yes'
 h_pilot$lab_tests.tb_microscopy <- h_pilot$lab_tests_tb_microscopy & h_pilot$laboratory_yn == 'yes'
-h_pilot$lab_tests.stool <- h_pilot$lab_tests_pregnancy & h_pilot$laboratory_yn == 'yes'
 h_pilot$lab_tests_pregnancy_calc <- h_pilot$lab_tests_pregnancy & h_pilot$laboratory_yn == 'yes'   
 h_pilot$supplies.condoms <- h_pilot$sti_tx_srvcs_condoms | h_pilot$hiv_tx_srvcs_condoms | h_pilot$supplies_available_condoms
 h_pilot$medication.iud <- h_pilot$family_planning_iud & h_pilot$family_planning_yn == 'yes'  
