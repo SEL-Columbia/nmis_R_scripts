@@ -1,6 +1,5 @@
 # source("source_scripts/NMIS_Utils.R")
 # source("base_scripts/InstallFormhub.R")
-setwd("~/work/r/nmis_R_scripts/")
 source("source_scripts/Normailize_Functions.R")
 source("source_scripts/NMIS_Functions.R")
 
