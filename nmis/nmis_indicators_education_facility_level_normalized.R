@@ -29,7 +29,7 @@ edu_sub <- subset(edu_outlier , select=c("uuid", "mylga", "mylga_state",
                                          "num_classrms_total", "classes_outside_yn", "two_shifts_yn", 
                                          "num_tchrs_attended_training", "num_tchrs_w_nce","provide_exercise_books_yn",
                                          "provide_pens_yn", "teacher_guide_yn", "functioning_library_yn",
-                                         "num_students_frthr_than_3km"))
+                                         "num_students_frthr_than_3km", "community", "ward"))
 
 edu_sub <- rename(edu_sub, c("photo" = "formhub_photo_id",
                              "school_name" = "facility_name",
