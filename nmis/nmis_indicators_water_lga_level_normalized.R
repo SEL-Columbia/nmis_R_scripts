@@ -59,4 +59,4 @@ lgaw_facilities <- ddply(iw774, .(lga_id), function(df) {
 ##########################
 ###### SUMMING UP ########
 ##########################
-saveRDS(x_y_killa(lgaw_facilities), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/normalized_final/Water_LGA_level_113.rds")
+saveRDS(lgaw_facilities, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/normalized_final/Water_LGA_level_113.rds")
