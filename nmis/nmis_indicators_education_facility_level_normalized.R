@@ -26,17 +26,19 @@ edu_sub <- subset(edu_outlier , select=c("uuid", "mylga", "mylga_state",
                                          "chalkboard_each_classroom_yn", "num_classrms_need_maj_repairs",
                                          "natl_curriculum_yn", "borehole_tubewell_repair_time", "potable_water",
                                          "num_classrms_need_min_repairs", "covered_roof_good_condi", 
-                                         "num_classrms_total", "classes_outside_yn", "two_shifts_yn", 
-                                         "num_tchrs_attended_training", "num_tchrs_w_nce","provide_exercise_books_yn",
-                                         "provide_pens_yn", "teacher_guide_yn", "functioning_library_yn",
-                                         "num_students_frthr_than_3km", "community", "ward"))
+                                         "classes_outside_yn", "two_shifts_yn", "num_tchrs_attended_training",
+                                         "num_tchrs_w_nce","provide_exercise_books_yn", "provide_pens_yn",
+                                         "teacher_guide_yn", "functioning_library_yn",
+                                         "num_students_frthr_than_3km", "community", 
+                                         "ward","start"))
 
 edu_sub <- rename(edu_sub, c("photo" = "formhub_photo_id",
                              "school_name" = "facility_name",
                              "level_of_education" = "facility_type",
                              "borehole_tubewell_repair_time" = "functional_water",
                              "num_tchrs_w_nce" = "num_tchrs_with_nce",
-                             "num_students_frthr_than_3km" = "students_living_3kmplus_school"))
+                             "num_students_frthr_than_3km" = "students_living_3kmplus_school",
+                             "start" = "date_of_survey"))
 
 # edu_sub$formhub_photo_id <- edu_sub$photo
 

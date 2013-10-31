@@ -44,7 +44,9 @@ edu_113 <- rename(edu_113, c("days_no_potable_water_pastmth" = "days_no_potable_
                              "power_grid_connection" = "power_sources.grid", 
                              "funtioning_library_yn" = "functioning_library_yn",
                              "toilet_none" = "toilet.none",
-                             "water_none" = "water.none"))
+                             "water_none" = "water.none",
+                             "start_time" = "start",
+                             "end_time" = "end"))
 
 ## Pilot
 edu_pilot <- rename(edu_pilot, c("num_total_classrooms" = "num_classrms_total",
@@ -65,7 +67,9 @@ edu_pilot <- rename(edu_pilot, c("num_total_classrooms" = "num_classrms_total",
                                  "num_tchrs_female_full_time" = "num_tchrs_female",
                                  "water_none" = "water.none",
                                  "power_grid_connection" = "power_sources.grid",
-                                 "funtioning_library_yn" = "functioning_library_yn"))
+                                 "funtioning_library_yn" = "functioning_library_yn",
+                                 "start_time" = "start",
+                                 "end_time" = "end"))
 
 
 #######
