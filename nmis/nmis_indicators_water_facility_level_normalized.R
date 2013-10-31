@@ -75,5 +75,5 @@ water_sub_nearbypoints <- subset(water_sub, dist_fake <= 35 | is.na(dist_fake))
 water_774 <- subset(water_774, dist_fake <= 35 | is.na(dist_fake))
 
 
-saveRDS(x_y_killa(water_sub_nearbypoints), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Water_774_NMIS_Facility.rds")
-saveRDS(x_y_killa(water_774), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Water_774_ALL_FACILITY_INDICATORS.rds")
+saveRDS(water_sub_nearbypoints, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Water_774_NMIS_Facility.rds")
+saveRDS(water_774, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Water_774_ALL_FACILITY_INDICATORS.rds")
