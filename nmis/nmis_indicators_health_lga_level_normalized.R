@@ -7,12 +7,6 @@ source("source_scripts/NMIS_Functions.R")
 
 health_774 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Health_774_ALL_FACILITY_INDICATORS.rds")
 
-#reading in data for population based calculations 
-popu <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/lgas.csv")
-row.names(popu) <- as.character(popu$lga_id)
-  # population figure within ddply is between the , and the last ) below
-lgah_summaries <- ddply(health_774, .(lga_id), summarize, population = popu[as.character(lga_id[[1]]),'pop_2006'])
-
 #changing into idata.frame
 ihealth774 <- idata.frame(health_774)
 
@@ -109,16 +103,16 @@ lga_health_data <- ddply(ihealth774, .(lga_id), function(df) {
                sum(df$num_nursemidwives_posted, na.rm = TRUE) +
                sum(df$num_nurses_posted, na.rm = TRUE) +
                sum(df$num_midwives_posted, na.rm = TRUE)) /
-                (popu[as.character(df$lga_id[[1]]),1]/1000),                    
+                (df$pop_2006[1]/1000),                    
           num_chews_per_1000 = 
             (sum(df$num_chews_posted, na.rm = TRUE) + 
                sum(df$num_junior_chews_posted, na.rm = TRUE)) /
-            (popu[as.character(df$lga_id[[1]]),1]/1000)
+            (df$pop_2006[1]/1000)
                            )})                     
 
 ###### SUMMING UP #########
 ##writing out##
-saveRDS(x_y_killa(lga_health_data), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/normalized_final/Health_LGA_level_774.rds")
+saveRDS(lga_health_data, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/normalized_final/Health_LGA_level_774.rds")
 
 
 
