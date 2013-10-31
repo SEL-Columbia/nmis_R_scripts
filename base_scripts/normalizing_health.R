@@ -1,9 +1,9 @@
-#####################################################################################################################
-##Normalizing Health Data: 661, 113, Pilot ##########################################################################
-#####################################################################################################################
+######################################################################################################################
+##Normalizing Health Data: 661, 113, Pilot 
 source("source_scripts/Normailize_Functions.R")
 source("source_scripts/NMIS_Functions.R")
 
+#reading in data
 h_661 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/merged/Health_661_Merged.csv", 
                   stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999"))
 h_113 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/113/Health_PhII_RoundI&II&III_Clean_2011.10.21.csv",
@@ -11,23 +11,18 @@ h_113 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data
 h_pilot <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/113/Pilot_Data_Health_Clean_2011.11.18.csv",
                     stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999"))
 
+#adding surveying source column
 h_661$src <- "661"
 h_113$src <- "113"
 h_pilot$src <- "pilot"
 
+#adding uuid to 113 + pilot
 h_113$uuid <- sapply(paste(h_113$gps, h_113$photo), FUN=digest)
 h_pilot$uuid <- sapply(paste(h_pilot$gps, h_pilot$photo), FUN=digest)
 
-
-####
-common_slugs_113 <- names(h_661)[(which(names(h_661) %in% names(h_113)))]
-common_slugs_pilot <- names(h_661)[(which(names(h_661) %in% names(h_pilot)))]
-health_common <- common_slug(c("h_113", "h_661", "h_pilot"))
-h_class <- common_type(c("h_113", "h_661", "h_pilot"))
-
 ########################
-#### Mapping Names #####
-########################
+#Mapping Names
+
 #661 
 h_661 <- rename(h_661, c("fees_adults.paid_services_routine_visit" = "paid_services_routine_visit",
                          "fees_adults.paid_services_lab_testing" = "paid_services_lab_testing",
@@ -96,9 +91,9 @@ h_pilot <- rename(h_pilot, c("lga" = "mylga",
                              "medication_tb_medicines" = "medication.tb_medicines",
                              "medication_none" = "medication.none"))
 
-####################################
+###############################
 #Adding/subtracting a few vars 
-####################################
+
 #661
 h_661$facility_owner_manager <- as.character(ifelse(h_661$facility_owner_manager.federalgovernment,
                                                     "federalgovernment",
@@ -226,19 +221,17 @@ h_pilot$delivery_services_yn <- as.logical(recodeVar(h_pilot$emergency_obstetric
 h_pilot$supplies.insecticide_treated_bednets <- (h_pilot$malaria_treatment_yn == 'yes' & 
                                                    (h_pilot$malaria_treatment_srvcs_itn == 'yes' |
                                                       h_pilot$supplies_available_bednets))
-#TODO: health follow up: all NA
+
 h_pilot$antenatal_care_malaria_prlx <- ifelse((h_pilot$malaria_treatment_sulphadoxine & 
                                                   h_pilot$antenatal_care_yn == 'yes'),
                                                     TRUE, NA)
 
 ##################################
-#### combining 661, 113 & pilot
-#################################
+##combining 661, 113 & pilot
 health_total <- rbind.fill(h_661, h_113, h_pilot)
 
 ###############################################
-####mapping values and standardize the type####
-###############################################
+##mapping values and standardize the type
 
 yes_no_columns <- c("private_yn", "road_yn", "all_weather_road_yn", "generator_funct_yn", "medication_folic_acid",
                     "solar_funct_yn", "grid_funct_yn", "vaccine_storage_yn", "oxygen_funct_yn",  
@@ -296,20 +289,20 @@ numeric_column_list <- c("medical_records_officers_active", "medical_records_off
                          "num_med_assistants_fulltime", "num_med_rcrds_officers_fulltime", "km_to_referral_facility",
                          "num_facilities", "num_midwives_fulltime", "num_toilets_improved_p", "days_no_potable_water_pastmth")
 
-# logical type conversion and ASSERTION(sort of)
+#logical type conversion and ASSERTION
 health_total <- yes_no_batch(health_total, yes_no_columns)
 check_type <- batch_type(health_total, yes_no_columns)
 stopifnot(all(check_type %in% c("logical")))
 
-# numeric type conversion and ASSERTION(sort of)
+#numeric type conversion and ASSERTION
 health_total <- numeric_batch(health_total, numeric_column_list)
 check_type <- batch_type(health_total, numeric_column_list)
 stopifnot(all(check_type %in% c("integer", "numeric")))
 
-################
-#### output ####
-################
-# Final cleaning remove lga_id = NA and duplicated UUID rows
+###################
+##output 
+
+## final cleaning remove lga_id = NA and duplicated UUID rows
 health_total <- subset(health_total, !(duplicated(health_total$uuid) | is.na(health_total$lga_id)))
 
 lgas <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/lgas.csv")
