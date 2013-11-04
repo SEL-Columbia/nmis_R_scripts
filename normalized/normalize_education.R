@@ -98,6 +98,9 @@ edu_113$multigrade_teaching_yn <- NA
 edu_113$times_tchr_pay_delay_pastyr <- as.integer(edu_113$times_tchr_pay_delay_pastyr)
 edu_113$times_tchr_pay_miss_pastyr <- as.integer(edu_113$times_tchr_pay_miss_pastyr)
 
+edu_113$num_students_frthr_than_3km <- ifelse(edu_113$num_students_frthr_than_3km < 0,
+                                              edu_113$num_students_frthr_than_3km == 8,
+                                              edu_113$num_students_frthr_than_3km)
 
 ##################################
 ##combining 661, 113 & pilot

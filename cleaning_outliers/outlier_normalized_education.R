@@ -46,10 +46,6 @@ edu_999$num_benches[edu_999$src == "113"] <- apply(cbind(edu_999$num_attached_be
 
 edu_999$potable_water <- ((edu_999$days_no_potable_water < 7) & (edu_999$water.none == FALSE))
 
-#negative number cleaning
-edu_999$num_students_frthr_than_3km <- ifelse(edu_999$num_students_frthr_than_3km < 0,
-                                              edu_999$num_students_frthr_than_3km == 8,
-                                              edu_999$num_students_frthr_than_3km)
 
 ######################################
 #### Outlier Cleaning stars here: ####
