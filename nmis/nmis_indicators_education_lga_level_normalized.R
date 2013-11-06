@@ -31,7 +31,7 @@ lga_edu_data <- ddply(ie, .(lga_id), function(df) {
               classrooms_num_chalkboards =
                   sum(df$num_classrm_w_chalkboard, na.rm = TRUE),
               teachers_total =
-                  sum(df$num_tchrs.num_tchrs_total, na.rm = TRUE),
+                  sum(df$num_tchrs_total, na.rm = TRUE),
               teachers_qualified =
                   sum(df$num_tchrs_w_nce, na.rm = TRUE),
               teachers_attended_training =

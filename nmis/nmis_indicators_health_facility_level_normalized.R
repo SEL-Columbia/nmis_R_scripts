@@ -32,7 +32,7 @@ health_sub <- subset(health_outlier, select=c("uuid", "mylga", "mylga_state",
                                               "medication.iv_fluid", "medication.uterotonics", 
                                               "lab_tests.pregnancy", "supplements.iron",
                                               "lab_tests.stool", "lab_tests.tb_microscopy", 
-                                              "medication.arvs"))
+                                              "medication.arvs", "community", "ward"))
 
 health_sub <- rename(health_sub, c('photo' = 'formhub_photo_id',
                              'geocodeoffacility' = 'gps',
@@ -399,6 +399,6 @@ health_sub <- subset(health_sub, dist_fake <= 35 | is.na(dist_fake))
 health_774 <- subset(health_774, dist_fake <= 35 | is.na(dist_fake))
 
 #writing out
-saveRDS(x_y_killa(health_sub), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Health_774_NMIS_Facility.rds")
-saveRDS(x_y_killa(health_774), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Health_774_ALL_FACILITY_INDICATORS.rds")
+saveRDS(health_sub, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Health_774_NMIS_Facility.rds")
+saveRDS(health_774, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Health_774_ALL_FACILITY_INDICATORS.rds")
 
