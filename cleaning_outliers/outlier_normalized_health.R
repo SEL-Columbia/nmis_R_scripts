@@ -3,7 +3,7 @@
 #####################################################################################################################
 source('base_scripts/InstallFormhub.R')
 source('source_scripts/NMIS_Functions.R')
-source('cleaning_outliers/outlier_functions.R')
+source('source_scripts/outlier_functions.R')
 
 #Reading in Data
 health_999 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Health_774_999Cleaned.rds")
@@ -230,7 +230,7 @@ health_999 <- outlierreplace(health_999, 'num_bucket_system',
 
 ##writing out.rds
 saveRDS(health_999, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Health_774_outliercleaned.rds")
-rm(health_999)
+
 
 
 

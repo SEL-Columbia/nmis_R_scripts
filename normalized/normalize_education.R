@@ -5,11 +5,11 @@ source("source_scripts/NMIS_Functions.R")
 
 #reading in data
 edu_661 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/merged/Education_661_Merged.csv", 
-                    stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999", "99999", "999999", ""))
+                    stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999", "99999", "999999", "-8"))
 edu_113 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/113/Educ_Baseline_PhaseII_all_merged_cleaned_2011Nov21.csv",
-                  stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999", "99999", "999999", ""))
+                  stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999", "99999", "999999", "-8"))
 edu_pilot <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/113/Pilot_Education_cleaned_2011Nov17.csv",
-                    stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999", "99999", "999999", ""))
+                    stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999", "99999", "999999", "-8"))
 
 #adding surveying source column
 edu_661$src <- "661"
@@ -98,12 +98,8 @@ edu_113$multigrade_teaching_yn <- NA
 edu_113$times_tchr_pay_delay_pastyr <- as.integer(edu_113$times_tchr_pay_delay_pastyr)
 edu_113$times_tchr_pay_miss_pastyr <- as.integer(edu_113$times_tchr_pay_miss_pastyr)
 
-edu_113$num_students_frthr_than_3km <- ifelse(edu_113$num_students_frthr_than_3km < 0,
-                                              edu_113$num_students_frthr_than_3km == 8,
-                                              edu_113$num_students_frthr_than_3km)
-
-##################################
-##combining 661, 113 & pilot
+################################
+###combining 661, 113 & pilot###
 edu_total <- rbind.fill(edu_661, edu_113, edu_pilot)
 
 
@@ -209,4 +205,4 @@ lgas <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/lgas.csv"
 lgas <- subset(lgas, select=-c(latitude, longitude))
 
 edu_total <- merge_non_redundant(lgas, edu_total, by="lga_id")
-saveRDS(edu_total, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Edu774.rds")
+saveRDS(edu_total, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Education_774_normalized.rds")

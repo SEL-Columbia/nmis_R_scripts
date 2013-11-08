@@ -1,11 +1,8 @@
-#####################################################################################################################
-##Normalized Health NMIS LGA Level ##################################################################################
-#####################################################################################################################
 # slugs are at https://github.com/mvpdev/nmis/blob/develop/uis_r_us/indicators/overview.json
-source("base_scripts/InstallFormhub.R")
 source("source_scripts/NMIS_Functions.R")
+source("base_scripts/InstallFormhub.R")
 
-health_774 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Health_774_ALL_FACILITY_INDICATORS.rds")
+health_774 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/Normalized/Health_774_ALL_FACILITY_INDICATORS.rds")
 
 #changing into idata.frame
 ihealth774 <- idata.frame(health_774)
@@ -112,7 +109,7 @@ lga_health_data <- ddply(ihealth774, .(lga_id), function(df) {
 
 ###### SUMMING UP #########
 ##writing out##
-saveRDS(lga_health_data, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/normalized_final/Health_LGA_level_774.rds")
+saveRDS(lga_health_data, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/Health_LGA_level_774.rds")
 
 
 

@@ -2,9 +2,9 @@
 ##Normalized Health 999 Cleaning ####################################################################################
 #####################################################################################################################
 source("base_scripts/InstallFormhub.R")
-source('cleaning_999s/999_functions.R')
+source('source_scripts/999_functions.R')
 
-merged_health <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Health774.rds")
+merged_health <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Health_774_normalized.rds")
 
 ##knocking out 999 values
 cellst(merged_health, 'num_flush_or_pour_flush_piped',

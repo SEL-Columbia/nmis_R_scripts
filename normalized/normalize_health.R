@@ -5,11 +5,11 @@ source("source_scripts/NMIS_Functions.R")
 
 #reading in data
 h_661 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/merged/Health_661_Merged.csv", 
-                  stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999"))
+                  stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999", "-8"))
 h_113 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/113/Health_PhII_RoundI&II&III_Clean_2011.10.21.csv",
-                  stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999"))
+                  stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999", "-8"))
 h_pilot <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/113/Pilot_Data_Health_Clean_2011.11.18.csv",
-                    stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999"))
+                    stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999", "-8"))
 
 #adding surveying source column
 h_661$src <- "661"
@@ -309,5 +309,5 @@ lgas <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/lgas.csv"
 lgas <- subset(lgas, select=-c(latitude, longitude))
 
 health_total <- merge_non_redundant(lgas, health_total, by="lga_id")
-saveRDS(health_total, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Health774.rds")
+saveRDS(health_total, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Health_774_normalized.rds")
 

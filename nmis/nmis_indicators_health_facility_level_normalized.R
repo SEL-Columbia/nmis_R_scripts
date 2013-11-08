@@ -1,6 +1,3 @@
-#####################################################################################################################
-##Normalized Health NMIS Facility Level #############################################################################
-#####################################################################################################################
 source("base_scripts/InstallFormhub.R")
 source("source_scripts/NMIS_Functions.R")
 
@@ -399,6 +396,6 @@ health_sub <- subset(health_sub, dist_fake <= 35 | is.na(dist_fake))
 health_774 <- subset(health_774, dist_fake <= 35 | is.na(dist_fake))
 
 #writing out
-saveRDS(health_sub, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Health_774_NMIS_Facility.rds")
-saveRDS(health_774, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Health_774_ALL_FACILITY_INDICATORS.rds")
+saveRDS(health_sub, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/Normalized/Health_774_NMIS_Facility.rds")
+saveRDS(health_774, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/Normalized/Health_774_ALL_FACILITY_INDICATORS.rds")
 

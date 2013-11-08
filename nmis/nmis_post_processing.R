@@ -11,7 +11,7 @@
 # percent <- c(percent, "antenatal_care_coverage")
 # 
 # p_nm[!p_nm %in% c_nm]
-
+source("source_scripts/post_processing_functions.R")
 
 percent_names <- c("proportion_schools_power_access_primary", "proportion_health_facilities_hiv_testing", 
                    "proportion_at_least_1_sba", "proportion_schools_multigrade_classrooms_primary", 
@@ -76,59 +76,30 @@ percent_names <- c("proportion_schools_power_access_primary", "proportion_health
                    "antenatal_care_coverage")
 
 
-nmis_lga <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/normalized_final/Combined_lga.csv", stringsAsFactors=F)
+nmis_lga <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/All_774_LGA.rds")
 
 for (name in percent_names){
     idx <- which(!is.na(nmis_lga[,name]) & !is.infinite(nmis_lga[,name]))
     nmis_lga[idx, name] <- paste(format(round(nmis_lga[idx, name]*100, digits=2), nsmall=2), "%", sep="")
 }
 
-write.csv(nmis_lga,"~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/normalized_final/Combined_lga.csv", row.names=F)
+write.csv(nmis_lga,"~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/All_774_LGA.csv", row.names=F)
 
 ######## Pull in the external state-level data
-
 #It seems we have most of the indicators lets just leave it as it is for now
 
 
 
 
 ####### replace baseline data with mopup data
-update_mopup <- function(df, edu_flag){
-    if(edu_flag == T){
-        df2 <- read.csv("./facility_data/baseline_matching_education.csv", stringsAsFactors=F, na.strings = "")
-    }else{
-        df2 <- read.csv("./facility_data/baseline_matching_health.csv", stringsAsFactors=F, na.strings = "")
-    }
-    df2 <- df2[!duplicated(df2$nmis_uuid),]
-    
-    update_df <- merge(df, df2, by.x = "uuid", by.y = "nmis_uuid", all.x=T)
-    
-    update_df$facility_name <- ifelse(!is.na(update_df$fcl_facility_name), 
-                                      update_df$fcl_facility_name,
-                                      update_df$facility_name)
-    
-    update_df$ward <- ifelse(!is.na(update_df$fcl_ward) & is.na(update_df$ward),
-                             update_df$fcl_ward,
-                             update_df$ward)
-    
-    update_df$community <- ifelse(!is.na(update_df$fcl_community) & is.na(update_df$community),
-                                  update_df$fcl_community,
-                                  update_df$community)
-    update_df$fcl_ward <- NULL
-    update_df$fcl_community <- NULL
-    update_df$fcl_facility_name <- NULL
-    
-    return(update_df)
-}
+edu_774 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/Normalized/Education_774_NMIS_Facility.rds")
+edu_774_all <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/Normalized/Education_774_ALL_FACILITY_INDICATORS.rds")
 
-edu_774 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Education_774_NMIS_Facility.rds")
-edu_774_all <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Education_774_ALL_FACILITY_INDICATORS.rds")
+health_774 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/Normalized/Health_774_NMIS_Facility.rds")
+health_774_all <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/Normalized/Health_774_ALL_FACILITY_INDICATORS.rds")
 
-health_774 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Health_774_NMIS_Facility.rds")
-health_774_all <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Health_774_ALL_FACILITY_INDICATORS.rds")
-
-water_774 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Water_774_NMIS_Facility.rds")
-water_774_all <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Water_774_ALL_FACILITY_INDICATORS.rds")
+water_774 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/Normalized/Water_774_NMIS_Facility.rds")
+water_774_all <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/Normalized/Water_774_ALL_FACILITY_INDICATORS.rds")
 
 
 
@@ -140,29 +111,6 @@ health_774_all <- update_mopup(health_774_all, edu_flag=F)
 
 
 ######## Addiing short id to baseline data
-shortid_generate <- function(df, prefix) 
-{ 
-    l <- letters
-    set.seed(1)
-    x <- sample(0:26^4-1, dim(df)[1], replace=F)
-    
-    digits <- vector(mode="list", length=4)
-    tmp <- x
-    for (i in 4:1)
-    {
-        digits[[i]] <- (tmp %% 26) + 1
-        tmp <- tmp %/% 26
-    }
-    df$short_id <- paste0(prefix,':', l[digits[[4]]],l[digits[[3]]],l[digits[[2]]],l[digits[[1]]])
-    
-    # test that these are unique by lga before returning
-    numberofshortids <- length(unique(df$short_id))
-    numberoffacilities <- length(df$short_id)
-    stopifnot(numberofshortids == numberoffacilities)
-    
-    return(df) 
-}
-
 edu_774 <- shortid_generate(edu_774, prefix="E")
 stopifnot(!anyDuplicated(edu_774$short_id))
 
@@ -178,12 +126,13 @@ stopifnot(!anyDuplicated(health_774_all$short_id))
 water_774 <- shortid_generate(water_774, prefix="W")
 stopifnot(!anyDuplicated(water_774$short_id))
 
-water_774_all <- shortid_generate(water_774_all, prefix="H")
+water_774_all <- shortid_generate(water_774_all, prefix="W")
 stopifnot(!anyDuplicated(water_774_all$short_id))
 
-write.csv(water_774, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/normalized_final/facility/water_774.csv", row.names=F)
-write.csv(water_774_all, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/normalized_final/facility/water_774_all.csv", row.names=F)
-write.csv(edu_774, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/normalized_final/facility/edu_774.csv", row.names=F)
-write.csv(edu_774_all, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/normalized_final/facility/edu_774_all.csv", row.names=F)
-write.csv(health_774, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/normalized_final/facility/health_774.csv", row.names=F)
-write.csv(health_774_all, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/normalized_final/facility/health_774_all.csv", row.names=F)
+write.csv(water_774, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/Water_774_NMIS_Facility.csv", row.names=F)
+write.csv(edu_774, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/Education_774_NMIS_Facility.csv", row.names=F)
+write.csv(health_774, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/Health_774_NMIS_Facility.csv", row.names=F)
+
+write.csv(water_774_all, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/Water_774_ALL_FACILITY_INDICATORS.csv", row.names=F)
+write.csv(edu_774_all, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/Education_774_ALL_FACILITY_INDICATORS.csv", row.names=F)
+write.csv(health_774_all, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/Health_774_ALL_FACILITY_INDICATORS.csv", row.names=F)

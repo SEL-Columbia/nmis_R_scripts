@@ -98,17 +98,12 @@ common_type <- function(df_names)
     
 }
 
-numeric_batch <- function(df, list_of_column_names)
-{
+numeric_batch <- function(df, list_of_column_names){
     l_ply(list_of_column_names, function(col) {
-        if (class(df[,col]) %in% c("numeric", "integer")){
-            print(sprintf("%s is already numeric or integer, and no conversion was carried out.", col))
-        }else{
+        if (!class(df[,col]) %in% c("numeric", "integer")){
             df[,col] <<- as.numeric(df[,col])    
         }
-        
     })
-    
     return(df)
 }
 
@@ -120,21 +115,14 @@ yes_no_converter <- function(df, col_name)
         num_itm <- length(which(!is.na(vec)))
         yn_prop <- num_yn/num_itm
         
-        if (yn_prop > 0.99){
-            cat(sprintf("%s: All of the values are yes and no\n", col_name))
-        }else{
+        if (yn_prop < 0.99){
             warning(sprintf("%s: yes and no values has only a proportion of %.3f", col_name, yn_prop))
         }
         vec <- as.logical(recodeVar(vec,
                                     c('yes', 'no', 'TRUE', 'FALSE'),
                                     c(TRUE, FALSE, TRUE, FALSE)))
-    
-    }else{
-        cat(sprintf("%s is already logical, and no conversion was carried out.\n", col_name))
-    }
-        
+    }        
     return(vec)
-    
 }
 
 yes_no_batch <- function(df, list_of_column_names)
