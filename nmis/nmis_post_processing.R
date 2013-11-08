@@ -79,8 +79,10 @@ percent_names <- c("proportion_schools_power_access_primary", "proportion_health
 nmis_lga <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/All_774_LGA.rds")
 
 for (name in percent_names){
-    idx <- which(!is.na(nmis_lga[,name]) & !is.infinite(nmis_lga[,name]))
-    nmis_lga[idx, name] <- paste(format(round(nmis_lga[idx, name]*100, digits=2), nsmall=2), "%", sep="")
+    idx <- which(is.finite(nmis_lga[,name]))
+    na_idx <- which(!is.finite(nmis_lga[,name]))
+    nmis_lga[idx, name] <- paste(format(round(nmis_lga[idx, name]*100, digits=2), nsmall=2, trim=T), "%", sep="")
+    nmis_lga[na_idx, name] <- NA
 }
 
 write.csv(nmis_lga,"~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/All_774_LGA.csv", row.names=F)
