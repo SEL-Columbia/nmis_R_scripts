@@ -26,17 +26,19 @@ edu_sub <- subset(edu_outlier , select=c("uuid", "mylga", "mylga_state",
                                          "chalkboard_each_classroom_yn", "num_classrms_need_maj_repairs",
                                          "natl_curriculum_yn", "borehole_tubewell_repair_time", "potable_water",
                                          "num_classrms_need_min_repairs", "covered_roof_good_condi", 
-                                         "num_classrms_total", "classes_outside_yn", "two_shifts_yn", 
-                                         "num_tchrs_attended_training", "num_tchrs_w_nce","provide_exercise_books_yn",
-                                         "provide_pens_yn", "teacher_guide_yn", "functioning_library_yn",
-                                         "num_students_frthr_than_3km"))
+                                         "classes_outside_yn", "two_shifts_yn", "num_tchrs_attended_training",
+                                         "num_tchrs_w_nce","provide_exercise_books_yn", "provide_pens_yn",
+                                         "teacher_guide_yn", "functioning_library_yn",
+                                         "num_students_frthr_than_3km", "community", 
+                                         "ward","start"))
 
 edu_sub <- rename(edu_sub, c("photo" = "formhub_photo_id",
                              "school_name" = "facility_name",
                              "level_of_education" = "facility_type",
                              "borehole_tubewell_repair_time" = "functional_water",
                              "num_tchrs_w_nce" = "num_tchrs_with_nce",
-                             "num_students_frthr_than_3km" = "students_living_3kmplus_school"))
+                             "num_students_frthr_than_3km" = "students_living_3kmplus_school",
+                             "start" = "date_of_survey"))
 
 # edu_sub$formhub_photo_id <- edu_sub$photo
 
@@ -162,5 +164,5 @@ e_774 <- subset(e_774, dist_fake <= 35 | is.na(dist_fake))
 
 
 
-saveRDS(x_y_killa(edu_sub), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Education_774_NMIS_Facility.rds")
-saveRDS(x_y_killa(e_774), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Education_774_ALL_FACILITY_INDICATORS.rds")
+saveRDS(edu_sub, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/Normalized/Education_774_NMIS_Facility.rds")
+saveRDS(e_774, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/Normalized/Education_774_ALL_FACILITY_INDICATORS.rds")

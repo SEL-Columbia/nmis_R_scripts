@@ -1,35 +1,29 @@
-# source("source_scripts/NMIS_Utils.R")
-# source("base_scripts/InstallFormhub.R")
-setwd("~/work/r/nmis_R_scripts/")
+######################################################################################################################
+##Normalizing Education/Health/Water Data: 661, 113, Pilot 
 source("source_scripts/Normailize_Functions.R")
 source("source_scripts/NMIS_Functions.R")
 
-
+#reading in data
 edu_661 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/merged/Education_661_Merged.csv", 
-                    stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999", "99999", "999999", ""))
+                    stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999", "99999", "999999", "-8"))
 edu_113 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/113/Educ_Baseline_PhaseII_all_merged_cleaned_2011Nov21.csv",
-                  stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999", "99999", "999999", ""))
+                  stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999", "99999", "999999", "-8"))
 edu_pilot <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/113/Pilot_Education_cleaned_2011Nov17.csv",
-                    stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999", "99999", "999999", ""))
+                    stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999", "99999", "999999", "-8"))
 
+#adding surveying source column
 edu_661$src <- "661"
 edu_113$src <- "113"
 edu_pilot$src <- "pilot"
 
+#adding uuid to 113 + pilot
 edu_113$uuid <- sapply(paste(edu_113$gps, edu_113$photo), FUN=digest)
 edu_pilot$uuid <- sapply(paste(edu_pilot$gps, edu_pilot$photo), FUN=digest)
 
-
-####
-common_slugs_113 <- names(edu_661)[(which(names(edu_661) %in% names(edu_113)))]
-edu_common <- common_slug(c("edu_113", "edu_661", "edu_pilot"))
-edu_class <- common_type(c("edu_113", "edu_661", "edu_pilot"))
-
 ########################
-#### Mapping Names #####
-########################
+##Mapping Names 
 
-### 113 names
+#113 names
 edu_113 <- rename(edu_113, c("days_no_potable_water_pastmth" = "days_no_potable_water",
                              "num_unattached_desks" = "num_desks",
                              "lga" = "mylga",
@@ -45,9 +39,11 @@ edu_113 <- rename(edu_113, c("days_no_potable_water_pastmth" = "days_no_potable_
                              "power_grid_connection" = "power_sources.grid", 
                              "funtioning_library_yn" = "functioning_library_yn",
                              "toilet_none" = "toilet.none",
-                             "water_none" = "water.none"))
+                             "water_none" = "water.none",
+                             "start_time" = "start",
+                             "end_time" = "end"))
 
-## Pilot
+#pilot
 edu_pilot <- rename(edu_pilot, c("num_total_classrooms" = "num_classrms_total",
                                  "lga" = "mylga",
                                  "state" = "mylga_state", 
@@ -66,12 +62,12 @@ edu_pilot <- rename(edu_pilot, c("num_total_classrooms" = "num_classrms_total",
                                  "num_tchrs_female_full_time" = "num_tchrs_female",
                                  "water_none" = "water.none",
                                  "power_grid_connection" = "power_sources.grid",
-                                 "funtioning_library_yn" = "functioning_library_yn"))
+                                 "funtioning_library_yn" = "functioning_library_yn",
+                                 "start_time" = "start",
+                                 "end_time" = "end"))
 
-
-#######
-#Adding Few vars before cleaning 999
-#######
+######################################
+##Adding variables before 999 cleaning 
 
 edu_113$school_managed <- ifelse(edu_113$school_managed_fed_gov, 
                                  "fed_gov",
@@ -102,22 +98,18 @@ edu_113$multigrade_teaching_yn <- NA
 edu_113$times_tchr_pay_delay_pastyr <- as.integer(edu_113$times_tchr_pay_delay_pastyr)
 edu_113$times_tchr_pay_miss_pastyr <- as.integer(edu_113$times_tchr_pay_miss_pastyr)
 
-                
-##################################
-#### combining 661, 113 & pilot
-#################################
+################################
+###combining 661, 113 & pilot###
 edu_total <- rbind.fill(edu_661, edu_113, edu_pilot)
 
 
 ###############################################
-####mapping values and standardize the type####
-###############################################
+##mapping values and standardize the type
 
 edu_113$vip_latrine_number <- as.numeric(edu_113$vip_latrine_number)
 edu_113$slab_pit_latrine_number <- as.numeric(edu_113$slab_pit_latrine_number)
 
-#### Total
-
+##total
 edu_total$borehole_tubewell_repair_time <- as.logical(recodeVar(edu_total$borehole_tubewell_repair_time,
                                                                 c('yes', 'fixed_more_than_month', 'fixed_within_day',
                                                                   'fixed_within_month', 'fixed_within_week', 'never_broken',
@@ -193,7 +185,6 @@ numeric_column_list <- c("slab_pit_latrine_number", "vip_latrine_not_working", "
                       "num_exercise_books_per_student_pry", "num_exercise_books_per_student_jss", 
                       "num_textbooks_pry_sci", "num_notebooks")
 
-
 # logical type conversion and ASSERTION(sort of)
 edu_total <- yes_no_batch(edu_total, yes_no_columns)
 check_type <- batch_type(edu_total, yes_no_columns)
@@ -204,95 +195,14 @@ edu_total <- numeric_batch(edu_total, numeric_column_list)
 check_type <- batch_type(edu_total, numeric_column_list)
 stopifnot(all(check_type %in% c("integer", "numeric")))
 
+################
+##output 
 
-################
-#### output ####
-################
-# Final cleaning remove lga_id = NA and duplicated UUID rows
+#final cleaning remove lga_id = NA and duplicated UUID rows
 edu_total <- subset(edu_total, !(duplicated(edu_total$uuid) | is.na(edu_total$lga_id)))
 
 lgas <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/lgas.csv")
 lgas <- subset(lgas, select=-c(latitude, longitude))
 
 edu_total <- merge_non_redundant(lgas, edu_total, by="lga_id")
-saveRDS(edu_total, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Edu774.rds")
-################################
-##### Added in outlier & 999####
-################################
-
-# Creating Num_tchrs_male & female for 113 source
-edu_113$num_tchrs_male <- apply(cbind(edu_113$num_tchrs_male_full_time, edu_113$num_tchrs_male_part_time), 1,
-                                sum, na.rm=T)
-edu_113$num_tchrs_female <- apply(cbind(edu_113$num_tchrs_female_full_time, edu_113$num_tchrs_female_part_time), 1,
-                                  sum, na.rm=T)
-
-edu_113$num_tchrs_w_nce <- apply(cbind(edu_113$tchrs_male_nce, 
-                                       edu_113$tchrs_female_nce, 
-                                       edu_113$tchrs_male_other_w_nce,
-                                       edu_113$tchrs_female_other_w_nce), 1, sum, na.rm=T)
-
-
-edu_113$num_classrms_total <- apply(cbind(edu_113$num_classrms_good_cond, 
-                                          edu_113$num_classrms_need_min_repairs, 
-                                          edu_113$num_classrms_need_maj_repairs), 1, sum, na.rm=T)
-
-edu_113$num_toilet_total <- apply(cbind(edu_113$vip_latrine_number, 
-                                        edu_113$slab_pit_latrine_number), 
-                                  1, sum, na.rm=T)
-
-edu_113$num_benches <- apply(cbind(edu_113$num_attached_benches, 
-                                   edu_113$num_unattached_benches), 1, sum, na.rm=T)
-
-edu_113$ratio_students_to_benches <- replace(edu_113$num_students_total, is.na(edu_113$num_students_total), 0) / 
-    replace(edu_113$num_benches, is.na(edu_113$num_benches), 0) 
-
-edu_661$chalkboard_each_classroom_yn <- edu_661$num_classrms_total <= edu_661$num_classrm_w_chalkboard
-
-########################
-###Needed to be added###
-########################
-
-#~^ 661
-
-# after cleaning999
-
-# after outlier
-edu_661$num_textbooks <-  
-    ifelse(edu_661$level_of_education %in% c('primary_only', 'preprimary_and_primary'),  
-           edu_661$num_math_textbook_pry + edu_661$num_english_textbook_pry + 
-               edu_661$num_soc_science_textbook_pry + edu_661$num_science_textbook_pry,
-           ifelse(edu_661$level_of_education %in% c('junior_and_senior_sec', 'juniors_sec_only'),
-                  edu_661$num_math_textbook_js + edu_661$num_english_textbook_js + 
-                      edu_661$num_soc_science_textbook_js + edu_661$num_science_textbook_js,
-                  ifelse(edu_661$level_of_education %in% c('primary_and_junior_sec', 'primary_junior_and_senior_sec'),
-                         edu_661$num_math_textbook_pry + edu_661$num_english_textbook_pry + 
-                             edu_661$num_soc_science_textbook_pry + edu_661$num_science_textbook_pry +
-                             edu_661$num_math_textbook_js + edu_661$num_english_textbook_js + 
-                             edu_661$num_soc_science_textbook_js + edu_661$num_science_textbook_js,
-                         0)))
-
-#~^ 113
-edu_113$num_textbooks <- apply(cbind(edu_113$num_textbooks_english, 
-                                     edu_113$num_textbooks_math, 
-                                     edu_113$num_textbooks_social_sci,
-                                     edu_113$num_textbooks_pry_sci), 1, sum, na.rm=T)
-
-edu_113$pupil_toilet_ratio_facility <- (ifelse(edu_113$flush_toilet_drain_to == "improved", 
-                                               apply(cbind(edu_113$flush_toilet_number, 
-                                                           edu_113$vip_latrine_number,
-                                                           edu_113$slab_pit_latrine_number), 1, sum, na.rm=T),
-                                               apply(cbind(edu_113$vip_latrine_number,
-                                                           edu_113$slab_pit_latrine_number,
-                                                           edu_113$education_improved_sanitation), 1, sum, na.rm=T)) / edu_113$num_students_total)
-
-edu_113$improved_sanitation <- (edu_113$toilet.flush_or_pour_flush_improved | 
-                                    edu_113$toilet.ventilated_improved | 
-                                    edu_113$toilet.pit_latrine_with_slab)
-
-
-#~^ Pilot
-edu_pilot$num_textbooks <- apply(cbind(edu_pilot$num_textbooks_english, 
-                                       edu_pilot$num_textbooks_math, 
-                                       edu_pilot$num_textbooks_social_sci,
-                                       edu_pilot$num_textbooks_pry_sci), 1, sum, na.rm=T)
-
+saveRDS(edu_total, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Education_774_normalized.rds")

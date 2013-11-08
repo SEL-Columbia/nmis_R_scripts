@@ -1,7 +1,9 @@
-setwd("~/work/r/nmis_R_scripts/")
+######################################################################################################################
+##Normalizing Water Data: 661, 113, Pilot 
 source("source_scripts/Normailize_Functions.R")
 source("source_scripts/NMIS_Functions.R")
 
+#reading in data
 water_661 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/merged/Water_661_Merged.csv", 
                     stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999", ""))
 
@@ -15,47 +17,37 @@ reclassify <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_
                        stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999", ""))
 reclassify <- subset(reclassify, select=c(uuid, Classification))    
 
-
+#adding surveying source column
 water_661$src <- "661"
 water_113$src <- "113"
 water_pilot$src <- "pilot"
 
+#adding uuid to 113 + pilot
 water_113$uuid <- sapply(paste(water_113$gps, water_113$photo), FUN=digest)
 water_pilot$uuid <- sapply(paste(water_pilot$gps, water_pilot$photo), FUN=digest)
 
-
-####
-common_slugs_113 <- names(water_661)[(which(names(water_661) %in% names(water_pilot)))]
-water_common <- common_slug(c("water_113", "water_661", "water_pilot"))
-water_class <- common_type(c("water_113", "water_661", "water_pilot"))
-
-####
-#### Merge reclassify data back to 661 data
-####
-
+#merge reclassify data back to 661 data
 water_661 <- merge(water_661, reclassify, by="uuid", all.x=T)
 water_661 <- water_661[!duplicated(water_661$uuid),]
 
 ########################
-########################
-#### Mapping Names #####
-########################
+##mapping names 
 
-### 113 names
+#113
 water_113 <- rename(water_113, 
                     c("geocodeoffacility" = 'gps',
                       "water_source_used_today_yn" = "water_functional_yn"
                       ))
 
-### pilot names
+#pilot names
 water_pilot <- rename(water_pilot, 
                       c("geocodeoffacility" = 'gps',
                         "water_source_used_today_yn" = "water_functional_yn"
                       ))
 
-##########################
-#Standardize column value#
-##########################
+
+#########################
+#standardize column values
 
 water_113$water_source_type <- recodeVar(water_113$water_source_type, 
 										c("borehole", "tube_well"),
@@ -89,12 +81,12 @@ water_661$Classification <- recodeVar(water_661$Classification,
                                         c("no_photo", "no_photo", "no_photo", 
                                           'ten_thousand_overhead', "unimproved")
                                         )
-#Delete records with no_photo or remove in classification column
+##delete records with no_photo or remove in classification column
 water_661 <- subset(water_661,! Classification %in% c("remove", "no_photo"))
 
-#######
-#Adding Few vars before Combining
-#######
+##############################
+#Adding/subtracting a few vars
+
 water_661$water_point_type <- ifelse(!is.na(water_661$Classification), 
                                      water_661$Classification, 
                               ifelse(!is.na(water_661$water_source_type),
@@ -182,10 +174,13 @@ water_661$distribution_type <-
       		NA))))  
 
 
-#####Combine
+##################################
+##combining 661, 113 & pilot
 water_total <- rbind.fill(water_661, water_113, water_pilot)
 
-##### Standardize after combine 3 sources
+##########################################
+##mapping values and standardize the type
+
 water_total$reason_not_used <-ifelse(water_total$src == "661", 
 									water_total$reason_not_used, 
 									   ifelse(water_total$reasons_not_used_pump_broken,
@@ -227,5 +222,5 @@ lgas <- subset(lgas, select=-c(latitude, longitude))
 water_total <- merge_non_redundant(lgas, water_total, by="lga_id")
 water_total <- subset(water_total, !(duplicated(water_total$uuid) | is.na(water_total$lga_id)))
 
-saveRDS(water_total, '~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Water_774_normalized_999clean.rds')
-  		        	      	        	      	        	      	        	  		         	        	   		        	   		        	   		        	   		        	 		         	   		        	  		         	        	   		        	   		        	   		        	   		        	   		        	   		        	   		        	   		                                                                                                                                                                                                                                                                                                    
+saveRDS(water_total, '~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Water_774_normalized.rds')
+

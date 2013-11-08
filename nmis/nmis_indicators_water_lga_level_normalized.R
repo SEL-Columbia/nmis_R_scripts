@@ -1,6 +1,6 @@
 # slugs are at https://github.com/mvpdev/nmis/blob/develop/uis_r_us/indicators/overview.json
 source("source_scripts/NMIS_Functions.R")
-water_774 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Water_774_ALL_FACILITY_INDICATORS.rds")
+water_774 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/Normalized/Water_774_ALL_FACILITY_INDICATORS.rds")
 iw774 <- idata.frame(water_774)
 
 ####################
@@ -59,4 +59,4 @@ lgaw_facilities <- ddply(iw774, .(lga_id), function(df) {
 ##########################
 ###### SUMMING UP ########
 ##########################
-saveRDS(x_y_killa(lgaw_facilities), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/normalized_final/Water_LGA_level_113.rds")
+saveRDS(lgaw_facilities, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/Water_LGA_level_774.rds")
