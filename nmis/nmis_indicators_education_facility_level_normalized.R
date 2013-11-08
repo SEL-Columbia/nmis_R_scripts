@@ -17,8 +17,8 @@ edu_outlier$is_junior_secondary <- edu_outlier$level_of_education %in% c('junior
 edu_outlier$pj <- edu_outlier$is_primary | edu_outlier$is_junior_secondary
 
 
-edu_sub <- subset(edu_outlier , select=c("uuid", "mylga", "mylga_state", 
-                                         "mylga_zone", "gps", "school_name", 
+edu_sub <- subset(edu_outlier , select=c("uuid", "lga", "state", 
+                                         "zone", "gps", "school_name", 
                                          "level_of_education", "unique_lga", 
                                          "lga_id", "photo", "src", 
                                          "education_type", "num_tchrs_total", 
@@ -98,7 +98,9 @@ edu_sub$school_1kmplus_secondary_school <- edu_outlier$km_to_secondary_school > 
 edu_sub$male_to_female_student_ratio <- edu_outlier$num_students_male / edu_outlier$num_students_female
 
 ## Infrastructure: Water & San ##
-edu_sub$gender_separated_toilets_yn <- (edu_outlier$num_toilet_boy > 1) & (edu_outlier$num_toilet_girl > 1)
+edu_sub$gender_separated_toilets_yn <- ifelse(edu_outlier$src == "661",
+                                             (edu_outlier$num_toilet_boy > 1) & (edu_outlier$num_toilet_girl > 1),
+                                              edu_outlier$gender_separated_toilets_yn)
 edu_sub$pupil_toilet_ratio_facility <- edu_outlier$num_students_total / edu_outlier$num_toilet_total
 
 edu_sub$pupil_toilet_ratio_facility <- ifelse(is.infinite(edu_sub$pupil_toilet_ratio_facility),

@@ -8,7 +8,7 @@ water_774 <- rename(water_774, c("pop_2006" = "Population"))
 # put in uuids, and make sure there are no duplicates
 stopifnot(!anyDuplicated(water_774$uuid) | any(is.na(water_774$lga_id)))
 
-water_sub <- subset(water_774, select=c("photo", "state", "lga", "lga_id", "uuid", "gps",
+water_sub <- subset(water_774, select=c("photo", "state", "lga","zone" "lga_id", "uuid", "gps",
                                         "community", "ward", "lift_mechanism", "water_point_type",
                                         "water_functional_yn", "pay_for_water_yn", "src", "unique_lga" ))
 

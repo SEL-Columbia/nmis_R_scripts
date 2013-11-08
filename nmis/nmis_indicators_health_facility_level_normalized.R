@@ -5,8 +5,8 @@ source("source_scripts/NMIS_Functions.R")
 health_outlier <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Health_774_outliercleaned.rds")
 
 #new data set "health_sub"
-health_sub <- subset(health_outlier, select=c("uuid", "mylga", "mylga_state", 
-                                              "mylga_zone", "lga_id", "immunization.yellow_fever_immun", 
+health_sub <- subset(health_outlier, select=c("uuid", "lga", "state", 
+                                              "zone", "lga_id", "immunization.yellow_fever_immun", 
                                               "unique_lga", "facility_name", "supplies.condoms", 
                                               "src", "inpatient_care_yn", "tb_treatment_yn",
                                               "medication_folic_acid", "compr_oc_blood_transfusions",
