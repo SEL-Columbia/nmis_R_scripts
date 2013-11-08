@@ -5,7 +5,7 @@ source("source_scripts/NMIS_Functions.R")
 # sector slugs are at https://github.com/mvpdev/nmis/blob/develop/uis_r_us/indicators/overview.json
 # overview page slugs are at https://github.com/mvpdev/nmis/blob/develop/uis_r_us/indicators/facility.py
 
-edu774 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Education_774_ALL_FACILITY_INDICATORS.rds")
+edu774 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/Normalized/Education_774_ALL_FACILITY_INDICATORS.rds")
 
 #education data request (TODO: rename to something better)
 ie <- idata.frame(edu774)
@@ -31,7 +31,7 @@ lga_edu_data <- ddply(ie, .(lga_id), function(df) {
               classrooms_num_chalkboards =
                   sum(df$num_classrm_w_chalkboard, na.rm = TRUE),
               teachers_total =
-                  sum(df$num_tchrs.num_tchrs_total, na.rm = TRUE),
+                  sum(df$num_tchrs_total, na.rm = TRUE),
               teachers_qualified =
                   sum(df$num_tchrs_w_nce, na.rm = TRUE),
               teachers_attended_training =
@@ -209,7 +209,7 @@ lga_edu_data <- ddply(ie, .(lga_id), function(df) {
                   
 
 #writing out
-saveRDS(x_y_killa(lga_edu_data), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/normalized_final/Education_LGA_level_774.rds")
+saveRDS(lga_edu_data, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/Education_LGA_level_774.rds")
 
 
 

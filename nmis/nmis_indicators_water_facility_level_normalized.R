@@ -2,7 +2,7 @@
 source("base_scripts/InstallFormhub.R")
 source("source_scripts/NMIS_Functions.R")
 
-water_774 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Water_774_normalized_999clean.rds")
+water_774 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Water_774_normalized.rds")
 water_774 <- rename(water_774, c("pop_2006" = "Population"))
 
 # put in uuids, and make sure there are no duplicates
@@ -10,7 +10,7 @@ stopifnot(!anyDuplicated(water_774$uuid) | any(is.na(water_774$lga_id)))
 
 water_sub <- subset(water_774, select=c("photo", "state", "lga", "lga_id", "uuid", "gps",
                                         "community", "ward", "lift_mechanism", "water_point_type",
-                                        "water_functional_yn", "pay_for_water_yn", "src" ))
+                                        "water_functional_yn", "pay_for_water_yn", "src", "unique_lga" ))
 
 water_sub <- rename(water_sub, 
                             c("photo" = 'formhub_photo_id',
@@ -65,14 +65,15 @@ water_sub$distribution_type <- recodeVar(water_774$distribution_type,
 ###113
 water_sub <- lga_boudary_dist(water_sub, gps_col="gps")
 water_sub$sector <- "water"
+water_sub$facility_name <- "Water Point"
 
 water_774 <- merge_non_redundant(water_sub, water_774, by="uuid")
 
 
 #Delete all those have dist >= 35 km
-water_sub_nearbypoints <- subset(water_sub, dist_fake <= 35 | is.na(dist_fake))
+water_sub <- subset(water_sub, dist_fake <= 35 | is.na(dist_fake))
 water_774 <- subset(water_774, dist_fake <= 35 | is.na(dist_fake))
 
 
-saveRDS(x_y_killa(water_sub_nearbypoints), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Water_774_NMIS_Facility.rds")
-saveRDS(x_y_killa(water_774), "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Water_774_ALL_FACILITY_INDICATORS.rds")
+saveRDS(water_sub, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/Normalized/Water_774_NMIS_Facility.rds")
+saveRDS(water_774, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/Normalized/Water_774_ALL_FACILITY_INDICATORS.rds")

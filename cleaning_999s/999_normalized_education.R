@@ -1,18 +1,12 @@
 source('base_scripts/InstallFormhub.R')
-source('./cleaning_999s/999_functions.R')
-source("source_scripts/Normailize_Functions.R")
+source('source_scripts/999_functions.R')
 
-merged_education <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Edu774.rds")
+
+merged_education <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Education_774_normalized.rds")
 
 #Here starts 999 cleaning
 cellst(merged_education, 'tchrs_male_ssce_wasc',
        which(merged_education$tchrs_male_ssce_wasc == 99), NA_integer_) #one data entry was 99  
-
-cellst(merged_education, 'tchrs_male_nce',
-       which(merged_education$tchrs_male_nce < 0), NA_integer_)
-
-cellst(merged_education, 'tchrs_female_nce',
-       which(merged_education$tchrs_female_nce < 0), NA_integer_)
 
 cellst(merged_education, 'tchrs_male_b_ed',
        which(merged_education$tchrs_male_b_ed == 998), NA_integer_)
@@ -50,13 +44,6 @@ cellst(merged_education,'num_sections_js3',
 cellst(merged_education,'num_attached_benches', 
        which(merged_education$num_attached_benches < 0), NA_integer_)
 #extra
-
-cellst(merged_education,'num_tchrs_attended_training', 
-       which(merged_education$num_tchrs_attended_training < 0), NA_integer_)
-
-cellst(merged_education,'num_tchrs_attended_last_day', 
-       which(merged_education$num_tchrs_attended_last_day < 0), NA_integer_)
-
 cellst(merged_education, 'cont_stdnts_enroll_fee', 
        which(merged_education$cont_stdnts_enroll_fee < 0), NA_integer_)
 
@@ -137,17 +124,14 @@ cellst(merged_education, 'num_students_frthr_than_3km',
        which(merged_education$num_students_frthr_than_3km >= 9000), 
        NA_integer_) # 999 considered as outlier
 
-cellst(merged_education, 'num_students_total', 
-       which(merged_education$num_students_total < 0), NA_integer_)
-
 cellst(merged_education, 'days_no_potable_water', 
        which(merged_education$days_no_potable_water < 0), NA_integer_)
 
 cellst(merged_education, 'num_toilet_boy', 
-       which(merged_education$num_toilet_boy < 0 | merged_education$num_toilet_boy >= 999), NA_integer_)
+       which(merged_education$num_toilet_boy >= 999), NA_integer_)
 
 cellst(merged_education, 'num_toilet_girl', 
-       which(merged_education$num_toilet_girl < 0 | merged_education$num_toilet_boy >= 999), NA_integer_)
+       which(merged_education$num_toilet_boy >= 999), NA_integer_)
 
 #individual cells
 cellst(merged_education, 'num_tchrs_w_nce',

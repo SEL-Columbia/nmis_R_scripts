@@ -10,6 +10,8 @@ skilled <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/extern
 skilled_b <- merge(skilled, ref, by.x=c('state', 'lg'), by.y=c('state_hnlss', 'lg_hnlss'), all=T)
 skilled_b<- rename(skilled_b, c("LGA_id" = "lga_id"))
 skilled_birth <- subset(skilled_b,  !is.na(skilled_b$lga_id), select=c('lga_id', 'p_births'))
+skilled_birth <- rename(skilled_birth, c("p_births" = "proportion_of_births_by_skilled_health_personnel"))
+
 
 #Read hiv tested data and add lga id
 hiv <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/source_data/10_HIV_Tested.csv")

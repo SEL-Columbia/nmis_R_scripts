@@ -1,6 +1,9 @@
+#####################################################################################################################
+##Normalized Education Outlier Cleaning #############################################################################
+#####################################################################################################################
 source('base_scripts/InstallFormhub.R')
 source('source_scripts/NMIS_Functions.R')
-source('cleaning_outliers/outlier_functions.R')
+source('source_scripts/outlier_functions.R')
 
 edu_999 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/999cleaned/Education_774_999Cleaned.rds")
 
@@ -376,5 +379,5 @@ edu_999 <- outlierreplace(edu_999, 'num_students_total',
                           edu_999$num_students_total > 2355)
 ##writing out.rds
 saveRDS(edu_999, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Education_774_outliercleaned.rds")
-rm(edu_999)
+
 

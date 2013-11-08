@@ -13,4 +13,4 @@ combined <- merge(combined, water_774_lga, by="lga_id", all=T)
 combined <- merge(combined, health_774_lga, by="lga_id", all=T)
 combined <- merge_non_redundant(lgas, combined, by="lga_id")
 
-write.csv(combined, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/normalized_final/Combined_lga.csv", row.names=F)
+saveRDS(combined, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/All_774_LGA.rds")
