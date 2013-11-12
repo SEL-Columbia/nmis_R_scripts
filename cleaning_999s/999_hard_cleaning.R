@@ -87,166 +87,91 @@
 
 src_ed <- function(uu){
   df <- merged_education
-  subset(df, select=c("src", "uuid"), df$uuid == uu)  
+  subset(df, select=c("src", "uuid", "formhub"), df$uuid == uu)  
 }
 
+src_ed_113 <- function(uu){
+  df <- merged_education
+  subset(df, select=c("uuid", "gps"), df$uuid == uu)  
+}
+ 
+src_ed("f9f06ca9-7ad4-469b-8144-67baf7c599f3")
 
-src_ed("8bcf97c54123f3a87381742d5b0f9b08")
-
-# 113
-  # tchrs_male_ssce_wasc/tchrs_male_b_ed/tchrs_male_other_w_nce
-    "8bcf97c54123f3a87381742d5b0f9b08"
-
-
-# uniforms_fee
-"4121e085aa9dbee0ff95263f26ed8a39" "7be78e7712cfbe5e309c3e1323943644" "842b21594b34c2d8a83c2275047712de"
-"a4b55218036aba806c97d7df5f1e75c5" "b9b8804d5611ad52b5b87dbdb98cf62c" "976e9a38f84961a6db79ec9c842cf1e1"
-"acd09bbeb2927c75180f0d54af0bd759" "aec0a9e7ab6be7293a674641740ebdb7" "278ad56748781b842fb4d2d3091adf29"
-"7eb6ac2c8a182480a859d118ba94f22b" "f131fb65a9f0f161ebcf82c59ac9ff99" "3746609afb627ae54ad36e16459845e0"
-
-# num_students_exempt
-283b848489d60359c22e2212e654ec63
-
-# num_tchrs_paid_fed_gov
-1ec2e8049c4e7bb9b218d73e0e1c2225
-
-# num_classrms_unused
-056b9bb503e8378fc2bc883800cd8326
-
-# num_sections_js1
-5f1729c1cf2af188ff3aff990d423b61
-
-# num_sections_js2
-a4cc679f1dc29e0d1dc235c316783164
-
-# num_sections_js3
-"a4cc679f1dc29e0d1dc235c316783164" "f0dd96be62f31f2ff1a8de1151625e04"
-
-# cont_stdnts_enroll_fee
-272e754d01169fc1c27564c4d7ea9633
-
-# num_students_male/num_students_female/num_students_total
-"77f4e5d0-08f8-4354-aef1-9591f7140747" "ca5381dc-ac3b-4f5b-9062-72f615010c59" 
-"1befb5db-5450-4ff1-87f5-667004fdce12" "54062322-462f-4530-a53e-aab8670c089c"
-"a034332d-2580-4088-aee0-3a2ce63fa773" "7feceb37-6346-4d7f-9f54-12a3a99c64bb" 
-"2b18354f-f3dc-4478-9884-afa3d4e8905a"
-
-# num_pry_female
-"0937cb8c-7db7-4191-9e29-140d2ec3675f"
-
-# num_pry_male
-"209aa2e5-b16d-492d-9047-26321906b802" "c95ec70a-bc42-4007-9b97-798209c38b1b"
-
-# num_js_male
-"be853298-27dd-460f-bd4b-3bdd69f3fb26" "f9f06ca9-7ad4-469b-8144-67baf7c599f3"
-
-# num_toilet_boy
-"9f26dd26-7056-42f5-9dec-08844e515c14" "9459a67f-c736-4454-9ca0-70cbb781cdd3"
-
-# num_toilet_girl
-"6157e955-fc36-4f91-8428-a781b3db5fa4" "c6d45e03-bcc3-4d34-b4f9-b6c9f6bcd95e" "a8dacbe5-c2b9-4abc-b56d-af028ce0973a"
-"0ed9d757-8570-440e-83f8-94bc973a4fb0" "b17f1079-3f13-4867-9222-34dba18852ad"
-
-# num_toilet_both
-"a98d7e4b-0380-418f-8a3f-e49e591da797" "84b06bec-2105-4c09-9f29-7afb58079c21" "f17247de-7eb6-40a9-b6ca-6a3b7d6edbc4"
-
-# num_tchrs_male
-"fa81607a-5196-4060-842f-0bf10a6e4fb2" "1c99ce33-2fe0-4a33-8626-7f7669b14847" "95b8d43e-be78-4344-942c-3632ca7ad043"
-
-# num_tchrs_female
-"71f7d5f8-019d-4d44-8107-801022722986" "e5b8ce01-56b8-4aec-879f-d84af9b9458e"
-
-# num_math_textbook_js
-"ad0f5305-213f-4f46-8495-275deaa35588" "17345140-65b8-40a2-98b8-b55e973ac3aa"
-
-# num_sr_staff_total
-"9e33fa99a66b12017810eb34b1be3917"     "a396a5e05a7ff1fb619bc0bafd695bb0"     "c9d30737fd5605655d2ce65dde1a84a3"    
-"c2966c673ec40665605efad210d30d5b"     "1c97555a8d01f62d28addbee3ffadb7c"     "8b9139f3370b6ffaff8784260a983207"    
-"7702116d-5773-44f6-9425-6541d0e9042f"
-
-# num_jr_staff_total
-"9e33fa99a66b12017810eb34b1be3917" "a396a5e05a7ff1fb619bc0bafd695bb0" "c9d30737fd5605655d2ce65dde1a84a3"
-"1c97555a8d01f62d28addbee3ffadb7c" "8b9139f3370b6ffaff8784260a983207"
-
-# num_tchrs_total
-"a506c7e8-8c00-4b01-94d4-c4be52bd60f2" "cad7e54b-b5cc-4768-9c56-18a8f3f1023f" "1d150389-47c3-4457-a9b2-c66a25c7d42f"
-
-# num_classrms_need_min_repairs
-"9395b0fd-079e-4f2c-abe2-4e6ff3588da9"
-
-# num_classrms_need_maj_repairs
-"6975bd61-4a3a-4ce6-a20f-8ba4df8f9d10" "671f000b-0b5c-4ea8-8c5d-91371411edf7" "5e9a6a8d-05cc-4279-8a50-ec59dbaae5f6"
-
-# days_no_potable_water
-"75142743-7221-42b5-86bf-c38e24472bef"
-
-# num_ss_female
-"f5b8049a-f127-42d7-89bd-ab24cf15e41e"
-
-# num_ss_female/num_ss_male/num_ss_total                    
+# num_ss_female/num_ss_male/num_ss_total
+  #05_06
 "cad7e54b-b5cc-4768-9c56-18a8f3f1023f"
 
 # km_to_secondary_school
-"c93e86dd-95b9-436f-8a05-34e12b061ed4" "b4a104a4560940be66a34a4662130578"     "2d145503-c174-4184-8e78-a55bb0ff68fa"
-"79b36dba-b534-4b03-8fa6-b24f7a87754d" "41a05265-861c-462b-8c55-4bbf3c7a5de7" "e8bbe921-106d-4962-a40a-07952f164e6a"
-"ed3a6954-35ad-4265-9b92-4750b1aff542" "a6d8d491-de6d-4b05-b706-8c4651da4334" "c4e1172d-07f8-4944-9f25-ce766ae46671"
+  #22_05
+"c93e86dd-95b9-436f-8a05-34e12b061ed4"  
+"2d145503-c174-4184-8e78-a55bb0ff68fa"
+"79b36dba-b534-4b03-8fa6-b24f7a87754d"
+"41a05265-861c-462b-8c55-4bbf3c7a5de7" 
+"e8bbe921-106d-4962-a40a-07952f164e6a" 
+"ed3a6954-35ad-4265-9b92-4750b1aff542" 
+"c4e1172d-07f8-4944-9f25-ce766ae46671"
+  #17_04
+"a6d8d491-de6d-4b05-b706-8c4651da4334" 
 
 # num_tchrs_w_nce
-"6c7dd1bf-82c7-46e1-8ab0-ad85baada470" "41dff099-4e14-4fdf-9f49-300b7c1f5c8f" 
+  #05_06
+"6c7dd1bf-82c7-46e1-8ab0-ad85baada470" 
+  #22_05
+"41dff099-4e14-4fdf-9f49-300b7c1f5c8f" 
 
 # num_tchrs_total/num_tchrs_female/num_students_total/num_students_male/num_tchrs_male/num_students_female
+  #22_05
 'ab52fe42-1525-46dd-945a-f5fef4566c16'
 
 # num_classrms_total
-'fcdbb827-943b-40b5-bc59-19106759bf2c' 'd17bde2e-a6ce-4b0d-87fe-ab39e61bfe8e'
+  #17_04
+'fcdbb827-943b-40b5-bc59-19106759bf2c' 
+'d17bde2e-a6ce-4b0d-87fe-ab39e61bfe8e'
 
 #num_students_total
-"cad7e54b-b5cc-4768-9c56-18a8f3f1023f" "1f757568-d298-46bb-8ce4-40d276f2267e"
+  #05_06
+"cad7e54b-b5cc-4768-9c56-18a8f3f1023f" 
+"1f757568-d298-46bb-8ce4-40d276f2267e"
 
 # km_to_catchment_area
-"7daa97e3-5d02-4dec-9808-1b342d31aa62" "d0bbc547-6be1-4a96-9d90-eb45ab155b8c" "caaa5fd4-a18e-49d3-8554-369d0d5fbafa"
-"db49c87f-992a-41f3-bcb4-a08a62e3d5d7" "5f37e972-9570-47ee-b2ad-a717213c6988" "0e77f433-3bbb-4394-9922-8b16f766e822"
-"67fbdf6e-3b34-4300-99be-ea44fe157be3" "8d485f75-7102-41f7-828d-888324504e4c"
+  #22_05
+"7daa97e3-5d02-4dec-9808-1b342d31aa62" 
+"db49c87f-992a-41f3-bcb4-a08a62e3d5d7" 
+"0e77f433-3bbb-4394-9922-8b16f766e822"
+"67fbdf6e-3b34-4300-99be-ea44fe157be3" 
+  #17_04
+"d0bbc547-6be1-4a96-9d90-eb45ab155b8c" 
+  #05_06
+"caaa5fd4-a18e-49d3-8554-369d0d5fbafa"
+"5f37e972-9570-47ee-b2ad-a717213c6988"
+"8d485f75-7102-41f7-828d-888324504e4c"
 
 # num_students_frthr_than_3km
+  #05_06
 "2b18354f-f3dc-4478-9884-afa3d4e8905a"
 
 # days_no_potable_water
+  #05_06
 "75142743-7221-42b5-86bf-c38e24472bef"
 
 # num_toilet_boy
-"9f26dd26-7056-42f5-9dec-08844e515c14" "9459a67f-c736-4454-9ca0-70cbb781cdd3"
+  #17_04
+"9f26dd26-7056-42f5-9dec-08844e515c14" 
+  #22_05
+"9459a67f-c736-4454-9ca0-70cbb781cdd3"
 
 # num_toilet_girl
-"6157e955-fc36-4f91-8428-a781b3db5fa4" "c6d45e03-bcc3-4d34-b4f9-b6c9f6bcd95e" 
+  #17_04
+"6157e955-fc36-4f91-8428-a781b3db5fa4" 
+"c6d45e03-bcc3-4d34-b4f9-b6c9f6bcd95e" 
+"b17f1079-3f13-4867-9222-34dba18852ad"
+  #05_06
 "a8dacbe5-c2b9-4abc-b56d-af028ce0973a"
-"0ed9d757-8570-440e-83f8-94bc973a4fb0" "b17f1079-3f13-4867-9222-34dba18852ad"
+  #22_05
+"0ed9d757-8570-440e-83f8-94bc973a4fb0" 
 
-# cells_help_clean(merged_education,'num_attached_benches', 
-#        which(merged_education$num_attached_benches < 0), NA_integer_) #looking at 107 instances of -8
 
-# cells_help_clean(merged_education,'num_tchrs_attended_training', 
-#        which(merged_education$num_tchrs_attended_training < 0), NA_integer_) #91 of -8
 
-# cells_help_clean(merged_education, 'num_sr_staff_total',
-#                  which(merged_education$num_sr_staff_total < 0), NA_integer_) #92 -8
 
-# cells_help_clean(merged_education, 'num_jr_staff_total',
-#                  which(merged_education$num_jr_staff_total < 0), NA_integer_) #92 -8
-
-# cells_help_clean(merged_education, 'num_tchrs_total',
-#                  which(merged_education$num_tchrs_total < 0), NA_integer_) #79 -8
-
-#  cells_help_clean(merged_education, 'tchrs_male_nce',
-#        which(merged_education$tchrs_male_nce < 0), NA_integer_) #81 -8
-
-# cells_help_clean(merged_education, 'tchrs_female_nce',
-#        which(merged_education$tchrs_female_nce < 0), NA_integer_) #83 -8
-
-# cells_help_clean(merged_education, 'num_students_total', 
-#        which(merged_education$num_students_total < 0), NA_integer_) #103 -8
-
-# cells_help_clean(merged_education, 'num_students_frthr_than_3km', 
-#        which(merged_education$num_students_frthr_than_3km < 0), NA_integer_) #40 -8
 
 
