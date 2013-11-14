@@ -27,33 +27,33 @@ lgaw_facilities <- ddply(iw774, .(lga_id), function(df) {
             nrow(df),
         #####Functionality#####
         percentage_functional_improved = 
-            ratio(df$is_improved & df$functional== "Yes", df$is_improved),
+            ratio(df$is_improved & df$functional, df$is_improved),
         percentage_functional_taps =
-            ratio(df$water_point_type == "Tap" & df$functional =="Yes", df$water_point_type== "Tap"),
+            ratio(df$water_point_type == "Tap" & df$functional, df$water_point_type== "Tap"),
         percentage_functional_handpumps =
-            ratio(df$water_point_type %in% c("Handpump", "Borehole") & df$is_improved & df$functional == "Yes", df$water_point_type %in% c("Handpump", "Borehole")),
+            ratio(df$water_point_type %in% c("Handpump", "Borehole") & df$is_improved & df$functional, df$water_point_type %in% c("Handpump", "Borehole")),
         
         #####Population Served#####National standard is 250 people per water point
         population_improved_water_points =
             250 * icount(df$is_improved),
         population_improved_functional_water_points = 
-            250 * icount(df$is_improved & df$functional == "Yes"),
+            250 * icount(df$is_improved & df$functional ),
         percentage_population_improved =
             ratio(250 * icount(df$is_improved), df$Population), 
         percentage_population_improved_functional = 
-            ratio(250 * icount(df$is_improved & df$functional == "Yes"), df$Population),
+            ratio(250 * icount(df$is_improved & df$functional), df$Population),
         num_diesel = 
             icount(df$lift_mechanism == "Diesel"),
         percentage_diesel_functional =
-            ratio(df$lift_mechanism == "Diesel" & df$functional == "Yes", df$lift_mechanism == "Diesel"),
+            ratio(df$lift_mechanism == "Diesel" & df$functional, df$lift_mechanism == "Diesel"),
         num_electric = 
             icount(df$lift_mechanism == "Electric"),
         percentage_electric_functional =
-            ratio(df$lift_mechanism == "Electric" & df$functional == "Yes", df$lift_mechanism == "Electric"),                             
+            ratio(df$lift_mechanism == "Electric" & df$functional, df$lift_mechanism == "Electric"),                             
         num_solar = 
             icount(df$lift_mechanism == "Solar"),
         percentage_solar_functional = 
-            ratio(df$lift_mechanism == "Solar" & df$functional == "Yes", df$lift_mechanism == "Solar")
+            ratio(df$lift_mechanism == "Solar" & df$functional, df$lift_mechanism == "Solar")
     )})
 
 ##########################

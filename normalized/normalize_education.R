@@ -57,7 +57,7 @@ edu_pilot <- rename(edu_pilot, c("num_total_classrooms" = "num_classrms_total",
                                  "toilet_pit_latrine_with_slab" = "toilet.pit_latrine_with_slab",
                                  "days_no_water_any_source" = "days_no_water_pastmth",
                                  "toilet_none" = "toilet.none",
-                                 "X_p_num_improved_sanitation" = "num_toilet_total",
+                                 "X_p_num_improved_sanitation" = "num_toilets_total",
                                  "num_tchrs_male_full_time" = "num_tchrs_male",
                                  "num_tchrs_female_full_time" = "num_tchrs_female",
                                  "water_none" = "water.none",
@@ -67,20 +67,25 @@ edu_pilot <- rename(edu_pilot, c("num_total_classrooms" = "num_classrms_total",
                                  "end_time" = "end"))
 
 ######################################
-##Adding variables before 999 cleaning 
+##Adding variables before 999 cleaning
+edu_661$school_managed <- recodeVar(edu_661$school_managed,
+                                    c("faith_org", "fed_gov", "loc_gov", "other", 
+                                      "priv_noprofit", "priv_profit", "st_gov"),
+                                    c("faith_based", "federal_gov", "local_gov", "none",
+                                      "private_non_profit", "private_profit", "state_gov"))
 
 edu_113$school_managed <- ifelse(edu_113$school_managed_fed_gov, 
-                                 "fed_gov",
+                                 "federal_gov",
                           ifelse(edu_113$school_managed_st_gov, 
-                                 "st_gov",
+                                 "state_gov",
                           ifelse(edu_113$school_managed_loc_gov, 
-                                 "loc_gov",
+                                 "local_gov",
                           ifelse(edu_113$school_managed_priv_profit, 
-                                 "priv_profit",
+                                 "private_profit",
                           ifelse(edu_113$school_managed_priv_noprofit, 
-                                 "priv_noprofit",
+                                 "private_non_profit",
                           ifelse(edu_113$school_managed_other | !is.na(edu_113$school_managed_other_specify),
-                                 "other",
+                                 "none",
                                 NA))))))
 
 edu_113$fees.admission_new <- as.logical(edu_113$new_stdnts_enroll_fee > 0)
@@ -105,17 +110,21 @@ edu_total <- rbind.fill(edu_661, edu_113, edu_pilot)
 
 ###############################################
 ##mapping values and standardize the type
-
-edu_113$vip_latrine_number <- as.numeric(edu_113$vip_latrine_number)
-edu_113$slab_pit_latrine_number <- as.numeric(edu_113$slab_pit_latrine_number)
-
-##total
 edu_total$borehole_tubewell_repair_time <- as.logical(recodeVar(edu_total$borehole_tubewell_repair_time,
                                                                 c('yes', 'fixed_more_than_month', 'fixed_within_day',
                                                                   'fixed_within_month', 'fixed_within_week', 'never_broken',
                                                                   'not_fixed', 'no'),
                                                                 c(TRUE, TRUE, TRUE, TRUE,TRUE, TRUE,
                                                                   FALSE, FALSE)))
+
+edu_total$level_of_education <- recodeVar(edu_total$level_of_education,
+                                          "juniors_sec_only", "junior_sec_only")
+
+edu_total$education_type <- recodeVar(edu_total$education_type,
+                                      c("formal", "formal_educ", "integrated",
+                                        "religious", "religious_only", "religious_with_formal"),
+                                      c("formal_only", "formal_only", "integrated",
+                                        "religious_only", "religious_only", "integrated"))
 
 yes_no_columns <- c("toilet.none", "water.none","functioning_library_yn", "teacher_guide_yn", "provide_pens_yn", 
                     "provide_exercise_books_yn", "two_shifts_yn", "classes_outside_yn", 
@@ -175,7 +184,7 @@ numeric_column_list <- c("slab_pit_latrine_number", "vip_latrine_not_working", "
                       "num_pry_female", "num_pry_male", "num_pry_total", "num_js_female", 
                       "num_js_male", "num_js_total", "num_ss_female", "num_ss_male", 
                       "num_ss_total", "num_toilet_boy", "num_toilet_girl", "num_toilet_both", 
-                      "num_toilet_total", "num_tchrs_male", "num_tchrs_female", "num_tchrs_total", 
+                      "num_toilets_total", "num_tchrs_male", "num_tchrs_female", "num_tchrs_total", 
                       "num_tchrs_w_nce", "num_tchrs_w_nce_plus", "num_sr_staff_total", 
                       "num_jr_staff_total", "num_tchrs_trained_new_curricula", "num_classrms_total", 
                       "num_classrms_good_cond", "num_classrms_need_min_repairs", "num_classrms_need_maj_repairs", 

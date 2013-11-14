@@ -29,7 +29,7 @@ health_sub <- subset(health_outlier, select=c("uuid", "lga", "state",
                                               "medication.iv_fluid", "medication.uterotonics", 
                                               "lab_tests.pregnancy", "supplements.iron",
                                               "lab_tests.stool", "lab_tests.tb_microscopy", 
-                                              "medication.arvs", "community", "ward"))
+                                              "medication.arvs", "community", "ward", "start"))
 
 health_sub <- rename(health_sub, c('photo' = 'formhub_photo_id',
                              'geocodeoffacility' = 'gps',
@@ -67,7 +67,8 @@ health_sub <- rename(health_sub, c('photo' = 'formhub_photo_id',
                              'lab_tests.pregnancy' = 'lab_tests_pregnancy_calc',
                              'lab_tests.stool' = 'lab_tests_stool_calc',
                              'lab_tests.tb_microscopy' = 'lab_tests_tb_microscopy_calc',
-                             'medication.arvs' = 'hiv_treatment_yn'))
+                             'medication.arvs' = 'hiv_treatment_yn',
+                             "start" = "date_of_survey"))
                               
 nm_774 <- names(health_outlier)[! names(health_outlier) %in% names(health_sub)]
 nm_774 <- c(nm_774, "uuid")

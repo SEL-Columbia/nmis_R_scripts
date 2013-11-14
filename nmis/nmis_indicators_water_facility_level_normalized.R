@@ -10,11 +10,12 @@ stopifnot(!anyDuplicated(water_774$uuid) | any(is.na(water_774$lga_id)))
 
 water_sub <- subset(water_774, select=c("photo", "state", "lga","zone", "lga_id", "uuid", "gps",
                                         "community", "ward", "lift_mechanism", "water_point_type",
-                                        "water_functional_yn", "pay_for_water_yn", "src", "unique_lga" ))
+                                        "water_functional_yn", "pay_for_water_yn", "src", "unique_lga", "start"))
 
 water_sub <- rename(water_sub, 
                             c("photo" = 'formhub_photo_id',
-                              "water_functional_yn" = "functional"))
+                              "water_functional_yn" = "functional",
+                              "start" = "date_of_survey"))
 
 stopifnot(nrow(water_sub) == nrow(water_774)) #otherwise calculations below will be wrong
 
