@@ -50,7 +50,7 @@ health_sub <- rename(health_sub, c('photo' = 'formhub_photo_id',
                              'immunization.tetanus_immun' = 'child_health_tetanus_immun_calc',
                              'immunization.dpt_immunization' = 'child_health_dpt_immunization_calc',
                              'immunization.opv_immuization' = 'child_health_opv_immuization_calc',
-                             'immunization.measles_immun' = 'child_health_measles_immun_calc',
+                             'measles_yn' = 'child_health_measles_immun_calc',
                              'medication.implants' = 'family_planning_implants_calc',
                              'medication.iud' = 'family_planning_iud_calc',
                              'supplies.insecticide_treated_bednets' = 'has_itns',
@@ -79,13 +79,13 @@ rm(nm_774)
 ####################
 ##### SNAPSHOT #####
 ####################
-health_sub$owner_manager <- recodeVar(health_outlier$facility_owner_manager,
+health_sub$management <- recodeVar(health_outlier$facility_owner_manager,
                                         c('lga', 'community', 'federalgovernment','stategovrenment', 
                                                 'church_mission', 'private_forprofit', 'private_notforprofit'), 
                                           c('public', 'public', 'public','public', 
                                               'private', 'private', 'private'), default=NA)  
 
-health_sub$maternal_health_delivery_services <- ifelse(health_outlier$src == '661',
+health_sub$delivery_services <- ifelse(health_outlier$src == '661',
                                                         health_outlier$delivery_services_yn,
                                                     health_outlier$emergency_obstetrics_yn)
                                                                  
@@ -130,7 +130,7 @@ health_outlier$iv_medications_yn <- health_outlier$medication.iv_fluid
 #######################
 #########################
 
-health_sub$maternal_health_delivery_services_24_7 <- ifelse(health_outlier$src == '661',
+health_sub$delivery_services_24_7 <- ifelse(health_outlier$src == '661',
                                                          (health_outlier$facility_open_247_yn & 
                                                             health_outlier$delivery_services_yn & 
                                                              health_outlier$delivery_skilled_birth_247_yn),
@@ -180,7 +180,7 @@ health_sub$emergency_transport_currently_functioning <- ifelse(health_outlier$sr
 health_sub$power_access_and_functional[health_outlier$src == '661'] <- 
                                         health_outlier$power_sources.none[health_outlier$src == '661']
                                         
-health_sub$comprehensive_obstetrics_yn <- health_outlier$emergency_obstetrics_yn & 
+health_sub$c_section_yn <- health_outlier$emergency_obstetrics_yn & 
                                             health_outlier$c_section_yn
 
 
@@ -188,7 +188,7 @@ health_sub$comprehensive_obstetrics_yn <- health_outlier$emergency_obstetrics_yn
 ##### STAFFING #####
 ####################
 
-health_sub$num_chews_total <- 
+health_sub$num_chews_fulltime <- 
   (rowSums(cbind(health_outlier$num_chews_posted,
                  health_outlier$num_junior_chews_posted), na.rm=T))
 
