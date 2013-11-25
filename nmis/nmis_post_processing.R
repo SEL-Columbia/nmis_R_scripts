@@ -79,8 +79,10 @@ percent_names <- c("proportion_schools_power_access_primary", "proportion_health
 nmis_lga <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/All_774_LGA.rds")
 
 for (name in percent_names){
-    idx <- which(!is.na(nmis_lga[,name]) & !is.infinite(nmis_lga[,name]))
-    nmis_lga[idx, name] <- paste(format(round(nmis_lga[idx, name]*100, digits=2), nsmall=2), "%", sep="")
+    idx <- which(is.finite(nmis_lga[,name]))
+    na_idx <- which(!is.finite(nmis_lga[,name]))
+    nmis_lga[idx, name] <- paste(format(round(nmis_lga[idx, name]*100, digits=2), nsmall=2, trim=T), "%", sep="")
+    nmis_lga[na_idx, name] <- NA
 }
 
 write.csv(nmis_lga,"~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/All_774_LGA.csv", row.names=F)
@@ -112,22 +114,22 @@ health_774_all <- update_mopup(health_774_all, edu_flag=F)
 
 ######## Addiing short id to baseline data
 edu_774 <- shortid_generate(edu_774, prefix="E")
-stopifnot(!anyDuplicated(edu_774$short_id))
+stopifnot(!anyDuplicated(edu_774$facility_ID))
 
 edu_774_all <- shortid_generate(edu_774_all, prefix="E")
-stopifnot(!anyDuplicated(edu_774_all$short_id))
+stopifnot(!anyDuplicated(edu_774_all$facility_ID))
 
 health_774 <- shortid_generate(health_774, prefix="H")
-stopifnot(!anyDuplicated(health_774$short_id))
+stopifnot(!anyDuplicated(health_774$facility_ID))
 
 health_774_all <- shortid_generate(health_774_all, prefix="H")
-stopifnot(!anyDuplicated(health_774_all$short_id))
+stopifnot(!anyDuplicated(health_774_all$facility_ID))
 
 water_774 <- shortid_generate(water_774, prefix="W")
-stopifnot(!anyDuplicated(water_774$short_id))
+stopifnot(!anyDuplicated(water_774$facility_ID))
 
 water_774_all <- shortid_generate(water_774_all, prefix="W")
-stopifnot(!anyDuplicated(water_774_all$short_id))
+stopifnot(!anyDuplicated(water_774_all$facility_ID))
 
 write.csv(water_774, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/Water_774_NMIS_Facility.csv", row.names=F)
 write.csv(edu_774, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/Education_774_NMIS_Facility.csv", row.names=F)

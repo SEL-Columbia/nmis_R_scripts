@@ -12,12 +12,12 @@ edu_999 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_proc
 edu_999$chalkboard_each_classroom_yn[edu_999$src == '661'] <- (edu_999$num_classrms_total[edu_999$src == '661'] <= 
                                                                 edu_999$num_classrm_w_chalkboard[edu_999$src == '661'])
 
-edu_999$num_toilet_total[edu_999$src == "661"] <- apply(cbind(edu_999$num_toilet_boy[edu_999$src == "661"], 
+edu_999$num_toilets_total[edu_999$src == "661"] <- apply(cbind(edu_999$num_toilet_boy[edu_999$src == "661"], 
                                                               edu_999$num_toilet_girl[edu_999$src == "661"], 
                                                               edu_999$num_toilet_both[edu_999$src == "661"]),
                                                         1, sum, na.rm=T)
 
-edu_999$num_toilet_total[edu_999$src == "113"] <- apply(cbind(edu_999$vip_latrine_number[edu_999$src == "113"], 
+edu_999$num_toilets_total[edu_999$src == "113"] <- apply(cbind(edu_999$vip_latrine_number[edu_999$src == "113"], 
                                                               edu_999$slab_pit_latrine_number[edu_999$src == "113"]), 
                                                         1, sum, na.rm=T)
 
@@ -50,8 +50,8 @@ edu_999$potable_water <- ((edu_999$days_no_potable_water < 7) & (edu_999$water.n
 ######################################
 #### Outlier Cleaning stars here: ####
 ######################################
-edu_999$num_toilet_total <- ifelse(edu_999$toilet.none == F & edu_999$num_toilet_total == 0,
-                                   NA, edu_999$num_toilet_total)
+edu_999$num_toilets_total <- ifelse(edu_999$toilet.none == F & edu_999$num_toilets_total == 0,
+                                   NA, edu_999$num_toilets_total)
 
 edu_999$num_students_total <- apply(cbind(edu_999$num_students_female, 
                                           edu_999$num_students_male), 
@@ -115,8 +115,8 @@ edu_999 <- outlierreplace(edu_999, 'num_students_total', edu_999$num_students_to
 ##ratios
 edu_999$ratio_students_to_toilet <- replace(edu_999$num_students_total, 
                                             is.na(edu_999$num_students_total), 0) /
-                                    replace(edu_999$num_toilet_total, 
-                                            is.na(edu_999$num_toilet_total), 0) 
+                                    replace(edu_999$num_toilets_total, 
+                                            is.na(edu_999$num_toilets_total), 0) 
 
 edu_999$ratio_students_to_desks <-   replace(edu_999$num_students_total, 
                                        is.na(edu_999$num_students_total), 0) / 

@@ -50,8 +50,8 @@ rm(nm_774)
 
 ################
 ## SNAPSHOT ####
-edu_sub$owner_manager <- recodeVar(edu_outlier$school_managed, 
-                          c("fed_gov", "loc_gov", "st_gov", "priv_profit", "priv_noprofit", "faith_org"),
+edu_sub$management <- recodeVar(edu_outlier$school_managed, 
+                          c("federal_gov", "local_gov", "state_gov", "private_profit", "private_non_profit", "faith_based"),
                           c("public", "public", "public", "private", "private", "private"),
                           default=NA)
 
@@ -101,7 +101,7 @@ edu_sub$male_to_female_student_ratio <- edu_outlier$num_students_male / edu_outl
 edu_sub$gender_separated_toilets_yn <- ifelse(edu_outlier$src == "661",
                                              (edu_outlier$num_toilet_boy > 1) & (edu_outlier$num_toilet_girl > 1),
                                               edu_outlier$gender_separated_toilets_yn)
-edu_sub$pupil_toilet_ratio_facility <- edu_outlier$num_students_total / edu_outlier$num_toilet_total
+edu_sub$pupil_toilet_ratio_facility <- edu_outlier$num_students_total / edu_outlier$num_toilets_total
 
 edu_sub$pupil_toilet_ratio_facility <- ifelse(is.infinite(edu_sub$pupil_toilet_ratio_facility),
                                               NA, edu_sub$pupil_toilet_ratio_facility)

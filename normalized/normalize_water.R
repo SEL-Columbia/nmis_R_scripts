@@ -65,14 +65,14 @@ water_113$lift_mechanism <- recodeVar(water_113$lift_mechanism,
                                         c("animal", "diesel", "solar", 
                                           "electric", "do_not_know"),
                                         c("animal_power", "fuel_pump", "solar_pump", 
-                                          "electricity_pump", "dk")
+                                          "electricity_pump", NA)
                                         )
 
 water_pilot$lift_mechanism <- recodeVar(water_pilot$lift_mechanism, 
                                         c("diesel_pump", "electric_motor_pump", "rope_and_pulley",
                                             "not_known"),
                                         c("fuel_pump", "electricity_pump", "rope_pulley", 
-                                            "dk")
+                                            NA)
                                         )
 
 water_661$Classification <- recodeVar(water_661$Classification, 
@@ -207,13 +207,13 @@ water_total$reason_not_used <-ifelse(water_total$src == "661",
 		                               		"dk",
 		                               	NA))))))))))))
 
-water_total$pay_for_water_yn <- recodeVar(water_total$pay_for_water_yn, 
+water_total$pay_for_water_yn <- as.logical(recodeVar(water_total$pay_for_water_yn, 
                                         c('yes', 'no', 'dk', 'do_not_know'), 
-                                        c('Yes', 'No', "Don't Know", "Don't Know"))
+                                        c(TRUE, FALSE, NA, NA)))
 
-water_total$water_functional_yn <- recodeVar(water_total$water_functional_yn, 
+water_total$water_functional_yn <- as.logical(recodeVar(water_total$water_functional_yn, 
                                           c('yes', 'no', 'dk', 'do_not_know'), 
-                                          c('Yes', 'No', "Don't Know", "Don't Know"))
+                                          c(TRUE, FALSE, NA, NA)))
 
 
 # Final Cleaning remove rows without lga_id or duplicated uuid

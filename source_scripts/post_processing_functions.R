@@ -29,7 +29,7 @@ update_mopup <- function(df, edu_flag){
 
 
 
-### Adding short_id
+### Adding facility_ID
 shortid_generate <- function(df, prefix) 
 { 
     l <- letters
@@ -43,11 +43,11 @@ shortid_generate <- function(df, prefix)
         digits[[i]] <- (tmp %% 26) + 1
         tmp <- tmp %/% 26
     }
-    df$short_id <- paste0(prefix,':', l[digits[[4]]],l[digits[[3]]],l[digits[[2]]],l[digits[[1]]])
+    df$facility_ID <- paste0(prefix,':', l[digits[[4]]],l[digits[[3]]],l[digits[[2]]],l[digits[[1]]])
     
     # test that these are unique by lga before returning
-    numberofshortids <- length(unique(df$short_id))
-    numberoffacilities <- length(df$short_id)
+    numberofshortids <- length(unique(df$facility_ID))
+    numberoffacilities <- length(df$facility_ID)
     stopifnot(numberofshortids == numberoffacilities)
     
     return(df) 
