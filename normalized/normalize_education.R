@@ -1,5 +1,6 @@
 ######################################################################################################################
-##Normalizing Education/Health/Water Data: 661, 113, Pilot 
+##Normalizing Education Data: 661, 113, Pilot 
+
 source("source_scripts/Normailize_Functions.R")
 source("source_scripts/NMIS_Functions.R")
 
