@@ -69,6 +69,16 @@ edu_pilot <- rename(edu_pilot, c("num_total_classrooms" = "num_classrms_total",
 ######################################
 ##Adding variables before 999 cleaning 
 
+edu_661$covered_roof_good_condi <- edu_661$covered_roof_yn == "yes_good_condition"
+
+edu_661$chalkboard_each_classroom_yn <- (edu_661$num_classrms_total <= 
+                                           edu_661$num_classrm_w_chalkboard)
+
+edu_661$num_toilets_total <- apply(cbind(edu_661$num_toilet_boy, 
+                                         edu_661$num_toilet_girl, 
+                                         edu_661$num_toilet_both),
+                                   1, sum, na.rm=T)
+
 edu_113$school_managed <- ifelse(edu_113$school_managed_fed_gov, 
                                  "fed_gov",
                           ifelse(edu_113$school_managed_st_gov, 
@@ -90,7 +100,6 @@ edu_113$fees.transport <- as.logical(edu_113$transport_fee > 0)
 edu_113$fees.exam_fee <- as.logical(edu_113$exams_fee > 0)
 edu_113$fees.pta_fee <- as.logical(edu_113$pta_fee > 0)
 
-edu_661$covered_roof_good_condi <- edu_661$covered_roof_yn == "yes_good_condition"
 edu_113$covered_roof_good_condi <- edu_113$covered_roof_yn %in% c("roof_fence_good_condition", 'yes')
 edu_pilot$covered_roof_good_condi <- edu_pilot$covered_roof_yn %in% c("roof_fence_good_condition", 'yes')
 
@@ -101,6 +110,33 @@ edu_113$times_tchr_pay_miss_pastyr <- as.integer(edu_113$times_tchr_pay_miss_pas
 edu_113$num_students_frthr_than_3km <- ifelse(edu_113$num_students_frthr_than_3km < 0,
                                               edu_113$num_students_frthr_than_3km == 8,
                                               edu_113$num_students_frthr_than_3km)
+
+edu_113$num_toilets_total <- apply(cbind(edu_113$vip_latrine_number, 
+                                         edu_113$slab_pit_latrine_number), 
+                                   1, sum, na.rm=T)
+
+edu_113$num_tchrs_male <- apply(cbind(edu_113$num_tchrs_male_full_time, 
+                                      edu_113$num_tchrs_male_part_time), 
+                                1, sum, na.rm=T)
+
+edu_113$num_tchrs_female <- apply(cbind(edu_113$num_tchrs_female_full_time, 
+                                        edu_113$num_tchrs_female_part_time), 
+                                  1, sum, na.rm=T)
+
+edu_113$num_tchrs_w_nce <- apply(cbind(edu_113$tchrs_male_nce, 
+                                       edu_113$tchrs_female_nce, 
+                                       edu_113$tchrs_male_other_w_nce,
+                                       edu_113$tchrs_female_other_w_nce),
+                                 1, sum, na.rm=T)
+
+edu_113$num_classrms_total <- apply(cbind(edu_113$num_classrms_good_cond, 
+                                          edu_113$num_classrms_need_min_repairs, 
+                                          edu_113$num_classrms_need_maj_repairs),
+                                    1, sum, na.rm=T)
+
+edu_113$num_benches <- apply(cbind(edu_113$num_attached_benches, 
+                                   edu_113$num_unattached_benches),
+                             1, sum, na.rm=T)
 
 ##################################
 ##combining 661, 113 & pilot
@@ -120,6 +156,9 @@ edu_total$borehole_tubewell_repair_time <- as.logical(recodeVar(edu_total$boreho
                                                                   'not_fixed', 'no'),
                                                                 c(TRUE, TRUE, TRUE, TRUE,TRUE, TRUE,
                                                                   FALSE, FALSE)))
+
+edu_total$potable_water <- ((edu_total$days_no_potable_water < 7) & (edu_total$water.none == FALSE))
+
 
 yes_no_columns <- c("toilet.none", "water.none","functioning_library_yn", "teacher_guide_yn", "provide_pens_yn", 
                     "provide_exercise_books_yn", "two_shifts_yn", "classes_outside_yn", 
