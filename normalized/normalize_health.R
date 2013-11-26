@@ -1,5 +1,6 @@
 ######################################################################################################################
 ##Normalizing Health Data: 661, 113, Pilot 
+
 source("source_scripts/Normailize_Functions.R")
 source("source_scripts/NMIS_Functions.R")
 
@@ -181,7 +182,30 @@ h_113$equipment.emoc_antishock_garment <- ((h_113$emoc_antishock_garment & h_113
 
 h_113$supplies.condoms <- h_113$sti_tx_srvcs_condoms | h_113$hiv_tx_srvcs_condoms | h_113$supplies_available_condoms
 
+h_113$improved_sanitation_and_functional <- (h_113$toilet_types_vip_latrine | 
+                                               h_113$toilet_types_pit_w_slab | 
+                                               (h_113$num_flush_or_pour_flush_piped & 
+                                                  h_113$flush_toilet_drain_to == 'improved')) & 
+                                            ((h_113$toilet_types_vip_latrine & 
+                                                (h_113$vip_latrine_not_working < 7)) | 
+                                               (h_113$toilet_types_pit_w_slab & 
+                                                  (h_113$slab_pit_latrine_not_working) < 7) | 
+                                               (h_113$num_flush_or_pour_flush_piped & 
+                                                  h_113$flush_toilet_drain_to == 'improved' & 
+                                                  (h_113$flush_toilet_not_working < 7)))
+
+h_113$power_access_and_functional <- (((h_113$power_sources_generator &
+                                          h_113$generator_funct_yn == 'yes') |
+                                         (h_113$power_sources_solar &
+                                            h_113$solar_funct_yn == 'yes') |
+                                         (h_113$power_sources_grid &
+                                            h_113$grid_funct_yn == 'yes')) &
+                                        (h_113$days_no_electricity <= 7))
+
 #pilot
+
+h_pilot$improved_sanitation <- h_pilot$num_toilets_improved_p > 0 
+
 h_pilot$family_planning_iud <- as.logical(recodeVar(h_pilot$family_planning_iud,
                                          c('', 'yes'),
                                          c(FALSE, TRUE), default=NA))
@@ -225,6 +249,14 @@ h_pilot$supplies.insecticide_treated_bednets <- (h_pilot$malaria_treatment_yn ==
 h_pilot$antenatal_care_malaria_prlx <- ifelse((h_pilot$malaria_treatment_sulphadoxine & 
                                                   h_pilot$antenatal_care_yn == 'yes'),
                                                     TRUE, NA)
+
+h_pilot$power_access_and_functional <- (((h_pilot$power_sources_generator &
+                                        h_pilot$generator_funct_yn == 'yes') |
+                                           (h_pilot$power_sources_solar &
+                                              h_pilot$solar_funct_yn == 'yes') |
+                                           (h_pilot$power_sources_grid &
+                                              h_pilot$grid_funct_yn == 'yes')) &
+                                          (h_pilot$days_no_electricity <= 7))
 
 ##################################
 ##combining 661, 113 & pilot
