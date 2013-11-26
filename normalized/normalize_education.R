@@ -113,14 +113,12 @@ edu_113$multigrade_teaching_yn <- NA
 edu_113$times_tchr_pay_delay_pastyr <- as.integer(edu_113$times_tchr_pay_delay_pastyr)
 edu_113$times_tchr_pay_miss_pastyr <- as.integer(edu_113$times_tchr_pay_miss_pastyr)
 
-################################
-###combining 661, 113 & pilot###
 edu_113$num_students_frthr_than_3km <- ifelse(edu_113$num_students_frthr_than_3km < 0,
                                               edu_113$num_students_frthr_than_3km == 8,
                                               edu_113$num_students_frthr_than_3km)
 
-edu_113$num_toilets_total <- apply(cbind(edu_113$vip_latrine_number, 
-                                         edu_113$slab_pit_latrine_number), 
+edu_113$num_toilets_total <- apply(cbind(as.numeric(edu_113$vip_latrine_number), 
+                                         as.numeric(edu_113$slab_pit_latrine_number)), 
                                    1, sum, na.rm=T)
 
 edu_113$num_tchrs_male <- apply(cbind(edu_113$num_tchrs_male_full_time, 

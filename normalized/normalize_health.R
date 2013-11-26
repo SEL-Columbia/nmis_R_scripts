@@ -195,11 +195,11 @@ h_113$improved_sanitation_and_functional <- (h_113$toilet_types_vip_latrine |
                                                   (h_113$flush_toilet_not_working < 7)))
 
 h_113$power_access_and_functional <- (((h_113$power_sources_generator &
-                                          h_113$generator_funct_yn) |
+                                          h_113$generator_funct_yn == 'yes') |
                                          (h_113$power_sources_solar &
-                                            h_113$solar_funct_yn) |
+                                            h_113$solar_funct_yn == 'yes') |
                                          (h_113$power_sources_grid &
-                                            h_113$grid_funct_yn)) &
+                                            h_113$grid_funct_yn == 'yes')) &
                                         (h_113$days_no_electricity <= 7))
 
 #pilot
@@ -251,11 +251,11 @@ h_pilot$antenatal_care_malaria_prlx <- ifelse((h_pilot$malaria_treatment_sulphad
                                                     TRUE, NA)
 
 h_pilot$power_access_and_functional <- (((h_pilot$power_sources_generator &
-                                            h_pilot$generator_funct_yn) |
+                                        h_pilot$generator_funct_yn == 'yes') |
                                            (h_pilot$power_sources_solar &
-                                              h_pilot$solar_funct_yn) |
+                                              h_pilot$solar_funct_yn == 'yes') |
                                            (h_pilot$power_sources_grid &
-                                              h_pilot$grid_funct_yn)) &
+                                              h_pilot$grid_funct_yn == 'yes')) &
                                           (h_pilot$days_no_electricity <= 7))
 
 ##################################
