@@ -1,5 +1,6 @@
 ######################################################################################################################
-##Normalizing Education/Health/Water Data: 661, 113, Pilot 
+##Normalizing Education Data: 661, 113, Pilot 
+
 source("source_scripts/Normailize_Functions.R")
 source("source_scripts/NMIS_Functions.R")
 
@@ -74,6 +75,16 @@ edu_661$school_managed <- recodeVar(edu_661$school_managed,
                                     c("faith_based", "federal_gov", "local_gov", "none",
                                       "private_non_profit", "private_profit", "state_gov"))
 
+edu_661$covered_roof_good_condi <- edu_661$covered_roof_yn == "yes_good_condition"
+
+edu_661$chalkboard_each_classroom_yn <- (edu_661$num_classrms_total <= 
+                                           edu_661$num_classrm_w_chalkboard)
+
+edu_661$num_toilets_total <- apply(cbind(edu_661$num_toilet_boy, 
+                                         edu_661$num_toilet_girl, 
+                                         edu_661$num_toilet_both),
+                                   1, sum, na.rm=T)
+
 edu_113$school_managed <- ifelse(edu_113$school_managed_fed_gov, 
                                  "federal_gov",
                           ifelse(edu_113$school_managed_st_gov, 
@@ -95,7 +106,6 @@ edu_113$fees.transport <- as.logical(edu_113$transport_fee > 0)
 edu_113$fees.exam_fee <- as.logical(edu_113$exams_fee > 0)
 edu_113$fees.pta_fee <- as.logical(edu_113$pta_fee > 0)
 
-edu_661$covered_roof_good_condi <- edu_661$covered_roof_yn == "yes_good_condition"
 edu_113$covered_roof_good_condi <- edu_113$covered_roof_yn %in% c("roof_fence_good_condition", 'yes')
 edu_pilot$covered_roof_good_condi <- edu_pilot$covered_roof_yn %in% c("roof_fence_good_condition", 'yes')
 
@@ -103,8 +113,39 @@ edu_113$multigrade_teaching_yn <- NA
 edu_113$times_tchr_pay_delay_pastyr <- as.integer(edu_113$times_tchr_pay_delay_pastyr)
 edu_113$times_tchr_pay_miss_pastyr <- as.integer(edu_113$times_tchr_pay_miss_pastyr)
 
-################################
-###combining 661, 113 & pilot###
+edu_113$num_students_frthr_than_3km <- ifelse(edu_113$num_students_frthr_than_3km < 0,
+                                              edu_113$num_students_frthr_than_3km == 8,
+                                              edu_113$num_students_frthr_than_3km)
+
+edu_113$num_toilets_total <- apply(cbind(as.numeric(edu_113$vip_latrine_number), 
+                                         as.numeric(edu_113$slab_pit_latrine_number)), 
+                                   1, sum, na.rm=T)
+
+edu_113$num_tchrs_male <- apply(cbind(edu_113$num_tchrs_male_full_time, 
+                                      edu_113$num_tchrs_male_part_time), 
+                                1, sum, na.rm=T)
+
+edu_113$num_tchrs_female <- apply(cbind(edu_113$num_tchrs_female_full_time, 
+                                        edu_113$num_tchrs_female_part_time), 
+                                  1, sum, na.rm=T)
+
+edu_113$num_tchrs_w_nce <- apply(cbind(edu_113$tchrs_male_nce, 
+                                       edu_113$tchrs_female_nce, 
+                                       edu_113$tchrs_male_other_w_nce,
+                                       edu_113$tchrs_female_other_w_nce),
+                                 1, sum, na.rm=T)
+
+edu_113$num_classrms_total <- apply(cbind(edu_113$num_classrms_good_cond, 
+                                          edu_113$num_classrms_need_min_repairs, 
+                                          edu_113$num_classrms_need_maj_repairs),
+                                    1, sum, na.rm=T)
+
+edu_113$num_benches <- apply(cbind(edu_113$num_attached_benches, 
+                                   edu_113$num_unattached_benches),
+                             1, sum, na.rm=T)
+
+##################################
+##combining 661, 113 & pilot
 edu_total <- rbind.fill(edu_661, edu_113, edu_pilot)
 
 
@@ -116,6 +157,8 @@ edu_total$borehole_tubewell_repair_time <- as.logical(recodeVar(edu_total$boreho
                                                                   'not_fixed', 'no'),
                                                                 c(TRUE, TRUE, TRUE, TRUE,TRUE, TRUE,
                                                                   FALSE, FALSE)))
+
+edu_total$potable_water <- ((edu_total$days_no_potable_water < 7) & (edu_total$water.none == FALSE))
 
 edu_total$level_of_education <- recodeVar(edu_total$level_of_education,
                                           "juniors_sec_only", "junior_sec_only")
