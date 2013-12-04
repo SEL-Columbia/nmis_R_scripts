@@ -152,7 +152,7 @@ h_113$transport_to_referral <-  ifelse(h_113$emergency_transport_ambulance,
                                        ifelse(h_113$emergency_transport_keke_napep,
                                               "keke", NA))
 
-h_113$medication.iv_fluid <- h_113$medication_iv_fluid | 
+h_113$medication.iv_fluid <- h_113$medication.iv_fluid | 
                               ((h_113$supplies.needles_and_tubing & h_113$emergency_obstetrics_yn == 'yes') | 
                               (h_113$emoc_parenteral1 | h_113$emoc_antibiotics))
 

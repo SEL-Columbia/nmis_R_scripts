@@ -33,15 +33,15 @@ lgaw_facilities <- ddply(iw774, .(lga_id), function(df) {
         percentage_functional_handpumps =
             ratio(df$water_point_type %in% c("Handpump", "Borehole") & df$is_improved & df$functional, df$water_point_type %in% c("Handpump", "Borehole")),
         
-        #####Population Served#####National standard is 250 people per water point
-        population_improved_water_points =
-            250 * icount(df$is_improved),
-        population_improved_functional_water_points = 
-            250 * icount(df$is_improved & df$functional ),
-        percentage_population_improved =
-            ratio(250 * icount(df$is_improved), df$Population), 
-        percentage_population_improved_functional = 
-            ratio(250 * icount(df$is_improved & df$functional), df$Population),
+#         #####Population Served#####National standard is 250 people per water point
+#         population_improved_water_points =
+#             250 * icount(df$is_improved),
+#         population_improved_functional_water_points = 
+#             250 * icount(df$is_improved & df$functional ),
+#         percentage_population_improved =
+#             ratio(250 * icount(df$is_improved), df$Population), 
+#         percentage_population_improved_functional = 
+#             ratio(250 * icount(df$is_improved & df$functional), df$Population),
         num_diesel = 
             icount(df$lift_mechanism == "Diesel"),
         percentage_diesel_functional =

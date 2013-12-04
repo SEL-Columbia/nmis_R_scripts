@@ -86,7 +86,7 @@ health_sub$management <- recodeVar(health_outlier$facility_owner_manager,
                                               'private', 'private', 'private'), default=NA)  
 
 health_sub$maternal_health_delivery_services <- ifelse(health_outlier$src == '661',
-                                                        health_outlier$maternal_health_delivery_services,
+                                                        health_outlier$delivery_services_yn,
                                                     health_outlier$emergency_obstetrics_yn)
                                                                  
 health_sub$skilled_birth_attendant <- 
