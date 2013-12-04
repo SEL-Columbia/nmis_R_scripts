@@ -53,7 +53,7 @@ lga_health_data <- ddply(ihealth774, .(lga_id), function(df) {
             proportion_no_user_fees_child_health = 
               bool_proportion(df$health_no_child_user_fees, TRUE),                               
       proportion_delivery_24_7 =
-        bool_proportion(df$delivery_services_24_7, TRUE),           
+        bool_proportion(df$maternal_health_delivery_services_24_7, TRUE),           
       proportion_at_least_1_sba = 
         bool_proportion(df$skilled_birth_attendant, TRUE),                    
       proportion_antenatal = 

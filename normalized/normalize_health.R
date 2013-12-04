@@ -72,6 +72,7 @@ h_113 <- rename(h_113, c("lga" = "mylga",
                          "medication_antihistamines" = "medication.antihistamines",
                          "medication_anti_diarrheals" = "medication.anti_diarrheals",
                          "medication_anti_pyretics" = "medication.anti_pyretics",
+                         "medication_iv_fluid" = "medication.iv_fluid",
                          "medication_arvs" = "medication.arvs",
                          "medication_tb_medicines" = "medication.tb_medicines",
                          "medication_none" = "medication.none"))

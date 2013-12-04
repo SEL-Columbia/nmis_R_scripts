@@ -109,9 +109,9 @@ lga_edu_data <- ddply(ie, .(lga_id), function(df) {
               student_classroom_ratio_lga_juniorsec =
                   ratio(df$num_students_total, df$num_classrms_total, df$is_junior_secondary),
               proportion_schools_hold_classes_outside_primary =
-                  bool_proportion(df$classes_outside_yn, df$is_primary),
+                  bool_proportion(df$class_held_outside, df$is_primary),
               proportion_schools_hold_classes_outside_juniorsec =
-                  bool_proportion(df$classes_outside_yn, df$is_junior_secondary),
+                  bool_proportion(df$class_held_outside, df$is_junior_secondary),
               proportion_schools_two_shifts_primary =
                   bool_proportion(df$two_shifts_yn, df$is_primary),
               proportion_schools_two_shifts_juniorsec=

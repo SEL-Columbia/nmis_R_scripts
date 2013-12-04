@@ -13,7 +13,7 @@ health_sub <- subset(health_outlier, select=c("uuid", "lga", "state",
                                               "child_health_growth_monitor", "malaria_treatment_artemisinin",
                                               "photo", "geocodeoffacility", "power_sources_grid", 
                                               "num_nurses_posted", "lab_technicians_posted",
-                                              "num_doctors_posted",  
+                                              "num_doctors_posted", "child_health_mebendazole", 
                                               "medication.antihistamines", "medication.antibiotic_oral", 
                                               "medication.act", "medication.sulphadoxine",
                                               "vaccine_storage_type.refrigerator", "medication.iud",
@@ -50,7 +50,7 @@ health_sub <- rename(health_sub, c('photo' = 'formhub_photo_id',
                              'immunization.tetanus_immun' = 'child_health_tetanus_immun_calc',
                              'immunization.dpt_immunization' = 'child_health_dpt_immunization_calc',
                              'immunization.opv_immuization' = 'child_health_opv_immuization_calc',
-                             'immunization.measles_immun' = 'measles_yn',
+                             'immunization.measles_immun' = 'child_health_measles_immun_calc',
                              'medication.implants' = 'family_planning_implants_calc',
                              'medication.iud' = 'family_planning_iud_calc',
                              'supplies.insecticide_treated_bednets' = 'has_itns',
@@ -62,7 +62,7 @@ health_sub <- rename(health_sub, c('photo' = 'formhub_photo_id',
                              'emoc_parenteral_anticonvulsant_yn' = 'emoc_parenteral_anticonvulsant',
                              'supplies.condoms' = 'condoms_yn',
 #                              'supplements.folic_acid' = 'medication_folic_acid',
-                             'medication.iv_fluid' = 'medication_iv_fluid',
+                             'medication.iv_fluid' = 'iv_medications_yn',
 #                              'medication.uterotonics' = 'uterotonics_yn_calc',
                              'lab_tests.pregnancy' = 'lab_tests_pregnancy_calc',
                              'lab_tests.stool' = 'lab_tests_stool_calc',
@@ -85,8 +85,8 @@ health_sub$management <- recodeVar(health_outlier$facility_owner_manager,
                                           c('public', 'public', 'public','public', 
                                               'private', 'private', 'private'), default=NA)  
 
-health_sub$delivery_services <- ifelse(health_outlier$src == '661',
-                                                        health_outlier$delivery_services_yn,
+health_sub$maternal_health_delivery_services <- ifelse(health_outlier$src == '661',
+                                                        health_outlier$maternal_health_delivery_services,
                                                     health_outlier$emergency_obstetrics_yn)
                                                                  
 health_sub$skilled_birth_attendant <- 
@@ -98,6 +98,10 @@ health_sub$num_chews_and_chos <-
   (rowSums(cbind(health_outlier$num_chews_posted,
                  health_outlier$num_junior_chews_posted,
                  health_outlier$num_cho_posted), na.rm=T))
+
+health_sub$num_chews_total <-
+  (rowSums(cbind(health_outlier$num_chews_posted,
+                 health_outlier$num_junior_chews_posted), na.rm=T))
 
 health_sub$vaccines_fridge_freezer <- ifelse(health_outlier$src == '661',
                                           (health_outlier$vaccine_storage_type.refrigerator & 
@@ -130,7 +134,7 @@ health_outlier$iv_medications_yn <- health_outlier$medication.iv_fluid
 #######################
 #########################
 
-health_sub$delivery_services_24_7 <- ifelse(health_outlier$src == '661',
+health_sub$maternal_health_delivery_services_24_7 <- ifelse(health_outlier$src == '661',
                                                          (health_outlier$facility_open_247_yn & 
                                                             health_outlier$delivery_services_yn & 
                                                              health_outlier$delivery_skilled_birth_247_yn),
