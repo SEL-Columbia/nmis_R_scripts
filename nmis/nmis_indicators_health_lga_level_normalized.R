@@ -107,10 +107,61 @@ lga_health_data <- ddply(ihealth774, .(lga_id), function(df) {
             (df$pop_2006[1]/1000)
                            )})                     
 
+###### core indicator calculations
+# Services that are provided at all faciltiies except for Health Posts 
+  #subsetting data by facility type
+  sansHP_health_774 <- health_774[(health_774$facility_type == 'cottagehospital' |
+                                    health_774$facility_type == 'specialisthospital' |
+                                    health_774$facility_type == 'wardmodelphccentre' |
+                                    health_774$facility_type == 'teachinghospital' |
+                                    health_774$facility_type == 'dentalclinic' |
+                                    health_774$facility_type == 'maternity' |
+                                    health_774$facility_type == 'federalmedicalcentre' |
+                                    health_774$facility_type == 'generalhospital' |
+                                    health_774$facility_type == 'comprehensivehealthcentre' |
+                                    health_774$facility_type == 'primaryhealthcarecentre' |
+                                    health_774$facility_type == 'primaryhealthclinic'),]
+  isansHP_health_774 <- idata.frame(sansHP_health_774)
+
+  lga_health_data_core_sansHP <- ddply(isansHP_health_774, .(lga_id), function(df) {
+        data.frame(
+      #     Total number of primary health clinics, primary health centers, comprehensive health centers and hospitals
+      #     Percentage that were intended to conduct deliveries for pregnant women    
+              proportion_delivery_24_7_sansHP = 
+                bool_proportion(df$maternal_health_delivery_services_24_7, TRUE),
+              proportion_vaccines_fridge_freezer_sansHP = 
+                bool_proportion(df$vaccines_fridge_freezer, TRUE)          
+      )}) 
+
+#rest of core indicators:
+lga_health_data_core <- ddply(ihealth774, .(lga_id), function(df) {
+    data.frame( 
+      # Services that are provided at all facilities including Health Posts
+      proportion_measles = 
+        bool_proportion(df$child_health_measles_immun_calc, TRUE),
+      # Infrastructure -- All facilities                
+      proportion_improved_water_supply = 
+        bool_proportion(df$improved_water_supply, TRUE),
+      proportion_improved_sanitation = 
+        bool_proportion(df$improved_sanitation, TRUE),
+      proportion_improved_sanitation = 
+        bool_proportion(df$phcn_electricity, TRUE),
+      #Health Facilities summary 
+      facilities_emergency_transport = 
+        icount(df$emergency_transport),
+      facilities_skilled_birth_attendant = 
+        icount(df$skilled_birth_attendant),
+      facilities_measles = 
+        icount(df$child_health_measles_immun_calc)
+  )}) 
+
+lga_health <- merge(lga_health_data, lga_health_data_core, by="lga_id")
+lga_health <- merge(lga_health, lga_health_data_core_sansHP, by="lga_id")
+
+
 ###### SUMMING UP #########
 ##writing out##
-saveRDS(lga_health_data, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/Health_LGA_level_774.rds")
-
+saveRDS(lga_health, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/Health_LGA_level_774.rds")
 
 
 
