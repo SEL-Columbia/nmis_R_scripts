@@ -2,7 +2,7 @@
 required_packages = data.frame(Package = c("plyr", "devtools"),
                                MinVersion = c("1.8", "1.1"), stringsAsFactors=F)
 required_gh_packages = data.frame(Package = "formhub", MinVersion = "0.0.3.6.1",
-                                      gh.uname = "modilabs", gh.repo = "formhub.R", stringsAsFactors=F)
+                                      gh.uname = "sel-columbia", gh.repo = "formhub.R", stringsAsFactors=F)
 
 row.names(required_packages) <- required_packages$Package
 row.names(required_gh_packages) <- required_gh_packages$Package
