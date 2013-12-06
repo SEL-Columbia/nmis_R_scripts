@@ -207,6 +207,87 @@ lga_edu_data <- ddply(ie, .(lga_id), function(df) {
                   sum(df$num_classrms_need_maj_repairs, na.rm = TRUE)
               )})                   
                   
+###### core indicator calculations
+lga_edu_data_core <- ddply(ie, .(lga_id), function(df) {
+  data.frame(   
+      # Facilities
+        percent_management_public = 
+          icount(df$management == 'public')/length(df$management),
+        percent_natl_curriculum =
+          bool_proportion(df$natl_curriculum_yn, TRUE),
+      # General information for Primary Schols
+        percent_management_public_primary = 
+          bool_proportion(df$management == 'public', df$is_primary),
+        percent_natl_curriculum_primary =
+          bool_proportion(df$natl_curriculum_yn, df$is_primary),
+        avg_num_students_primary =
+          ratio(df$num_students_total,  df$is_primary),
+        avg_num_tchrs_primary = 
+          ratio(df$num_tchrs_total,  df$is_primary),
+        avg_num_classrms_primary = 
+          ratio(df$num_classrms_total,  df$is_primary),
+        avg_num_toilets_primary = 
+          ratio(df$num_toilets_total,  df$is_primary),
+      # General information for Junior Secondary Schools
+        percent_management_public_js = 
+          bool_proportion(df$management == 'public', df$is_junior_secondary),
+        percent_natl_curriculum_js =
+          bool_proportion(df$natl_curriculum_yn, df$is_junior_secondary),
+        avg_num_students_js =
+          ratio(df$num_students_total,  df$is_junior_secondary),
+        avg_num_tchrs_js = 
+          ratio(df$num_tchrs_total,  df$is_junior_secondary),
+        avg_num_classrms_js = 
+          ratio(df$num_classrms_total,  df$is_junior_secondary),
+        avg_num_toilets_js = 
+          ratio(df$num_toilets_total,  df$is_junior_secondary),
+      # Infrastructure in Primary Schools
+        percent_functional_water_primary = 
+          ratio(df$functional_water,  df$is_primary),
+        percent_improved_sanitation_primary = 
+          ratio(df$improved_sanitation,  df$is_primary),
+        percent_phcn_electricity_primary = 
+          ratio(df$phcn_electricity,  df$is_primary),
+      # Infrastructure in Junior Secondary Schools
+        percent_functional_water_js = 
+          ratio(df$functional_water,  df$is_junior_secondary),
+        percent_improved_sanitation_js = 
+          ratio(df$improved_sanitation,  df$is_junior_secondary),
+        percent_phcn_electricity_js = 
+          ratio(df$phcn_electricity,  df$is_junior_secondary)
+)}) 
+
+# Education Facilities summary on the "All sectors" page (narrow table)
+edu774_allsectors <- edu774
+edu774_allsectors$is_js_multiplecount <- 
+        edu774_allsectors$level_of_education %in% c('js_ss', 'js', 'primary_js',
+                                                    'primary_and_junior_sec', 
+                                                    'junior_and_senior_sec',
+                                                    'junior_sec_only', 'primary_js_ss',
+                                                    'primary_junior_and_senior_sec')
+
+edu774_allsectors$is_ss_multiplecount <- 
+        edu774_allsectors$level_of_education %in% c('junior_and_senior_sec', 'ss',
+                                                      'js_ss', 'senior_sec_only',
+                                                    'primary_junior_and_senior_sec',
+                                                    'primary_js_ss')
+edu774_allsectors$gov_managed <- 
+        edu774_allsectors$management == 'public'
+  
+ie2 <- idata.frame(edu774_allsectors)
+
+core_allsectors <- ddply(ie2, .(lga_id), function(df) {
+                    data.frame(   
+                      num_js_schools_multiplecount = 
+                        icount(df$is_js_multiplecount),
+                      num_ss_schools_multiplecount = 
+                        icount(df$is_ss_multiplecount),
+                      percent_teachers_nce_primary = 
+                        ratio(df$num_tchrs_with_nce, df$num_tchrs_total, df$management)                        
+)}) 
+
+lga_edu_data <- merge(lga_edu_data, lga_edu_data_core, by = "lga_id")
+lga_edu_data <- merge(lga_edu_data, core_allsectors, by = "lga_id")
 
 #writing out
 saveRDS(lga_edu_data, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/Education_LGA_level_774.rds")
