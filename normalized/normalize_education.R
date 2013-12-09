@@ -23,9 +23,9 @@ edu_113$uuid <- sapply(paste(edu_113$gps, edu_113$photo), FUN=digest)
 edu_pilot$uuid <- sapply(paste(edu_pilot$gps, edu_pilot$photo), FUN=digest)
 
 #adding photo urls
-add_photo_url(edu_661, 'formhub')
-add_photo_url(edu_pilot, 'nmisstatic')
-add_photo_url(edu_113, 'nmisstatic')
+edu_661 <- add_photo_url(edu_661, 'formhub')
+edu_pilot <- add_photo_url(edu_pilot, 'nmisstatic')
+edu_113 <- add_photo_url(edu_113, 'nmisstatic')
 
 ########################
 ##Mapping Names 

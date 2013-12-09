@@ -28,9 +28,9 @@ water_113$uuid <- sapply(paste(water_113$gps, water_113$photo), FUN=digest)
 water_pilot$uuid <- sapply(paste(water_pilot$gps, water_pilot$photo), FUN=digest)
 
 #adding photo urls
-add_photo_url(water_661, 'formhub')
-add_photo_url(water_pilot, 'nmisstatic')
-add_photo_url(water_113, 'nmisstatic')
+water_661 <- add_photo_url(water_661, 'formhub')
+water_pilot <- add_photo_url(water_pilot, 'nmisstatic')
+water_113 <- add_photo_url(water_113, 'nmisstatic')
 
 #merge reclassify data back to 661 data
 water_661 <- merge(water_661, reclassify, by="uuid", all.x=T)

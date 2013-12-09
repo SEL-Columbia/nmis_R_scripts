@@ -29,7 +29,8 @@ health_sub <- subset(health_outlier, select=c("uuid", "lga", "state",
                                               "medication.iv_fluid", "medication.uterotonics", 
                                               "lab_tests.pregnancy", "supplements.iron",
                                               "lab_tests.stool", "lab_tests.tb_microscopy", 
-                                              "medication.arvs", "community", "ward", "start"))
+                                              "medication.arvs", "community", "ward", "start", 
+                                              "photo_url", "photo_url_med", "photo_url_sml"))
 
 health_sub <- rename(health_sub, c('photo' = 'formhub_photo_id',
                              'geocodeoffacility' = 'gps',
