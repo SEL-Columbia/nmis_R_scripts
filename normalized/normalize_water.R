@@ -2,6 +2,7 @@
 ##Normalizing Water Data: 661, 113, Pilot 
 source("source_scripts/Normailize_Functions.R")
 source("source_scripts/NMIS_Functions.R")
+source("source_scripts/NMIS_Utils.R")
 
 #reading in data
 water_661 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/merged/Water_661_Merged.csv", 
@@ -25,6 +26,11 @@ water_pilot$src <- "pilot"
 #adding uuid to 113 + pilot
 water_113$uuid <- sapply(paste(water_113$gps, water_113$photo), FUN=digest)
 water_pilot$uuid <- sapply(paste(water_pilot$gps, water_pilot$photo), FUN=digest)
+
+#adding photo urls
+add_photo_url(edu_661)
+add_photo_url(edu_pilot)
+add_photo_url(edu_113)
 
 #merge reclassify data back to 661 data
 water_661 <- merge(water_661, reclassify, by="uuid", all.x=T)

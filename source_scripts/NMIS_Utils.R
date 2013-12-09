@@ -19,6 +19,7 @@ add_lga_id = function(df, lgacolname='mylga', statecolname='mylga_state') {
 add_formhub_photo_url = function(df) {
     attachment_prefix <- 'http://formhub.s3.amazonaws.com/ossap/attachments/'
     df$photo_url <- str_c(attachment_prefix, df$photo)
+    # myf did not write this function
     photo_prefix <- substr(df$photo, 1, 13)
     df$photo_url_med <- str_c(attachment_prefix, photo_prefix, '-medium.jpg')
     df$photo_url_sml <- str_c(attachment_prefix, photo_prefix, '-small.jpg')
@@ -32,22 +33,21 @@ add_nmisstatic_photo_url = function(df) {
                         algo='md5', serialize=FALSE), 1, 1)
     df$photo_url <- paste(attachment_prefix, md5_folder, 0, df$photo, sep='/')
     df$photo_url_med <- paste(attachment_prefix, md5_folder, 200, df$photo, sep='/')
-    df$photo_url_small <- paste(attachment_prefix, md5_folder, 90, df$photo, sep='/')
+    df$photo_url_sml <- paste(attachment_prefix, md5_folder, 90, df$photo, sep='/')
     df
 }
 
-add_photo_url = function(df, type) {
+add_photo_url = function(df) {
     # since photo are from different sources based on different dataset, switch
     # to add_formhub_photo_url if it's 661 and add_nmisstatic_photo_url 
     # for the rest
+    type <- ifelse(df$src == '661', 'formhub', 'nmisstatic')
+   
     switch(type,
            formhub = add_formhub_photo_url(df),
            nmisstatic = add_nmisstatic_photo_url(df)
            )
 }
-
-
-
 
 source("source_scripts/Clean_LGA_State_errors.R")
 row.names(nmis_lga_mapping) <- nmis_lga_mapping$id
