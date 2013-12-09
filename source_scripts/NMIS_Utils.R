@@ -37,12 +37,10 @@ add_nmisstatic_photo_url = function(df) {
     df
 }
 
-add_photo_url = function(df) {
+add_photo_url = function(df, type) {
     # since photo are from different sources based on different dataset, switch
     # to add_formhub_photo_url if it's 661 and add_nmisstatic_photo_url 
     # for the rest
-    type <- ifelse(df$src == '661', 'formhub', 'nmisstatic')
-   
     switch(type,
            formhub = add_formhub_photo_url(df),
            nmisstatic = add_nmisstatic_photo_url(df)
