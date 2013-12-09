@@ -1,4 +1,5 @@
 source("base_scripts/InstallFormhub.R")
+source("source_scripts/NMIS_Utils.R")
 
 extraSchema = setNames(data.frame(rbind(
                     c("mylga", "select one", "LGA"),

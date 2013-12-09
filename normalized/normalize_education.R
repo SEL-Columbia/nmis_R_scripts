@@ -3,7 +3,7 @@
 
 source("source_scripts/Normailize_Functions.R")
 source("source_scripts/NMIS_Functions.R")
-source("source_scripts/NMIS_Utils")
+source("source_scripts/NMIS_Utils.R")
 
 #reading in data
 edu_661 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/merged/Education_661_Merged.csv", 
