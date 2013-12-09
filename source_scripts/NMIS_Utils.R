@@ -18,14 +18,17 @@ add_lga_id = function(df, lgacolname='mylga', statecolname='mylga_state') {
 
 add_formhub_photo_url = function(df) {
     attachment_prefix <- 'http://formhub.s3.amazonaws.com/ossap/attachments/'
-    df$fh_photo_url <- str_c(attachment_prefix, df$photo)
+    df$photo_url <- str_c(attachment_prefix, df$photo)
     photo_prefix <- substr(df$photo, 1, 13)
-    df$fh_photo_url_med <- str_c(attachment_prefix, photo_prefix, '-medium.jpg')
-    df$fh_photo_url_sml <- str_c(attachment_prefix, photo_prefix, '-small.jpg')
+    df$photo_url_med <- str_c(attachment_prefix, photo_prefix, '-medium.jpg')
+    df$photo_url_sml <- str_c(attachment_prefix, photo_prefix, '-small.jpg')
     df
 }
 
 add_nmisstatic_photo_url = function(df) {
+    attachment_prefix <- 'http://nmisstatic.s3.amazonaws.com/facimg/'
+    md5_folder <- md5sum(df$photo)
+
     df
 }
 
