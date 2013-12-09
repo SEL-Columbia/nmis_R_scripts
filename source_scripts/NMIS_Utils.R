@@ -16,7 +16,7 @@ add_lga_id = function(df, lgacolname='mylga', statecolname='mylga_state') {
   df
 }
 
-add_photo_url = function(df) {
+add_formhub_photo_url = function(df) {
   attachment_prefix <- 'http://formhub.s3.amazonaws.com/ossap/attachments/'
   df$fh_photo_url <- str_c(attachment_prefix, df$photo)
   photo_prefix <- substr(df$photo, 1, 13)
@@ -24,6 +24,20 @@ add_photo_url = function(df) {
   df$fh_photo_url_sml <- str_c(attachment_prefix, photo_prefix, '-small.jpg')
   df
 }
+
+add_nmisstatic_photo_url = function(df) {
+    df
+}
+
+add_photo_url = function(df, type) {
+    switch(type,
+           formhub = add_formhub_photo_url(df),
+           nmisstatic = add_nmisstatic_photo_url(df)
+           )
+}
+
+
+
 
 source("source_scripts/Clean_LGA_State_errors.R")
 row.names(nmis_lga_mapping) <- nmis_lga_mapping$id

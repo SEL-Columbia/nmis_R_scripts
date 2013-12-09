@@ -64,10 +64,10 @@ rm(list=c("education", "education2", "education3", "health", "health2", "health3
 
 ###### ELEMENTARY MANIPULATIONS ########
 source("source_scripts/NMIS_Utils.R")
-merged_education <- add_photo_url(merged_education)
-merged_health <- add_photo_url(merged_health)
-merged_water <- add_photo_url(merged_water)
-merged_local <- add_photo_url(merged_local)
+merged_education <- add_photo_url(merged_education, 'formhub')
+merged_health <- add_photo_url(merged_health, 'formhub')
+merged_water <- add_photo_url(merged_water, 'formhub')
+merged_local <- add_photo_url(merged_local, 'formhub')
 
 ############################
 #### Remove UUID duplicates
