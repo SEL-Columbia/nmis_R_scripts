@@ -28,7 +28,7 @@ add_formhub_photo_url = function(df) {
 add_nmisstatic_photo_url = function(df) {
     attachment_prefix <- 'http://nmisstatic.s3.amazonaws.com/facimg/'
     md5_folder <- md5sum(df$photo)
-
+    df$photo_url <- str_c(attachment_prefix, md5_folder)
     df
 }
 
