@@ -1,5 +1,5 @@
 source('base_scripts/InstallFormhub.R')
-load_packages_with_install(c('doBy', 'stringr'))
+load_packages_with_install(c('doBy', 'stringr', 'digest'))
 
 lga_corrections <- read.csv('~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/source_data/nmis_lga_corrections.csv', stringsAsFactors=FALSE)
 nmis_lga_mapping <- read.csv('~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/source_data/nmis_lga_mapping.csv', stringsAsFactors=FALSE)
@@ -17,12 +17,12 @@ add_lga_id = function(df, lgacolname='mylga', statecolname='mylga_state') {
 }
 
 add_formhub_photo_url = function(df) {
-  attachment_prefix <- 'http://formhub.s3.amazonaws.com/ossap/attachments/'
-  df$fh_photo_url <- str_c(attachment_prefix, df$photo)
-  photo_prefix <- substr(df$photo, 1, 13)
-  df$fh_photo_url_med <- str_c(attachment_prefix, photo_prefix, '-medium.jpg')
-  df$fh_photo_url_sml <- str_c(attachment_prefix, photo_prefix, '-small.jpg')
-  df
+    attachment_prefix <- 'http://formhub.s3.amazonaws.com/ossap/attachments/'
+    df$fh_photo_url <- str_c(attachment_prefix, df$photo)
+    photo_prefix <- substr(df$photo, 1, 13)
+    df$fh_photo_url_med <- str_c(attachment_prefix, photo_prefix, '-medium.jpg')
+    df$fh_photo_url_sml <- str_c(attachment_prefix, photo_prefix, '-small.jpg')
+    df
 }
 
 add_nmisstatic_photo_url = function(df) {
@@ -30,6 +30,9 @@ add_nmisstatic_photo_url = function(df) {
 }
 
 add_photo_url = function(df, type) {
+    # since photo are from different sources based on different dataset, switch
+    # to add_formhub_photo_url if it's 661 and add_nmisstatic_photo_url 
+    # for the rest
     switch(type,
            formhub = add_formhub_photo_url(df),
            nmisstatic = add_nmisstatic_photo_url(df)
