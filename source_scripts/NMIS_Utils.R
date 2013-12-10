@@ -1,5 +1,5 @@
 source('base_scripts/InstallFormhub.R')
-load_packages_with_install(c('doBy', 'stringr'))
+load_packages_with_install(c('doBy', 'stringr', 'digest'))
 
 lga_corrections <- read.csv('~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/source_data/nmis_lga_corrections.csv', stringsAsFactors=FALSE)
 nmis_lga_mapping <- read.csv('~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/source_data/nmis_lga_mapping.csv', stringsAsFactors=FALSE)
@@ -16,13 +16,35 @@ add_lga_id = function(df, lgacolname='mylga', statecolname='mylga_state') {
   df
 }
 
-add_photo_url = function(df) {
-  attachment_prefix <- 'http://formhub.s3.amazonaws.com/ossap/attachments/'
-  df$fh_photo_url <- str_c(attachment_prefix, df$photo)
-  photo_prefix <- substr(df$photo, 1, 13)
-  df$fh_photo_url_med <- str_c(attachment_prefix, photo_prefix, '-medium.jpg')
-  df$fh_photo_url_sml <- str_c(attachment_prefix, photo_prefix, '-small.jpg')
-  df
+add_formhub_photo_url = function(df) {
+    attachment_prefix <- 'http://formhub.s3.amazonaws.com/ossap/attachments/'
+    df$photo_url <- str_c(attachment_prefix, df$photo)
+    # myf did not write this function
+    photo_prefix <- substr(df$photo, 1, 13)
+    df$photo_url_med <- str_c(attachment_prefix, photo_prefix, '-medium.jpg')
+    df$photo_url_sml <- str_c(attachment_prefix, photo_prefix, '-small.jpg')
+    df
+}
+
+add_nmisstatic_photo_url = function(df) {
+    attachment_prefix <- 'http://nmisstatic.s3.amazonaws.com/facimg'
+    # getting the first element of the md5sum
+    md5_folder <- substr(digest(sub('\\.jpg$', '', df$photo),
+                        algo='md5', serialize=FALSE), 1, 1)
+    df$photo_url <- paste(attachment_prefix, md5_folder, 0, df$photo, sep='/')
+    df$photo_url_med <- paste(attachment_prefix, md5_folder, 200, df$photo, sep='/')
+    df$photo_url_sml <- paste(attachment_prefix, md5_folder, 90, df$photo, sep='/')
+    df
+}
+
+add_photo_url = function(df, type) {
+    # since photo are from different sources based on different dataset, switch
+    # to add_formhub_photo_url if it's 661 and add_nmisstatic_photo_url 
+    # for the rest
+    switch(type,
+           formhub = add_formhub_photo_url(df),
+           nmisstatic = add_nmisstatic_photo_url(df)
+           )
 }
 
 source("source_scripts/Clean_LGA_State_errors.R")

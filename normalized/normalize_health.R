@@ -3,6 +3,7 @@
 
 source("source_scripts/Normailize_Functions.R")
 source("source_scripts/NMIS_Functions.R")
+source("source_scripts/NMIS_Utils.R")
 
 #reading in data
 h_661 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/merged/Health_661_Merged.csv", 
@@ -20,6 +21,11 @@ h_pilot$src <- "pilot"
 #adding uuid to 113 + pilot
 h_113$uuid <- sapply(paste(h_113$gps, h_113$photo), FUN=digest)
 h_pilot$uuid <- sapply(paste(h_pilot$gps, h_pilot$photo), FUN=digest)
+
+#adding photo urls
+h_661 <- add_photo_url(h_661, 'formhub')
+h_pilot <- add_photo_url(h_pilot, 'nmisstatic')
+h_113 <- add_photo_url(h_113, 'nmisstatic')
 
 ########################
 #Mapping Names
