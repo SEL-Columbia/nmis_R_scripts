@@ -168,8 +168,8 @@ lga_health_data_core <- ddply(ihealth774, .(lga_id), function(df) {
         bool_proportion(df$phcn_electricity, TRUE),
       proportion_alternative_power = 
         bool_proportion(df$phcn_electricity, TRUE),
-#       icount(df$ == '')
-      
+      proportion_power_alternative_functional = 
+        bool_proportion(df$power_sources_alternative_functional, TRUE),
       #Health Facilities summary 
       facilities_delivery_services_yn = 
         icount(df$delivery_services_yn),
