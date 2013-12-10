@@ -28,8 +28,11 @@ add_formhub_photo_url = function(df) {
 add_nmisstatic_photo_url = function(df) {
     attachment_prefix <- 'http://nmisstatic.s3.amazonaws.com/facimg'
     # getting the first element of the md5sum
-    md5_folder <- substr(digest(sub('\\.jpg$', '', df$photo),
-                        algo='md5', serialize=FALSE), 1, 1)
+#     md5_folder <- substr(digest(sub('\\.jpg$', '', df$photo),
+#                         algo='md5', serialize=FALSE), 1, 1)
+    
+    md5_folder <- sapply(sub('\\.jpg$', '', df$photo), function(x) 
+                    substr(digest(x,  algo='md5', serialize=FALSE), 1, 1))
     df$photo_url <- paste(attachment_prefix, md5_folder, 0, df$photo, sep='/')
     df$photo_url_sml <- paste(attachment_prefix, md5_folder, 90, df$photo, sep='/')
     df

@@ -223,7 +223,7 @@ h_113$power_access_and_functional <- (((h_113$power_sources_generator &
 
 h_113$power_sources_solar_functional <- ((h_113$power_sources_solar &
                                             h_113$solar_funct_yn == 'yes') & 
-                                        (h_661113$days_no_electricity <= 7))
+                                        (h_113$days_no_electricity <= 7))
 
 h_113$power_sources_generator_functional <- ((h_113$power_sources_generator &
                                               h_113$generator_funct_yn == 'yes') &
