@@ -137,6 +137,18 @@ h_661$child_health_growth_monitor <-  (h_661$weighing_scale_funct_yn == 'yes') &
                                         h_661$equipment.scale &
                                           h_661$supplies.muac_tape
 
+h_661$power_sources_solar_functional <- ((h_661$power_sources_solar &
+                                          h_661$solar_funct_yn == 'yes') &  
+                                        (h_661$power_sources_none == F))
+
+h_661$power_sources_generator_functional <- ((h_661$power_sources_generator & 
+                                               h_661$generator_funct_yn == 'yes') & 
+                                             (h_661$power_sources_none == F))
+
+h_661$power_sources_alternative_functional <- (h_661$power_sources_generator_functional |
+                                                h_661$power_sources_solar_functional)
+
+  
 #113
 h_113$medication.antibiotic_oral <- ((h_113$sti_tx_srvcs_penicilling | h_113$sti_tx_srvcs_doxycycline | 
                                       h_113$sti_tx_srvcs_ciprofloxacin) & (h_113$sti_treatment_yn == 'yes')) |
@@ -209,8 +221,19 @@ h_113$power_access_and_functional <- (((h_113$power_sources_generator &
                                             h_113$grid_funct_yn == 'yes')) &
                                         (h_113$days_no_electricity <= 7))
 
-#pilot
+h_113$power_sources_solar_functional <- ((h_113$power_sources_solar &
+                                            h_113$solar_funct_yn == 'yes') & 
+                                        (h_661113$days_no_electricity <= 7))
 
+h_113$power_sources_generator_functional <- ((h_113$power_sources_generator &
+                                              h_113$generator_funct_yn == 'yes') &
+                                        (h_113$days_no_electricity <= 7))
+
+h_113$power_sources_alternative_functional <- (h_113$power_sources_generator_functional |
+                                                 h_113$power_sources_solar_functional)
+
+
+#pilot
 h_pilot$improved_sanitation <- h_pilot$num_toilets_improved_p > 0 
 
 h_pilot$family_planning_iud <- as.logical(recodeVar(h_pilot$family_planning_iud,
@@ -264,6 +287,18 @@ h_pilot$power_access_and_functional <- (((h_pilot$power_sources_generator &
                                            (h_pilot$power_sources_grid &
                                               h_pilot$grid_funct_yn == 'yes')) &
                                           (h_pilot$days_no_electricity <= 7))
+
+h_pilot$power_sources_solar_functional <- ((h_pilot$power_sources_solar &
+                                              h_pilot$solar_funct_yn == 'yes') &
+                                          (h_pilot$days_no_electricity <= 7))
+
+h_pilot$power_sources_generator_functional <- ((h_pilot$power_sources_generator &
+                                                h_pilot$generator_funct_yn == 'yes') &
+                                              (h_pilot$days_no_electricity <= 7))
+
+h_pilot$power_sources_alternative_functional <- (h_pilot$power_sources_generator_functional |
+                                                  h_pilot$power_sources_solar_functional)
+
 
 ##################################
 ##combining 661, 113 & pilot

@@ -127,7 +127,7 @@ lga_health_data <- ddply(ihealth774, .(lga_id), function(df) {
      percent_compr_oc_c_sections = 
       bool_proportion(compr_oc_c_sections, TRUE)
     )}) 
-                                 
+
                                    
 # Services that are provided at all faciltiies except for Health Posts 
   #subsetting data by facility type
@@ -166,7 +166,8 @@ lga_health_data_core <- ddply(ihealth774, .(lga_id), function(df) {
       # Infrastructure -- All facilities                
       proportion_phcn_electricity = 
         bool_proportion(df$phcn_electricity, TRUE),
-      
+      proportion_alternative_power = 
+        bool_proportion(df$phcn_electricity, TRUE),
 #       icount(df$ == '')
       
       #Health Facilities summary 
