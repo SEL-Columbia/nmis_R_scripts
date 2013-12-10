@@ -125,7 +125,7 @@ lga_health_data <- ddply(ihealth774, .(lga_id), function(df) {
        length(df$uuid),
       #   Percentage that perform C-sections
      percent_compr_oc_c_sections = 
-      bool_proportion(compr_oc_c_sections, TRUE)
+      bool_proportion(ihealth_774_hospitals$compr_oc_c_sections, TRUE)
     )}) 
                                  
                                    
