@@ -107,7 +107,28 @@ lga_health_data <- ddply(ihealth774, .(lga_id), function(df) {
             (df$pop_2006[1]/1000)
                            )})                     
 
-###### core indicator calculations
+###### core indicator calculations ############################################################
+# Services that are provided at Hospitals only
+  #subsetting data by facility type
+  health_774_hospitals <- health_774[(health_774$facility_type == 'cottagehospital' |
+                                   health_774$facility_type == 'specialisthospital' |
+                                   health_774$facility_type == 'comprehensivehealthcentre' |
+                                   health_774$facility_type == 'generalhospital' |
+                                   health_774$facility_type == 'teachinghospital' |
+                                   health_774$facility_type == 'federalmedicalcentre'),]                                        
+   ihealth_774_hospitals<- idata.frame(health_774_hospitals)
+ 
+ lga_health_data_core_hospital <- ddply(ihealth_774_hospitals, .(lga_id), function(df) {
+   data.frame(
+      #   Total number of hospitals in LGA
+     num_hospitals = 
+       length(df$uuid),
+      #   Percentage that perform C-sections
+     percent_compr_oc_c_sections = 
+      bool_proportion(compr_oc_c_sections, TRUE)
+    )}) 
+                                 
+                                   
 # Services that are provided at all faciltiies except for Health Posts 
   #subsetting data by facility type
   sansHP_health_774 <- health_774[(health_774$facility_type == 'cottagehospital' |
@@ -121,19 +142,22 @@ lga_health_data <- ddply(ihealth774, .(lga_id), function(df) {
                                     health_774$facility_type == 'comprehensivehealthcentre' |
                                     health_774$facility_type == 'primaryhealthcarecentre' |
                                     health_774$facility_type == 'primaryhealthclinic'),]
-  isansHP_health_774 <- idata.frame(sansHP_health_774)
+ isansHP_health_774 <- idata.frame(sansHP_health_774)
 
-  lga_health_data_core_sansHP <- ddply(isansHP_health_774, .(lga_id), function(df) {
+lga_health_data_core_sansHP <- ddply(isansHP_health_774, .(lga_id), function(df) {
         data.frame(
-      #     Total number of primary health clinics, primary health centers, comprehensive health centers and hospitals
+          num_health_facilities_sansHP = 
+            length(df$uuid),
       #     Percentage that were intended to conduct deliveries for pregnant women    
-              proportion_delivery_24_7_sansHP = 
-                bool_proportion(df$maternal_health_delivery_services_24_7, TRUE),
-              proportion_vaccines_fridge_freezer_sansHP = 
-                bool_proportion(df$vaccines_fridge_freezer, TRUE)          
+          proportion_delivery_24_7_sansHP = 
+            bool_proportion(df$maternal_health_delivery_services_24_7, TRUE),
+          proportion_vaccines_fridge_freezer_sansHP = 
+            bool_proportion(df$vaccines_fridge_freezer, TRUE)          
       )}) 
 
 #rest of core indicators:
+
+
 lga_health_data_core <- ddply(ihealth774, .(lga_id), function(df) {
     data.frame( 
       # Services that are provided at all facilities including Health Posts
@@ -142,7 +166,12 @@ lga_health_data_core <- ddply(ihealth774, .(lga_id), function(df) {
       # Infrastructure -- All facilities                
       proportion_phcn_electricity = 
         bool_proportion(df$phcn_electricity, TRUE),
+      
+#       icount(df$ == '')
+      
       #Health Facilities summary 
+      facilities_delivery_services_yn = 
+        icount(df$delivery_services_yn),
       facilities_emergency_transport = 
         icount(df$emergency_transport),
       facilities_skilled_birth_attendant = 
