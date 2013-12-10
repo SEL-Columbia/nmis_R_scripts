@@ -220,6 +220,8 @@ lga_edu_data_core <- ddply(ie, .(lga_id), function(df) {
           bool_proportion(df$management == 'public', df$is_primary),
         percent_natl_curriculum_primary =
           bool_proportion(df$natl_curriculum_yn, df$is_primary),
+        num_school_1kmplus_secondary_school = 
+          bool_proportion(df$school_1kmplus_secondary_school, df$is_primary),
         avg_num_students_primary =
           ratio(df$num_students_total,  df$is_primary),
         avg_num_tchrs_primary = 
