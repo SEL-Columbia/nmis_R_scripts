@@ -11,7 +11,7 @@ stopifnot(!anyDuplicated(water_774$uuid) | any(is.na(water_774$lga_id)))
 water_sub <- subset(water_774, select=c("photo", "state", "lga","zone", "lga_id", "uuid", "gps",
                                         "community", "ward", "lift_mechanism", "water_point_type",
                                         "water_functional_yn", "pay_for_water_yn", "src", 
-                                        "unique_lga", "start", "photo_url", "photo_url_med", "photo_url_sml"))
+                                        "unique_lga", "start", "photo_url", "photo_url_sml"))
 
 water_sub <- rename(water_sub, 
                             c("photo" = 'formhub_photo_id',
