@@ -140,8 +140,7 @@ lga_health_data_core <- ddply(ihealth774, .(lga_id), function(df) {
       proportion_measles = 
         bool_proportion(df$child_health_measles_immun_calc, TRUE),
       # Infrastructure -- All facilities                
-#REMOVED redundent indicators: proportion_improved_water_supply, proportion_improved_sanitation 
-      phcn_electricity = 
+      proportion_phcn_electricity = 
         bool_proportion(df$phcn_electricity, TRUE),
       #Health Facilities summary 
       facilities_emergency_transport = 
