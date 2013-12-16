@@ -19,7 +19,7 @@ add_lga_id = function(df, lgacolname='mylga', statecolname='mylga_state') {
 add_formhub_photo_url = function(df) {
     small_prefix <- 'https://formhub.org/attachment/small?media_file=ossap/attachments/'
     original_prefix <- 'http://formhub.s3.amazonaws.com/ossap/attachments/'
-    df$photo_url <- str_c(original_prefix, photo)
+    df$photo_url <- str_c(original_prefix, df$photo)
     df$photo_url_sml <- str_c(small_prefix, df$photo)
     df
 }
