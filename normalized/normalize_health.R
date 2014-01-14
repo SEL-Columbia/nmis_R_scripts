@@ -167,8 +167,10 @@ h_113$facility_type <- recodeVar(h_113$facility_type,
 
 h_113$transport_to_referral <-  ifelse(h_113$emergency_transport_ambulance,
                                        "ambulance",
-                                       ifelse(h_113$emergency_transport_keke_napep,
-                                              "keke", NA))
+                                  ifelse(h_113$transport_to_referral_taxi,
+                                           "taxi",
+                                    ifelse(h_113$emergency_transport_keke_napep,
+                                              "keke", NA)))
 
 h_113$medication.iv_fluid <- h_113$medication.iv_fluid | 
                               ((h_113$supplies.needles_and_tubing & h_113$emergency_obstetrics_yn == 'yes') | 
@@ -248,8 +250,10 @@ h_pilot$facility_type <- recodeVar(h_pilot$facility_type,
 
 h_pilot$transport_to_referral <-  ifelse(h_pilot$transport_to_referral_ambulance,
                                           "ambulance",
-                                    ifelse(h_pilot$transport_to_referral_keke,
-                                          "keke", NA))
+                                    ifelse(h_pilot$transport_to_referral_taxi,
+                                            "taxi",
+                                      ifelse(h_pilot$transport_to_referral_keke,
+                                              "keke", NA)))
 
 h_pilot$lab_tests.hemoglobin_testing <- h_pilot$lab_tests_hemoglobin_testing & h_pilot$laboratory_yn == 'yes' 
 h_pilot$lab_tests.urine_testing <- h_pilot$lab_tests_urine_testing & h_pilot$laboratory_yn == 'yes'
