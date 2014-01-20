@@ -65,91 +65,91 @@ h_gap <- ddply(ih, .(lga_id), function(df) {
     # Improved and Functional Water Point
       improved_water_supply_numerator = sum(df$improved_water_supply, na.rm=T), 
       improved_water_supply_denominator = sum(df$denominator, na.rm=T),
-      improved_water_supply_percent = ceiling(100*sum(df$improved_water_supply, na.rm=T)/
+      improved_water_supply_percent = round(100*sum(df$improved_water_supply, na.rm=T)/
                                                 sum(df$denominator, na.rm=T)),
       
     # Improved Toilet 
       improved_sanitation_numerator = sum(df$improved_sanitation, na.rm=T),  
       improved_sanitation_denominator = sum(df$denominator, na.rm=T),
-      improved_sanitation_percent = ceiling(100*sum(df$improved_sanitation, na.rm=T)/
+      improved_sanitation_percent = round(100*sum(df$improved_sanitation, na.rm=T)/
                                               sum(df$denominator, na.rm=T)),
       
     # Grid Power available (PHCN/NEPA)
       phcn_electricity_numerator = sum(df$phcn_electricity, na.rm=T),
       phcn_electricity_denominator = sum(df$denominator, na.rm=T),
-      phcn_electricity_percent = ceiling(100*sum(df$phcn_electricity, na.rm=T)/sum(df$denominator, na.rm=T)),
+      phcn_electricity_percent = round(100*sum(df$phcn_electricity, na.rm=T)/sum(df$denominator, na.rm=T)),
       
     # Any Power Available (grid or alternative power supply) 
       any_power_available_numerator = sum(df$anypower, na.rm=T),
       any_power_available_denominator = sum(df$denominator, na.rm=T),
-      any_power_available_percent = ceiling(100*sum(df$anypower, na.rm=T)/sum(df$denominator, na.rm=T)),
+      any_power_available_percent = round(100*sum(df$anypower, na.rm=T)/sum(df$denominator, na.rm=T)),
       
     # Emergency Transport available for referrals
       emerg_tran_numerator = sum(df$emerg_tran, na.rm=T),
       emerg_tran_denominator = sum(df$denominator, na.rm=T),
-      emerg_tran_percent = ceiling(100*sum(df$emerg_tran, na.rm=T)/sum(df$denominator, na.rm=T)),
+      emerg_tran_percent = round(100*sum(df$emerg_tran, na.rm=T)/sum(df$denominator, na.rm=T)),
       
     # Sufficient Skilled Birth Attendants
       sba_numerator = sum(df$sba, na.rm=T),
       sba_denominator = sum(df$denominator, na.rm=T),
-      sba_percent = ceiling(100*sum(df$sba, na.rm=T)/sum(df$denominator, na.rm=T)),
+      sba_percent = round(100*sum(df$sba, na.rm=T)/sum(df$denominator, na.rm=T)),
       
     # Delivery Services available
       delivery_services_yn_numerator = sum(df$delivery_services_yn, na.rm=T),
       delivery_services_yn_denominator = sum(df$denominator, na.rm=T),
-      delivery_services_yn_percent = ceiling(100*sum(df$delivery_services_yn, na.rm=T)/
+      delivery_services_yn_percent = round(100*sum(df$delivery_services_yn, na.rm=T)/
                                                sum(df$denominator, na.rm=T)),
       
     # C-Sections performed
       c_section_yn_numerator = sum(df$c_section_yn, na.rm=T),  
       c_section_yn_denominator = sum(df$denominator, na.rm=T),
-      c_section_yn_percent = ceiling(100*sum(df$c_section_yn, na.rm=T)/sum(df$denominator, na.rm=T)),
+      c_section_yn_percent = round(100*sum(df$c_section_yn, na.rm=T)/sum(df$denominator, na.rm=T)),
       
     # Antenatal Care Services are provided
       antenatal_care_yn_numerator = sum(df$antenatal_care_yn, na.rm=T),
       antenatal_care_yn_denominator = sum(df$denominator, na.rm=T),
-      antenatal_care_yn_percent = ceiling(100*sum(df$antenatal_care_yn, na.rm=T)/
+      antenatal_care_yn_percent = round(100*sum(df$antenatal_care_yn, na.rm=T)/
                                             sum(df$denominator, na.rm=T)),
       
     # Family Planning Methods provided
       family_planning_yn_numerator = sum(df$family_planning_yn, na.rm=T),
       family_planning_yn_denominator = sum(df$denominator, na.rm=T),
-      family_planning_yn_percent = ceiling(100*sum(df$family_planning_yn, na.rm=T)/
+      family_planning_yn_percent = round(100*sum(df$family_planning_yn, na.rm=T)/
                                              sum(df$denominator, na.rm=T)),
       
     # Measles Immunizations are provided 
       child_health_measles_immun_numerator = sum(df$child_health_measles_immun, na.rm=T),    
       child_health_measles_immun_denominator = sum(df$denominator, na.rm=T),
-      child_health_measles_immun_percent = ceiling(100*sum(df$child_health_measles_immun, na.rm=T)/
+      child_health_measles_immun_percent = round(100*sum(df$child_health_measles_immun, na.rm=T)/
                                                      sum(df$denominator, na.rm=T)),
       
     # Refrigerator or Freezer for vaccine storage
       vaccines_fridge_freezer_numerator = sum(df$vaccines_fridge_freezer, na.rm=T),
       vaccines_fridge_freezer_denominator = sum(df$denominator, na.rm=T),
-      vaccines_fridge_freezer_percent = ceiling(100*sum(df$vaccines_fridge_freezer, na.rm=T)/
+      vaccines_fridge_freezer_percent = round(100*sum(df$vaccines_fridge_freezer, na.rm=T)/
                                                   sum(df$denominator, na.rm=T)),
       
     # Artemisinin-based combination therapy (ACT)
       medication_anti_malarials_numerator = sum(df$medication_anti_malarials, na.rm=T),
       medication_anti_malarials_denominator = sum(df$denominator, na.rm=T),
-      medication_anti_malarials_percent = ceiling(100*sum(df$medication_anti_malarials, na.rm=T)/
+      medication_anti_malarials_percent = round(100*sum(df$medication_anti_malarials, na.rm=T)/
                                                     sum(df$denominator, na.rm=T)),
       
     # Fully staffed hospitals ?? need to follow up with Ranu
     # Fully staffed primary health centres (PHCs)
       phcentre_numerator = sum(df$phcentre, na.rm=T),
       phcentre_denominator = sum(df$denominator, na.rm=T),
-      phcentre_percent = ceiling(100*sum(df$phcentre, na.rm=T)/sum(df$denominator, na.rm=T)),
+      phcentre_percent = round(100*sum(df$phcentre, na.rm=T)/sum(df$denominator, na.rm=T)),
       
     # Fully staffed primary health clinics
       phclinic_numerator = sum(df$phclinic, na.rm=T),
       phclinic_denominator = sum(df$denominator, na.rm=T),
-      phclinic_percent = ceiling(100*sum(df$phclinic, na.rm=T)/sum(df$denominator, na.rm=T)),
+      phclinic_percent = round(100*sum(df$phclinic, na.rm=T)/sum(df$denominator, na.rm=T)),
       
     # Fully staffed dispensaries
       dispensary_numerator = sum(df$hpdispensary, na.rm=T),
       dispensary_denominator = sum(df$denominator, na.rm=T),
-      dispensary_percent = ceiling(100*sum(df$hpdispensary, na.rm=T)/sum(df$denominator, na.rm=T))
+      dispensary_percent = round(100*sum(df$hpdispensary, na.rm=T)/sum(df$denominator, na.rm=T))
 )})
 
 #adding basic information
@@ -188,31 +188,33 @@ e_gap <- ddply(iedu, .(lga_id), function(df) {
       
   # Schools with access to improved functional water 
     improved_functional_water_numerator = sum(df$improved_functonal_water, na.rm=T),
-    improved_functional_water_denominator = length(df$uuid),
-    improved_functional_water_percent = ceiling(100*sum(df$improved_functonal_water, na.rm=T)/
-                                                  length(df$uuid)),
+    improved_functional_water_denominator = length(na.omit(df$improved_functonal_water)),
+    improved_functional_water_percent = round(100*sum(df$improved_functonal_water, na.rm=T)/
+                                                  length(na.omit(df$improved_functonal_water))),
     
   # Schools with access to improved sanitation
     improved_sanitation_numerator = sum(df$improved_sanitation, na.rm=T),
-    improved_sanitation_denominator = length(df$uuid),
-    improved_sanitation_percent = ceiling(100*sum(df$improved_sanitation, na.rm=T)/length(df$uuid)),
+    improved_sanitation_denominator = length(na.omit(df$improved_sanitation)),
+    improved_sanitation_percent = round(100*sum(df$improved_sanitation, na.rm=T)/
+                                          length(na.omit(df$improved_sanitation))),
     
   # Schools connected to the national electricity grid (PHCN, NEPA)
     phcn_electricity_numerator = sum(df$phcn_electricity, na.rm=T),
-    phcn_electricity_denominator = length(df$uuid),
-    phcn_electricity_percent = ceiling(100*sum(df$phcn_electricity, na.rm=T)/length(df$uuid)),
+    phcn_electricity_denominator = length(na.omit(df$phcn_electricity)),
+    phcn_electricity_percent = round(100*sum(df$phcn_electricity, na.rm=T)/
+                                       length(na.omit(df$phcn_electricity))),
     
   # Total number of classrooms with a useable chalkboard/blackboard/whiteboard
     num_classrm_w_chalkboard_numerator = sum(df$num_classrm_w_chalkboard, na.rm=T),
-    num_classrm_w_chalkboard_denominator = length(df$uuid),
-    num_classrm_w_chalkboard_percent = ceiling(100*sum(df$num_classrm_w_chalkboard, na.rm=T)/
-                                                 length(df$uuid)),
+    num_classrm_w_chalkboard_denominator = sum(df$num_classrms_total, na.rm=T),
+    num_classrm_w_chalkboard_percent = round(100*sum(df$num_classrm_w_chalkboard, na.rm=T)/
+                                               sum(df$num_classrms_total, na.rm=T)),
     
   # Total number of NCE qualified teachers 
     num_tchrs_with_nce_numerator = sum(df$num_tchrs_with_nce, na.rm=T),
-    num_tchrs_with_nce_denominator = length(df$uuid),
-    num_tchrs_with_nce_percent = ceiling(100*sum(df$num_tchrs_with_nce, na.rm=T)/
-                                                 length(df$uuid))
+    num_tchrs_with_nce_denominator = sum(df$num_tchrs_total, na.rm=T), 
+    num_tchrs_with_nce_percent = round(100*sum(df$num_tchrs_with_nce, na.rm=T)/
+                                         sum(df$num_tchrs_total, na.rm=T))
     
 )})
 
