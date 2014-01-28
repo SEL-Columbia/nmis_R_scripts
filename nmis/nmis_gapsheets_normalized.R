@@ -1,8 +1,11 @@
 ####################################################################################################
 ####################################################################################################
 # Gapsheets
+require(plyr)
+source("./source_scripts/NMIS_Functions.R")
 
 lgas <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/lgas.csv")
+lgas <- lgas[,c('lga_id', 'lga', 'state', 'zone', 'unique_lga', 'pop_2006')]
 
 #health####################################################################################################
 hh <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/Normalized/Health_774_ALL_FACILITY_INDICATORS.rds")
@@ -152,12 +155,6 @@ h_gap <- ddply(ih, .(lga_id), function(df) {
       dispensary_percent = round(100*sum(df$hpdispensary, na.rm=T)/length(na.omit(df$hpdispensary)))
 )})
 
-#adding basic information
-h_gap_final <- merge(h_gap, lgas[,c('lga_id', 'lga', 'state', 'zone', 'pop_2006')], by="lga_id")
-
-#writing out data
-write.csv(h_gap_final, "~/Code/nmis_ui_data_2ef92c15/data_774/health_gapsheet.csv", row.names=F)
-
 
 #education#################################################################################################
 e <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/Normalized/Education_774_ALL_FACILITY_INDICATORS.rds")
@@ -218,12 +215,17 @@ e_gap <- ddply(iedu, .(lga_id), function(df) {
     
 )})
 
+
 #adding basic information
-e_gap_final <- merge(e_gap, lgas[,c('lga_id', 'lga', 'state', 'zone', 'pop_2006')], by="lga_id")
+h_gap_final <- merge(h_gap, lgas, by="lga_id", all=T)
+#adding basic information
+e_gap_final <- merge(e_gap, lgas, by="lga_id", all=T)
+
+combined <- merge_non_redundant(h_gap_final, e_gap_final, by="lga_id")
 
 #writing out data
+write.csv(h_gap_final, "~/Code/nmis_ui_data_2ef92c15/data_774/health_gapsheet.csv", row.names=F)
 write.csv(e_gap_final, "~/Code/nmis_ui_data_2ef92c15/data_774/education_gapsheet.csv", row.names=F)
+write.csv(e_gap_final, "~/Code/nmis_ui_data_2ef92c15/data_774/All_774_LGA.csv", row.names=F)
+
     
-    
-    
-  
