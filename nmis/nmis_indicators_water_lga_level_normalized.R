@@ -12,17 +12,17 @@ lgaw_facilities <- ddply(iw774, .(lga_id), function(df) {
     data.frame(
         #####Type#####
         num_improved_water_points = 
-            icount(df$is_improved),
+            sum(df$is_improved, na.rm=T),
         num_overhead_tanks = 
-            icount(df$water_point_type %in%
+            sum(df$water_point_type %in%
                 c('Overhead Tank (1,000)', 'Overhead Tank (10,000)', 
-                  'Rainwater Harvesting System')),
+                  'Rainwater Harvesting System'), na.rm=T),
         num_taps = 
-            icount(df$water_point_type == "Tap"),       
+            sum(df$water_point_type == "Tap", na.rm=T),       
         num_handpumps =
-            icount(df$water_point_type %in% c('Borehole', 'Handpump')),
+            sum(df$water_point_type %in% c('Borehole', 'Handpump'), na.rm=T),
         num_unimproved_points =
-            icount(! df$is_improved),                                                    
+            sum((!df$is_improved), na.rm=T),                                                    
         num_total_water_points = 
             nrow(df),
         #####Functionality#####
@@ -43,15 +43,15 @@ lgaw_facilities <- ddply(iw774, .(lga_id), function(df) {
 #         percentage_population_improved_functional = 
 #             ratio(250 * icount(df$is_improved & df$functional), df$Population),
         num_diesel = 
-            icount(df$lift_mechanism == "Diesel"),
+            sum(df$lift_mechanism == "Diesel", na.rm=T),
         percentage_diesel_functional =
             ratio(df$lift_mechanism == "Diesel" & df$functional, df$lift_mechanism == "Diesel"),
         num_electric = 
-            icount(df$lift_mechanism == "Electric"),
+            sum(df$lift_mechanism == "Electric", na.rm=T),
         percentage_electric_functional =
             ratio(df$lift_mechanism == "Electric" & df$functional, df$lift_mechanism == "Electric"),                             
         num_solar = 
-            icount(df$lift_mechanism == "Solar"),
+            sum(df$lift_mechanism == "Solar", na.rm=T),
         percentage_solar_functional = 
             ratio(df$lift_mechanism == "Solar" & df$functional, df$lift_mechanism == "Solar")
     )})

@@ -117,10 +117,10 @@ h_661$facility_owner_manager <- as.character(ifelse(h_661$facility_owner_manager
                                                      "church_mission",
                                                           NA_character_)))))))
 
-h_661$emoc_antibiotics <- as.logical(recodeVar(h_661$emoc_antibiotics_yn, 
-                                               c('yes', 'no'),
-                                               c(TRUE, FALSE)))   
-
+h_661$emoc_antibiotics <- as.logical(revalue(h_661$emoc_antibiotics_yn, 
+                                               c("yes" = TRUE, 
+                                                 "no" = FALSE)))
+                                             
 h_661 <- subset(h_661, select=-c(facility_owner_manager.private_forprofit, facility_owner_manager.charitable_ngo,
                                  facility_owner_manager.religious_org, facility_owner_manager.stategovernment,
                                  facility_owner_manager.lga, facility_owner_manager.none, emoc_antibiotics_yn,
@@ -129,9 +129,9 @@ h_661 <- subset(h_661, select=-c(facility_owner_manager.private_forprofit, facil
 h_661$power_sources_grid <- (h_661$grid_proximity == 'connected_to_grid' | 
                                h_661$local_grid_proximity == 'connected_to_local_grid')
 
-h_661$toilets_yn <- as.logical(recodeVar(h_661$toilets_yn,
-                                c('no_toilets_available', 'toilets_available'),
-                                  c(FALSE, TRUE), default=NA))
+h_661$toilets_yn <- as.logical(revalue(h_661$toilets_yn,
+                                c('no_toilets_available' = FALSE,
+                                  'toilets_available' = TRUE)))
 
 h_661$child_health_growth_monitor <-  (h_661$weighing_scale_funct_yn == 'yes') & 
                                         h_661$equipment.scale &
@@ -155,15 +155,16 @@ h_113$medication.antibiotic_oral <- ((h_113$sti_tx_srvcs_penicilling | h_113$sti
                                     ((h_113$child_health_ampicillin | h_113$child_health_ciprofloxain) & 
                                        h_113$child_health_yn == 'yes') | (h_113$medication_anti_biotics)
 
-h_113$facility_owner_manager <- recodeVar(h_113$facility_owner_manager,
-                                          c('federalgovrenment'),
-                                          c('federalgovernment'))
+h_113$facility_owner_manager <- revalue(h_113$facility_owner_manager,
+                                          c('federalgovrenment'='federalgovernment'))
 
-h_113$facility_type <- recodeVar(h_113$facility_type,
-                                 c('healthpost','dispensary',
-                                   'federalmedicalcare', 'wardmodelprimaryhealthcarecentre'),
-                                 c('healthpostdispensary', 'healthpostdispensary',
-                                   'federalmedicalcentre', 'wardmodelphccentre'))
+facility_type_value <- c('healthpostdispensary', 'healthpostdispensary',
+                         'federalmedicalcentre', 'wardmodelphccentre')
+
+names(facility_type_value) <- c('healthpost','dispensary',
+                                'federalmedicalcare', 'wardmodelprimaryhealthcarecentre')
+
+h_113$facility_type <- revalue(h_113$facility_type, facility_type_value)
 
 h_113$transport_to_referral <-  ifelse(h_113$emergency_transport_ambulance,
                                        "ambulance",
@@ -240,13 +241,14 @@ h_pilot$improved_sanitation <- h_pilot$num_toilets_improved_p > 0
 
 h_pilot$family_planning_iud <- as.logical(recodeVar(h_pilot$family_planning_iud,
                                          c('', 'yes'),
-                                         c(FALSE, TRUE), default=NA))
+                                         c(FALSE, TRUE)))
 
-h_pilot$facility_type <- recodeVar(h_pilot$facility_type,
-                                   c('healthpost','dispensary',
-                                     'wardmodelprimaryhealthcarecentre'),
-                                   c('healthpostdispensary', 'healthpostdispensary',
-                                     'wardmodelphccentre'))
+facility_type_value <- c('healthpostdispensary', 'healthpostdispensary',
+                         'wardmodelphccentre')
+names(facility_type_value) <-  c('healthpost','dispensary',
+                                 'wardmodelprimaryhealthcarecentre')
+
+h_pilot$facility_type <- revalue(h_pilot$facility_type, facility_type_value)
 
 h_pilot$transport_to_referral <-  ifelse(h_pilot$transport_to_referral_ambulance,
                                           "ambulance",
@@ -272,9 +274,8 @@ h_pilot$immunization.bcg_immunization  <- h_pilot$child_health_immunization_p & 
 h_pilot$immunization.yellow_fever_immun <- h_pilot$child_health_immunization_p & h_pilot$child_health_yn == 'yes'
 h_pilot$immunization.csm_immunization <- h_pilot$child_health_immunization_p & h_pilot$child_health_yn == 'yes'
 
-h_pilot$delivery_services_yn <- as.logical(recodeVar(h_pilot$emergency_obstetrics_yn,
-                                                     c('yes', 'no'),
-                                                     c(TRUE, FALSE))) 
+h_pilot$delivery_services_yn <- as.logical(revalue(h_pilot$emergency_obstetrics_yn,
+                                                     c('yes' = TRUE, 'no' = FALSE))) 
 
 h_pilot$supplies.insecticide_treated_bednets <- (h_pilot$malaria_treatment_yn == 'yes' & 
                                                    (h_pilot$malaria_treatment_srvcs_itn == 'yes' |

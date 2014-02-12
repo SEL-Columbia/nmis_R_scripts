@@ -75,11 +75,12 @@ edu_pilot <- rename(edu_pilot, c("num_total_classrooms" = "num_classrms_total",
 
 ######################################
 ##Adding variables before 999 cleaning
-edu_661$school_managed <- recodeVar(edu_661$school_managed,
-                                    c("faith_org", "fed_gov", "loc_gov", "other", 
-                                      "priv_noprofit", "priv_profit", "st_gov"),
-                                    c("faith_based", "federal_gov", "local_gov", "none",
-                                      "private_non_profit", "private_profit", "state_gov"))
+school_managed_value <- c("faith_based", "federal_gov", "local_gov", "none",
+                          "private_non_profit", "private_profit", "state_gov")
+names(school_managed_value) <- c("faith_org", "fed_gov", "loc_gov", "other", 
+                                 "priv_noprofit", "priv_profit", "st_gov")
+
+edu_661$school_managed <- revalue(edu_661$school_managed, school_managed_value)
 
 edu_661$covered_roof_good_condi <- edu_661$covered_roof_yn == "yes_good_condition"
 
@@ -157,23 +158,28 @@ edu_total <- rbind.fill(edu_661, edu_113, edu_pilot)
 
 ###############################################
 ##mapping values and standardize the type
-edu_total$borehole_tubewell_repair_time <- as.logical(recodeVar(edu_total$borehole_tubewell_repair_time,
-                                                                c('yes', 'fixed_more_than_month', 'fixed_within_day',
-                                                                  'fixed_within_month', 'fixed_within_week', 'never_broken',
-                                                                  'not_fixed', 'no'),
-                                                                c(TRUE, TRUE, TRUE, TRUE,TRUE, TRUE,
-                                                                  FALSE, FALSE)))
+borehole_tubewell_repair_time_value <- c(TRUE, TRUE, TRUE, TRUE,TRUE, TRUE,
+                                         FALSE, FALSE)
+names(borehole_tubewell_repair_time_value) <- c('yes', 'fixed_more_than_month', 'fixed_within_day',
+                                                'fixed_within_month', 'fixed_within_week', 'never_broken',
+                                                'not_fixed', 'no')
+
+edu_total$borehole_tubewell_repair_time <- as.logical(revalue(edu_total$borehole_tubewell_repair_time, borehole_tubewell_repair_time_value))
 
 edu_total$potable_water <- ((edu_total$days_no_potable_water < 7) & (edu_total$water.none == FALSE))
 
-edu_total$level_of_education <- recodeVar(edu_total$level_of_education,
-                                          "juniors_sec_only", "junior_sec_only")
 
-edu_total$education_type <- recodeVar(edu_total$education_type,
-                                      c("formal", "formal_educ", "integrated",
-                                        "religious", "religious_only", "religious_with_formal"),
-                                      c("formal_only", "formal_only", "integrated",
-                                        "religious_only", "religious_only", "integrated"))
+
+edu_total$level_of_education <- revalue(edu_total$level_of_education,
+                                          c("juniors_sec_only" = "junior_sec_only"))
+
+
+education_type_value <- c("formal_only", "formal_only", "integrated",
+                          "religious_only", "religious_only", "integrated")
+names(education_type_value) <- c("formal", "formal_educ", "integrated",
+                                 "religious", "religious_only", "religious_with_formal")
+
+edu_total$education_type <- revalue(edu_total$education_type, education_type_value)
 
 yes_no_columns <- c("toilet.none", "water.none","functioning_library_yn", "teacher_guide_yn", "provide_pens_yn", 
                     "provide_exercise_books_yn", "two_shifts_yn", "classes_outside_yn", 

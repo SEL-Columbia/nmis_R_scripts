@@ -55,38 +55,31 @@ water_pilot <- rename(water_pilot,
 #########################
 #standardize column values
 
-water_113$water_source_type <- recodeVar(water_113$water_source_type, 
-										c("borehole", "tube_well"),
-										c("borehole_tube_well", "borehole_tube_well")
-										)
+water_source_type_value <- c("borehole_tube_well", "borehole_tube_well", "rainwater_harvesting_scheme",
+                             "developed_protected_spring_water", "protected_dug_well")
+names(water_source_type_value) <- c("borehole", "tube_well","rainwater", 
+                                    "surface_water", "dug_well")
 
-water_pilot$water_source_type <- recodeVar(water_pilot$water_source_type, 
-										c("borehole", "tube_well","rainwater", 
-                                          "surface_water", "dug_well"),
-										c("borehole_tube_well", "borehole_tube_well", "rainwater_harvesting_scheme",
-                                          "developed_protected_spring_water", "protected_dug_well")
-										)
+water_113$water_source_type <- revalue(water_113$water_source_type, water_source_type_value)
+water_pilot$water_source_type <- revalue(water_pilot$water_source_type, water_source_type_value)
 
-water_113$lift_mechanism <- recodeVar(water_113$lift_mechanism, 
-                                        c("animal", "diesel", "solar", 
-                                          "electric", "do_not_know"),
-                                        c("animal_power", "fuel_pump", "solar_pump", 
-                                          "electricity_pump", NA)
-                                        )
 
-water_pilot$lift_mechanism <- recodeVar(water_pilot$lift_mechanism, 
-                                        c("diesel_pump", "electric_motor_pump", "rope_and_pulley",
-                                            "not_known"),
-                                        c("fuel_pump", "electricity_pump", "rope_pulley", 
-                                            NA)
-                                        )
+lift_mechanism_value <- c("animal_power", "fuel_pump", "solar_pump", 
+                          "electricity_pump", "fuel_pump", "electricity_pump",
+                          "rope_pulley", NA, NA)
+names(lift_mechanism_value) <- c("animal", "diesel", "solar", 
+                                 "electric", "diesel_pump", "electric_motor_pump", 
+                                 "rope_and_pulley", "do_not_know", "not_known")
 
-water_661$Classification <- recodeVar(water_661$Classification, 
-                                        c('No Photo', 'No_photo', 'no_photo', 
-                                          'ten_thousand_ovehead', 'unimproved '),
-                                        c("no_photo", "no_photo", "no_photo", 
-                                          'ten_thousand_overhead', "unimproved")
-                                        )
+water_113$lift_mechanism <- revalue(water_113$lift_mechanism, lift_mechanism_value)
+water_pilot$lift_mechanism <- revalue(water_pilot$lift_mechanism, lift_mechanism_value)
+
+Classification_value <- c("no_photo", "no_photo", "no_photo", 
+                          'ten_thousand_overhead', "unimproved")
+names(Classification_value) <-  c('No Photo', 'No_photo', 'no_photo', 
+                                  'ten_thousand_ovehead', 'unimproved ')
+
+water_661$Classification <- revalue(water_661$Classification, Classification_value)
 ##delete records with no_photo or remove in classification column
 water_661 <- subset(water_661,! Classification %in% c("remove", "no_photo"))
 
@@ -213,13 +206,11 @@ water_total$reason_not_used <-ifelse(water_total$src == "661",
 		                               		"dk",
 		                               	NA))))))))))))
 
-water_total$pay_for_water_yn <- as.logical(recodeVar(water_total$pay_for_water_yn, 
-                                        c('yes', 'no', 'dk', 'do_not_know'), 
-                                        c(TRUE, FALSE, NA, NA)))
+pay_function_value <- c(TRUE, FALSE, NA, NA)
+names(pay_function_value) <- c('yes', 'no', 'dk', 'do_not_know')
 
-water_total$water_functional_yn <- as.logical(recodeVar(water_total$water_functional_yn, 
-                                          c('yes', 'no', 'dk', 'do_not_know'), 
-                                          c(TRUE, FALSE, NA, NA)))
+water_total$pay_for_water_yn <- as.logical(revalue(water_total$pay_for_water_yn, pay_function_value))
+water_total$water_functional_yn <- as.logical(revalue(water_total$water_functional_yn, pay_function_value))
 
 
 # Final Cleaning remove rows without lga_id or duplicated uuid

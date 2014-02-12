@@ -13,29 +13,29 @@ ihealth774 <- idata.frame(health_774)
 
 lga_health_data <- ddply(ihealth774, .(lga_id), function(df) {
           data.frame(
-            num_level_1_health_facilities = icount(df$facility_type == 'healthpostdispensary'),
-            num_level_2_health_facilities = icount(df$facility_type ==
-                                                           'primaryhealthclinic'),       
-            num_level_3_health_facilities = icount(df$facility_type ==
-                                                           'primaryhealthcarecentre'),
-            num_level_4_health_facilities = icount(df$facility_type ==
-                                                           'comprehensivehealthcentre'),
-            num_level_other_health_facilities = icount(df$facility_type %in%
+            num_level_1_health_facilities = sum(df$facility_type == 'healthpostdispensary', na.rm=T),
+            num_level_2_health_facilities = sum(df$facility_type ==
+                                                           'primaryhealthclinic', na.rm=T),       
+            num_level_3_health_facilities = sum(df$facility_type ==
+                                                           'primaryhealthcarecentre', na.rm=T),
+            num_level_4_health_facilities = sum(df$facility_type ==
+                                                           'comprehensivehealthcentre', na.rm=T),
+            num_level_other_health_facilities = sum(df$facility_type %in%
                                                                c('cottagehospital', 'specialisthospital',
                                                                  'wardmodelphccentre', 'teachinghospital',
                                                                  'dentalclinic', 'maternity', 'federalmedicalcentre',
-                                                                 'generalhospital')), 
-            num_health_facilities = icount(df$facility_type %in%
+                                                                 'generalhospital'), na.rm=T), 
+            num_health_facilities = sum(df$facility_type %in%
                                                    c('cottagehospital', 'specialisthospital', 'healthpostdispensary',
                                                      'wardmodelphccentre', 'teachinghospital',
                                                      'dentalclinic', 'maternity', 'federalmedicalcentre',
                                                      'generalhospital', 'comprehensivehealthcentre',
                                                      'primaryhealthcarecentre', 'primaryhealthclinic'
-                                                   )),
+                                                   ), na.rm=T),
             proportion_health_facilities_inpatient_care = 
-              bool_proportion(df$inpatient_care_yn, TRUE),
+              mean(df$inpatient_care_yn, na.rm=T),
             proportion_health_facilities_open_24_7 = 
-              bool_proportion(df$facility_open_247_yn, TRUE),              
+              mean(df$facility_open_247_yn, na.rm=T),              
       num_doctors = sum(df$num_doctors_posted, na.rm = TRUE),            
       num_nursemidwives_midwives = sum(df$num_nursemidwives_posted, na.rm = TRUE) + 
               sum(df$num_midwives_posted, na.rm = TRUE),            
@@ -43,58 +43,58 @@ lga_health_data <- ddply(ihealth774, .(lga_id), function(df) {
       num_chews = sum(df$num_chews_posted, na.rm = TRUE) + 
               sum(df$num_junior_chews_posted, na.rm = TRUE),            
       num_lab_techs = sum(df$lab_technicians_posted, na.rm = TRUE),             
-      proportion_staff_paid = bool_proportion(df$staff_paid_lastmth_yn, TRUE),            
+      proportion_staff_paid = mean(df$staff_paid_lastmth_yn, na.rm=T),            
             proportion_health_facilities_routine_immunization =
-              bool_proportion(df$routine_immunization, TRUE),                     
+              mean(df$routine_immunization, na.rm=T),                     
             proportion_growth_monitoring = 
-              bool_proportion(df$child_health_growth_monitor, TRUE),            
+              mean(df$child_health_growth_monitor, na.rm=T),            
             proportion_deworming = 
-              bool_proportion(df$child_health_deworming, TRUE),
+              mean(df$child_health_deworming, na.rm=T),
             proportion_no_user_fees_child_health = 
-              bool_proportion(df$health_no_child_user_fees, TRUE),                               
+              mean(df$health_no_child_user_fees, na.rm=T),                               
       proportion_delivery_24_7 =
-        bool_proportion(df$maternal_health_delivery_services_24_7, TRUE),           
+        mean(df$maternal_health_delivery_services_24_7, na.rm=T),           
       proportion_at_least_1_sba = 
-        bool_proportion(df$skilled_birth_attendant, TRUE),                    
+        mean(df$skilled_birth_attendant, na.rm=T),                    
       proportion_antenatal = 
-        bool_proportion(df$antenatal_care_yn, TRUE),                    
-      num_health_facilities_c_sections = icount(df$compr_oc_c_sections),                    
+        mean(df$antenatal_care_yn, na.rm=T),                    
+      num_health_facilities_c_sections = sum(df$compr_oc_c_sections, na.rm=T),                    
       proportion_access_functional_emergency_transport = 
-        bool_proportion(df$emergency_transport_currently_functioning, TRUE),                    
+        mean(df$emergency_transport_currently_functioning, na.rm=T),                    
       proportion_family_planning = 
-        bool_proportion(df$family_planning_yn, TRUE),                       
+        mean(df$family_planning_yn, na.rm=T),                       
       proportion_delivery_no_user_fees = 
-      bool_proportion(df$health_no_delivery_user_fees, TRUE),        
+      mean(df$health_no_delivery_user_fees, na.rm=T),        
         proportion_health_facilities_hiv_testing =
-          bool_proportion(df$lab_tests_hiv_testing_calc, TRUE),                    
+          mean(df$lab_tests_hiv_testing_calc, na.rm=T),                    
         proportion_malaria_testing = 
-          bool_proportion(df$malaria_testing, TRUE),  
+          mean(df$malaria_testing, na.rm=T),  
         proportion_act_treatment_for_malaria = 
-          bool_proportion(df$medication_anti_malarials, TRUE),
+          mean(df$medication_anti_malarials, na.rm=T),
         proportion_malaria_prevention_pregnancy = 
-          bool_proportion(df$sulpha_and_antenatal, TRUE),
+          mean(df$sulpha_and_antenatal, na.rm=T),
         proportion_offer_bednets = 
-          bool_proportion(df$has_itns, TRUE),                    
+          mean(df$has_itns, na.rm=T),                    
         proportion_no_user_fees_malaria = 
-          bool_proportion(df$paid_services_malaria_treatment, TRUE),
+          mean(df$paid_services_malaria_treatment, na.rm=T),
             proportion_health_facilities_art_treatment =
-              bool_proportion(df$malaria_treatment_artemisinin, TRUE),    
+              mean(df$malaria_treatment_artemisinin, na.rm=T),    
     proportion_health_facilities_tb_treatment = 
-      bool_proportion(df$tb_treatment_yn, TRUE),                           
+      mean(df$tb_treatment_yn, na.rm=T),                           
     proportion_health_facilities_tb_testing = 
-      bool_proportion(df$lab_tests_tb_microscopy_calc, TRUE),
+      mean(df$lab_tests_tb_microscopy_calc, na.rm=T),
             proportion_any_power_access = 
-              bool_proportion(df$power_access_and_functional, TRUE),                      
+              mean(df$power_access_and_functional, na.rm=T),                      
             proportion_improved_water_supply =
-              bool_proportion(df$improved_water_supply, TRUE),                        
+              mean(df$improved_water_supply, na.rm=T),                        
             proportion_improved_sanitation = 
-              bool_proportion(df$improved_sanitation, TRUE),                        
+              mean(df$improved_sanitation, na.rm=T),                        
             proportion_mobile_coverage = 
-              bool_proportion(df$mobile_signal_funct_yn, TRUE),                    
+              mean(df$mobile_signal_funct_yn, na.rm=T),                    
             proportion_health_facilities_med_waste_separated = 
-              bool_proportion(df$med_waste_separated_yn, TRUE),    
+              mean(df$med_waste_separated_yn, na.rm=T),    
     proportion_stockout_essential_meds = 
-    bool_proportion(df$essential_meds_stockout, TRUE),                        
+    mean(df$essential_meds_stockout, na.rm=T),                        
           num_skilled_health_providers_per_1000 = 
             (sum(df$num_doctors_posted, na.rm = TRUE) + 
                sum(df$num_nursemidwives_posted, na.rm = TRUE) +
@@ -125,7 +125,7 @@ lga_health_data <- ddply(ihealth774, .(lga_id), function(df) {
        length(df$uuid),
       #   Percentage that perform C-sections
      percent_compr_oc_c_sections = 
-      bool_proportion(ihealth_774_hospitals$compr_oc_c_sections, TRUE)
+      mean(ihealth_774_hospitals$compr_oc_c_sections, na.rm=T)
     )}) 
 
                                    
@@ -150,9 +150,9 @@ lga_health_data_core_sansHP <- ddply(isansHP_health_774, .(lga_id), function(df)
             length(df$uuid),
       #     Percentage that were intended to conduct deliveries for pregnant women    
           proportion_delivery_24_7_sansHP = 
-            bool_proportion(df$maternal_health_delivery_services_24_7, TRUE),
+            mean(df$maternal_health_delivery_services_24_7, na.rm=T),
           proportion_vaccines_fridge_freezer_sansHP = 
-            bool_proportion(df$vaccines_fridge_freezer, TRUE)          
+            mean(df$vaccines_fridge_freezer, na.rm=T)          
       )}) 
 
 #rest of core indicators:
@@ -162,23 +162,23 @@ lga_health_data_core <- ddply(ihealth774, .(lga_id), function(df) {
     data.frame( 
       # Services that are provided at all facilities including Health Posts
       proportion_measles = 
-        bool_proportion(df$child_health_measles_immun_calc, TRUE),
+        mean(df$child_health_measles_immun_calc, na.rm=T),
       # Infrastructure -- All facilities                
       proportion_phcn_electricity = 
-        bool_proportion(df$phcn_electricity, TRUE),
+        mean(df$phcn_electricity, na.rm=T),
       proportion_alternative_power = 
-        bool_proportion(df$phcn_electricity, TRUE),
+        mean(df$phcn_electricity, na.rm=T),
       proportion_power_alternative_functional = 
-        bool_proportion(df$power_sources_alternative_functional, TRUE),
+        mean(df$power_sources_alternative_functional, na.rm=T),
       #Health Facilities summary 
       facilities_delivery_services_yn = 
-        icount(df$delivery_services_yn),
+        sum(df$delivery_services_yn, na.rm=T),
       facilities_emergency_transport = 
-        icount(df$emergency_transport),
+        sum(df$emergency_transport, na.rm=T),
       facilities_skilled_birth_attendant = 
-        icount(df$skilled_birth_attendant),
+        sum(df$skilled_birth_attendant, na.rm=T),
       facilities_measles = 
-        icount(df$child_health_measles_immun_calc)
+        sum(df$child_health_measles_immun_calc, na.rm=T)
   )}) 
 
 lga_health <- merge(lga_health_data, lga_health_data_core, by="lga_id")

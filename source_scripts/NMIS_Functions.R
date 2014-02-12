@@ -96,7 +96,7 @@ bool_proportion <- function(numerator_TF, denominator_TF) {
       }
       df <- data.frame(cbind(num=numerator_TF, den=denominator_TF))
       df <- na.omit(df)
-      icount(df$num & df$den) / icount(df$den)
+      sum((df$num & df$den), na.rm=TRUE) / sum(df$den, na.rm=TRUE)
     }
 }
 

@@ -13,13 +13,13 @@ ie <- idata.frame(edu774)
 lga_edu_data <- ddply(ie, .(lga_id), function(df) {
    data.frame(
               schools_pri_junsec_total = 
-                  icount(df$pj),
+                  sum(df$pj, na.rm = TRUE),
               classrooms_total =
                   sum(df$num_classrms_total, na.rm = TRUE),
               schools_improved_water_supply = 
-                  bool_proportion(df$improved_water_supply, TRUE), 
+                  mean(df$improved_water_supply, na.rm=T), 
               schools_improved_sanitation =
-                  bool_proportion(df$improved_sanitation, TRUE),
+                  mean(df$improved_sanitation, na.rm=T),
               benches_school_ratio =
                   ratio(df$num_benches, df$pj),
               benches_pupil_ratio =
@@ -39,15 +39,15 @@ lga_edu_data <- ddply(ie, .(lga_id), function(df) {
               txt_pupil_ratio = 
                   ratio(df$num_textbooks, df$num_students_total,df$pj),
               percent_teaching_guides = 
-                  bool_proportion(df$teacher_guide_yn, TRUE),
+                  mean(df$teacher_guide_yn, na.rm=T),
               schools_use_teaching_aids = 
-                  icount(df$teacher_guide_yn),
+                  sum(df$teacher_guide_yn, na.rm = TRUE),
               num_primary_schools = 
-                  icount(df$is_primary),
+                  sum(df$is_primary, na.rm = TRUE),
               num_junior_secondary_schools = 
-                  icount(df$is_junior_secondary),
+                  sum(df$is_junior_secondary, na.rm = TRUE),
               num_senior_secondary_schools = 
-                  icount(df$level_of_education %in% c('senior_sec_only','ss')),
+                  sum(df$level_of_education %in% c('senior_sec_only','ss'), na.rm = TRUE ),
               num_schools = 
                   length(df$uuid),
               proportion_schools_1kmplus_catchment_primary =
@@ -181,24 +181,24 @@ lga_edu_data <- ddply(ie, .(lga_id), function(df) {
               proportion_schools_functioning_library_juniorsec = 
                   bool_proportion(df$functioning_library_yn, df$is_junior_secondary),                            
               num_preprimary_level =
-                  icount(df$level_of_education %in% c('preprimary_only', 'preprimary')),              
+                  sum(df$level_of_education %in% c('preprimary_only', 'preprimary'), na.rm = TRUE),              
               num_preprimary_primary_level = 
-                  icount(df$level_of_education %in% c('preprimary_and_primary', 'preprimary_primary')),              
+                  sum(df$level_of_education %in% c('preprimary_and_primary', 'preprimary_primary'), na.rm = TRUE),              
               num_primary_level =
-                  icount(df$level_of_education %in% c('primary_only', 'primary')),              
+                  sum(df$level_of_education %in% c('primary_only', 'primary'), na.rm = TRUE),              
               num_primary_js_level =  
-                  icount(df$level_of_education %in% c('primary_and_junior_sec', 'primary_js')),              
+                  sum(df$level_of_education %in% c('primary_and_junior_sec', 'primary_js'), na.rm = TRUE),              
               num_js_level =
-                  icount(df$level_of_education %in% c('juniors_sec_only', 'js')),              
+                  sum(df$level_of_education %in% c('juniors_sec_only', 'js'), na.rm = TRUE),              
               num_js_ss_level = 
-                  icount(df$level_of_education %in% c('junior_and_senior_sec', 'js_ss')),              
+                  sum(df$level_of_education %in% c('junior_and_senior_sec', 'js_ss'), na.rm = TRUE),              
               num_ss_level = 
-                  icount(df$level_of_education %in% c('senior_sec_only', 'ss')),            
+                  sum(df$level_of_education %in% c('senior_sec_only', 'ss'), na.rm = TRUE),            
               num_primary_js_ss_level = 
-                  icount(df$level_of_education %in% c('primary_junior_and_senior_sec', 'primary_js_ss')),
-              num_other_level = icount(df$level_of_education %in% c('science_technical', 'vocational', 
+                  sum(df$level_of_education %in% c('primary_junior_and_senior_sec', 'primary_js_ss'), na.rm = TRUE),
+              num_other_level = sum(df$level_of_education %in% c('science_technical', 'vocational', 
                                                                       'adult_lit','adult_ed', 'adult_vocational',
-                                                                      'vocational_post_primary', 'vocational_post_secondary')),
+                                                                      'vocational_post_primary', 'vocational_post_secondary'), na.rm = TRUE),
               student_teacher_ratio_lga = 
                   ratio(df$num_students_total, df$num_tchrs_total),              
               proportion_teachers_nce = 
@@ -212,9 +212,9 @@ lga_edu_data_core <- ddply(ie, .(lga_id), function(df) {
   data.frame(   
       # Facilities
         percent_management_public = 
-          icount(df$management == 'public')/length(df$management),
+          sum(df$management == 'public', na.rm = TRUE) / length(df$management),
         percent_natl_curriculum =
-          bool_proportion(df$natl_curriculum_yn, TRUE),
+          mean(df$natl_curriculum_yn, na.rm=T),
       # General information for Primary Schols
         percent_management_public_primary = 
           bool_proportion(df$management == 'public', df$is_primary),
@@ -273,17 +273,17 @@ edu774_allsectors$is_ss_multiplecount <-
                                                       'js_ss', 'senior_sec_only',
                                                     'primary_junior_and_senior_sec',
                                                     'primary_js_ss')
-edu774_allsectors$gov_managed <- 
-        edu774_allsectors$management == 'public'
+
+edu774_allsectors$gov_managed <- edu774_allsectors$management == 'public'
   
 ie2 <- idata.frame(edu774_allsectors)
 
 core_allsectors <- ddply(ie2, .(lga_id), function(df) {
                     data.frame(   
                       num_js_schools_multiplecount = 
-                        icount(df$is_js_multiplecount),
+                        sum(df$is_js_multiplecount, na.rm = TRUE),
                       num_ss_schools_multiplecount = 
-                        icount(df$is_ss_multiplecount),
+                        sum(df$is_ss_multiplecount, na.rm = TRUE),
                       percent_teachers_nce_primary = 
                         ratio(df$num_tchrs_with_nce, df$num_tchrs_total, df$management)                        
 )}) 
