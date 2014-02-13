@@ -142,9 +142,9 @@ yes_no_batch <- function(df, list_of_column_names)
 
 column_exists <- function(df, list_of_column_names){
     warning(paste("following cloumns are not in the data.frame: ", 
-                  list_of_column_names[which(! list_of_column_names %in% names(edu_total))], 
-                  collapse=", "))
-    return(list_of_column_names[which(list_of_column_names %in% names(edu_total))])
+                  paste(list_of_column_names[which(! list_of_column_names %in% names(df))], 
+                        collapse=", ")))
+    return(list_of_column_names[which(list_of_column_names %in% names(df))])
 }
 
 batch_type <- function(df, list_of_column_names)
