@@ -99,9 +99,12 @@ common_type <- function(df_names)
 }
 
 numeric_batch <- function(df, list_of_column_names){
+    
+    list_of_column_names <- column_exists(df, list_of_column_names)
+    
     l_ply(list_of_column_names, function(col) {
         if (!class(df[,col]) %in% c("numeric", "integer")){
-            df[,col] <<- as.numeric(df[,col])    
+            suppressWarnings(df[,col] <<- as.numeric(df[,col]))
         }
     })
     return(df)
@@ -114,27 +117,40 @@ yes_no_converter <- function(df, col_name)
         num_yn <- length(grep("(yes|no|true|false)", vec,ignore.case=T))
         num_itm <- length(which(!is.na(vec)))
         yn_prop <- num_yn/num_itm
+        vec <- tolower(vec)
         
         if (yn_prop < 0.99){
             warning(sprintf("%s: yes and no values has only a proportion of %.3f", col_name, yn_prop))
         }
-        vec <- as.logical(recodeVar(vec,
-                                    c('yes', 'no', 'TRUE', 'FALSE'),
-                                    c(TRUE, FALSE, TRUE, FALSE)))
+        suppressMessages(vec <- as.logical(revalue(vec, c('yes' = TRUE,'no' = FALSE,
+                                      'true' = TRUE,'false' = FALSE)
+                                  )))
     }        
     return(vec)
 }
 
 yes_no_batch <- function(df, list_of_column_names)
 {
+    list_of_column_names <- column_exists(df, list_of_column_names)
+    
     l_ply(list_of_column_names, function(col) {
-        df[,col] <<- yes_no_converter(df=df, col_name=col)
+            df[,col] <<- yes_no_converter(df=df, col_name=col)    
+
     })
     return(df)
 }
 
+column_exists <- function(df, list_of_column_names){
+    warning(paste("following cloumns are not in the data.frame: ", 
+                  list_of_column_names[which(! list_of_column_names %in% names(edu_total))], 
+                  collapse=", "))
+    return(list_of_column_names[which(list_of_column_names %in% names(edu_total))])
+}
+
 batch_type <- function(df, list_of_column_names)
 {
+    list_of_column_names <- column_exists(df, list_of_column_names)
+    
     types <- unlist(lapply(list_of_column_names, function(x) class(df[,x])))
     return(types)
 }
