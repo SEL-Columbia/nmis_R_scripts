@@ -81,10 +81,10 @@ edu_sub$num_textbooks <-
                edu_outlier$num_math_textbook_js + edu_outlier$num_english_textbook_js + 
                edu_outlier$num_soc_science_textbook_js + edu_outlier$num_science_textbook_js,
                0))),  
-    apply(cbind(edu_outlier$num_textbooks_english, 
+    rowSums(cbind(edu_outlier$num_textbooks_english, 
                 edu_outlier$num_textbooks_math, 
                 edu_outlier$num_textbooks_social_sci,
-                edu_outlier$num_textbooks_pry_sci), 1, sum, na.rm=T))
+                edu_outlier$num_textbooks_pry_sci), na.rm=T))
                                       
 
 ## Fix the num_textbooks outlier issuse, take 0.95 quantile(1300) as the cutt off 
@@ -141,9 +141,9 @@ edu_sub$pupil_desk_ratio <- edu_outlier$num_students_total / edu_outlier$num_des
 ## Adequacy of Staffing ##
 edu_sub$pupil_tchr_ratio <- edu_outlier$num_students_total / edu_outlier$num_tchrs_total
 edu_sub$teacher_nonteachingstaff_ratio <- edu_outlier$num_tchrs_total / 
-                                                apply(cbind(edu_outlier$num_sr_staff_total,
+                                                rowSums(cbind(edu_outlier$num_sr_staff_total,
                                                             edu_outlier$num_jr_staff_total),
-                                                1, sum, na.rm=T)
+                                                        na.rm=T)
                                                       
 ## Institutional Development ##
 edu_sub$tchr_pay_delay <- edu_outlier$times_tchr_pay_delay_pastyr > 0

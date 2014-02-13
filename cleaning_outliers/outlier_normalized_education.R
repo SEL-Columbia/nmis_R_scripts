@@ -13,20 +13,20 @@ edu_normalized <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/
 edu_normalized$num_toilets_total <- ifelse(edu_normalized$toilet.none == F & edu_normalized$num_toilets_total == 0,
                                    NA, edu_normalized$num_toilets_total)
 
-edu_normalized$num_students_total <- apply(cbind(edu_normalized$num_students_female, 
-                                          edu_normalized$num_students_male), 
-                                           1, sum, na.rm=T)
+edu_normalized$num_students_total <- rowSums(cbind(edu_normalized$num_students_female, 
+                                                    edu_normalized$num_students_male), 
+                                                na.rm=T)
 
 #dealing with total students problem
-edu_normalized$test_f <- apply(cbind(edu_normalized$num_pry_female, 
-                              edu_normalized$num_js_female,
-                              edu_normalized$num_ss_female), 
-                              1, sum, na.rm=T)
+edu_normalized$test_f <- rowSums(cbind(edu_normalized$num_pry_female, 
+                                        edu_normalized$num_js_female,
+                                        edu_normalized$num_ss_female), 
+                                    na.rm=T)
 
-edu_normalized$test_m <- apply(cbind(edu_normalized$num_pry_male, 
+edu_normalized$test_m <- rowSums(cbind(edu_normalized$num_pry_male, 
                               edu_normalized$num_js_male,
                               edu_normalized$num_ss_male), 
-                              1, sum, na.rm=T)
+                              na.rm=T)
 
 edu_normalized$total <- edu_normalized$test_f + edu_normalized$test_m
 
@@ -317,16 +317,16 @@ edu_normalized$ratio_students_to_benches <- ifelse(edu_normalized$ratio_students
                                             edu_normalized$ratio_students_to_benches)
 
 ######## May need to delete next 3 lines after discussion
-edu_normalized$num_students_total <- apply(cbind(edu_normalized$num_students_male, 
-                                          edu_normalized$num_students_female), 
-                                        1, sum, na.rm=T)
+edu_normalized$num_students_total <- rowSums(cbind(edu_normalized$num_students_male, 
+                                                    edu_normalized$num_students_female), 
+                                            na.rm=T)
 
 edu_normalized$num_students_total <- ifelse(edu_normalized$num_students_total == 0, NA, 
                                      edu_normalized$num_students_total)
 
-edu_normalized$num_tchrs_total <- apply(cbind(edu_normalized$num_tchrs_male, 
-                                        edu_normalized$num_tchrs_female), 
-                                        1, sum, na.rm=T)
+edu_normalized$num_tchrs_total <- rowSums(cbind(edu_normalized$num_tchrs_male, 
+                                                edu_normalized$num_tchrs_female), 
+                                            na.rm=T)
 
 
 #### TODO: investigate why these are in the data at all; constraints should have knocked these out #####
