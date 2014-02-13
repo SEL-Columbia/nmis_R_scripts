@@ -87,10 +87,10 @@ edu_661$covered_roof_good_condi <- edu_661$covered_roof_yn == "yes_good_conditio
 edu_661$chalkboard_each_classroom_yn <- (edu_661$num_classrms_total <= 
                                            edu_661$num_classrm_w_chalkboard)
 
-edu_661$num_toilets_total <- apply(cbind(edu_661$num_toilet_boy, 
+edu_661$num_toilets_total <- rowSums(cbind(edu_661$num_toilet_boy, 
                                          edu_661$num_toilet_girl, 
                                          edu_661$num_toilet_both),
-                                   1, sum, na.rm=T)
+                                     na.rm=T)
 
 edu_113$school_managed <- ifelse(edu_113$school_managed_fed_gov, 
                                  "federal_gov",
@@ -124,32 +124,32 @@ edu_113$num_students_frthr_than_3km <- ifelse(edu_113$num_students_frthr_than_3k
                                               edu_113$num_students_frthr_than_3km == 8,
                                               edu_113$num_students_frthr_than_3km)
 
-edu_113$num_toilets_total <- apply(cbind(as.numeric(edu_113$vip_latrine_number), 
+edu_113$num_toilets_total <- rowSums(cbind(as.numeric(edu_113$vip_latrine_number), 
                                          as.numeric(edu_113$slab_pit_latrine_number)), 
-                                   1, sum, na.rm=T)
+                                   na.rm=T)
 
-edu_113$num_tchrs_male <- apply(cbind(edu_113$num_tchrs_male_full_time, 
+edu_113$num_tchrs_male <- rowSums(cbind(edu_113$num_tchrs_male_full_time, 
                                       edu_113$num_tchrs_male_part_time), 
-                                1, sum, na.rm=T)
+                                  na.rm=T)
 
-edu_113$num_tchrs_female <- apply(cbind(edu_113$num_tchrs_female_full_time, 
+edu_113$num_tchrs_female <- rowSums(cbind(edu_113$num_tchrs_female_full_time, 
                                         edu_113$num_tchrs_female_part_time), 
-                                  1, sum, na.rm=T)
+                                    na.rm=T)
 
-edu_113$num_tchrs_w_nce <- apply(cbind(edu_113$tchrs_male_nce, 
+edu_113$num_tchrs_w_nce <- rowSums(cbind(edu_113$tchrs_male_nce, 
                                        edu_113$tchrs_female_nce, 
                                        edu_113$tchrs_male_other_w_nce,
                                        edu_113$tchrs_female_other_w_nce),
-                                 1, sum, na.rm=T)
+                                    na.rm=T)
 
-edu_113$num_classrms_total <- apply(cbind(edu_113$num_classrms_good_cond, 
+edu_113$num_classrms_total <- rowSums(cbind(edu_113$num_classrms_good_cond, 
                                           edu_113$num_classrms_need_min_repairs, 
                                           edu_113$num_classrms_need_maj_repairs),
-                                    1, sum, na.rm=T)
+                                      na.rm=T)
 
-edu_113$num_benches <- apply(cbind(edu_113$num_attached_benches, 
+edu_113$num_benches <- rowSums(cbind(edu_113$num_attached_benches, 
                                    edu_113$num_unattached_benches),
-                             1, sum, na.rm=T)
+                                na.rm=T)
 
 ##################################
 ##combining 661, 113 & pilot
