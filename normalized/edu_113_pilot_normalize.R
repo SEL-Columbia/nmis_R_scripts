@@ -218,13 +218,5 @@ stopifnot(all(check_type %in% c("integer", "numeric")))
 edu_113 <- subset(edu_113, !(duplicated(edu_113$uuid) | is.na(edu_113$lga_id)))
 edu_pilot <- subset(edu_pilot, !(duplicated(edu_pilot$uuid) | is.na(edu_pilot$lga_id)))
 
-
-edu_113 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/113/Educ_Baseline_PhaseII_all_merged_cleaned_2011Nov21.csv",
-                    stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999", "99999", "999999", "-8"))
-edu_pilot <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/113/Pilot_Education_cleaned_2011Nov17.csv",
-                      stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999", "99999", "999999", "-8"))
-
-
-
 write.csv(edu_113, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/113/Educ_Baseline_PhaseII_all_merged_cleaned_2011Nov21.csv", row.names=F)
 write.csv(edu_pilot, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/113/Pilot_Education_cleaned_2011Nov17.csv", row.names=F)

@@ -18,60 +18,10 @@ edu_661$src <- "661"
 edu_113$src <- "113"
 edu_pilot$src <- "pilot"
 
-#adding uuid to 113 + pilot
-edu_113$uuid <- sapply(paste(edu_113$gps, edu_113$photo), FUN=digest)
-edu_pilot$uuid <- sapply(paste(edu_pilot$gps, edu_pilot$photo), FUN=digest)
-
 #adding photo urls
 edu_661 <- add_photo_url(edu_661, 'formhub')
 edu_pilot <- add_photo_url(edu_pilot, 'nmisstatic')
 edu_113 <- add_photo_url(edu_113, 'nmisstatic')
-
-########################
-##Mapping Names 
-
-#113 names
-edu_113 <- rename(edu_113, c("days_no_potable_water_pastmth" = "days_no_potable_water",
-                             "num_unattached_desks" = "num_desks",
-                             "lga" = "mylga",
-                             "state" = "mylga_state", 
-                             "zone"= "mylga_zone",
-                             "water_pipe_water" = "water.pipe_water", 
-                             "water_tube_well" = "water.tube_well", 
-                             "toilet_flush_or_pour_flush" = "toilet.flush_or_pour_flush_improved", 
-                             "toilet_ventilated_improved" = "toilet.ventilated_improved", 
-                             "toilet_pit_latrine_with_slab" = "toilet.pit_latrine_with_slab",
-                             "power_generator" = "power_sources.generator", 
-                             "power_solar_system" = "power_sources.solar_system", 
-                             "power_grid_connection" = "power_sources.grid", 
-                             "funtioning_library_yn" = "functioning_library_yn",
-                             "toilet_none" = "toilet.none",
-                             "water_none" = "water.none",
-                             "start_time" = "start",
-                             "end_time" = "end"))
-
-#pilot
-edu_pilot <- rename(edu_pilot, c("num_total_classrooms" = "num_classrms_total",
-                                 "lga" = "mylga",
-                                 "state" = "mylga_state", 
-                                 "zone"= "mylga_zone",
-                                 "X_p_num_total_desk" = "num_desks",
-                                 "X_p_num_benches_chairs" = "num_benches",
-                                 "water_pipe_water" = "water.pipe_water", 
-                                 "water_tube_well" = "water.tube_well", 
-                                 "toilet_flush_or_pour_flush" = "toilet.flush_or_pour_flush_improved", 
-                                 "toilet_ventilated_improved" = "toilet.ventilated_improved", 
-                                 "toilet_pit_latrine_with_slab" = "toilet.pit_latrine_with_slab",
-                                 "days_no_water_any_source" = "days_no_water_pastmth",
-                                 "toilet_none" = "toilet.none",
-                                 "X_p_num_improved_sanitation" = "num_toilets_total",
-                                 "num_tchrs_male_full_time" = "num_tchrs_male",
-                                 "num_tchrs_female_full_time" = "num_tchrs_female",
-                                 "water_none" = "water.none",
-                                 "power_grid_connection" = "power_sources.grid",
-                                 "funtioning_library_yn" = "functioning_library_yn",
-                                 "start_time" = "start",
-                                 "end_time" = "end"))
 
 ######################################
 ##Adding variables before 999 cleaning
@@ -91,65 +41,6 @@ edu_661$num_toilets_total <- rowSums(cbind(edu_661$num_toilet_boy,
                                          edu_661$num_toilet_girl, 
                                          edu_661$num_toilet_both),
                                      na.rm=T)
-
-edu_113$school_managed <- ifelse(edu_113$school_managed_fed_gov, 
-                                 "federal_gov",
-                          ifelse(edu_113$school_managed_st_gov, 
-                                 "state_gov",
-                          ifelse(edu_113$school_managed_loc_gov, 
-                                 "local_gov",
-                          ifelse(edu_113$school_managed_priv_profit, 
-                                 "private_profit",
-                          ifelse(edu_113$school_managed_priv_noprofit, 
-                                 "private_non_profit",
-                          ifelse(edu_113$school_managed_other | !is.na(edu_113$school_managed_other_specify),
-                                 "none",
-                                NA))))))
-
-edu_113$fees.admission_new <- as.logical(edu_113$new_stdnts_enroll_fee > 0)
-edu_113$fees.tuition_cont <- as.logical(edu_113$cont_stdnts_enroll_fee > 0)
-edu_113$fees.textbook <- as.logical(edu_113$textbooks_fee > 0)
-edu_113$fees.transport <- as.logical(edu_113$transport_fee > 0)
-edu_113$fees.exam_fee <- as.logical(edu_113$exams_fee > 0)
-edu_113$fees.pta_fee <- as.logical(edu_113$pta_fee > 0)
-
-edu_113$covered_roof_good_condi <- edu_113$covered_roof_yn %in% c("roof_fence_good_condition", 'yes')
-edu_pilot$covered_roof_good_condi <- edu_pilot$covered_roof_yn %in% c("roof_fence_good_condition", 'yes')
-
-edu_113$multigrade_teaching_yn <- NA
-edu_113$times_tchr_pay_delay_pastyr <- as.integer(edu_113$times_tchr_pay_delay_pastyr)
-edu_113$times_tchr_pay_miss_pastyr <- as.integer(edu_113$times_tchr_pay_miss_pastyr)
-
-edu_113$num_students_frthr_than_3km <- ifelse(edu_113$num_students_frthr_than_3km < 0,
-                                              edu_113$num_students_frthr_than_3km == 8,
-                                              edu_113$num_students_frthr_than_3km)
-
-edu_113$num_toilets_total <- rowSums(cbind(as.numeric(edu_113$vip_latrine_number), 
-                                         as.numeric(edu_113$slab_pit_latrine_number)), 
-                                   na.rm=T)
-
-edu_113$num_tchrs_male <- rowSums(cbind(edu_113$num_tchrs_male_full_time, 
-                                      edu_113$num_tchrs_male_part_time), 
-                                  na.rm=T)
-
-edu_113$num_tchrs_female <- rowSums(cbind(edu_113$num_tchrs_female_full_time, 
-                                        edu_113$num_tchrs_female_part_time), 
-                                    na.rm=T)
-
-edu_113$num_tchrs_w_nce <- rowSums(cbind(edu_113$tchrs_male_nce, 
-                                       edu_113$tchrs_female_nce, 
-                                       edu_113$tchrs_male_other_w_nce,
-                                       edu_113$tchrs_female_other_w_nce),
-                                    na.rm=T)
-
-edu_113$num_classrms_total <- rowSums(cbind(edu_113$num_classrms_good_cond, 
-                                          edu_113$num_classrms_need_min_repairs, 
-                                          edu_113$num_classrms_need_maj_repairs),
-                                      na.rm=T)
-
-edu_113$num_benches <- rowSums(cbind(edu_113$num_attached_benches, 
-                                   edu_113$num_unattached_benches),
-                                na.rm=T)
 
 ##################################
 ##combining 661, 113 & pilot
