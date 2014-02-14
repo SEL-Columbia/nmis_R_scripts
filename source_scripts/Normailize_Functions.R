@@ -141,10 +141,15 @@ yes_no_batch <- function(df, list_of_column_names)
 }
 
 column_exists <- function(df, list_of_column_names){
-    warning(paste("following cloumns are not in the data.frame: ", 
-                  paste(list_of_column_names[which(! list_of_column_names %in% names(df))], 
-                        collapse=", ")))
-    return(list_of_column_names[which(list_of_column_names %in% names(df))])
+    if (length(which(! list_of_column_names %in% names(df))) > 0){
+        warning(paste("following cloumns are not in the data.frame: ", 
+                      paste(list_of_column_names[which(! list_of_column_names %in% names(df))], 
+                            collapse=", ")))
+        return(list_of_column_names[which(list_of_column_names %in% names(df))])    
+    }else{
+        return(list_of_column_names)
+    }
+    
 }
 
 batch_type <- function(df, list_of_column_names)
@@ -152,5 +157,15 @@ batch_type <- function(df, list_of_column_names)
     list_of_column_names <- column_exists(df, list_of_column_names)
     
     types <- unlist(lapply(list_of_column_names, function(x) class(df[,x])))
+    names(types) <- list_of_column_names
     return(types)
+}
+
+smart_batch_type_convert <- function(df, column_list, 
+                                     type_to_list=c("logical"), convert_func){
+    
+    check_type <- batch_type(df, column_list)
+    column_list <- names(check_type)[! check_type %in% type_to_list]
+    df <- convert_func(df, column_list)
+    return(df)   
 }

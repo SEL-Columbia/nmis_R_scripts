@@ -141,12 +141,21 @@ numeric_column_list <- c("slab_pit_latrine_number", "vip_latrine_not_working", "
                       "num_textbooks_pry_sci", "num_notebooks")
 
 # logical type conversion and ASSERTION(sort of)
-edu_total <- yes_no_batch(edu_total, yes_no_columns)
+# edu_total <- yes_no_batch(edu_total, yes_no_columns)
+edu_total <- smart_batch_type_convert(edu_total, 
+                                      column_list=yes_no_columns,
+                                      type_to_list=c("logical"),
+                                      yes_no_batch)
 check_type <- batch_type(edu_total, yes_no_columns)
 stopifnot(all(check_type %in% c("logical")))
 
+
 # numeric type conversion and ASSERTION(sort of)
-edu_total <- numeric_batch(edu_total, numeric_column_list)
+# edu_total <- numeric_batch(edu_total, numeric_column_list)
+edu_total <- smart_batch_type_convert(edu_total, 
+                                      column_list=numeric_column_list, 
+                                      type_to_list=c("integer", "numeric"),
+                                      numeric_batch)
 check_type <- batch_type(edu_total, numeric_column_list)
 stopifnot(all(check_type %in% c("integer", "numeric")))
 
