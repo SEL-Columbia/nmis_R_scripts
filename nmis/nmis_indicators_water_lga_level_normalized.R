@@ -15,7 +15,7 @@ lgaw_facilities <- ddply(iw774, .(lga_id), function(df) {
             sum(df$is_improved, na.rm=T),
         num_overhead_tanks = 
             sum(df$water_point_type %in%
-                c('Overhead Tank (1,000)', 'Overhead Tank (10,000)', 
+                c('Overhead Tank', 
                   'Rainwater Harvesting System'), na.rm=T),
         num_taps = 
             sum(df$water_point_type == "Tap", na.rm=T),       

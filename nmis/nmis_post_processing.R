@@ -74,7 +74,11 @@ percent_names <- c("proportion_schools_power_access_primary", "proportion_health
                    "proportion_of_children_u5_diarrhea_last_2wks", "proportion_of_children_u5_reporting_fever_last_2wks", 
                    "proportion_of_children_u5_treated_with_antimalarial_drugs", 
                    "proportion_women_15_24_with_comp_correct_hiv_aids_knowledge", 
-                   "antenatal_care_coverage")
+                   "antenatal_care_coverage", "percent_compr_oc_c_sections", "percent_management_public",
+                    "percent_natl_curriculum", "num_school_1kmplus_secondary_school", "percent_functional_water_primary",
+                    "percent_improved_sanitation_primary", "percent_phcn_electricity_primary", "percent_phcn_electricity_js",
+                    "proportion_delivery_24_7_sansHP", "proportion_vaccines_fridge_freezer_sansHP", "proportion_measles", 
+                    "proportion_phcn_electricity", "proportion_power_alternative_functional")
 
 
 nmis_lga <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/All_774_LGA.rds")

@@ -30,7 +30,7 @@ health_sub <- subset(health_outlier, select=c("uuid", "lga", "state",
                                               "lab_tests.pregnancy", "supplements.iron",
                                               "lab_tests.stool", "lab_tests.tb_microscopy", 
                                               "medication.arvs", "community", "ward", "start", 
-                                              "photo_url", "photo_url_sml"))
+                                              "photo_url", "photo_url_sml","antenatal_care_yn", "family_planning_yn"))
 
 health_sub <- rename(health_sub, c('photo' = 'formhub_photo_id',
                              'geocodeoffacility' = 'gps',
@@ -80,6 +80,7 @@ rm(nm_774)
 ####################
 ##### SNAPSHOT #####
 ####################
+health_sub$date_of_survey <- as.character(as.Date(health_sub$date_of_survey))
 health_sub$management <- recodeVar(health_outlier$facility_owner_manager,
                                         c('lga', 'community', 'federalgovernment','stategovrenment', 
                                                 'church_mission', 'private_forprofit', 'private_notforprofit'), 
@@ -388,6 +389,8 @@ health_sub$routine_immunization <- health_outlier$immunization.bcg_immunization 
 health_sub$health_no_delivery_user_fees <- health_outlier$paid_services_anc_delivery == F
 
 health_sub$health_no_child_user_fees <- health_outlier$child_tx_fees_yn == F
+
+
 
 
 #Adding distant to every facility

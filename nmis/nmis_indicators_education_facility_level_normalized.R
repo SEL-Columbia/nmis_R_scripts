@@ -30,7 +30,9 @@ edu_sub <- subset(edu_outlier , select=c("uuid", "lga", "state",
                                          "num_tchrs_w_nce","provide_exercise_books_yn", "provide_pens_yn",
                                          "teacher_guide_yn", "functioning_library_yn",
                                          "num_students_frthr_than_3km", "community", 
-                                         "ward","start", "photo_url", "photo_url_sml"))
+                                         "ward","start", "photo_url", "photo_url_sml",
+                                         "num_tchrs_male", "num_tchrs_female", "num_students_female",
+                                         "num_students_male", "num_toilets_total"))
 
 edu_sub <- rename(edu_sub, c("photo" = "formhub_photo_id",
                              "school_name" = "facility_name",
@@ -51,6 +53,8 @@ rm(nm_774)
 
 ################
 ## SNAPSHOT ####
+edu_sub$date_of_survey <- as.character(as.Date(edu_sub$date_of_survey))
+
 edu_sub$management <- recodeVar(edu_outlier$school_managed, 
                           c("federal_gov", "local_gov", "state_gov", "private_profit", "private_non_profit", "faith_based"),
                           c("public", "public", "public", "private", "private", "private"),

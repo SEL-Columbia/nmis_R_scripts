@@ -21,9 +21,11 @@ water_sub <- rename(water_sub,
 stopifnot(nrow(water_sub) == nrow(water_774)) #otherwise calculations below will be wrong
 
 ## GENERAL ##
+water_sub$date_of_survey <- as.character(as.Date(water_sub$date_of_survey))
+
 #improved# 
-water_sub$is_improved <- water_sub$water_point_type %in% c('Borehole','Handpump','Tap',"Overhead Tank (10,000)",
-                                                 'Overhead Tank (1,000)','Rainwater Harvesting System')
+water_sub$is_improved <- water_sub$water_point_type %in% c('Borehole','Handpump','Tap','Overhead Tank',
+                                                           'Rainwater Harvesting System')
 #lift mechanism#
 water_sub$lift_mechanism <- recodeVar(water_774$lift_mechanism,
                                  c("hand_pump", "electricity_pump", "fuel_pump", "solar_pump", 

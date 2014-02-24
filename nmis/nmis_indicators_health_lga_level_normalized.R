@@ -183,7 +183,7 @@ lga_health_data_core <- ddply(ihealth774, .(lga_id), function(df) {
 
 lga_health <- merge(lga_health_data, lga_health_data_core, by="lga_id")
 lga_health <- merge(lga_health, lga_health_data_core_sansHP, by="lga_id")
-
+lga_health <- merge(lga_health, lga_health_data_core_hospital, by="lga_id")
 
 ###### SUMMING UP #########
 ##writing out##
