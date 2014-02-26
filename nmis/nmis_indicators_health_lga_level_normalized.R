@@ -181,9 +181,9 @@ lga_health_data_core <- ddply(ihealth774, .(lga_id), function(df) {
         sum(df$child_health_measles_immun_calc, na.rm=T)
   )}) 
 
-lga_health <- merge(lga_health_data, lga_health_data_core, by="lga_id")
-lga_health <- merge(lga_health, lga_health_data_core_sansHP, by="lga_id")
-lga_health <- merge(lga_health, lga_health_data_core_hospital, by="lga_id")
+lga_health <- merge(lga_health_data, lga_health_data_core, by="lga_id", all=TRUE)
+lga_health <- merge(lga_health, lga_health_data_core_sansHP, by="lga_id", all=TRUE)
+lga_health <- merge(lga_health, lga_health_data_core_hospital, by="lga_id", all=TRUE)
 
 ###### SUMMING UP #########
 ##writing out##
