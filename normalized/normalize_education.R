@@ -18,11 +18,6 @@ edu_661$src <- "661"
 edu_113$src <- "113"
 edu_pilot$src <- "pilot"
 
-#adding photo urls
-edu_661 <- add_photo_url(edu_661, 'formhub')
-edu_pilot <- add_photo_url(edu_pilot, 'nmisstatic')
-edu_113 <- add_photo_url(edu_113, 'nmisstatic')
-
 ######################################
 ##Adding variables before 999 cleaning
 school_managed_value <- c("faith_based", "federal_gov", "local_gov", "none",

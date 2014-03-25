@@ -30,9 +30,8 @@ edu_sub <- subset(edu_outlier , select=c("uuid", "lga", "state",
                                          "num_tchrs_w_nce","provide_exercise_books_yn", "provide_pens_yn",
                                          "teacher_guide_yn", "functioning_library_yn",
                                          "num_students_frthr_than_3km", "community", 
-                                         "ward","start", "photo_url", "photo_url_sml",
-                                         "num_tchrs_male", "num_tchrs_female", "num_students_female",
-                                         "num_students_male", "num_toilets_total"))
+                                         "ward","start", "num_tchrs_male", "num_tchrs_female",
+                                         "num_students_female","num_students_male", "num_toilets_total"))
 
 edu_sub <- rename(edu_sub, c("photo" = "formhub_photo_id",
                              "school_name" = "facility_name",

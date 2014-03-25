@@ -30,7 +30,10 @@ net_enroll_na <- subset(net_enroll_na, select=-c(state, LGA))
 net_enroll_JS <- subset(net_enroll_JS, select=-c(state, LGA))
 other_edu <- subset(other_edu, select=-c(X, lga, state, LGA))
 
-net_enroll_na<- rename(net_enroll_na, c("LGA_id" = "lga_id"))
+net_enroll_na<- rename(net_enroll_na, c("LGA_id" = "lga_id",
+                                        "net_enrollment_ratio_primary_education" = "net_enrollment_rate_pry",
+                                        "net_enrollment_ratio_secondary_education" = "net_enrollment_rate_js"))
+
 net_enroll_JS<- rename(net_enroll_JS, c("LGA_id" = "lga_id"))
 other_edu<- rename(other_edu, c("LGA_id" = "lga_id"))
 
@@ -55,7 +58,7 @@ enroll_lga<- ddply(enroll_6_11, .(state, lg), summarise, count_enroll = length(s
 
 ##### Next step is simply combine the two and calculate the result 
 primary <- merge(age_lga, enroll_lga, all.x=T)
-primary$gross_enrollment_ratio_primary_education = primary$count_enroll/primary$count_age 
+primary$gross_enrollment_rate_pry = primary$count_enroll/primary$count_age 
    
 ##########################
 ####### SECONDARY ########
@@ -72,7 +75,7 @@ enroll_lga <- ddply(enroll_21_26, .(state, lg), summarise, count_enroll = length
 
 ##### Next step is simply combine the two and calculate the result 
 secondary <- merge(age_lga, enroll_lga, all.x=T)
-secondary$gross_enrollment_ratio_secondary_education = primary$count_enroll/primary$count_age 
+secondary$gross_enrollment_rate_js = secondary$count_enroll/secondary$count_age 
 
 
 ##############################
@@ -133,8 +136,8 @@ i_sanitation$percentage_households_with_access_to_improved_sanitation <-
 #####################################
 
 final_l <- subset(literacy, select=c(state, lg, literacy_rate))
-final_p <- subset(primary, select=c(state, lg, gross_enrollment_ratio_primary_education))
-final_s <- subset(secondary, select=c(state, lg, gross_enrollment_ratio_secondary_education))
+final_p <- subset(primary, select=c(state, lg, gross_enrollment_rate_pry))
+final_s <- subset(secondary, select=c(state, lg, gross_enrollment_rate_js))
 final_w <- subset(i_water, select=c(state, lg, percentage_households_with_access_to_improved_water_sources))
 final_san <- subset(i_sanitation, select=c(state, lg, percentage_households_with_access_to_improved_sanitation))
 
@@ -171,5 +174,5 @@ dhs_2008 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/exter
 final_total <- merge(final_total, dhs_2008, by = "lga_id")
 
 saveRDS(final_total, '~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/output_data/external_data.rds')
-
+write.csv(final_total, '~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/output_data/external_data.csv', row.names=F)
 
