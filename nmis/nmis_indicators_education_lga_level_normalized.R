@@ -245,18 +245,18 @@ lga_edu_data_core <- ddply(ie, .(lga_id), function(df) {
           ratio(df$num_toilets_total,  df$is_junior_secondary),
       # Infrastructure in Primary Schools
         percent_functional_water_primary = 
-          ratio(df$functional_water,  df$is_primary),
+          bool_proportion(df$functional_water,  df$is_primary),
         percent_improved_sanitation_primary = 
-          ratio(df$improved_sanitation,  df$is_primary),
+          bool_proportion(df$improved_sanitation,  df$is_primary),
         percent_phcn_electricity_primary = 
-          ratio(df$phcn_electricity,  df$is_primary),
+          bool_proportion(df$phcn_electricity,  df$is_primary),
       # Infrastructure in Junior Secondary Schools
         percent_functional_water_js = 
-          ratio(df$functional_water,  df$is_junior_secondary),
+          bool_proportion(df$functional_water,  df$is_junior_secondary),
         percent_improved_sanitation_js = 
-          ratio(df$improved_sanitation,  df$is_junior_secondary),
+          bool_proportion(df$improved_sanitation,  df$is_junior_secondary),
         percent_phcn_electricity_js = 
-          ratio(df$phcn_electricity,  df$is_junior_secondary)
+          bool_proportion(df$phcn_electricity,  df$is_junior_secondary)
 )}) 
 
 # Education Facilities summary on the "All sectors" page (narrow table)

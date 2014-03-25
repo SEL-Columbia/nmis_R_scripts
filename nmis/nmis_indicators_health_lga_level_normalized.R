@@ -118,15 +118,14 @@ lga_health_data <- ddply(ihealth774, .(lga_id), function(df) {
                                    health_774$facility_type == 'federalmedicalcentre'),]                                        
    ihealth_774_hospitals<- idata.frame(health_774_hospitals)
  
- lga_health_data_core_hospital <- ddply(ihealth_774_hospitals, .(lga_id), function(df) {
-   data.frame(
-      #   Total number of hospitals in LGA
-     num_hospitals = 
-       length(df$uuid),
-      #   Percentage that perform C-sections
-     percent_compr_oc_c_sections = 
-      mean(ihealth_774_hospitals$compr_oc_c_sections, na.rm=T)
-    )}) 
+ lga_health_data_core_hospital <- ddply(ihealth_774_hospitals, .(lga_id),
+                                                    function(df) {data.frame(
+                                                          #   Total number of hospitals in LGA
+                                                         num_hospitals = length(df$uuid),
+                                                          #   Percentage that perform C-sections
+                                                         percent_compr_oc_c_sections = 
+                                                                mean(ihealth_774_hospitals$compr_oc_c_sections, na.rm=T)
+                                                        )}) 
 
                                    
 # Services that are provided at all faciltiies except for Health Posts 
