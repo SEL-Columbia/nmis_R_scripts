@@ -93,7 +93,7 @@ edu_sub$facility_type_display <- revalue(edu_sub$facility_type, c("preprimary_pr
                                          "vocational_post_secondary" = "Adult, Vocational, or Technical",
                                          "adult_ed" = "Adult, Vocational, or Technical"))
 
-edu_sub$education_type <- revalue(edu_sub$facility_type, 
+edu_sub$education_type <- revalue(edu_sub$education_type, 
                                     c("formal_only" = "Formal Only",
                                       "integrated" = "Integrated",
                                       "religious_only" = "Religious Only"))
