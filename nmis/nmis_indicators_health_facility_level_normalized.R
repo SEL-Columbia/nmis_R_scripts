@@ -131,9 +131,10 @@ health_sub$improved_sanitation <- ifelse(health_outlier$src == 'pilot',
                                       (health_outlier$num_pit_w_slab > 0) | 
                                       (health_outlier$num_flush_or_pour_flush_piped > 0)))                                
 
-health_outlier$iv_medications_yn <- health_outlier$medication.iv_fluid
+health_sub$iv_medications_yn <- health_outlier$medication.iv_fluid
 
 
+# remove dentalclinic records 
 health_sub$facility_type_display <- revalue(health_sub$facility_type, 
                                             c("primaryhealthclinic" = "Clinic",
                                             "primaryhealthcarecentre" = "Primary Health Center",
@@ -150,7 +151,6 @@ health_sub$facility_type_display <- revalue(health_sub$facility_type,
                                             "private" = "Private Facility",
                                             "other" = "Other",
                                             "dentalclinic" = NA))
-
 
 #######################
 #########################
