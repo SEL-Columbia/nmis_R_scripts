@@ -67,6 +67,37 @@ edu_sub$improved_sanitation <- edu_outlier$toilet.flush_or_pour_flush_improved |
 edu_sub$phcn_electricity <- ifelse(edu_outlier$src == "661", 
                                    edu_outlier$grid_proximity == 'connected_to_grid',
                                    edu_outlier$power_sources.grid == T)
+
+
+edu_sub$facility_type_display <- revalue(edu_sub$facility_type, c("preprimary_primary" = "Pre-primary and Primary",
+                                         "primary" = "Primary Only", 
+                                         "preprimary" = "Pre-primary Only", 
+                                         "js_ss" = "Junior and Senior Secondary", 
+                                         "vocational_post_primary" = "Adult, Vocational, or Technical", 
+                                         "adult_vocational" = "Adult, Vocational, or Technical", 
+                                         "js" = "Junior Secondary Only", 
+                                         "primary_js" = "Primary and Junior Secondary", 
+                                         "ss" = "Senior Secondary Only", 
+                                         "primary_only" = "Primary Only", 
+                                         "preprimary_and_primary" = "Pre-primary and Primary", 
+                                         "adult_lit" = "Adult, Vocational, or Technical", 
+                                         "junior_and_senior_sec" = "Junior and Senior Secondary", 
+                                         "science_technical" = "Adult, Vocational, or Technical", 
+                                         "junior_sec_only" = "Junior Secondary Only", 
+                                         "preprimary_only" = "Pre-primary Only", 
+                                         "primary_junior_and_senior_sec" = "Primary, Junior, and Senior Secondary", 
+                                         "primary_and_junior_sec" = "Primary and Junior Secondary", 
+                                         "vocational" = "Adult, Vocational, or Technical", 
+                                         "senior_sec_only" = "Senior Secondary Only", 
+                                         "primary_js_ss" = "Primary, Junior, and Senior Secondary", 
+                                         "vocational_post_secondary" = "Adult, Vocational, or Technical",
+                                         "adult_ed" = "Adult, Vocational, or Technical"))
+
+edu_sub$education_type <- revalue(edu_sub$facility_type, 
+                                    c("formal_only" = "Formal Only",
+                                      "integrated" = "Integrated",
+                                      "religious_only" = "Religious Only"))
+
 ################
 ##################
 edu_sub$school_1kmplus_catchment_area <- edu_outlier$km_to_catchment_area > 1

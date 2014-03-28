@@ -133,6 +133,25 @@ health_sub$improved_sanitation <- ifelse(health_outlier$src == 'pilot',
 
 health_outlier$iv_medications_yn <- health_outlier$medication.iv_fluid
 
+
+health_sub$facility_type_display <- revalue(health_sub$facility_type, 
+                                            c("primaryhealthclinic" = "Clinic",
+                                            "primaryhealthcarecentre" = "Primary Health Center",
+                                            "comprehensivehealthcentre" = "District / General Hospital",
+                                            "generalhospital" = "District / General Hospital",
+                                            "wardmodelphccentre" = "Primary Health Center",
+                                            "healthpostdispensary" = "Health Post",
+                                            "maternity" = "Primary Health Center",
+                                            "cottagehospital" = "District / General Hospital",
+                                            "specialisthospital" = "Teaching / Specialist Hospital",
+                                            "teachinghospital" = "Teaching / Specialist Hospital",
+                                            "federalmedicalcentre" = "Teaching / Specialist Hospital",
+                                            "None" = "Other",
+                                            "private" = "Private Facility",
+                                            "other" = "Other",
+                                            "dentalclinic" = NA))
+
+
 #######################
 #########################
 

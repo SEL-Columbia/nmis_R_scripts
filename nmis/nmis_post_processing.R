@@ -11,7 +11,11 @@
 # percent <- c(percent, "antenatal_care_coverage")
 # 
 # p_nm[!p_nm %in% c_nm]
+
+
 source("source_scripts/post_processing_functions.R")
+source("nmis/RJson.R")
+
 
 percent_names <- c("proportion_schools_power_access_primary", "proportion_health_facilities_hiv_testing", 
                    "proportion_at_least_1_sba", "proportion_schools_multigrade_classrooms_primary", 
@@ -146,3 +150,11 @@ write.csv(health_774, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_p
 write.csv(water_774_all, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/final_output/Water_774_ALL_FACILITY_INDICATORS.csv", row.names=F)
 write.csv(edu_774_all, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/final_output/Education_774_ALL_FACILITY_INDICATORS.csv", row.names=F)
 write.csv(health_774_all, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/final_output/Health_774_ALL_FACILITY_INDICATORS.csv", row.names=F)
+
+
+# output json file for each lga
+output_dir <- "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/final_output/jsons"
+
+RJson_ouput(BASE_DIR=output_dir, nmis_lga, 
+            edu_774, health_774, water_774)
+
