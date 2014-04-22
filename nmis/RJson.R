@@ -4,8 +4,11 @@ require(plyr)
 
 
 
-RJson_ouput <- function(BASE_DIR, nmis_lga, edu_774,
+RJson_ouput <- function(BASE_DIR, nmis_lga, gap_sheet, edu_774,
                         health_774, water_774){
+    
+    # join gap_sheet to lga_level as per chris' request
+    nmis_lga <- merge(nmis_lga, gap_sheet, by="lga_id", all=TRUE)
     
     # utility function that turns Data.frame into named list
     df_to_list <- function(df){

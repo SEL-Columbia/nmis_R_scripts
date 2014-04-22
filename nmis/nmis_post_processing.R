@@ -99,6 +99,12 @@ for (name in percent_names){
 
 write.csv(nmis_lga,"~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/final_output/All_774_LGA.csv", row.names=F)
 
+
+
+######## PUlling GAP SHEET data
+gap_sheet <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/final_output/gap_sheet.RDS")
+
+
 ######## Pull in the external state-level data
 #It seems we have most of the indicators lets just leave it as it is for now
 
@@ -155,6 +161,6 @@ write.csv(health_774_all, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/
 # output json file for each lga
 output_dir <- "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/final_output/jsons"
 
-RJson_ouput(BASE_DIR=output_dir, nmis_lga, 
+RJson_ouput(BASE_DIR=output_dir, nmis_lga, gap_sheet, 
             edu_774, health_774, water_774)
 

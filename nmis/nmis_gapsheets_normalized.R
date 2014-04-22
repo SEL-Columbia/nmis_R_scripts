@@ -77,9 +77,9 @@ source("./source_scripts/NMIS_Functions.R")
                                               length(na.omit(df$improved_sanitation))),
         
       # Grid Power available (PHCN/NEPA)
-        gap_sheet_phcn_electricity_numerator = sum(df$phcn_electricity, na.rm=T),
-        gap_sheet_phcn_electricity_denominator = length(na.omit(df$phcn_electricity)),
-        gap_sheet_phcn_electricity_percent = round(100*sum(df$phcn_electricity, na.rm=T)/length(na.omit(df$phcn_electricity))),
+        gap_sheet_phcn_electricity_h_numerator = sum(df$phcn_electricity, na.rm=T),
+        gap_sheet_phcn_electricity_h_denominator = length(na.omit(df$phcn_electricity)),
+        gap_sheet_phcn_electricity_h_percent = round(100*sum(df$phcn_electricity, na.rm=T)/length(na.omit(df$phcn_electricity))),
         
       # Any Power Available (grid or alternative power supply) 
         gap_sheet_any_power_available_numerator = sum(df$anypower, na.rm=T),
@@ -192,9 +192,9 @@ source("./source_scripts/NMIS_Functions.R")
                                                         length(na.omit(df$improved_sanitation))),
       
     # Schools connected to the national electricity grid (PHCN, NEPA)
-      gap_sheet_phcn_electricity_numerator = sum(df$phcn_electricity, na.rm=T),
-      gap_sheet_phcn_electricity_denominator = length(na.omit(df$phcn_electricity)),
-      gap_sheet_phcn_electricity_percent = round(100*sum(df$phcn_electricity, na.rm=T)/
+      gap_sheet_phcn_electricity_e_numerator = sum(df$phcn_electricity, na.rm=T),
+      gap_sheet_phcn_electricity_e_denominator = length(na.omit(df$phcn_electricity)),
+      gap_sheet_phcn_electricity_e_percent = round(100*sum(df$phcn_electricity, na.rm=T)/
                                                   length(na.omit(df$phcn_electricity))),
     
     # Total number of classrooms with a useable chalkboard/blackboard/whiteboard
@@ -218,16 +218,16 @@ source("./source_scripts/NMIS_Functions.R")
   )})
 
 #writing out############################################################################################
+combined <- merge(h_gap, e_gap, by="lga_id", all=T)
 
-  #adding basic information  
-    h_gap_final <- merge(h_gap, lgas, by="lga_id", all=T)
-    e_gap_final <- merge(e_gap, lgas, by="lga_id", all=T)
+#writing out data
+saveRDS(combined, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/final_output/gap_sheet.RDS")
 
-  combined <- merge_non_redundant(h_gap_final, e_gap_final, by="lga_id")
 
-  #writing out data
-  write.csv(h_gap_final, "~/Code/nmis_ui_data_2ef92c15/data_774/health_gapsheet.csv", row.names=F)
-  write.csv(e_gap_final, "~/Code/nmis_ui_data_2ef92c15/data_774/education_gapsheet.csv", row.names=F)
+
+# 
+#   write.csv(h_gap_final, "~/Code/nmis_ui_data_2ef92c15/data_774/health_gapsheet.csv", row.names=F)
+#   write.csv(e_gap_final, "~/Code/nmis_ui_data_2ef92c15/data_774/education_gapsheet.csv", row.names=F)
 #   write.csv(e_gap_final, "~/Code/nmis_ui_data_2ef92c15/data_774/All_774_LGA.csv", row.names=F)
 
     
