@@ -37,6 +37,7 @@ edu_661$num_toilets_total <- rowSums(cbind(edu_661$num_toilet_boy,
                                          edu_661$num_toilet_both),
                                      na.rm=T)
 
+edu_661 <- rename(edu_661, c("num_tchrs_total" = "num_tchr_full_time"))
 ##################################
 ##combining 661, 113 & pilot
 edu_total <- rbind.fill(edu_661, edu_113, edu_pilot)
@@ -133,7 +134,7 @@ numeric_column_list <- c("slab_pit_latrine_number", "vip_latrine_not_working", "
                       "num_english_textbook_pry", "num_soc_science_textbook_pry", "num_math_textbook_js", 
                       "num_english_textbook_js", "num_soc_science_textbook_js", "num_science_textbook_js", 
                       "num_exercise_books_per_student_pry", "num_exercise_books_per_student_jss", 
-                      "num_textbooks_pry_sci", "num_notebooks")
+                      "num_textbooks_pry_sci", "num_notebooks", "num_tchr_full_time")
 
 # logical type conversion and ASSERTION(sort of)
 # edu_total <- yes_no_batch(edu_total, yes_no_columns)

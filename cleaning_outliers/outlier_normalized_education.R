@@ -35,23 +35,23 @@ edu_normalized[which(edu_normalized$total > edu_normalized$num_students_total),"
 
 #logic checks
 edu_normalized <- outlierreplace(edu_normalized, 'num_tchrs_male', 
-                    (edu_normalized$num_tchrs_male > edu_normalized$num_tchrs_total))
+                    (edu_normalized$num_tchrs_male > edu_normalized$num_tchr_full_time))
 
 edu_normalized <- outlierreplace(edu_normalized, 'num_tchrs_female', 
-                    (edu_normalized$num_tchrs_female > edu_normalized$num_tchrs_total))
+                    (edu_normalized$num_tchrs_female > edu_normalized$num_tchr_full_time))
 
 edu_normalized <- outlierreplace(edu_normalized, 'num_tchrs_w_nce',
-                    (edu_normalized$num_tchrs_w_nce > edu_normalized$num_tchrs_total))
+                    (edu_normalized$num_tchrs_w_nce > edu_normalized$num_tchr_full_time))
 
 edu_normalized <- outlierreplace(edu_normalized, 'num_tchrs_attended_training',
-                    (edu_normalized$num_tchrs_attended_training > edu_normalized$num_tchrs_total))
+                    (edu_normalized$num_tchrs_attended_training > edu_normalized$num_tchr_full_time))
 
-edu_normalized <- outlierreplace(edu_normalized, 'num_tchrs_total',
-                    (edu_normalized$num_tchrs_total > 20 & 
+edu_normalized <- outlierreplace(edu_normalized, 'num_tchr_full_time',
+                    (edu_normalized$num_tchr_full_time > 20 & 
                          edu_normalized$num_students_total == 0))
 
-edu_normalized <- outlierreplace(edu_normalized, 'num_tchrs_total',
-                    (edu_normalized$num_tchrs_total > edu_normalized$num_tchrs_male + 
+edu_normalized <- outlierreplace(edu_normalized, 'num_tchr_full_time',
+                    (edu_normalized$num_tchr_full_time > edu_normalized$num_tchrs_male + 
                          edu_normalized$num_tchrs_female))
 
 edu_normalized <- outlierreplace(edu_normalized, 'num_classrms_need_maj_repairs',
@@ -173,37 +173,37 @@ edu_normalized <- outlierreplace(edu_normalized, 'num_students_male',
 edu_normalized <- outlierreplace(edu_normalized, 'num_students_total',
                                 (edu_normalized$num_students_total > 2000 & 
                                  edu_normalized$num_classrms_total < 25 &
-                                 edu_normalized$num_tchrs_total < 10))
+                                 edu_normalized$num_tchr_full_time < 10))
 
 edu_normalized <- outlierreplace(edu_normalized, 'num_pry_male',
                                 (edu_normalized$num_pry_male > 2000 & 
                                 edu_normalized$num_classrms_total < 25 &
-                                edu_normalized$num_tchrs_total < 10))
+                                edu_normalized$num_tchr_full_time < 10))
 
 edu_normalized <- outlierreplace(edu_normalized, 'num_pry_total',
                                 (edu_normalized$num_pry_total > 2500 & 
                                  edu_normalized$num_classrms_total < 25 &
-                                 edu_normalized$num_tchrs_total < 10))
+                                 edu_normalized$num_tchr_full_time < 10))
 
 edu_normalized <- outlierreplace(edu_normalized, 'num_js_female',
                                 (edu_normalized$num_js_female > 1250 & 
                                  edu_normalized$num_classrms_total < 25 &
-                                 edu_normalized$num_tchrs_total < 10))
+                                 edu_normalized$num_tchr_full_time < 10))
 
 edu_normalized <- outlierreplace(edu_normalized, 'num_js_male',
                                 (edu_normalized$num_js_male > 1250 & 
                                  edu_normalized$num_classrms_total < 25 &
-                                 edu_normalized$num_tchrs_total < 10))
+                                 edu_normalized$num_tchr_full_time < 10))
 
 edu_normalized <- outlierreplace(edu_normalized, 'num_js_total',
                                 (edu_normalized$num_js_total > 2500 & 
                                  edu_normalized$num_classrms_total < 25 &
-                                 edu_normalized$num_tchrs_total < 10))
+                                 edu_normalized$num_tchr_full_time < 10))
 
 edu_normalized <- outlierreplace(edu_normalized, 'num_ss_male',
                                 (edu_normalized$num_ss_male > 1250 & 
                                  edu_normalized$num_classrms_total < 25 &
-                                 edu_normalized$num_tchrs_total < 10))
+                                 edu_normalized$num_tchr_full_time < 10))
 
 edu_normalized <- outlierreplace(edu_normalized, 'num_ss_total',
                                 (edu_normalized$km_to_catchment_area > 30))
@@ -324,7 +324,7 @@ edu_normalized$num_students_total <- rowSums(cbind(edu_normalized$num_students_m
 edu_normalized$num_students_total <- ifelse(edu_normalized$num_students_total == 0, NA, 
                                      edu_normalized$num_students_total)
 
-edu_normalized$num_tchrs_total <- rowSums(cbind(edu_normalized$num_tchrs_male, 
+edu_normalized$num_tchr_full_time <- rowSums(cbind(edu_normalized$num_tchrs_male, 
                                                 edu_normalized$num_tchrs_female), 
                                             na.rm=T)
 

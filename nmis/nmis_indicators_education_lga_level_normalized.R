@@ -31,7 +31,7 @@ lga_edu_data <- ddply(ie, .(lga_id), function(df) {
               classrooms_num_chalkboards =
                   sum(df$num_classrm_w_chalkboard, na.rm = TRUE),
               teachers_total =
-                  sum(df$num_tchrs_total, na.rm = TRUE),
+                  sum(df$num_tchr_full_time, na.rm = TRUE),
               teachers_qualified =
                   sum(df$num_tchrs_w_nce, na.rm = TRUE),
               teachers_attended_training =
@@ -133,21 +133,21 @@ lga_edu_data <- ddply(ie, .(lga_id), function(df) {
               pupil_desk_ratio_lga_juniorsec = 
                   ratio(df$num_students_total, df$num_desks, df$is_junior_secondary),    
               primary_school_pupil_teachers_ratio_lga =
-                  ratio(df$num_students_total, df$num_tchrs_total, df$is_primary),
+                  ratio(df$num_students_total, df$num_tchr_full_time, df$is_primary),
               junior_secondary_school_pupil_teachers_ratio_lga =
-                  ratio(df$num_students_total, df$num_tchrs_total, df$is_junior_secondary),
+                  ratio(df$num_students_total, df$num_tchr_full_time, df$is_junior_secondary),
               teacher_nonteachingstaff_ratio_lga_primary =
-                  ratio(df$num_tchrs_total, df$num_sr_staff_total + df$num_jr_staff_total, df$is_primary),
+                  ratio(df$num_tchr_full_time, df$num_sr_staff_total + df$num_jr_staff_total, df$is_primary),
               teacher_nonteachingstaff_ratio_lga_juniorsec =
-                  ratio(df$num_tchrs_total, df$num_sr_staff_total + df$num_jr_staff_total, df$is_junior_secondary),
+                  ratio(df$num_tchr_full_time, df$num_sr_staff_total + df$num_jr_staff_total, df$is_junior_secondary),
               proportion_teachers_nce_primary =
-                  ratio(df$num_tchrs_with_nce, df$num_tchrs_total, df$is_primary),
+                  ratio(df$num_tchrs_with_nce, df$num_tchr_full_time, df$is_primary),
               proportion_teachers_nce_juniorsec =
-                  ratio(df$num_tchrs_with_nce, df$num_tchrs_total, df$is_junior_secondary),
+                  ratio(df$num_tchrs_with_nce, df$num_tchr_full_time, df$is_junior_secondary),
               proportion_teachers_training_last_year_primary = 
-                  ratio(df$num_tchrs_attended_training, df$num_tchrs_total, df$is_primary),
+                  ratio(df$num_tchrs_attended_training, df$num_tchr_full_time, df$is_primary),
               proportion_teachers_training_last_year_juniorsec = 
-                  ratio(df$num_tchrs_attended_training, df$num_tchrs_total, df$is_junior_secondary),
+                  ratio(df$num_tchrs_attended_training, df$num_tchr_full_time, df$is_junior_secondary),
               proportion_schools_delay_pay_primary =
                   bool_proportion(df$tchr_pay_delay, df$is_primary),
               proportion_schools_delay_pay_juniorsec =
@@ -200,9 +200,9 @@ lga_edu_data <- ddply(ie, .(lga_id), function(df) {
                                                                       'adult_lit','adult_ed', 'adult_vocational',
                                                                       'vocational_post_primary', 'vocational_post_secondary'), na.rm = TRUE),
               student_teacher_ratio_lga = 
-                  ratio(df$num_students_total, df$num_tchrs_total),              
+                  ratio(df$num_students_total, df$num_tchr_full_time),              
               proportion_teachers_nce = 
-                  ratio(df$num_tchrs_with_nce, df$num_tchrs_total),
+                  ratio(df$num_tchrs_with_nce, df$num_tchr_full_time),
               number_classrooms_need_major_repair = 
                   sum(df$num_classrms_need_maj_repairs, na.rm = TRUE)
               )})                   
@@ -225,7 +225,7 @@ lga_edu_data_core <- ddply(ie, .(lga_id), function(df) {
         avg_num_students_primary =
           ratio(df$num_students_total,  df$is_primary),
         avg_num_tchrs_primary = 
-          ratio(df$num_tchrs_total,  df$is_primary),
+          ratio(df$num_tchr_full_time,  df$is_primary),
         avg_num_classrms_primary = 
           ratio(df$num_classrms_total,  df$is_primary),
         avg_num_toilets_primary = 
@@ -238,7 +238,7 @@ lga_edu_data_core <- ddply(ie, .(lga_id), function(df) {
         avg_num_students_js =
           ratio(df$num_students_total,  df$is_junior_secondary),
         avg_num_tchrs_js = 
-          ratio(df$num_tchrs_total,  df$is_junior_secondary),
+          ratio(df$num_tchr_full_time,  df$is_junior_secondary),
         avg_num_classrms_js = 
           ratio(df$num_classrms_total,  df$is_junior_secondary),
         avg_num_toilets_js = 
@@ -285,7 +285,7 @@ core_allsectors <- ddply(ie2, .(lga_id), function(df) {
                       num_ss_schools_multiplecount = 
                         sum(df$is_ss_multiplecount, na.rm = TRUE),
                       percent_teachers_nce_primary = 
-                        ratio(df$num_tchrs_with_nce, df$num_tchrs_total, df$management)                        
+                        ratio(df$num_tchrs_with_nce, df$num_tchr_full_time, df$management)                        
 )}) 
 
 lga_edu_data <- merge(lga_edu_data, lga_edu_data_core, by = "lga_id")

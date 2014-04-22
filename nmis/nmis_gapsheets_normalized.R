@@ -175,7 +175,7 @@ e_gap <- ddply(iedu, .(lga_id), function(df) {
     num_existing_classrooms = sum(df$num_classrms_total, na.rm=T),
     
   # Total Number of Teachers	
-    total_teachers = sum(df$num_tchrs_total, na.rm=T),
+    total_teachers = sum(df$num_tchr_full_time, na.rm=T),
   # Total Number of Students enrolled in primary education	??
   # Total Number of Students enrolled in junior secondary education	??
     
@@ -209,9 +209,9 @@ e_gap <- ddply(iedu, .(lga_id), function(df) {
     
   # Total number of NCE qualified teachers 
     num_tchrs_with_nce_numerator = sum(df$num_tchrs_with_nce, na.rm=T),
-    num_tchrs_with_nce_denominator = sum(df$num_tchrs_total, na.rm=T), 
+    num_tchrs_with_nce_denominator = sum(df$num_tchr_full_time, na.rm=T), 
     num_tchrs_with_nce_percent = round(100*sum(df$num_tchrs_with_nce, na.rm=T)/
-                                         sum(df$num_tchrs_total, na.rm=T))
+                                         sum(df$num_tchr_full_time, na.rm=T))
     
 )})
 
