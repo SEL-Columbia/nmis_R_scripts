@@ -135,7 +135,7 @@ source("./source_scripts/NMIS_Functions.R")
         gap_sheet_medication_anti_malarials_numerator = sum(df$medication_anti_malarials, na.rm=T),
         gap_sheet_medication_anti_malarials_denominator = length(na.omit(df$medication_anti_malarials)),
         gap_sheet_medication_anti_malarials_percent = round(100*sum(df$medication_anti_malarials, na.rm=T)/
-                                                    df$medication_anti_malarials),
+                                                    length(na.omit(df$medication_anti_malarials))),
         
       # Fully staffed hospitals ?? need to follow up with Ranu TODO
       # Fully staffed primary health centres (PHCs)
