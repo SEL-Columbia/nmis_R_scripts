@@ -16,22 +16,23 @@ lga_health_data <- ddply(ihealth774, .(lga_id), function(df) {
             num_level_1_health_facilities = sum(df$facility_type == 'healthpostdispensary', na.rm=T),
             num_level_2_health_facilities = sum(df$facility_type ==
                                                            'primaryhealthclinic', na.rm=T),       
-            num_level_3_health_facilities = sum(df$facility_type ==
-                                                           'primaryhealthcarecentre', na.rm=T),
+            num_level_3_health_facilities = sum(df$facility_type %in%
+                                                           c('primaryhealthcarecentre', 
+                                                             'wardmodelphccentre'), na.rm=T),
             num_level_4_health_facilities = sum(df$facility_type ==
                                                            'comprehensivehealthcentre', na.rm=T),
             num_level_other_health_facilities = sum(df$facility_type %in%
                                                                c('cottagehospital', 'specialisthospital',
-                                                                 'wardmodelphccentre', 'teachinghospital',
-                                                                 'dentalclinic', 'maternity', 'federalmedicalcentre',
+                                                                 'teachinghospital', 'dentalclinic', 
+                                                                 'maternity', 'federalmedicalcentre',
                                                                  'generalhospital'), na.rm=T), 
             num_health_facilities = sum(df$facility_type %in%
                                                    c('cottagehospital', 'specialisthospital', 'healthpostdispensary',
                                                      'wardmodelphccentre', 'teachinghospital',
                                                      'dentalclinic', 'maternity', 'federalmedicalcentre',
                                                      'generalhospital', 'comprehensivehealthcentre',
-                                                     'primaryhealthcarecentre', 'primaryhealthclinic'
-                                                   ), na.rm=T),
+                                                     'primaryhealthcarecentre', 'primaryhealthclinic'), 
+                                                    na.rm=T),
             proportion_health_facilities_inpatient_care = 
               mean(df$inpatient_care_yn, na.rm=T),
             proportion_health_facilities_open_24_7 = 
