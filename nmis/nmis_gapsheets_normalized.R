@@ -17,7 +17,6 @@ source("./source_scripts/NMIS_Functions.R")
                   h$power_sources_solar |
                     h$power_sources_grid |
                       h$power_sources_none == F
-  h$emerg_tran <- h$transport_to_referral %in% c('ambulance', 'taxi', 'keke')
   h$sba <- (rowSums(cbind(h$num_doctors_posted, 
                    h$num_midwives_posted,
                    h$num_nursemidwives_posted), na.rm=T) >= 2)
@@ -33,12 +32,8 @@ source("./source_scripts/NMIS_Functions.R")
                       h$num_chews_posted >= 1)
   
   h$all_facilities <- (h$facility_type %in% 
-        c('cottagehospital', 'generalhospital', 
-          'specialisthospital', 'teachinghospital',
-          'primaryhealthcarecentre', 'wardmodelphccentre',
-          'primaryhealthclinic', 'healthpostdispensary',
-          'maternity', 'dentalclinic', 
-          'comprehensivehealthcentre','federalmedicalcentre'))
+        c('primaryhealthcarecentre', 'wardmodelphccentre',
+          'primaryhealthclinic', 'healthpostdispensary'))
 
 #changing into idata.frame
   ih <- idata.frame(h)
@@ -57,9 +52,9 @@ source("./source_scripts/NMIS_Functions.R")
                                    c('primaryhealthcarecentre', 'wardmodelphccentre'), na.rm=T),
       # Number of Primary Health Clinics
         gap_sheet_total_phclinics = sum(df$facility_type == 'primaryhealthclinic', na.rm=T),
-      # Number of Dispensaries
+      # Number of Health Posts and Dispensaries
         gap_sheet_total_dispensary = sum(df$facility_type == 'healthpostdispensary', na.rm=T),
-      # Total Number of Secondary and Tertiary Facilities (Health Posts + Mobile Clinics)  
+      # Total Number of Secondary and Tertiary Facilities
         gap_sheet_total_sec_tertiary = sum(df$facility_type %in% c('maternity', 'dentalclinic', 
                                                             'comprehensivehealthcentre',
                                                             'federalmedicalcentre'), na.rm=T),                           
@@ -79,22 +74,26 @@ source("./source_scripts/NMIS_Functions.R")
       # Grid Power available (PHCN/NEPA)
         gap_sheet_phcn_electricity_numerator = sum(df$phcn_electricity, na.rm=T),
         gap_sheet_phcn_electricity_denominator = length(na.omit(df$phcn_electricity)),
-        gap_sheet_phcn_electricity_percent = round(100*sum(df$phcn_electricity, na.rm=T)/length(na.omit(df$phcn_electricity))),
+        gap_sheet_phcn_electricity_percent = round(100*sum(df$phcn_electricity, na.rm=T)/
+                                                     length(na.omit(df$phcn_electricity))),
         
       # Any Power Available (grid or alternative power supply) 
         gap_sheet_any_power_available_numerator = sum(df$anypower, na.rm=T),
         gap_sheet_any_power_available_denominator = length(na.omit(df$anypower)),
-        gap_sheet_any_power_available_percent = round(100*sum(df$anypower, na.rm=T)/length(na.omit(df$anypower))),
+        gap_sheet_any_power_available_percent = round(100*sum(df$anypower, na.rm=T)/
+                                                        length(na.omit(df$anypower))),
         
       # Emergency Transport available for referrals
-        gap_sheet_emerg_tran_numerator = sum(df$emerg_tran, na.rm=T),
-        gap_sheet_emerg_tran_denominator = length(na.omit(df$emerg_tran)),
-        gap_sheet_emerg_tran_percent = round(100*sum(df$emerg_tran, na.rm=T)/sum(df$denominator, na.rm=T)),
+        gap_sheet_emerg_tran_numerator = sum(df$emergency_transport, na.rm=T),
+        gap_sheet_emerg_tran_denominator = length(na.omit(df$emergency_transport)),
+        gap_sheet_emerg_tran_percent = round(100*sum(df$emergency_transport, na.rm=T)/
+                                               length(na.omit(df$emergency_transport))),
         
       # Sufficient Skilled Birth Attendants
         gap_sheet_sba_numerator = sum(df$sba, na.rm=T),
         gap_sheet_sba_denominator = length(na.omit(df$sba)),
-        gap_sheet_sba_percent = round(100*sum(df$sba, na.rm=T)/length(na.omit(df$sba))),
+        gap_sheet_sba_percent = round(100*sum(df$sba, na.rm=T)/
+                                        length(na.omit(df$sba))),
         
       # Delivery Services available
         gap_sheet_delivery_services_yn_numerator = sum(df$delivery_services_yn, na.rm=T),
@@ -105,7 +104,8 @@ source("./source_scripts/NMIS_Functions.R")
       # C-Sections performed
         gap_sheet_c_section_yn_numerator = sum(df$c_section_yn, na.rm=T),  
         gap_sheet_c_section_yn_denominator = length(na.omit(df$c_section_yn)),
-        gap_sheet_c_section_yn_percent = round(100*sum(df$c_section_yn, na.rm=T)/length(na.omit(df$c_section_yn))),
+        gap_sheet_c_section_yn_percent = round(100*sum(df$c_section_yn, na.rm=T)/
+                                                 length(na.omit(df$c_section_yn))),
         
       # Antenatal Care Services are provided
         gap_sheet_antenatal_care_yn_numerator = sum(df$antenatal_care_yn, na.rm=T),
@@ -141,17 +141,20 @@ source("./source_scripts/NMIS_Functions.R")
       # Fully staffed primary health centres (PHCs)
         gap_sheet_phcentre_numerator = sum(df$phcentre, na.rm=T),
         gap_sheet_phcentre_denominator = length(na.omit(df$phcentre)),
-        gap_sheet_phcentre_percent = round(100*sum(df$phcentre, na.rm=T)/length(na.omit(df$phcentre))),
+        gap_sheet_phcentre_percent = round(100*sum(df$phcentre, na.rm=T)/
+                                             length(na.omit(df$phcentre))),
         
       # Fully staffed primary health clinics
         gap_sheet_phclinic_numerator = sum(df$phclinic, na.rm=T),
         gap_sheet_phclinic_denominator = length(na.omit(df$phclinic)),
-        gap_sheet_phclinic_percent = round(100*sum(df$phclinic, na.rm=T)/length(na.omit(df$phclinic))),
+        gap_sheet_phclinic_percent = round(100*sum(df$phclinic, na.rm=T)/
+                                             length(na.omit(df$phclinic))),
         
       # Fully staffed dispensaries
         gap_sheet_dispensary_numerator = sum(df$hpdispensary, na.rm=T),
         gap_sheet_dispensary_denominator = length(na.omit(df$hpdispensary)),
-        gap_sheet_dispensary_percent = round(100*sum(df$hpdispensary, na.rm=T)/length(na.omit(df$hpdispensary)))
+        gap_sheet_dispensary_percent = round(100*sum(df$hpdispensary, na.rm=T)/
+                                               length(na.omit(df$hpdispensary)))
   )})
 
 
