@@ -72,10 +72,16 @@ source("./source_scripts/NMIS_Functions.R")
                                               length(na.omit(df$improved_sanitation))),
         
       # Grid Power available (PHCN/NEPA)
+<<<<<<< HEAD
         gap_sheet_phcn_electricity_numerator = sum(df$phcn_electricity, na.rm=T),
         gap_sheet_phcn_electricity_denominator = length(na.omit(df$phcn_electricity)),
         gap_sheet_phcn_electricity_percent = round(100*sum(df$phcn_electricity, na.rm=T)/
                                                      length(na.omit(df$phcn_electricity))),
+=======
+        gap_sheet_phcn_electricity_h_numerator = sum(df$phcn_electricity, na.rm=T),
+        gap_sheet_phcn_electricity_h_denominator = length(na.omit(df$phcn_electricity)),
+        gap_sheet_phcn_electricity_h_percent = round(100*sum(df$phcn_electricity, na.rm=T)/length(na.omit(df$phcn_electricity))),
+>>>>>>> 4ddd2ea158328086e241af9e8176269c86037e8c
         
       # Any Power Available (grid or alternative power supply) 
         gap_sheet_any_power_available_numerator = sum(df$anypower, na.rm=T),
@@ -167,7 +173,7 @@ source("./source_scripts/NMIS_Functions.R")
   edu$improved_functonal_water <- edu$functional_water & edu$improved_water_supply
 
 #changing into idata.frame
-  iedu <- idata.frame(edu)
+ iedu <- idata.frame(edu)
 
   e_gap <- ddply(iedu, .(lga_id), function(df) {
       data.frame(     
@@ -177,7 +183,7 @@ source("./source_scripts/NMIS_Functions.R")
       gap_sheet_num_existing_classrooms = sum(df$num_classrms_total, na.rm=T),
       
     # Total Number of Teachers	
-      gap_sheet_total_teachers = sum(df$num_tchrs_total, na.rm=T),
+      gap_sheet_total_teachers = sum(df$num_tchr_full_time, na.rm=T),
     # Total Number of Students enrolled in primary education	??
     # Total Number of Students enrolled in junior secondary education	??  
     
@@ -195,9 +201,9 @@ source("./source_scripts/NMIS_Functions.R")
                                                         length(na.omit(df$improved_sanitation))),
       
     # Schools connected to the national electricity grid (PHCN, NEPA)
-      gap_sheet_phcn_electricity_numerator = sum(df$phcn_electricity, na.rm=T),
-      gap_sheet_phcn_electricity_denominator = length(na.omit(df$phcn_electricity)),
-      gap_sheet_phcn_electricity_percent = round(100*sum(df$phcn_electricity, na.rm=T)/
+      gap_sheet_phcn_electricity_e_numerator = sum(df$phcn_electricity, na.rm=T),
+      gap_sheet_phcn_electricity_e_denominator = length(na.omit(df$phcn_electricity)),
+      gap_sheet_phcn_electricity_e_percent = round(100*sum(df$phcn_electricity, na.rm=T)/
                                                   length(na.omit(df$phcn_electricity))),
     
     # Total number of classrooms with a useable chalkboard/blackboard/whiteboard
@@ -206,7 +212,7 @@ source("./source_scripts/NMIS_Functions.R")
       gap_sheet_num_classrms_repairs_percent = round(100*sum(df$num_classrms_need_maj_repairs, na.rm=T)/
                                                                  sum(df$num_classrms_total, na.rm=T)),
     
-    # Total number of classrooms with a useable chalkboard/blackboard/whiteboard
+   # Total number of classrooms with a useable chalkboard/blackboard/whiteboard
       gap_sheet_num_classrm_w_chalkboard_numerator = sum(df$num_classrm_w_chalkboard, na.rm=T),
       gap_sheet_num_classrm_w_chalkboard_denominator = sum(df$num_classrms_total, na.rm=T),
       gap_sheet_num_classrm_w_chalkboard_percent = round(100*sum(df$num_classrm_w_chalkboard, na.rm=T)/
@@ -214,23 +220,23 @@ source("./source_scripts/NMIS_Functions.R")
       
     # Total number of NCE qualified teachers 
       gap_sheet_num_tchrs_with_nce_numerator = sum(df$num_tchrs_with_nce, na.rm=T),
-      gap_sheet_num_tchrs_with_nce_denominator = sum(df$num_tchrs_total, na.rm=T), 
+      gap_sheet_num_tchrs_with_nce_denominator = sum(df$num_tchr_full_time, na.rm=T), 
       gap_sheet_num_tchrs_with_nce_percent = round(100*sum(df$num_tchrs_with_nce, na.rm=T)/
-                                                     sum(df$num_tchrs_total, na.rm=T))
+                                                     sum(df$num_tchr_full_time, na.rm=T))
       
   )})
 
 #writing out############################################################################################
+combined <- merge(h_gap, e_gap, by="lga_id", all=T)
 
-  #adding basic information  
-    h_gap_final <- merge(h_gap, lgas, by="lga_id", all=T)
-    e_gap_final <- merge(e_gap, lgas, by="lga_id", all=T)
+#writing out data
+saveRDS(combined, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/final_output/gap_sheet.RDS")
 
-  combined <- merge_non_redundant(h_gap_final, e_gap_final, by="lga_id")
 
-  #writing out data
-  write.csv(h_gap_final, "~/Code/nmis_ui_data_2ef92c15/data_774/health_gapsheet.csv", row.names=F)
-  write.csv(e_gap_final, "~/Code/nmis_ui_data_2ef92c15/data_774/education_gapsheet.csv", row.names=F)
+
+# 
+#   write.csv(h_gap_final, "~/Code/nmis_ui_data_2ef92c15/data_774/health_gapsheet.csv", row.names=F)
+#   write.csv(e_gap_final, "~/Code/nmis_ui_data_2ef92c15/data_774/education_gapsheet.csv", row.names=F)
 #   write.csv(e_gap_final, "~/Code/nmis_ui_data_2ef92c15/data_774/All_774_LGA.csv", row.names=F)
 
     

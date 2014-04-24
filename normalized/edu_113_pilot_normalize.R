@@ -123,6 +123,16 @@ edu_113$num_benches <- rowSums(cbind(edu_113$num_attached_benches,
                                      edu_113$num_unattached_benches),
                                na.rm=T)
 
+# add full_time_teacher
+edu_113$num_tchr_full_time <- rowSums(cbind(edu_113$num_tchrs_male_full_time, 
+                                            edu_113$num_tchrs_female_full_time),
+                                        na.rm=T)
+
+edu_pilot$num_tchr_full_time <- edu_pilot$num_toilets_total
+
+
+
+
 # Type conversion
 ##################
 yes_no_columns <- c("toilet.none", "water.none","functioning_library_yn", "teacher_guide_yn", "provide_pens_yn", 
@@ -191,7 +201,7 @@ numeric_column_list <- c("slab_pit_latrine_number", "vip_latrine_not_working", "
                          "num_english_textbook_pry", "num_soc_science_textbook_pry", "num_math_textbook_js", 
                          "num_english_textbook_js", "num_soc_science_textbook_js", "num_science_textbook_js", 
                          "num_exercise_books_per_student_pry", "num_exercise_books_per_student_jss", 
-                         "num_textbooks_pry_sci", "num_notebooks")
+                         "num_textbooks_pry_sci", "num_notebooks", "num_tchr_full_time")
 
 # logical type conversion and ASSERTION(sort of)
 edu_113 <- yes_no_batch(edu_113, yes_no_columns)

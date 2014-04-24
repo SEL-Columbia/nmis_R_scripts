@@ -21,7 +21,7 @@ edu_sub <- subset(edu_outlier , select=c("uuid", "lga", "state",
                                          "zone", "gps", "school_name", 
                                          "level_of_education", "unique_lga", 
                                          "lga_id", "photo", "src", 
-                                         "education_type", "num_tchrs_total", 
+                                         "education_type", "num_tchr_full_time", 
                                          "num_students_total", "num_classrms_total", 
                                          "chalkboard_each_classroom_yn", "num_classrms_need_maj_repairs",
                                          "natl_curriculum_yn", "borehole_tubewell_repair_time", "potable_water",
@@ -173,8 +173,8 @@ edu_sub$pupil_bench_ratio <- edu_outlier$num_students_total / edu_outlier$num_be
 edu_sub$pupil_desk_ratio <- edu_outlier$num_students_total / edu_outlier$num_desks
 
 ## Adequacy of Staffing ##
-edu_sub$pupil_tchr_ratio <- edu_outlier$num_students_total / edu_outlier$num_tchrs_total
-edu_sub$teacher_nonteachingstaff_ratio <- edu_outlier$num_tchrs_total / 
+edu_sub$pupil_tchr_ratio <- edu_outlier$num_students_total / edu_outlier$num_tchr_full_time
+edu_sub$teacher_nonteachingstaff_ratio <- edu_outlier$num_tchr_full_time / 
                                                 rowSums(cbind(edu_outlier$num_sr_staff_total,
                                                             edu_outlier$num_jr_staff_total),
                                                         na.rm=T)
