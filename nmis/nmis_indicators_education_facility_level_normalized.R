@@ -152,7 +152,6 @@ edu_sub$access_clinic_dispensary <- edu_outlier$health_services_yn %in% c('yes_c
                                                                           'health_services_clinic')
 
 edu_sub$access_first_aid <- edu_outlier$health_services_yn %in% c('first_aid_kit', 
-                                                                  "health_services_clinic", 
                                                                   "health_services_aid_kit")
 
 edu_sub$wall_fence_good_condi <- edu_outlier$boundary_wall_fence_yn %in% c("yes_good_condition", 

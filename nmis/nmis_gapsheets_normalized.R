@@ -72,16 +72,10 @@ source("./source_scripts/NMIS_Functions.R")
                                               length(na.omit(df$improved_sanitation))),
         
       # Grid Power available (PHCN/NEPA)
-<<<<<<< HEAD
-        gap_sheet_phcn_electricity_numerator = sum(df$phcn_electricity, na.rm=T),
-        gap_sheet_phcn_electricity_denominator = length(na.omit(df$phcn_electricity)),
-        gap_sheet_phcn_electricity_percent = round(100*sum(df$phcn_electricity, na.rm=T)/
-                                                     length(na.omit(df$phcn_electricity))),
-=======
         gap_sheet_phcn_electricity_h_numerator = sum(df$phcn_electricity, na.rm=T),
         gap_sheet_phcn_electricity_h_denominator = length(na.omit(df$phcn_electricity)),
-        gap_sheet_phcn_electricity_h_percent = round(100*sum(df$phcn_electricity, na.rm=T)/length(na.omit(df$phcn_electricity))),
->>>>>>> 4ddd2ea158328086e241af9e8176269c86037e8c
+        gap_sheet_phcn_electricity_h_percent = round(100*sum(df$phcn_electricity, na.rm=T)/
+                                                       length(na.omit(df$phcn_electricity))),
         
       # Any Power Available (grid or alternative power supply) 
         gap_sheet_any_power_available_numerator = sum(df$anypower, na.rm=T),
@@ -143,7 +137,6 @@ source("./source_scripts/NMIS_Functions.R")
         gap_sheet_medication_anti_malarials_percent = round(100*sum(df$medication_anti_malarials, na.rm=T)/
                                                     length(na.omit(df$medication_anti_malarials))),
         
-      # Fully staffed hospitals ?? need to follow up with Ranu TODO
       # Fully staffed primary health centres (PHCs)
         gap_sheet_phcentre_numerator = sum(df$phcentre, na.rm=T),
         gap_sheet_phcentre_denominator = length(na.omit(df$phcentre)),

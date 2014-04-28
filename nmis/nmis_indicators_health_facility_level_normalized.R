@@ -45,7 +45,7 @@ health_sub <- rename(health_sub, c('photo' = 'formhub_photo_id',
                              'medication.sulphadoxine' = 'malaria_treatment_sulphadoxine',
                              'vaccine_storage_type.refrigerator' = 'equipment_refrigerator',
                              'immunization.csm_immunization' = 'child_health_csm_immunization_calc',
-                             'immunization.yellow_fever_immun' = 'child_health_yellow_fever_immun_calc',
+                             'immunization.yellow_fever_immun' = 'child_health_yellow_fever_immun_calc',l
                              'immunization.bcg_immunization' = 'child_health_bcg_immunization_calc',
                              'immunization.hepb_immunization' = 'child_health_hepb_immunization_calc',
                              'immunization.tetanus_immun' = 'child_health_tetanus_immun_calc',
@@ -117,7 +117,7 @@ health_sub$vaccines_fridge_freezer <- ifelse(health_outlier$src == '661',
                                                  health_outlier$vaccines_stored_yn, NA)))
                                                                                          
 health_sub$emergency_transport <- 
-  health_outlier$transport_to_referral %in% c('ambulance', 'keke')
+  health_outlier$transport_to_referral %in% c('ambulance', 'keke', 'taxi', 'boat')
 
 health_sub$improved_water_supply <- ifelse(health_outlier$src == 'pilot',
                                             health_outlier$water_sources_yn_p,                                         
