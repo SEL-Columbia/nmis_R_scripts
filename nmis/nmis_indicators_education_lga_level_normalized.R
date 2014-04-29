@@ -74,8 +74,22 @@ lga_edu_data <- ddply(ie, .(lga_id), function(df) {
                   bool_proportion(df$gender_separated_toilets_yn, df$is_junior_secondary),
               pupil_toilet_ratio_primary = 
                   ratio(df$num_students_total, df$num_toilets_total, df$is_primary),
-              pupil_toilet_ratio_secondary = 
+              # XXX output reduceable columns
+              pupil_toilet_ratio_primary_num = 
+                  ratio_num(df$num_students_total, df$num_toilets_total, df$is_primary),
+              pupil_toilet_ratio_primary_den = 
+                  ratio_den(df$num_students_total, df$num_toilets_total, df$is_primary),
+              # XXX 
+        
+              pupil_toilet_ratio_js= 
                   ratio(df$num_students_total, df$num_toilets_total, df$is_junior_secondary),              
+              # XXX output reduceable columns
+              pupil_toilet_ratio_js_num = 
+                  ratio_num(df$num_students_total, df$num_toilets_total, df$is_junior_secondary),
+              pupil_toilet_ratio_js_den = 
+                  ratio_den(df$num_students_total, df$num_toilets_total, df$is_junior_secondary),
+              # XXX 
+        
               proportion_schools_power_access_primary =
                   bool_proportion(df$power_access, df$is_primary),
               proportion_schools_power_access_juniorsec =
@@ -106,8 +120,22 @@ lga_edu_data <- ddply(ie, .(lga_id), function(df) {
                   bool_proportion(df$wall_fence_good_condi, df$is_junior_secondary),
               student_classroom_ratio_lga_primary =
                   ratio(df$num_students_total, df$num_classrms_total, df$is_primary),
-              student_classroom_ratio_lga_juniorsec =
+              # XXX output reduceable columns
+              student_classroom_ratio_lga_primary_num = 
+                  ratio_num(df$num_students_total, df$num_classrms_total, df$is_primary),
+              student_classroom_ratio_lga_primary_den = 
+                  ratio_den(df$num_students_total, df$num_classrms_total, df$is_primary),
+              # XXX 
+        
+              student_classroom_ratio_lga_js =
                   ratio(df$num_students_total, df$num_classrms_total, df$is_junior_secondary),
+              # XXX output reduceable columns
+              student_classroom_ratio_lga_js_num = 
+                  ratio_num(df$num_students_total, df$num_classrms_total, df$is_junior_secondary),
+              student_classroom_ratio_lga_js_den = 
+                  ratio_den(df$num_students_total, df$num_classrms_total, df$is_junior_secondary),
+              # XXX 
+
               proportion_schools_hold_classes_outside_primary =
                   bool_proportion(df$class_held_outside, df$is_primary),
               proportion_schools_hold_classes_outside_juniorsec =
@@ -132,18 +160,82 @@ lga_edu_data <- ddply(ie, .(lga_id), function(df) {
                   ratio(df$num_students_total, df$num_desks, df$is_primary),      
               pupil_desk_ratio_lga_juniorsec = 
                   ratio(df$num_students_total, df$num_desks, df$is_junior_secondary),    
-              primary_school_pupil_teachers_ratio_lga =
+              pupil_teachers_ratio_lga_primary =
                   ratio(df$num_students_total, df$num_tchr_full_time, df$is_primary),
-              junior_secondary_school_pupil_teachers_ratio_lga =
+                #XXX
+              pupil_teachers_ratio_lga_primary_num =
+                  ratio_num(df$num_students_total, df$num_tchr_full_time, df$is_primary),
+              pupil_teachers_ratio_lga_primary_den =
+                  ratio_den(df$num_students_total, df$num_tchr_full_time, df$is_primary),
+                #XXX
+              pupil_teachers_ratio_lga_js =
                   ratio(df$num_students_total, df$num_tchr_full_time, df$is_junior_secondary),
+                #XXX
+                #XXX
+              pupil_teachers_ratio_lga_js_num =
+                  ratio_num(df$num_students_total, df$num_tchr_full_time, df$is_junior_secondary),
+              pupil_teachers_ratio_lga_js_den =
+                  ratio_den(df$num_students_total, df$num_tchr_full_time, df$is_junior_secondary),
+                #XXX
               teacher_nonteachingstaff_ratio_lga_primary =
                   ratio(df$num_tchr_full_time, df$num_sr_staff_total + df$num_jr_staff_total, df$is_primary),
               teacher_nonteachingstaff_ratio_lga_juniorsec =
                   ratio(df$num_tchr_full_time, df$num_sr_staff_total + df$num_jr_staff_total, df$is_junior_secondary),
               proportion_teachers_nce_primary =
                   ratio(df$num_tchrs_with_nce, df$num_tchr_full_time, df$is_primary),
-              proportion_teachers_nce_juniorsec =
+                #XXX
+              proportion_teachers_nce_primary_num =
+                  ratio_num(df$num_tchrs_with_nce, df$num_tchr_full_time, df$is_primary),
+              proportion_teachers_nce_primary_den =
+                  ratio_den(df$num_tchrs_with_nce, df$num_tchr_full_time, df$is_primary),
+                #XXX
+              proportion_teachers_nce_js =
                   ratio(df$num_tchrs_with_nce, df$num_tchr_full_time, df$is_junior_secondary),
+                #XXX
+              proportion_teachers_nce_js_num =
+                  ratio_num(df$num_tchrs_with_nce, df$num_tchr_full_time, df$is_junior_secondary),
+              proportion_teachers_nce_js_den =
+                #XXX
+                #XXX
+              teacher_nonteachingstaff_ratio_lga_primary =
+                  ratio(df$num_tchr_full_time, df$num_sr_staff_total + df$num_jr_staff_total, df$is_primary),
+              teacher_nonteachingstaff_ratio_lga_juniorsec =
+                  ratio(df$num_tchr_full_time, df$num_sr_staff_total + df$num_jr_staff_total, df$is_junior_secondary),
+              proportion_teachers_nce_primary =
+                  ratio(df$num_tchrs_with_nce, df$num_tchr_full_time, df$is_primary),
+                #XXX
+              proportion_teachers_nce_primary_num =
+                  ratio_num(df$num_tchrs_with_nce, df$num_tchr_full_time, df$is_primary),
+              proportion_teachers_nce_primary_den =
+                  ratio_den(df$num_tchrs_with_nce, df$num_tchr_full_time, df$is_primary),
+                #XXX
+              proportion_teachers_nce_js =
+                  ratio(df$num_tchrs_with_nce, df$num_tchr_full_time, df$is_junior_secondary),
+                #XXX
+              proportion_teachers_nce_js_num =
+                  ratio_num(df$num_tchrs_with_nce, df$num_tchr_full_time, df$is_junior_secondary),
+              proportion_teachers_nce_js_den =
+                #XXX
+              teacher_nonteachingstaff_ratio_lga_primary =
+                  ratio(df$num_tchr_full_time, df$num_sr_staff_total + df$num_jr_staff_total, df$is_primary),
+              teacher_nonteachingstaff_ratio_lga_juniorsec =
+                  ratio(df$num_tchr_full_time, df$num_sr_staff_total + df$num_jr_staff_total, df$is_junior_secondary),
+              proportion_teachers_nce_primary =
+                  ratio(df$num_tchrs_with_nce, df$num_tchr_full_time, df$is_primary),
+                #XXX
+              proportion_teachers_nce_primary_num =
+                  ratio_num(df$num_tchrs_with_nce, df$num_tchr_full_time, df$is_primary),
+              proportion_teachers_nce_primary_den =
+                  ratio_den(df$num_tchrs_with_nce, df$num_tchr_full_time, df$is_primary),
+                #XXX
+              proportion_teachers_nce_js =
+                  ratio(df$num_tchrs_with_nce, df$num_tchr_full_time, df$is_junior_secondary),
+                #XXX
+              proportion_teachers_nce_js_num =
+                  ratio_num(df$num_tchrs_with_nce, df$num_tchr_full_time, df$is_junior_secondary),
+              proportion_teachers_nce_js_den =
+                  ratio_den(df$num_tchrs_with_nce, df$num_tchr_full_time, df$is_junior_secondary),
+                #XXX
               proportion_teachers_training_last_year_primary = 
                   ratio(df$num_tchrs_attended_training, df$num_tchr_full_time, df$is_primary),
               proportion_teachers_training_last_year_juniorsec = 
@@ -212,51 +304,159 @@ lga_edu_data_core <- ddply(ie, .(lga_id), function(df) {
   data.frame(   
       # Facilities
         percent_management_public = 
-          sum(df$management == 'public', na.rm = TRUE) / length(df$management),
+          sum(df$management == 'public', na.rm = TRUE) / count_na_rm(df$management),
         percent_natl_curriculum =
           mean(df$natl_curriculum_yn, na.rm=T),
       # General information for Primary Schols
         percent_management_public_primary = 
           bool_proportion(df$management == 'public', df$is_primary),
+        # XXX output reduceable columns
+        percent_management_public_primary_sum = 
+            sum(df[df$is_primary,]$management == 'public', na.rm = TRUE),
+        percent_management_public_primary_cnt = count_na_rm(df$management[df$is_primary]),
+        # XXX 
+        
         percent_natl_curriculum_primary =
           bool_proportion(df$natl_curriculum_yn, df$is_primary),
+        # XXX output reduceable columns
+        percent_natl_curriculum_primary_sum = 
+            sum(df[df$is_primary,]$natl_curriculum_yn, na.rm=T),
+        percent_natl_curriculum_primary_cnt = count_na_rm(df$natl_curriculum_yn[df$is_primary]),
+        # XXX 
+        
         num_school_1kmplus_secondary_school = 
           bool_proportion(df$school_1kmplus_secondary_school, df$is_primary),
         avg_num_students_primary =
           ratio(df$num_students_total,  df$is_primary),
+        # xxx output reduceable columns
+        avg_num_students_primary_sum = 
+            sum(df$num_students_total[df$is_primary], na.rm=t),
+        avg_num_students_primary_cnt = count_na_rm(df$num_students_total[df$is_primary]),
+        # xxx 
+      
         avg_num_tchrs_primary = 
           ratio(df$num_tchr_full_time,  df$is_primary),
+        # XXX output reduceable columns
+        avg_num_tchrs_primary_sum = 
+              sum(df$num_tchr_full_time[df$is_primary], na.rm=T),
+        avg_num_tchrs_primary_cnt = count_na_rm(df$num_tchr_full_time[df$is_primary]),
+        # XXX 
+      
         avg_num_classrms_primary = 
           ratio(df$num_classrms_total,  df$is_primary),
+        # XXX output reduceable columns
+        avg_num_classrms_primary_sum = 
+              sum(df$num_classrms_total[df$is_primary], na.rm=T),
+        avg_num_classrms_primary_cnt = count_na_rm(df$num_classrms_total[df$is_primary]),
+        # XXX 
+        
         avg_num_toilets_primary = 
           ratio(df$num_toilets_total,  df$is_primary),
+        # XXX output reduceable columns
+        avg_num_toilets_primary_sum = 
+              sum(df$num_toilets_total[df$is_primary], na.rm=T),
+        avg_num_toilets_primary_cnt = count_na_rm(df$num_toilets_total[df$is_primary]),
+        # XXX 
+
       # General information for Junior Secondary Schools
         percent_management_public_js = 
           bool_proportion(df$management == 'public', df$is_junior_secondary),
+        # XXX output reduceable columns
+        percent_management_public_js_sum = 
+            sum(df[df$is_junior_secondary,]$management == 'public', na.rm = TRUE),
+        percent_management_public_js_cnt = count_na_rm(df$management[df$is_junior_secondary]),
+        # XXX 
+        
         percent_natl_curriculum_js =
           bool_proportion(df$natl_curriculum_yn, df$is_junior_secondary),
+        # XXX output reduceable columns
+        percent_natl_curriculum_js_sum = 
+            sum(df[df$is_junior_secondary,]$natl_curriculum_yn, na.rm=T),
+        percent_natl_curriculum_js_cnt = count_na_rm(df$natl_curriculum_yn[df$is_junior_secondary]),
+        # XXX 
+        
         avg_num_students_js =
           ratio(df$num_students_total,  df$is_junior_secondary),
+        # xxx output reduceable columns
+        avg_num_students_js_sum = 
+            sum(df$num_students_total[df$is_junior_secondary], na.rm=t),
+        avg_num_students_js_cnt = count_na_rm(df$num_students_total[df$is_junior_secondary]),
+        # xxx 
+      
         avg_num_tchrs_js = 
           ratio(df$num_tchr_full_time,  df$is_junior_secondary),
+        # XXX output reduceable columns
+        avg_num_tchrs_js_sum = 
+              sum(df$num_tchr_full_time[df$is_junior_secondary], na.rm=T),
+        avg_num_tchrs_js_cnt = count_na_rm(df$num_tchr_full_time[df$is_junior_secondary]),
+        # XXX 
+      
         avg_num_classrms_js = 
           ratio(df$num_classrms_total,  df$is_junior_secondary),
+        # XXX output reduceable columns
+        avg_num_classrms_js_sum = 
+              sum(df$num_classrms_total[df$is_junior_secondary], na.rm=T),
+        avg_num_classrms_js_cnt = count_na_rm(df$num_classrms_total[df$is_junior_secondary]),
+        # XXX 
+        
         avg_num_toilets_js = 
           ratio(df$num_toilets_total,  df$is_junior_secondary),
+        # XXX output reduceable columns
+        avg_num_toilets_js_sum = 
+              sum(df$num_toilets_total[df$is_junior_secondary], na.rm=T),
+        avg_num_toilets_js_cnt = count_na_rm(df$num_toilets_total[df$is_junior_secondary]),
+        # XXX 
+
       # Infrastructure in Primary Schools
         percent_functional_water_primary = 
           bool_proportion(df$functional_water,  df$is_primary),
+        # XXX output reduceable columns
+        percent_functional_water_primary_sum = 
+              sum(df$functional_water[df$is_primary], na.rm=T),
+        percent_functional_water_primary_cnt = count_na_rm(df$functional_water[df$is_primary]),
+        # XXX 
+      
         percent_improved_sanitation_primary = 
           bool_proportion(df$improved_sanitation,  df$is_primary),
+        # XXX output reduceable columns
+        percent_improved_samitation_primary_sum = 
+              sum(df$improved_samitation[df$is_primary], na.rm=T),
+        percent_improved_samitation_primary_cnt = count_na_rm(df$improved_samitation[df$is_primary]),
+        # XXX 
+      
         percent_phcn_electricity_primary = 
           bool_proportion(df$phcn_electricity,  df$is_primary),
+        # XXX output reduceable columns
+        percent_phcn_electricity_primary_sum = 
+              sum(df$phcn_electricity[df$is_primary], na.rm=T),
+        percent_phcn_electricity_primary_cnt = count_na_rm(df$phcn_electricity[df$is_primary]),
+        # XXX 
+      
       # Infrastructure in Junior Secondary Schools
         percent_functional_water_js = 
           bool_proportion(df$functional_water,  df$is_junior_secondary),
+        # XXX output reduceable columns
+        percent_functional_water_js_sum = 
+              sum(df$functional_water[df$is_junior_secondary], na.rm=T),
+        percent_functional_water_js_cnt = count_na_rm(df$functional_water[df$is_junior_secondary]),
+        # XXX 
+      
         percent_improved_sanitation_js = 
           bool_proportion(df$improved_sanitation,  df$is_junior_secondary),
+        # XXX output reduceable columns
+        percent_improved_samitation_js_sum = 
+              sum(df$improved_samitation[df$is_junior_secondary], na.rm=T),
+        percent_improved_samitation_js_cnt = count_na_rm(df$improved_samitation[df$is_junior_secondary]),
+        # XXX 
+      
         percent_phcn_electricity_js = 
           bool_proportion(df$phcn_electricity,  df$is_junior_secondary)
+        # XXX output reduceable columns
+        percent_phcn_electricity_js_sum = 
+              sum(df$phcn_electricity[df$is_junior_secondary], na.rm=T),
+        percent_phcn_electricity_js_cnt = count_na_rm(df$phcn_electricity[df$is_junior_secondary]),
+        # XXX 
+      
 )}) 
 
 # Education Facilities summary on the "All sectors" page (narrow table)

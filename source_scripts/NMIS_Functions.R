@@ -100,6 +100,8 @@ bool_proportion <- function(numerator_TF, denominator_TF) {
     }
 }
 
+count_na_rm <- function(vec) {length(which(!is.na(vec)))}
+
 icount <- function(predicate) { 
     counts <- table(predicate)
     if('TRUE' %in% names(counts)) { counts['TRUE'] }
@@ -129,6 +131,26 @@ ratio <- function(numerator_col, denominator_col, filter) {
     return(sum(df$num) / sum(df$den))
 }
 
+
+ratio_num <- function(numerator_col, denominator_col, filter) {
+    df <- data.frame(cbind(num=numerator_col, den=denominator_col))
+    df <- na.omit(df[filter,])
+    if (nrow(df) == 0 | sum(df$den) == 0){
+        return(NA)
+    }
+    sum(df$num) 
+}
+
+ratio_den <- function(numerator_col, denominator_col, filter) {
+    df <- data.frame(cbind(num=numerator_col, den=denominator_col))
+    df <- na.omit(df[filter,])
+    if (nrow(df) == 0 | sum(df$den) == 0){
+        return(NA)
+    }
+    sum(df$den)
+}
+#mean_sum
+#mean_cnt
 any_na.rm <- function(vec) {any(vec, na.rm=T)}
 
 boundary_clean <- function(df, state_col="mylga_state", gps_col="gps")
