@@ -27,7 +27,7 @@ health_sub <- subset(health_outlier, select=c("uuid", "lga", "state",
                                               "c_section_yn", "equipment.emoc_antishock_garment", 
                                               "emoc_parenteral_anticonvulsant_yn", "facility_type", 
                                               "medication.iv_fluid", "medication.uterotonics", 
-                                              "lab_tests.pregnancy", "supplements.iron",
+                                              "lab_tests.pregnancy", "supplements.iron", "power_sources_alternative_functional",
                                               "lab_tests.stool", "lab_tests.tb_microscopy", 
                                               "medication.arvs", "community", "ward", "start", 
                                                 "antenatal_care_yn", "family_planning_yn"))
