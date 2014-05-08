@@ -1,7 +1,13 @@
-# History files
+# Miscellaneous R files 
 .Rhistory
 .RData
 *.Rout
+*.Rproj
+.Rproj.*
+
+# Vim files
+*.swp
+.swp
 
 .DS_Store
 
