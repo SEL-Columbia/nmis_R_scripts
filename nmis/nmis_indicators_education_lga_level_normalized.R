@@ -21,11 +21,11 @@ lga_edu_data <- ddply(ie, .(lga_id), function(df) {
               schools_improved_sanitation =
                   mean(df$improved_sanitation, na.rm=T),
               benches_school_ratio =
-                  ratio(df$num_benches, df$pj),
+                  ratio(df$num_benches, 1, df$pj),
               benches_pupil_ratio =
                   ratio(df$num_benches, df$num_students_total, df$pj),
               desks_school_ratio = 
-                  ratio(df$num_desks, df$pj),
+                  ratio(df$num_desks, 1, df$pj),
               desks_pupil_ratio = 
                   ratio(df$num_desks, df$num_students_total,  df$pj),
               classrooms_num_chalkboards =
@@ -236,13 +236,13 @@ lga_edu_data_core <- ddply(ie, .(lga_id), function(df) {
         percent_natl_curriculum_js =
           bool_proportion(df$natl_curriculum_yn, df$is_junior_secondary),
         avg_num_students_js =
-          ratio(df$num_students_total,  df$is_junior_secondary),
+          ratio(df$num_students_total,  1, df$is_junior_secondary),
         avg_num_tchrs_js = 
-          ratio(df$num_tchr_full_time,  df$is_junior_secondary),
+          ratio(df$num_tchr_full_time,  1, df$is_junior_secondary),
         avg_num_classrms_js = 
-          ratio(df$num_classrms_total,  df$is_junior_secondary),
+          ratio(df$num_classrms_total,  1, df$is_junior_secondary),
         avg_num_toilets_js = 
-          ratio(df$num_toilets_total,  df$is_junior_secondary),
+          ratio(df$num_toilets_total,  1, df$is_junior_secondary),
       # Infrastructure in Primary Schools
         percent_functional_water_primary = 
           bool_proportion(df$functional_water,  df$is_primary),
