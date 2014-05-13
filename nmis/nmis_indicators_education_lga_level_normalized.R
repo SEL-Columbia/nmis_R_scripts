@@ -223,13 +223,13 @@ lga_edu_data_core <- ddply(ie, .(lga_id), function(df) {
         num_school_1kmplus_secondary_school = 
           bool_proportion(df$school_1kmplus_secondary_school, df$is_primary),
         avg_num_students_primary =
-          ratio(df$num_students_total,  df$is_primary),
+          ratio(df$num_students_total,  1, df$is_primary),
         avg_num_tchrs_primary = 
-          ratio(df$num_tchr_full_time,  df$is_primary),
+          ratio(df$num_tchr_full_time,  1, df$is_primary),
         avg_num_classrms_primary = 
-          ratio(df$num_classrms_total,  df$is_primary),
+          ratio(df$num_classrms_total,  1, df$is_primary),
         avg_num_toilets_primary = 
-          ratio(df$num_toilets_total,  df$is_primary),
+          ratio(df$num_toilets_total,  1, df$is_primary),
       # General information for Junior Secondary Schools
         percent_management_public_js = 
           bool_proportion(df$management == 'public', df$is_junior_secondary),
