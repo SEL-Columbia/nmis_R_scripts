@@ -212,7 +212,7 @@ lga_edu_data_core <- ddply(ie, .(lga_id), function(df) {
   data.frame(   
       # Facilities
         percent_management_public = 
-          sum(df$management == 'public', na.rm = TRUE) / length(df$management),
+          mean(df$management == 'public', na.rm = TRUE),
         percent_natl_curriculum =
           mean(df$natl_curriculum_yn, na.rm=T),
       # General information for Primary Schols
