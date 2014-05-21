@@ -45,6 +45,7 @@ h_661 <- rename(h_661, c("fees_adults.paid_services_routine_visit" = "paid_servi
 h_113 <- rename(h_113, c("lga" = "mylga",
                          "state" = "mylga_state",
                          "zone" = "mylga_zone",
+                         "start_time" = "start",
                          "num_doctors_fulltime" = "num_doctors_posted",
                          "num_midwives_fulltime" = "num_midwives_posted",
                          "num_nurses_fulltime" = "num_nurses_posted",
