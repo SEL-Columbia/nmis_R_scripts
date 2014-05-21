@@ -1,20 +1,21 @@
 ## ALIASES / PREP ##
 source("base_scripts/InstallFormhub.R")
 source("source_scripts/NMIS_Functions.R")
+require(plyr); require(dplyr)
 
 edu_outlier <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Education_774_outliercleaned.rds")
 
-
-edu_outlier$is_primary <- edu_outlier$level_of_education %in%  c('primary_only', 'preprimary_and_primary',
-                                                                 'primary_and_junior_sec', 'primary_junior_and_senior_sec',
-                                                                 'primary', 'preprimary', 'primary_js',
-                                                                 'primary_js_ss', 'preprimary_primary')
-
-edu_outlier$is_junior_secondary <- edu_outlier$level_of_education %in% c('juniors_sec_only', 
+edu_outlier <- edu_outlier %.%
+    dplyr::mutate(
+        is_primary = level_of_education %in%  c('primary_only', 'preprimary_and_primary',
+                                                'primary_and_junior_sec', 'primary_junior_and_senior_sec',
+                                                'primary', 'preprimary', 'primary_js',
+                                                'primary_js_ss', 'preprimary_primary'),
+        is_junior_secondary = level_of_education %in% c('juniors_sec_only', 
                                                                          'junior_and_senior_sec', 
-                                                                         'js', 'js_ss')
-
-edu_outlier$pj <- edu_outlier$is_primary | edu_outlier$is_junior_secondary
+                                                                         'js', 'js_ss'),
+        pj = is_primary | is_junior_secondary
+    )
 
 
 edu_sub <- subset(edu_outlier , select=c("uuid", "lga", "state", 
@@ -42,7 +43,7 @@ edu_sub <- rename(edu_sub, c("photo" = "formhub_photo_id",
                              "start" = "date_of_survey",
                              "classes_outside_yn"  = "class_held_outside"))
 
-# edu_sub$formhub_photo_id <- edu_sub$photo
+# formhub_photo_id <- photo
 
 
 nm_774 <- names(edu_outlier)[! names(edu_outlier) %in% names(edu_sub)]
@@ -52,144 +53,149 @@ rm(nm_774)
 
 ################
 ## SNAPSHOT ####
-edu_sub$date_of_survey <- as.character(as.Date(edu_sub$date_of_survey))
+edu_sub <- edu_sub %.%
+    dplyr::mutate(
+        date_of_survey = as.character(as.Date(date_of_survey)),
+        
+        management = recodeVar(edu_outlier$school_managed, 
+                                        c("federal_gov", "local_gov", "state_gov", "private_profit", "private_non_profit", "faith_based"),
+                                        c("public", "public", "public", "private", "private", "private"),
+                                        default=NA),
+        
+        improved_water_supply = (edu_outlier$water.pipe_water | edu_outlier$water.tube_well),
+        improved_sanitation = edu_outlier$toilet.flush_or_pour_flush_improved | 
+            edu_outlier$toilet.ventilated_improved | 
+            edu_outlier$toilet.pit_latrine_with_slab,
+        
+        phcn_electricity = ifelse(edu_outlier$src == "661", 
+                                           edu_outlier$grid_proximity == 'connected_to_grid',
+                                           edu_outlier$power_sources.grid == T),
+        
+        
+        facility_type_display = revalue(facility_type, c("preprimary_primary" = "Pre-primary and Primary",
+                                                                          "primary" = "Primary Only", 
+                                                                          "preprimary" = "Pre-primary Only", 
+                                                                          "js_ss" = "Junior and Senior Secondary", 
+                                                                          "vocational_post_primary" = "Adult, Vocational, or Technical", 
+                                                                          "adult_vocational" = "Adult, Vocational, or Technical", 
+                                                                          "js" = "Junior Secondary Only", 
+                                                                          "primary_js" = "Primary and Junior Secondary", 
+                                                                          "ss" = "Senior Secondary Only", 
+                                                                          "primary_only" = "Primary Only", 
+                                                                          "preprimary_and_primary" = "Pre-primary and Primary", 
+                                                                          "adult_lit" = "Adult, Vocational, or Technical", 
+                                                                          "junior_and_senior_sec" = "Junior and Senior Secondary", 
+                                                                          "science_technical" = "Adult, Vocational, or Technical", 
+                                                                          "junior_sec_only" = "Junior Secondary Only", 
+                                                                          "preprimary_only" = "Pre-primary Only", 
+                                                                          "primary_junior_and_senior_sec" = "Primary, Junior, and Senior Secondary", 
+                                                                          "primary_and_junior_sec" = "Primary and Junior Secondary", 
+                                                                          "vocational" = "Adult, Vocational, or Technical", 
+                                                                          "senior_sec_only" = "Senior Secondary Only", 
+                                                                          "primary_js_ss" = "Primary, Junior, and Senior Secondary", 
+                                                                          "vocational_post_secondary" = "Adult, Vocational, or Technical",
+                                                                          "adult_ed" = "Adult, Vocational, or Technical")),
+        
+        education_type = revalue(education_type, 
+                                          c("formal_only" = "Formal Only",
+                                            "integrated" = "Integrated",
+                                            "religious_only" = "Religious Only")),
+        
+        ################
+        ##################
+        school_1kmplus_catchment_area = edu_outlier$km_to_catchment_area > 1,
+        num_textbooks = 
+            ifelse(edu_outlier$src == "661",
+                   ifelse(edu_outlier$level_of_education %in% c('primary_only', 'preprimary_and_primary'),  
+                          edu_outlier$num_math_textbook_pry + edu_outlier$num_english_textbook_pry + 
+                              edu_outlier$num_soc_science_textbook_pry + edu_outlier$num_science_textbook_pry,
+                          ifelse(edu_outlier$level_of_education %in% c('junior_and_senior_sec', 'juniors_sec_only'),
+                                 edu_outlier$num_math_textbook_js + edu_outlier$num_english_textbook_js + 
+                                     edu_outlier$num_soc_science_textbook_js + edu_outlier$num_science_textbook_js,
+                                 ifelse(edu_outlier$level_of_education %in% c('primary_and_junior_sec', 'primary_junior_and_senior_sec'),
+                                        edu_outlier$num_math_textbook_pry + edu_outlier$num_english_textbook_pry + 
+                                            edu_outlier$num_soc_science_textbook_pry + edu_outlier$num_science_textbook_pry +
+                                            edu_outlier$num_math_textbook_js + edu_outlier$num_english_textbook_js + 
+                                            edu_outlier$num_soc_science_textbook_js + edu_outlier$num_science_textbook_js,
+                                        0))),  
+                   rowSums(cbind(edu_outlier$num_textbooks_english, 
+                                 edu_outlier$num_textbooks_math, 
+                                 edu_outlier$num_textbooks_social_sci,
+                                 edu_outlier$num_textbooks_pry_sci), na.rm=T)),
+        
+        
+        ## Fix the num_textbooks outlier issuse, take 0.95 quantile(1300) as the cutt off 
+        num_textbooks = ifelse(num_textbooks > 2000, NA, num_textbooks),
+        textbook_to_pupil_ratio = num_textbooks / edu_outlier$num_students_total,
+        
+        ## ACCESS ##
+        # see school_1kmplus_catchment_area from above
+        school_1kmplus_secondary_school = edu_outlier$km_to_secondary_school > 1,
+        
+        ## PARTICIPATION ##
+        male_to_female_student_ratio = edu_outlier$num_students_male / edu_outlier$num_students_female,
+        
+        ## Infrastructure: Water & San ##
+        gender_separated_toilets_yn = ifelse(edu_outlier$src == "661",
+                                                      (edu_outlier$num_toilet_boy > 1) & (edu_outlier$num_toilet_girl > 1),
+                                                      edu_outlier$gender_separated_toilets_yn),
+        pupil_toilet_ratio_facility = edu_outlier$num_students_total / edu_outlier$num_toilets_total,
+        
+        pupil_toilet_ratio_facility = ifelse(is.infinite(pupil_toilet_ratio_facility),
+                                                      NA, pupil_toilet_ratio_facility),
+        
+        # can't trust the xform calculations because of "999" numbers
+        ## Infrastructure: Building Structure ##
+        power_access = (edu_outlier$power_sources.generator & edu_outlier$generator_funct_yn) |
+            (edu_outlier$power_sources.solar_system & edu_outlier$solar_funct_yn) |
+            (edu_outlier$power_sources.grid & edu_outlier$grid_funct_yn),
+        
+        ## Infrastructure: Health and Safety ##
+        access_clinic_dispensary = edu_outlier$health_services_yn %in% c('yes_clinic_dispensary', 
+                                                                                  'health_services_clinic'),
+        
+        access_first_aid = edu_outlier$health_services_yn %in% c('first_aid_kit', 
+                                                                          "health_services_aid_kit"),
+        
+        wall_fence_good_condi = edu_outlier$boundary_wall_fence_yn %in% c("yes_good_condition", 
+                                                                                   "roof_fence_good_condition",
+                                                                                   "yes"),
+        ## Infrastructure: Learning Environment ##
+        pupil_classrm_ratio = edu_outlier$num_students_total / edu_outlier$num_classrms_total,
+        # actually, lets just make sure to re-calculate totals in the outlier scripts
+        
+        multigrade_classrms = edu_outlier$multigrade_teaching_yn %in% 
+            c('yes_not_enough_space', 'yes_no_teacher_no_space', 'yes_not_enough_teacher'),
+        
+        
+        
+        ## Furniture ##
+        pupil_bench_ratio = edu_outlier$num_students_total / edu_outlier$num_benches,
+        pupil_desk_ratio = edu_outlier$num_students_total / edu_outlier$num_desks,
+        
+        ## Adequacy of Staffing ##
+        pupil_tchr_ratio = edu_outlier$num_students_total / edu_outlier$num_tchr_full_time,
+        teacher_nonteachingstaff_ratio = edu_outlier$num_tchr_full_time / 
+            rowSums(cbind(edu_outlier$num_sr_staff_total,
+                          edu_outlier$num_jr_staff_total),
+                    na.rm=T),
+        
+        ## Institutional Development ##
+        tchr_pay_delay = edu_outlier$times_tchr_pay_delay_pastyr > 0,
+        tchr_pay_miss = edu_outlier$times_tchr_pay_miss_pastyr > 0,
+        
+        ## Curriculum Issues ##
+        textbook_to_pupil_ratio = num_textbooks / edu_outlier$num_students_total,
+        
+        
+        #Adding distant to every facility
+        #combining calculated result back to original data
+        edu_sub = lga_boudary_dist(edu_sub, gps_col="gps"),
+        sector = "education"
+)
+edu_sub$multigrade_classrms[src %in% c("113", "pilot")] <-
+    (edu_outlier$num_classrooms_multiple_use[edu_outlier$src %in% c("113", "pilot")] >=1)
 
-edu_sub$management <- recodeVar(edu_outlier$school_managed, 
-                          c("federal_gov", "local_gov", "state_gov", "private_profit", "private_non_profit", "faith_based"),
-                          c("public", "public", "public", "private", "private", "private"),
-                          default=NA)
-
-edu_sub$improved_water_supply <- (edu_outlier$water.pipe_water | edu_outlier$water.tube_well)
-edu_sub$improved_sanitation <- edu_outlier$toilet.flush_or_pour_flush_improved | 
-                                    edu_outlier$toilet.ventilated_improved | 
-                                    edu_outlier$toilet.pit_latrine_with_slab
-
-edu_sub$phcn_electricity <- ifelse(edu_outlier$src == "661", 
-                                   edu_outlier$grid_proximity == 'connected_to_grid',
-                                   edu_outlier$power_sources.grid == T)
-
-
-edu_sub$facility_type_display <- revalue(edu_sub$facility_type, c("preprimary_primary" = "Pre-primary and Primary",
-                                         "primary" = "Primary Only", 
-                                         "preprimary" = "Pre-primary Only", 
-                                         "js_ss" = "Junior and Senior Secondary", 
-                                         "vocational_post_primary" = "Adult, Vocational, or Technical", 
-                                         "adult_vocational" = "Adult, Vocational, or Technical", 
-                                         "js" = "Junior Secondary Only", 
-                                         "primary_js" = "Primary and Junior Secondary", 
-                                         "ss" = "Senior Secondary Only", 
-                                         "primary_only" = "Primary Only", 
-                                         "preprimary_and_primary" = "Pre-primary and Primary", 
-                                         "adult_lit" = "Adult, Vocational, or Technical", 
-                                         "junior_and_senior_sec" = "Junior and Senior Secondary", 
-                                         "science_technical" = "Adult, Vocational, or Technical", 
-                                         "junior_sec_only" = "Junior Secondary Only", 
-                                         "preprimary_only" = "Pre-primary Only", 
-                                         "primary_junior_and_senior_sec" = "Primary, Junior, and Senior Secondary", 
-                                         "primary_and_junior_sec" = "Primary and Junior Secondary", 
-                                         "vocational" = "Adult, Vocational, or Technical", 
-                                         "senior_sec_only" = "Senior Secondary Only", 
-                                         "primary_js_ss" = "Primary, Junior, and Senior Secondary", 
-                                         "vocational_post_secondary" = "Adult, Vocational, or Technical",
-                                         "adult_ed" = "Adult, Vocational, or Technical"))
-
-edu_sub$education_type <- revalue(edu_sub$education_type, 
-                                    c("formal_only" = "Formal Only",
-                                      "integrated" = "Integrated",
-                                      "religious_only" = "Religious Only"))
-
-################
-##################
-edu_sub$school_1kmplus_catchment_area <- edu_outlier$km_to_catchment_area > 1
-edu_sub$num_textbooks <- 
-    ifelse(edu_outlier$src == "661",
-        ifelse(edu_outlier$level_of_education %in% c('primary_only', 'preprimary_and_primary'),  
-               edu_outlier$num_math_textbook_pry + edu_outlier$num_english_textbook_pry + 
-               edu_outlier$num_soc_science_textbook_pry + edu_outlier$num_science_textbook_pry,
-        ifelse(edu_outlier$level_of_education %in% c('junior_and_senior_sec', 'juniors_sec_only'),
-               edu_outlier$num_math_textbook_js + edu_outlier$num_english_textbook_js + 
-               edu_outlier$num_soc_science_textbook_js + edu_outlier$num_science_textbook_js,
-        ifelse(edu_outlier$level_of_education %in% c('primary_and_junior_sec', 'primary_junior_and_senior_sec'),
-               edu_outlier$num_math_textbook_pry + edu_outlier$num_english_textbook_pry + 
-               edu_outlier$num_soc_science_textbook_pry + edu_outlier$num_science_textbook_pry +
-               edu_outlier$num_math_textbook_js + edu_outlier$num_english_textbook_js + 
-               edu_outlier$num_soc_science_textbook_js + edu_outlier$num_science_textbook_js,
-               0))),  
-    rowSums(cbind(edu_outlier$num_textbooks_english, 
-                edu_outlier$num_textbooks_math, 
-                edu_outlier$num_textbooks_social_sci,
-                edu_outlier$num_textbooks_pry_sci), na.rm=T))
-                                      
-
-## Fix the num_textbooks outlier issuse, take 0.95 quantile(1300) as the cutt off 
-edu_sub$num_textbooks <- ifelse(edu_sub$num_textbooks > 2000, NA, edu_sub$num_textbooks)
-edu_sub$textbook_to_pupil_ratio <- edu_sub$num_textbooks / edu_outlier$num_students_total
-
-## ACCESS ##
-# see school_1kmplus_catchment_area from above
-edu_sub$school_1kmplus_secondary_school <- edu_outlier$km_to_secondary_school > 1
-
-## PARTICIPATION ##
-edu_sub$male_to_female_student_ratio <- edu_outlier$num_students_male / edu_outlier$num_students_female
-
-## Infrastructure: Water & San ##
-edu_sub$gender_separated_toilets_yn <- ifelse(edu_outlier$src == "661",
-                                             (edu_outlier$num_toilet_boy > 1) & (edu_outlier$num_toilet_girl > 1),
-                                              edu_outlier$gender_separated_toilets_yn)
-edu_sub$pupil_toilet_ratio_facility <- edu_outlier$num_students_total / edu_outlier$num_toilets_total
-
-edu_sub$pupil_toilet_ratio_facility <- ifelse(is.infinite(edu_sub$pupil_toilet_ratio_facility),
-                                              NA, edu_sub$pupil_toilet_ratio_facility)
-
-# can't trust the xform calculations because of "999" numbers
-## Infrastructure: Building Structure ##
-edu_sub$power_access <- (edu_outlier$power_sources.generator & edu_outlier$generator_funct_yn) |
-                        (edu_outlier$power_sources.solar_system & edu_outlier$solar_funct_yn) |
-                        (edu_outlier$power_sources.grid & edu_outlier$grid_funct_yn)
-
-## Infrastructure: Health and Safety ##
-edu_sub$access_clinic_dispensary <- edu_outlier$health_services_yn %in% c('yes_clinic_dispensary', 
-                                                                          'health_services_clinic')
-
-edu_sub$access_first_aid <- edu_outlier$health_services_yn %in% c('first_aid_kit', 
-                                                                  "health_services_aid_kit")
-
-edu_sub$wall_fence_good_condi <- edu_outlier$boundary_wall_fence_yn %in% c("yes_good_condition", 
-                                                                           "roof_fence_good_condition",
-                                                                           "yes")
-## Infrastructure: Learning Environment ##
-edu_sub$pupil_classrm_ratio <- edu_outlier$num_students_total / edu_outlier$num_classrms_total
-# actually, lets just make sure to re-calculate totals in the outlier scripts
-
-edu_sub$multigrade_classrms <- edu_outlier$multigrade_teaching_yn %in% c('yes_not_enough_space',
-                                                                         'yes_no_teacher_no_space',
-                                                                         'yes_not_enough_teacher')
-edu_sub$multigrade_classrms[edu_sub$src %in% c("113", "pilot")] <- (edu_outlier$num_classrooms_multiple_use[edu_outlier$src %in% c("113", "pilot")] >=1) 
-
-
-## Furniture ##
-edu_sub$pupil_bench_ratio <- edu_outlier$num_students_total / edu_outlier$num_benches
-edu_sub$pupil_desk_ratio <- edu_outlier$num_students_total / edu_outlier$num_desks
-
-## Adequacy of Staffing ##
-edu_sub$pupil_tchr_ratio <- edu_outlier$num_students_total / edu_outlier$num_tchr_full_time
-edu_sub$teacher_nonteachingstaff_ratio <- edu_outlier$num_tchr_full_time / 
-                                                rowSums(cbind(edu_outlier$num_sr_staff_total,
-                                                            edu_outlier$num_jr_staff_total),
-                                                        na.rm=T)
-                                                      
-## Institutional Development ##
-edu_sub$tchr_pay_delay <- edu_outlier$times_tchr_pay_delay_pastyr > 0
-edu_sub$tchr_pay_miss <- edu_outlier$times_tchr_pay_miss_pastyr > 0
-
-## Curriculum Issues ##
-edu_sub$textbook_to_pupil_ratio <- edu_sub$num_textbooks / edu_outlier$num_students_total
-
-
-#Adding distant to every facility
-#combining calculated result back to original data
-edu_sub <- lga_boudary_dist(edu_sub, gps_col="gps")
-edu_sub$sector <- "education"
 
 e_774 <- merge_non_redundant(edu_sub, e_774_left, by="uuid")
 
