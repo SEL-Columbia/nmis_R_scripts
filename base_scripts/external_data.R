@@ -173,6 +173,12 @@ dhs_2008 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/exter
 
 final_total <- merge(final_total, dhs_2008, by = "lga_id")
 
+######################################
+###    Adding unique_lga           ###
+######################################
+lgas <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/lgas.csv")
+final_total <- merge(final_total, lgas[c("lga_id", "unique_lga")], by = "lga_id")
+
 saveRDS(final_total, '~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/output_data/external_data.rds')
 write.csv(final_total, '~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/output_data/external_data.csv', row.names=F)
 
