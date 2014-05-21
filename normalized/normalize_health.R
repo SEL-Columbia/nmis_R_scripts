@@ -240,7 +240,6 @@ h_113$power_sources_generator_functional <- ((h_113$power_sources_generator &
 
 h_113$power_sources_alternative_functional <- (h_113$power_sources_generator_functional |
                                                  h_113$power_sources_solar_functional)
-h_113$start <- h_113$start_time
 
 
 #pilot
