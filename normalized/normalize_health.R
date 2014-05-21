@@ -143,6 +143,9 @@ h_661$power_sources_generator_functional <- ((h_661$power_sources_generator &
 h_661$power_sources_alternative_functional <- (h_661$power_sources_generator_functional |
                                                 h_661$power_sources_solar_functional)
 
+h_661$access_to_alternative_power_source <- (h_661$power_sources_generator | h_661$power_sources_solar)
+
+
   
 #113
 h_113$medication.antibiotic_oral <- ((h_113$sti_tx_srvcs_penicilling | h_113$sti_tx_srvcs_doxycycline | 
