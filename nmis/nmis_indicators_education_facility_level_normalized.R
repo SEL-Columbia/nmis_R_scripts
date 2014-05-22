@@ -186,15 +186,17 @@ edu_sub <- edu_sub %.%
         
         ## Curriculum Issues ##
         textbook_to_pupil_ratio = num_textbooks / edu_outlier$num_students_total,
-        
-        
-        #Adding distant to every facility
-        #combining calculated result back to original data
-        edu_sub = lga_boudary_dist(edu_sub, gps_col="gps"),
         sector = "education"
-)
+    )
 edu_sub$multigrade_classrms[src %in% c("113", "pilot")] <-
     (edu_outlier$num_classrooms_multiple_use[edu_outlier$src %in% c("113", "pilot")] >=1)
+
+
+#Adding distant to every facility
+#combining calculated result back to original data
+edu_sub <- lga_boudary_dist(edu_sub, gps_col="gps"),
+        
+
 
 
 e_774 <- merge_non_redundant(edu_sub, e_774_left, by="uuid")
