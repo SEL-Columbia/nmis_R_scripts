@@ -38,7 +38,7 @@ water_sub$lift_mechanism <- recodeVar(water_774$lift_mechanism,
 
 #cause of breakdown# 
 water_sub$breakdown <-
-      ifelse(water_774$water_functional_yn == "yes",
+      ifelse(water_774$water_functional_yn,
          "Functional",
       ifelse(water_774$reason_not_used == "bad_quality",
          "Poor Water Quality",
