@@ -130,9 +130,17 @@ h_661$toilets_yn <- as.logical(revalue(h_661$toilets_yn,
                                 c('no_toilets_available' = FALSE,
                                   'toilets_available' = TRUE)))
 
+h_661$vaccine_storage_yn <- as.logical(revalue(h_661$vaccine_storage_yn,
+                                c("yes" = TRUE,
+                                  "no_stored_other_palce" = FALSE,
+                                  "no_vaccines_not_offered" = FALSE)))
+
+
 h_661$child_health_growth_monitor <-  (h_661$weighing_scale_funct_yn == 'yes') & 
                                         h_661$equipment.scale &
                                           h_661$supplies.muac_tape
+
+
 
 h_661$power_sources_solar_functional <- ((h_661$power_sources_solar &
                                           h_661$solar_funct_yn == 'yes') &  
@@ -313,7 +321,7 @@ health_total <- rbind.fill(h_661, h_113, h_pilot)
 ##mapping values and standardize the type
 
 yes_no_columns <- c("private_yn", "road_yn", "all_weather_road_yn", "generator_funct_yn", "medication_folic_acid",
-                    "solar_funct_yn", "grid_funct_yn", "vaccine_storage_yn", "oxygen_funct_yn",  
+                    "solar_funct_yn", "grid_funct_yn", "oxygen_funct_yn",  
                     "flush_improved_functional_yn", "flush_unimproved_functional_yn", "malaria_treatment_artemisinin",
                     "vip_latrine_functional_yn", "slab_pit_latrine_functional_yn", "syringes_stockout_yn",
                     "open_pit_latrine_functional_yn", "bucket_system_functional_yn", "zinc_stockout_yn",

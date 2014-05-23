@@ -106,16 +106,15 @@ health_sub$num_chews_total <-
   (rowSums(cbind(health_outlier$num_chews_posted,
                  health_outlier$num_junior_chews_posted), na.rm=T))
 
-health_sub$vaccines_fridge_freezer <- ifelse(health_outlier$src == '661',
-                                          (health_outlier$vaccine_storage_type.refrigerator & 
-                                           health_outlier$vaccine_storage_type.freezer),
-                                        ifelse(health_outlier$src == '113',     
-                                           as.logical(recodeVar(health_outlier$vaccines_strg_type,
-                                                       c('solar_refrigeration', 'grid_refrigeration', 
-                                                         'lpg_refrigeration', 'vaccine_carriers_icepacks'),
-                                                       c(TRUE, TRUE, TRUE, TRUE), default = NA)),
-                                          ifelse(health_outlier$src == 'pilot',     
-                                                 health_outlier$vaccines_stored_yn, NA)))
+health_sub$vaccines_fridge_freezer <- 
+    ifelse(health_outlier$src == '661',
+           health_outlier$vaccine_storage_yn & 
+               (health_outlier$vaccine_storage_type.refrigerator | health_outlier$vaccine_storage_type.freezer),
+           ifelse(health_outlier$src == '113',
+                  as.logical(recodeVar(health_outlier$vaccines_strg_type,
+                        c('solar_refrigeration', 'grid_refrigeration', 'lpg_refrigeration', 'vaccine_carriers_icepacks'),
+                        c(TRUE, TRUE, TRUE, FALSE), default = NA)),
+                  ifelse(health_outlier$src == 'pilot', health_outlier$vaccines_stored_yn, NA)))
                                                                                          
 health_sub$emergency_transport <- 
   health_outlier$transport_to_referral %in% c('ambulance', 'keke', 'taxi', 'boat')
@@ -206,8 +205,7 @@ health_sub$emergency_transport_currently_functioning <- ifelse(health_outlier$sr
 health_sub$power_access_and_functional[health_outlier$src == '661'] <- 
                                         health_outlier$power_sources.none[health_outlier$src == '661'] == F
                                         
-health_sub$c_section_yn <- health_outlier$emergency_obstetrics_yn & 
-                                            health_outlier$c_section_yn
+health_sub$c_section_yn <- health_outlier$emergency_obstetrics_yn & health_outlier$c_section_yn
 
 
 ####################
