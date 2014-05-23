@@ -61,9 +61,15 @@ edu_pilot <- rename(edu_pilot, c("num_total_classrooms" = "num_classrms_total",
                                  "funtioning_library_yn" = "functioning_library_yn",
                                  "start_time" = "start",
                                  "end_time" = "end"))
+### Pilot cleanup
+edu_pilot <- dplyr::mutate(edu_pilot,
+     covered_roof_good_condi = covered_roof_yn %in% c("roof_fence_good_condition", 'yes'),
+     natl_curriculum_yn = education_type %in% c("formal", "integrated")
+)
 
 ######################################
 ##Adding variables before 999 cleaning
+
 edu_113$school_managed <- ifelse(edu_113$school_managed_fed_gov, 
                                  "federal_gov",
                                  ifelse(edu_113$school_managed_st_gov, 
@@ -86,7 +92,7 @@ edu_113$fees.exam_fee <- as.logical(edu_113$exams_fee > 0)
 edu_113$fees.pta_fee <- as.logical(edu_113$pta_fee > 0)
 
 edu_113$covered_roof_good_condi <- edu_113$covered_roof_yn %in% c("roof_fence_good_condition", 'yes')
-edu_pilot$covered_roof_good_condi <- edu_pilot$covered_roof_yn %in% c("roof_fence_good_condition", 'yes')
+
 
 edu_113$multigrade_teaching_yn <- NA
 edu_113$times_tchr_pay_delay_pastyr <- as.integer(edu_113$times_tchr_pay_delay_pastyr)
@@ -127,8 +133,6 @@ edu_113$num_benches <- rowSums(cbind(edu_113$num_attached_benches,
 edu_113$num_tchr_full_time <- rowSums(cbind(edu_113$num_tchrs_male_full_time, 
                                             edu_113$num_tchrs_female_full_time),
                                         na.rm=T)
-
-edu_pilot$num_tchr_full_time <- edu_pilot$num_toilets_total
 
 
 
