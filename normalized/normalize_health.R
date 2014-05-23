@@ -77,8 +77,7 @@ h_113 <- rename(h_113, c("lga" = "mylga",
                          "medication_iv_fluid" = "medication.iv_fluid",
                          "medication_arvs" = "medication.arvs",
                          "medication_tb_medicines" = "medication.tb_medicines",
-                         "medication_none" = "medication.none",
-                         "start_time" = "start"))
+                         "medication_none" = "medication.none"))
 
 #pilot
 h_pilot <- rename(h_pilot, c("lga" = "mylga",
