@@ -5,7 +5,7 @@ source("source_scripts/NMIS_Functions.R")
 # sector slugs are at https://github.com/mvpdev/nmis/blob/develop/uis_r_us/indicators/overview.json
 # overview page slugs are at https://github.com/mvpdev/nmis/blob/develop/uis_r_us/indicators/facility.py
 
-edu774 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/Normalized/Education_774_ALL_FACILITY_INDICATORS.rds")
+edu774 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/normalized/Education_774_ALL_FACILITY_INDICATORS.rds")
 
 #education data request (TODO: rename to something better)
 ie <- idata.frame(edu774)
