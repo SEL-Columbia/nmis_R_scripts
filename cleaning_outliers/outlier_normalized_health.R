@@ -6,7 +6,7 @@ source('source_scripts/NMIS_Functions.R')
 source('source_scripts/outlier_functions.R')
 
 #Reading in Data
-health_normalized <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/normalized/Health_774_normalized.rds")
+health_normalized <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Health_774_normalized.rds")
 
 ######################################
 #### Outlier Cleaning 

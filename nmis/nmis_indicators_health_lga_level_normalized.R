@@ -2,7 +2,7 @@
 source("source_scripts/NMIS_Functions.R")
 source("base_scripts/InstallFormhub.R")
 
-health_774 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/normalized/Health_774_ALL_FACILITY_INDICATORS.rds")
+health_774 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/Normalized/Health_774_ALL_FACILITY_INDICATORS.rds")
 
 #changing into idata.frame
 ihealth774 <- idata.frame(health_774)
@@ -187,7 +187,7 @@ lga_health <- merge(lga_health, lga_health_data_core_hospital, by="lga_id", all=
 
 ###### SUMMING UP #########
 ##writing out##
-saveRDS(lga_health, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/output_data/data_774/Health_LGA_level_774.rds")
+saveRDS(lga_health, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/Health_LGA_level_774.rds")
 
 
 

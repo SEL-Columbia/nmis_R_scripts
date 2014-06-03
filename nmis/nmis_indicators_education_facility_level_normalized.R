@@ -200,5 +200,5 @@ e_774 <- subset(e_774, dist_fake <= 35 | is.na(dist_fake))
 
 
 
-saveRDS(edu_sub, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/normalized/Education_774_NMIS_Facility.rds")
-saveRDS(e_774, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/normalized/Education_774_ALL_FACILITY_INDICATORS.rds")
+saveRDS(edu_sub, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/Normalized/Education_774_NMIS_Facility.rds")
+saveRDS(e_774, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/Normalized/Education_774_ALL_FACILITY_INDICATORS.rds")

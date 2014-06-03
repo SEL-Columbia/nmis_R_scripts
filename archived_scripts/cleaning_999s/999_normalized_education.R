@@ -2,7 +2,7 @@ source('base_scripts/InstallFormhub.R')
 source('source_scripts/999_functions.R')
 
 
-merged_education <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/normalized/Education_774_normalized.rds")
+merged_education <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Education_774_normalized.rds")
 
 #Here starts 999 cleaning
 cellst(merged_education, 'tchrs_male_ssce_wasc',
