@@ -1,5 +1,5 @@
 ## ALIASES / PREP ##
-source("base_scripts/InstallFormhub.R")
+source("1_base_scripts/InstallFormhub.R")
 source("source_scripts/NMIS_Functions.R")
 
 # sector slugs are at https://github.com/mvpdev/nmis/blob/develop/uis_r_us/indicators/overview.json
@@ -292,7 +292,7 @@ lga_edu_data <- merge(lga_edu_data, lga_edu_data_core, by = "lga_id")
 lga_edu_data <- merge(lga_edu_data, core_allsectors, by = "lga_id")
 
 #writing out
-saveRDS(lga_edu_data, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/Education_LGA_level_774.rds")
+saveRDS(lga_edu_data, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/output_data/data_774/Education_LGA_level_774.rds")
 
 
 

@@ -1,7 +1,7 @@
 #####################################################################################################################
 ##Normalized Health Outlier Cleaning
 
-source('base_scripts/InstallFormhub.R')
+source('1_base_scripts/InstallFormhub.R')
 source('source_scripts/NMIS_Functions.R')
 source('source_scripts/outlier_functions.R')
 

@@ -223,7 +223,7 @@ source("./source_scripts/NMIS_Functions.R")
 combined <- merge(h_gap, e_gap, by="lga_id", all=T)
 
 #writing out data
-saveRDS(combined, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/final_output/gap_sheet.RDS")
+saveRDS(combined, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/output_data/data_774/final_output/gap_sheet.RDS")
 
 
 

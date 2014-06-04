@@ -1,5 +1,5 @@
 #script for Facility level water for PIlot data from 113
-source("base_scripts/InstallFormhub.R")
+source("1_base_scripts/InstallFormhub.R")
 source("source_scripts/NMIS_Functions.R")
 
 water_774 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/normalized/Water_774_normalized.rds")

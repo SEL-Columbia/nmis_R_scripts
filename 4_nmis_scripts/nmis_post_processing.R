@@ -14,7 +14,7 @@
 
 
 source("source_scripts/post_processing_functions.R")
-source("nmis/RJson.R")
+source("4_nmis_scripts/RJson.R")
 
 
 percent_names <- c("proportion_schools_power_access_primary", "proportion_health_facilities_hiv_testing", 
@@ -88,7 +88,7 @@ percent_names <- c("proportion_schools_power_access_primary", "proportion_health
                     "proportion_phcn_electricity", "proportion_power_alternative_functional")
 
 
-nmis_lga <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/All_774_LGA.rds")
+nmis_lga <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/output_data/data_774/All_774_LGA.rds")
 
 for (name in percent_names){
     idx <- which(is.finite(nmis_lga[,name]))
@@ -97,18 +97,16 @@ for (name in percent_names){
     nmis_lga[na_idx, name] <- NA
 }
 
-write.csv(nmis_lga,"~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/final_output/All_774_LGA.csv", row.names=F)
+write.csv(nmis_lga,"~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/output_data/data_774/final_output/All_774_LGA.csv", row.names=F)
 
 
 
 ######## PUlling GAP SHEET data
-gap_sheet <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/final_output/gap_sheet.RDS")
+gap_sheet <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/output_data/data_774/final_output/gap_sheet.RDS")
 
 
 ######## Pull in the external state-level data
 #It seems we have most of the indicators lets just leave it as it is for now
-
-
 
 
 ####### replace baseline data with mopup data
@@ -120,8 +118,6 @@ health_774_all <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/
 
 water_774 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/normalized/Water_774_NMIS_Facility.rds")
 water_774_all <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/normalized/Water_774_ALL_FACILITY_INDICATORS.rds")
-
-
 
 edu_774 <- update_mopup(edu_774, edu_flag=T)
 edu_774_all <- update_mopup(edu_774_all, edu_flag=T)
@@ -149,17 +145,16 @@ stopifnot(!anyDuplicated(water_774$facility_ID))
 water_774_all <- shortid_generate(water_774_all, prefix="W")
 stopifnot(!anyDuplicated(water_774_all$facility_ID))
 
-write.csv(water_774, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/final_output/Water_774_NMIS_Facility.csv", row.names=F)
-write.csv(edu_774, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/final_output/Education_774_NMIS_Facility.csv", row.names=F)
-write.csv(health_774, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/final_output/Health_774_NMIS_Facility.csv", row.names=F)
+write.csv(water_774, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/output_data/data_774/final_output/Water_774_NMIS_Facility.csv", row.names=F)
+write.csv(edu_774, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/output_data/data_774/final_output/Education_774_NMIS_Facility.csv", row.names=F)
+write.csv(health_774, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/output_data/data_774/final_output/Health_774_NMIS_Facility.csv", row.names=F)
 
-write.csv(water_774_all, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/final_output/Water_774_ALL_FACILITY_INDICATORS.csv", row.names=F)
-write.csv(edu_774_all, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/final_output/Education_774_ALL_FACILITY_INDICATORS.csv", row.names=F)
-write.csv(health_774_all, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/final_output/Health_774_ALL_FACILITY_INDICATORS.csv", row.names=F)
-
+write.csv(water_774_all, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/output_data/data_774/final_output/Water_774_ALL_FACILITY_INDICATORS.csv", row.names=F)
+write.csv(edu_774_all, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/output_data/data_774/final_output/Education_774_ALL_FACILITY_INDICATORS.csv", row.names=F)
+write.csv(health_774_all, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/output_data/data_774/final_output/Health_774_ALL_FACILITY_INDICATORS.csv", row.names=F)
 
 # output json file for each lga
-output_dir <- "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/final_output/jsons"
+output_dir <- "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/output_data/data_774/final_output/jsons"
 
 RJson_ouput(BASE_DIR=output_dir, nmis_lga, gap_sheet, 
             edu_774, health_774, water_774)
