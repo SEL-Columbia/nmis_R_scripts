@@ -115,8 +115,9 @@ h_661$facility_owner_manager <- as.character(ifelse(h_661$facility_owner_manager
                                                           NA_character_)))))))
 
 h_661$emoc_antibiotics <- as.logical(revalue(h_661$emoc_antibiotics_yn, 
-                                               c("yes" = TRUE, 
-                                                 "no" = FALSE)))
+                                               c("yes" = TRUE, "no" = FALSE)))
+h_661$medication_anti_malarials <- as.logical(revalue(
+    h_661$malaria_treatment_artemisinin, c("yes" = TRUE, "no" = FALSE)))
                                              
 h_661 <- subset(h_661, select=-c(facility_owner_manager.private_forprofit, facility_owner_manager.charitable_ngo,
                                  facility_owner_manager.religious_org, facility_owner_manager.stategovernment,
