@@ -1,5 +1,5 @@
 ## ALIASES / PREP ##
-source("base_scripts/InstallFormhub.R")
+source("1_base_scripts/InstallFormhub.R")
 source("source_scripts/NMIS_Functions.R")
 
 edu_outlier <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/outlier_cleaned/Education_774_outliercleaned.rds")

@@ -102,7 +102,7 @@ def make_makefile(dryrun=False):
     deps = find_reads_and_writes()
     f = open('Makefile', 'w')
     preamble = """R=R CMD BATCH --no-restore --slave
-all:~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/in_process_data/nmis/data_774/final_output/All_774_LGA.csv
+all:~/Dropbox/Nigeria/Nigeria\ 661\ Baseline\ Data\ Cleaning/output_data/data_774/final_output/All_774_LGA.csv
 test:
 \tRscript tests/*.R > logs/test.log
 """
