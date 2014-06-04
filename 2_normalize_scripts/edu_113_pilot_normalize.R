@@ -64,7 +64,8 @@ edu_pilot <- rename(edu_pilot, c("num_total_classrooms" = "num_classrms_total",
 ### Pilot cleanup
 edu_pilot <- dplyr::mutate(edu_pilot,
      covered_roof_good_condi = covered_roof_yn %in% c("roof_fence_good_condition", 'yes'),
-     natl_curriculum_yn = education_type %in% c("formal", "integrated")
+     natl_curriculum_yn = education_type %in% c("formal", "integrated"),
+     num_tchrs_w_nce = qualified_female_teachers + qualified_male_teachers
 )
 
 ######################################

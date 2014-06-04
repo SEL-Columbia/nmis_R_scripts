@@ -359,7 +359,8 @@ health_sub$paid_services_malaria_treatment <-
 ##### INFRASTRUCTURE #####
 ##########################
 
-health_sub$potable_water_access <- (health_outlier$days_no_potable_water_pastmth <= 23)
+health_sub$functional_water <- (health_outlier$days_no_potable_water_pastmth <= 23)
+health_sub$improved_functional_water <- health_sub$improved_water_supply & health_sub$functional_water
 
 health_sub$improved_sanitation_and_functional <- ifelse(health_outlier$src == '661',
                                                           (health_outlier$vip_latrine_functional_yn & 

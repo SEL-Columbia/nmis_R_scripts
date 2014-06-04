@@ -60,6 +60,8 @@ edu_sub$management <- recodeVar(edu_outlier$school_managed,
                           default=NA)
 
 edu_sub$improved_water_supply <- (edu_outlier$water.pipe_water | edu_outlier$water.tube_well)
+edu_sub$improved_functional_water <- edu_sub$improved_water_supply & edu_sub$functional_water
+
 edu_sub$improved_sanitation <- edu_outlier$toilet.flush_or_pour_flush_improved | 
                                     edu_outlier$toilet.ventilated_improved | 
                                     edu_outlier$toilet.pit_latrine_with_slab

@@ -163,7 +163,7 @@ source("./source_scripts/NMIS_Functions.R")
   edu <- e
 
 #booleans in preperation for aggregation
-  edu$improved_functonal_water <- edu$functional_water & edu$improved_water_supply
+  edu$improved_functional_water <- edu$functional_water & edu$improved_water_supply
 
 #changing into idata.frame
  iedu <- idata.frame(edu)
@@ -182,10 +182,10 @@ source("./source_scripts/NMIS_Functions.R")
     
         
     # Schools with access to improved functional water 
-      gap_sheet_improved_functional_water_numerator = sum(df$improved_functonal_water, na.rm=T),
-      gap_sheet_improved_functional_water_denominator = length(na.omit(df$improved_functonal_water)),
-      gap_sheet_improved_functional_water_percent = round(100*sum(df$improved_functonal_water, na.rm=T)/
-                                                            length(na.omit(df$improved_functonal_water))),
+      gap_sheet_improved_functional_water_numerator = sum(df$improved_functional_water, na.rm=T),
+      gap_sheet_improved_functional_water_denominator = length(na.omit(df$improved_functional_water)),
+      gap_sheet_improved_functional_water_percent = round(100*sum(df$improved_functional_water, na.rm=T)/
+                                                            length(na.omit(df$improved_functional_water))),
       
     # Schools with access to improved sanitation
       gap_sheet_improved_sanitation_numerator = sum(df$improved_sanitation, na.rm=T),
