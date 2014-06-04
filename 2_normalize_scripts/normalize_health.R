@@ -242,6 +242,8 @@ h_113$power_sources_generator_functional <- ((h_113$power_sources_generator &
 
 h_113$power_sources_alternative_functional <- (h_113$power_sources_generator_functional |
                                                  h_113$power_sources_solar_functional)
+h_113$compr_oc_c_sections <- h_113$comprehensive_obstetrics_yn == 'yes' &
+                                h_113$compr_oc_c_sections
 
 
 #pilot
