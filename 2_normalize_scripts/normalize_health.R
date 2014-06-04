@@ -223,7 +223,8 @@ h_113$improved_sanitation_and_functional <- (h_113$toilet_types_vip_latrine |
                                                (h_113$num_flush_or_pour_flush_piped & 
                                                   h_113$flush_toilet_drain_to == 'improved' & 
                                                   (h_113$flush_toilet_not_working < 7)))
-
+h_113$access_to_alternative_power_source <- h_113$power_sources_generator |
+    h_113$power_sources_solar
 h_113$power_access_and_functional <- (((h_113$power_sources_generator &
                                           h_113$generator_funct_yn == 'yes') |
                                          (h_113$power_sources_solar &
@@ -266,6 +267,9 @@ h_pilot$transport_to_referral <-  ifelse(h_pilot$transport_to_referral_ambulance
                                             "taxi",
                                       ifelse(h_pilot$transport_to_referral_keke,
                                               "keke", NA)))
+h_pilot$access_to_alternative_power_source <- h_pilot$power_sources_generator |
+    h_pilot$power_sources_solar
+
 
 h_pilot$lab_tests.hemoglobin_testing <- h_pilot$lab_tests_hemoglobin_testing & h_pilot$laboratory_yn == 'yes' 
 h_pilot$lab_tests.urine_testing <- h_pilot$lab_tests_urine_testing & h_pilot$laboratory_yn == 'yes'
