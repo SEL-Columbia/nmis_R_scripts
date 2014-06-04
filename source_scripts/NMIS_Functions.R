@@ -1,4 +1,4 @@
-source('base_scripts/InstallFormhub.R')
+source('1_base_scripts/InstallFormhub.R')
 #packages
 load_packages_with_install(c("plyr", "doBy", "stringr", "digest", "gdata",
                       "maptools", "shapefiles", "sp", "spatstat", "geosphere"))

@@ -9,7 +9,7 @@ source("./source_scripts/NMIS_Functions.R")
 
 #health##############################################################################################
   hh <- 
-  readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/Normalized/Health_774_ALL_FACILITY_INDICATORS.rds")
+  readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/normalized/Health_774_ALL_FACILITY_INDICATORS.rds")
   h <- hh
 
 #booleans in preperation for aggregation
@@ -159,7 +159,7 @@ source("./source_scripts/NMIS_Functions.R")
 
 #education#################################################################################################
   e <- 
-  readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/Normalized/Education_774_ALL_FACILITY_INDICATORS.rds")
+  readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/normalized/Education_774_ALL_FACILITY_INDICATORS.rds")
   edu <- e
 
 #booleans in preperation for aggregation
@@ -223,7 +223,7 @@ source("./source_scripts/NMIS_Functions.R")
 combined <- merge(h_gap, e_gap, by="lga_id", all=T)
 
 #writing out data
-saveRDS(combined, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/data_774/final_output/gap_sheet.RDS")
+saveRDS(combined, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/output_data/data_774/final_output/gap_sheet.RDS")
 
 
 

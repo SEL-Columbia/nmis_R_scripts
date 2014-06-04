@@ -1,4 +1,4 @@
-source('base_scripts/InstallFormhub.R')
+source('1_base_scripts/InstallFormhub.R')
 load_packages_with_install(c('doBy', 'stringr', 'digest'))
 
 lga_corrections <- read.csv('~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/source_data/nmis_lga_corrections.csv', stringsAsFactors=FALSE)
