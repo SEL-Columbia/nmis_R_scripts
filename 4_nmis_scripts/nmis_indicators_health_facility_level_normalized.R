@@ -129,9 +129,10 @@ health_sub$improved_water_supply <- ifelse(health_outlier$src == 'pilot',
 
 health_sub$improved_sanitation <- ifelse(health_outlier$src == 'pilot',
                                           health_outlier$num_toilets_improved_p > 0,  
-                                    ((health_outlier$num_vip_latrine > 0) | 
-                                      (health_outlier$num_pit_w_slab > 0) | 
-                                      (health_outlier$num_flush_or_pour_flush_piped > 0)))                                
+                                    (health_outlier$toilets_yn  &
+                                         (health_outlier$num_vip_latrine > 0) | 
+                                        (health_outlier$num_pit_w_slab > 0) | 
+                                        (health_outlier$num_flush_or_pour_flush_piped > 0)))
 
 health_sub$iv_medications_yn <- health_outlier$medication.iv_fluid
 
