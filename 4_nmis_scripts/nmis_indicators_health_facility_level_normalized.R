@@ -217,7 +217,13 @@ health_sub$emergency_transport_currently_functioning <- ifelse(health_outlier$sr
 health_sub$power_access_and_functional[health_outlier$src == '661'] <- 
                                         health_outlier$power_sources.none[health_outlier$src == '661'] == F
                                         
-health_sub$c_section_yn <- health_outlier$emergency_obstetrics_yn & health_outlier$c_section_yn
+health_sub$c_section_yn <- ifelse(health_outlier$src == '113',
+                                  health_outlier$compr_oc_c_sections,
+                            ifelse(health_outlier$src == '661',
+                                   health_outlier$c_section_yn,
+                            ifelse(health_outlier$src == 'pilot',
+                                   health_outlier$emergency_obstetrics_yn,
+                                   NA)))
 
 
 ####################
