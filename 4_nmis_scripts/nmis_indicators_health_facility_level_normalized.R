@@ -125,12 +125,23 @@ health_sub$improved_water_supply <- ifelse(health_outlier$src == 'pilot',
                                       health_outlier$water_sources.tap_outside | 
                                       health_outlier$water_sources.borehole_tube_well))
 
-health_sub$improved_sanitation <- ifelse(health_outlier$src == 'pilot',
-                                          health_outlier$num_toilets_improved_p > 0,  
-                                    (health_outlier$toilets_yn  &
-                                         (health_outlier$num_vip_latrine > 0) | 
-                                        (health_outlier$num_pit_w_slab > 0) | 
-                                        (health_outlier$num_flush_or_pour_flush_piped > 0)))
+health_sub$improved_sanitation <- 
+    ifelse(health_outlier$src == 'pilot',
+           health_outlier$num_toilets_improved_p > 0,
+    ifelse(health_outlier$src == '113',
+           rowSums(cbind(health_outlier$num_vip_latrine,
+                         health_outlier$num_pit_w_slab,
+                         health_outlier$num_flush_or_pour_flush_piped),
+                   na.rm=T) > 0,
+    ifelse(health_outlier$src == '661',
+           health_outlier$toilets_yn &
+               rowSums(cbind(health_outlier$num_vip_latrine,
+                             health_outlier$num_pit_w_slab,
+                             health_outlier$num_flush_or_pour_flush_piped),
+                       na.rm=T) > 0,
+           NA
+    )))
+                                    
 
 health_sub$iv_medications_yn <- health_outlier$medication.iv_fluid
 
