@@ -110,12 +110,11 @@ health_sub$vaccines_fridge_freezer <-
            health_outlier$vaccine_storage_yn & 
                (health_outlier$vaccine_storage_type.refrigerator | health_outlier$vaccine_storage_type.freezer),
     ifelse(health_outlier$src == '113',
-           as.logical(recodeVar(health_outlier$vaccines_stored_yn,
-                    c('yes', 'no', 'None'), c(TRUE, FALSE, FALSE), default=NA)) &
+           health_outlier$vaccine_storage_yn &
                as.logical(recodeVar(health_outlier$vaccines_strg_type,
                     c('solar_refrigeration', 'grid_refrigeration', 'lpg_refrigeration', 'vaccine_carriers_icepacks'),
                     c(TRUE, TRUE, TRUE, FALSE), default = NA)),
-    ifelse(health_outlier$src == 'pilot', health_outlier$vaccines_stored_yn, NA)))
+    ifelse(health_outlier$src == 'pilot', health_outlier$vaccine_storage_yn, NA)))
                                                                                          
 health_sub$emergency_transport <- 
   health_outlier$transport_to_referral %in% c('ambulance', 'keke', 'taxi', 'boat')

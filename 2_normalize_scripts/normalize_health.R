@@ -167,6 +167,10 @@ h_113$medication.antibiotic_oral <- ((h_113$sti_tx_srvcs_penicilling | h_113$sti
 h_113$facility_owner_manager <- revalue(h_113$facility_owner_manager,
                                           c('federalgovrenment'='federalgovernment'))
 
+h_113$vaccine_storage_yn <- as.logical(recodeVar(h_113$vaccines_stored_yn,
+                                                   c('yes', 'no'), c(TRUE, FALSE), default=NA))
+
+
 facility_type_value <- c('healthpostdispensary', 'healthpostdispensary',
                          'federalmedicalcentre', 'wardmodelphccentre')
 
@@ -250,6 +254,9 @@ h_113$compr_oc_c_sections <- h_113$comprehensive_obstetrics_yn == 'yes' &
 
 #pilot
 h_pilot$improved_sanitation <- h_pilot$num_toilets_improved_p > 0 
+
+h_pilot$vaccine_storage_yn <- as.logical(recodeVar(h_pilot$vaccines_stored_yn,
+                                        c('yes', 'no'), c(TRUE, FALSE), default=NA))
 
 h_pilot$family_planning_iud <- as.logical(recodeVar(h_pilot$family_planning_iud,
                                          c('', 'yes'),
