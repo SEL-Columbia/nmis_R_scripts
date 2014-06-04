@@ -14,7 +14,7 @@ water_113 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_
 water_pilot <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/raw_data/113/Pilot_Water_cleaned_2011Aug29.csv", 
                       stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999", ""))
 
-reclassify <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/reclassify_final_148.csv", 
+reclassify <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/normalized/reclassify_final_148.csv", 
                        stringsAsFactors=F, na.strings = c("NA", "n/a", "999", "9999", ""))
 reclassify <- subset(reclassify, select=c(uuid, Classification))    
 
@@ -214,5 +214,5 @@ lgas <- subset(lgas, select=-c(latitude, longitude))
 water_total <- merge_non_redundant(lgas, water_total, by="lga_id")
 water_total <- subset(water_total, !(duplicated(water_total$uuid) | is.na(water_total$lga_id)))
 
-saveRDS(water_total, '~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Water_774_normalized.rds')
+saveRDS(water_total, '~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/normalized/Water_774_normalized.rds')
 

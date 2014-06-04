@@ -1,30 +1,30 @@
-source("base_scripts/InstallFormhub.R")
+source("1_base_scripts/InstallFormhub.R")
 load_packages_with_install(c("foreign", "gdata", "plyr"))
 
 # load hnlss lga state mapping data
-ref <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/source_data/Nigeria Master Codes_SP.csv")
+ref <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/raw_data/Nigeria Master Codes_SP.csv")
 ref <- ref[,c("LGA_id", "lg_hnlss", "state_hnlss")]
 
 #Read skilled birth data and add lga id
-skilled <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/source_data/08_Skilled_Birth.csv") 
+skilled <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/raw_data/08_Skilled_Birth.csv") 
 skilled_b <- merge(skilled, ref, by.x=c('state', 'lg'), by.y=c('state_hnlss', 'lg_hnlss'), all=T)
-skilled_b<- rename(skilled_b, c("LGA_id" = "lga_id"))
+skilled_b <- rename(skilled_b, c("LGA_id" = "lga_id"))
 skilled_birth <- subset(skilled_b,  !is.na(skilled_b$lga_id), select=c('lga_id', 'p_births'))
 skilled_birth <- rename(skilled_birth, c("p_births" = "proportion_of_births_by_skilled_health_personnel"))
 
 
 #Read hiv tested data and add lga id
-hiv <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/source_data/10_HIV_Tested.csv")
+hiv <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/raw_data/10_HIV_Tested.csv")
 #following line is correcting percentage figure in the raw data to fit our pattern (0.0-1.0)
 hiv$percentage_of_individuals_tested_for_hiv_ever <- hiv$percentage_of_individuals_tested_for_hiv_ever/100
 hiv_b <- merge(hiv, ref, by.x=c('state', 'lg'), by.y=c('state_hnlss', 'lg_hnlss'), all=T)
-hiv_b<- rename(hiv_b, c("LGA_id" = "lga_id"))
+hiv_b <- rename(hiv_b, c("LGA_id" = "lga_id"))
 hiv_tested <- subset(hiv_b, !is.na(hiv_b$lga_id), select=c('lga_id', 'percentage_of_individuals_tested_for_hiv_ever'))
 
 #Read net_enroll_na_fixed
-net_enroll_na <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/source_data/net enrollment NA fixed.csv")
-net_enroll_JS <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/source_data/net_enroll_JS_male female.csv")
-other_edu <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/source_data/Other edu indicators.csv")
+net_enroll_na <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/raw_data/net enrollment NA fixed.csv")
+net_enroll_JS <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/raw_data/net_enroll_JS_male female.csv")
+other_edu <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/raw_data/Other edu indicators.csv")
 
 net_enroll_na <- subset(net_enroll_na, select=-c(state, LGA))
 net_enroll_JS <- subset(net_enroll_JS, select=-c(state, LGA))
@@ -45,7 +45,7 @@ other_edu$transition_rate_primary_to_js1_female = other_edu$transition_rate_prim
 ####### primary #########
 #########################
 # Load hnlss data
-sec_2 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/source_data/section_2.rds") 
+sec_2 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/raw_data/section_2.rds") 
 # select records with age == 6-11,  s2a07== 11-16 (primary)
 age_6_11<- sec_2[which(sapply(sec_2[,c("age")], 
                  function(x) any(x == c(6:11)))),c("lga","lg", "stlga","age","state")]
@@ -100,7 +100,7 @@ literacy$literacy_rate <- (literacy[,"count_liter"]/literacy[,"count_age"])
 ####### WATER/SANITATION ########
 ##############################
 
-sec_6 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/source_data/hh_final.rds")
+sec_6 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/raw_data/hh_final.rds")
 #select only records with improved water == 1:5 | 7
 water_improved <- sec_6[which(sapply(as.numeric(sec_6[,c("s6f4a")]), 
                                      function(x) any(x == c(1:5,7)))),
@@ -169,7 +169,7 @@ final_total <- subset(final_total, !is.na(lga_id) & lga_id %in% 1:774 & !duplica
 ######################################
 ###    Combining DHS 2008 data     ###
 ######################################
-dhs_2008 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/source_data/dhs_2008.csv" )
+dhs_2008 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/raw_data/dhs_2008.csv" )
 
 final_total <- merge(final_total, dhs_2008, by = "lga_id")
 
