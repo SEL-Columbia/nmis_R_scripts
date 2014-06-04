@@ -5,7 +5,7 @@ source('base_scripts/InstallFormhub.R')
 source('source_scripts/NMIS_Functions.R')
 source('source_scripts/outlier_functions.R')
 
-edu_normalized <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Education_774_normalized.rds")
+edu_normalized <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/normalized/Education_774_normalized.rds")
 
 ######################################
 #### Outlier Cleaning 

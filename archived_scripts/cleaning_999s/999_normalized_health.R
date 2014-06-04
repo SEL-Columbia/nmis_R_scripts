@@ -4,7 +4,7 @@
 source("base_scripts/InstallFormhub.R")
 source('source_scripts/999_functions.R')
 
-merged_health <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Health_774_normalized.rds")
+merged_health <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/normalized/Health_774_normalized.rds")
 
 ##knocking out 999 values
 cellst(merged_health, 'num_flush_or_pour_flush_piped',

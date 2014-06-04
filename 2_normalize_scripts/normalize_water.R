@@ -214,5 +214,5 @@ lgas <- subset(lgas, select=-c(latitude, longitude))
 water_total <- merge_non_redundant(lgas, water_total, by="lga_id")
 water_total <- subset(water_total, !(duplicated(water_total$uuid) | is.na(water_total$lga_id)))
 
-saveRDS(water_total, '~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Water_774_normalized.rds')
+saveRDS(water_total, '~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/normalized/Water_774_normalized.rds')
 
