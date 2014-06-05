@@ -37,13 +37,15 @@ water_661 <- water_661[!duplicated(water_661$uuid),]
 #113
 water_113 <- rename(water_113, 
                     c("geocodeoffacility" = 'gps',
-                      "water_source_used_today_yn" = "water_functional_yn"
+                      "water_source_used_today_yn" = "water_functional_yn",
+                      "start_time" = "start"
                       ))
 
 #pilot names
 water_pilot <- rename(water_pilot, 
                       c("geocodeoffacility" = 'gps',
-                        "water_source_used_today_yn" = "water_functional_yn"
+                        "water_source_used_today_yn" = "water_functional_yn",
+                        "start_time" = "start"
                       ))
 
 
@@ -166,7 +168,6 @@ water_661$distribution_type <-
       	ifelse(water_661$water_outlet_connection == "outlet_more_1km",
         	"Water Scheme, Source further than 1km",
       		NA))))  
-
 
 ##################################
 ##combining 661, 113 & pilot
