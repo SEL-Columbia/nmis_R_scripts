@@ -45,16 +45,9 @@ edu_total <- rbind.fill(edu_661, edu_113, edu_pilot)
 
 ###############################################
 ##mapping values and standardize the type
-borehole_tubewell_repair_time_value <- c(TRUE, TRUE, TRUE, TRUE,TRUE, TRUE,
-                                         FALSE, FALSE)
-names(borehole_tubewell_repair_time_value) <- c('yes', 'fixed_more_than_month', 'fixed_within_day',
-                                                'fixed_within_month', 'fixed_within_week', 'never_broken',
-                                                'not_fixed', 'no')
 
-edu_total$borehole_tubewell_repair_time <- as.logical(revalue(edu_total$borehole_tubewell_repair_time, borehole_tubewell_repair_time_value))
-
-edu_total$potable_water <- ((edu_total$days_no_potable_water < 7) & (edu_total$water.none == FALSE))
-
+# if water.none = FALSE, FALSE. else, depends on how many days didn't have water.
+edu_total$functional_water <- ((edu_total$water.none == FALSE) & (edu_total$days_no_potable_water < 7))
 
 
 edu_total$level_of_education <- revalue(edu_total$level_of_education,
