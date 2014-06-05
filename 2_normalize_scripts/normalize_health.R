@@ -115,8 +115,9 @@ h_661$facility_owner_manager <- as.character(ifelse(h_661$facility_owner_manager
                                                           NA_character_)))))))
 
 h_661$emoc_antibiotics <- as.logical(revalue(h_661$emoc_antibiotics_yn, 
-                                               c("yes" = TRUE, 
-                                                 "no" = FALSE)))
+                                               c("yes" = TRUE, "no" = FALSE)))
+h_661$medication_anti_malarials <- as.logical(revalue(
+    h_661$malaria_treatment_artemisinin, c("yes" = TRUE, "no" = FALSE)))
                                              
 h_661 <- subset(h_661, select=-c(facility_owner_manager.private_forprofit, facility_owner_manager.charitable_ngo,
                                  facility_owner_manager.religious_org, facility_owner_manager.stategovernment,
@@ -165,6 +166,10 @@ h_113$medication.antibiotic_oral <- ((h_113$sti_tx_srvcs_penicilling | h_113$sti
 
 h_113$facility_owner_manager <- revalue(h_113$facility_owner_manager,
                                           c('federalgovrenment'='federalgovernment'))
+
+h_113$vaccine_storage_yn <- as.logical(recodeVar(h_113$vaccines_stored_yn,
+                                                   c('yes', 'no'), c(TRUE, FALSE), default=NA))
+
 
 facility_type_value <- c('healthpostdispensary', 'healthpostdispensary',
                          'federalmedicalcentre', 'wardmodelphccentre')
@@ -223,7 +228,8 @@ h_113$improved_sanitation_and_functional <- (h_113$toilet_types_vip_latrine |
                                                (h_113$num_flush_or_pour_flush_piped & 
                                                   h_113$flush_toilet_drain_to == 'improved' & 
                                                   (h_113$flush_toilet_not_working < 7)))
-
+h_113$access_to_alternative_power_source <- h_113$power_sources_generator |
+    h_113$power_sources_solar
 h_113$power_access_and_functional <- (((h_113$power_sources_generator &
                                           h_113$generator_funct_yn == 'yes') |
                                          (h_113$power_sources_solar &
@@ -249,6 +255,9 @@ h_113$compr_oc_c_sections <- h_113$comprehensive_obstetrics_yn == 'yes' &
 #pilot
 h_pilot$improved_sanitation <- h_pilot$num_toilets_improved_p > 0 
 
+h_pilot$vaccine_storage_yn <- as.logical(recodeVar(h_pilot$vaccines_stored_yn,
+                                        c('yes', 'no'), c(TRUE, FALSE), default=NA))
+
 h_pilot$family_planning_iud <- as.logical(recodeVar(h_pilot$family_planning_iud,
                                          c('', 'yes'),
                                          c(FALSE, TRUE)))
@@ -266,6 +275,9 @@ h_pilot$transport_to_referral <-  ifelse(h_pilot$transport_to_referral_ambulance
                                             "taxi",
                                       ifelse(h_pilot$transport_to_referral_keke,
                                               "keke", NA)))
+h_pilot$access_to_alternative_power_source <- h_pilot$power_sources_generator |
+    h_pilot$power_sources_solar
+
 
 h_pilot$lab_tests.hemoglobin_testing <- h_pilot$lab_tests_hemoglobin_testing & h_pilot$laboratory_yn == 'yes' 
 h_pilot$lab_tests.urine_testing <- h_pilot$lab_tests_urine_testing & h_pilot$laboratory_yn == 'yes'

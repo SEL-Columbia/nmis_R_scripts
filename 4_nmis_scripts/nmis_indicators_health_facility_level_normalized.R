@@ -10,12 +10,12 @@ health_sub <- subset(health_outlier, select=c("uuid", "lga", "state",
                                               "unique_lga", "facility_name", "supplies.condoms", 
                                               "src", "inpatient_care_yn", "tb_treatment_yn",
                                               "medication_folic_acid", "compr_oc_blood_transfusions",
-                                              "child_health_growth_monitor", "malaria_treatment_artemisinin",
+                                              "child_health_growth_monitor",
                                               "photo", "geocodeoffacility", "power_sources_grid", 
                                               "num_nurses_posted", "lab_technicians_posted",
                                               "num_doctors_posted", "child_health_mebendazole", 
                                               "medication.antihistamines", "medication.antibiotic_oral", 
-                                              "medication.act", "medication.sulphadoxine",
+                                              "medication_anti_malarials", "medication.sulphadoxine",
                                               "vaccine_storage_type.refrigerator", "medication.iud",
                                               "immunization.csm_immunization", "supplements.folic_acid", 
                                               "immunization.bcg_immunization", "immunization.hepb_immunization", 
@@ -41,7 +41,6 @@ health_sub <- rename(health_sub, c('photo' = 'formhub_photo_id',
                              'lab_technicians_posted' = 'num_lab_techs_fulltime',
                              'medication.antihistamines' = 'medication_antihistamines',
                              'medication.antibiotic_oral' = 'oral_antibiotics_calc',
-                             'medication.act' = 'medication_anti_malarials',
                              'supplements.iron' = 'medication_iron_tablets',
                              'medication.sulphadoxine' = 'malaria_treatment_sulphadoxine',
                              'vaccine_storage_type.refrigerator' = 'equipment_refrigerator',
@@ -110,11 +109,12 @@ health_sub$vaccines_fridge_freezer <-
     ifelse(health_outlier$src == '661',
            health_outlier$vaccine_storage_yn & 
                (health_outlier$vaccine_storage_type.refrigerator | health_outlier$vaccine_storage_type.freezer),
-           ifelse(health_outlier$src == '113',
-                  as.logical(recodeVar(health_outlier$vaccines_strg_type,
-                        c('solar_refrigeration', 'grid_refrigeration', 'lpg_refrigeration', 'vaccine_carriers_icepacks'),
-                        c(TRUE, TRUE, TRUE, FALSE), default = NA)),
-                  ifelse(health_outlier$src == 'pilot', health_outlier$vaccines_stored_yn, NA)))
+    ifelse(health_outlier$src == '113',
+           health_outlier$vaccine_storage_yn &
+               as.logical(recodeVar(health_outlier$vaccines_strg_type,
+                    c('solar_refrigeration', 'grid_refrigeration', 'lpg_refrigeration', 'vaccine_carriers_icepacks'),
+                    c(TRUE, TRUE, TRUE, FALSE), default = NA)),
+    ifelse(health_outlier$src == 'pilot', health_outlier$vaccine_storage_yn, NA)))
                                                                                          
 health_sub$emergency_transport <- 
   health_outlier$transport_to_referral %in% c('ambulance', 'keke', 'taxi', 'boat')
@@ -125,11 +125,23 @@ health_sub$improved_water_supply <- ifelse(health_outlier$src == 'pilot',
                                       health_outlier$water_sources.tap_outside | 
                                       health_outlier$water_sources.borehole_tube_well))
 
-health_sub$improved_sanitation <- ifelse(health_outlier$src == 'pilot',
-                                          health_outlier$num_toilets_improved_p > 0,  
-                                    ((health_outlier$num_vip_latrine > 0) | 
-                                      (health_outlier$num_pit_w_slab > 0) | 
-                                      (health_outlier$num_flush_or_pour_flush_piped > 0)))                                
+health_sub$improved_sanitation <- 
+    ifelse(health_outlier$src == 'pilot',
+           health_outlier$num_toilets_improved_p > 0,
+    ifelse(health_outlier$src == '113',
+           rowSums(cbind(health_outlier$num_vip_latrine,
+                         health_outlier$num_pit_w_slab,
+                         health_outlier$num_flush_or_pour_flush_piped),
+                   na.rm=T) > 0,
+    ifelse(health_outlier$src == '661',
+           health_outlier$toilets_yn &
+               rowSums(cbind(health_outlier$num_vip_latrine,
+                             health_outlier$num_pit_w_slab,
+                             health_outlier$num_flush_or_pour_flush_piped),
+                       na.rm=T) > 0,
+           NA
+    )))
+                                    
 
 health_sub$iv_medications_yn <- health_outlier$medication.iv_fluid
 
@@ -205,7 +217,13 @@ health_sub$emergency_transport_currently_functioning <- ifelse(health_outlier$sr
 health_sub$power_access_and_functional[health_outlier$src == '661'] <- 
                                         health_outlier$power_sources.none[health_outlier$src == '661'] == F
                                         
-health_sub$c_section_yn <- health_outlier$emergency_obstetrics_yn & health_outlier$c_section_yn
+health_sub$c_section_yn <- ifelse(health_outlier$src == '113',
+                                  health_outlier$compr_oc_c_sections,
+                            ifelse(health_outlier$src == '661',
+                                   health_outlier$c_section_yn,
+                            ifelse(health_outlier$src == 'pilot',
+                                   health_outlier$emergency_obstetrics_yn,
+                                   NA)))
 
 
 ####################
