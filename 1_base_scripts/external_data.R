@@ -177,7 +177,13 @@ final_total <- merge(final_total, dhs_2008, by = "lga_id")
 ###    Adding unique_lga           ###
 ######################################
 lgas <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/lgas.csv")
-final_total <- merge(final_total, lgas[c("lga_id", "unique_lga")], by = "lga_id")
+final_total <- merge(final_total, lgas[c("lga_id", "unique_lga", "state")], by = "lga_id")
+
+#######################################
+###Combining HNLSS State level Data ###
+#######################################
+state <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/raw_data/state_level_data.csv", stringsAsFactors=F)
+final_total <- merge(final_total, state[c("state_name", "preval_hiv")], by.x="state", by.y="state_name")
 
 saveRDS(final_total, '~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/output_data/external_data.rds')
 write.csv(final_total, '~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/output_data/external_data.csv', row.names=F)
