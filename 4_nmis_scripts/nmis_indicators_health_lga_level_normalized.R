@@ -2,7 +2,7 @@
 source("source_scripts/NMIS_Functions.R")
 source("1_base_scripts/InstallFormhub.R")
 
-health_774 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/normalized/Health_774_ALL_FACILITY_INDICATORS.rds")
+health_774 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/output_data/normalized/Health_774_ALL_FACILITY_INDICATORS.rds")
 
 #changing into idata.frame
 ihealth774 <- idata.frame(health_774)
