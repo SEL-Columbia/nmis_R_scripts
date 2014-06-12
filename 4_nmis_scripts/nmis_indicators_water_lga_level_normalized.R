@@ -1,6 +1,6 @@
 # slugs are at https://github.com/mvpdev/nmis/blob/develop/uis_r_us/indicators/overview.json
 source("source_scripts/NMIS_Functions.R")
-water_774 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/nmis/normalized/Water_774_ALL_FACILITY_INDICATORS.rds")
+water_774 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/output_data/normalized/Water_774_ALL_FACILITY_INDICATORS.rds")
 iw774 <- idata.frame(water_774)
 
 ####################
