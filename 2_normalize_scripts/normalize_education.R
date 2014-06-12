@@ -158,4 +158,4 @@ lgas <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/lgas.csv"
 lgas <- subset(lgas, select=-c(latitude, longitude))
 
 edu_total <- merge_non_redundant(lgas, edu_total, by="lga_id")
-saveRDS(edu_total, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/normalized/Education_774_normalized.rds")
+saveRDS(edu_total, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Education_774_normalized.rds")

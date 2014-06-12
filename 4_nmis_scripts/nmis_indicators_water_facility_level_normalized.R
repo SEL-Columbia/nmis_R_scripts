@@ -2,7 +2,7 @@
 source("1_base_scripts/InstallFormhub.R")
 source("source_scripts/NMIS_Functions.R")
 
-water_774 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/normalized/Water_774_normalized.rds")
+water_774 <- readRDS("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/in_process_data/Normalized/Water_774_normalized.rds")
 water_774 <- rename(water_774, c("pop_2006" = "Population"))
 
 # put in uuids, and make sure there are no duplicates
