@@ -39,7 +39,6 @@ edu_sub <- rename(edu_sub, c("photo" = "formhub_photo_id",
                              "num_tchrs_w_nce" = "num_tchrs_with_nce",
                              "num_students_frthr_than_3km" = "students_living_3kmplus_school",
                              "start" = "date_of_survey",
-                             "start" = "submission_time",
                              "classes_outside_yn"  = "class_held_outside"))
 
 # edu_sub$formhub_photo_id <- edu_sub$photo
@@ -52,6 +51,7 @@ rm(nm_774)
 
 ################
 ## SNAPSHOT ####
+edu_sub$submission_time <- edu_sub$date_of_survey
 edu_sub$date_of_survey <- as.character(as.Date(edu_sub$date_of_survey))
 
 edu_sub$management <- recodeVar(edu_outlier$school_managed, 
@@ -190,15 +190,15 @@ edu_sub$textbook_to_pupil_ratio <- edu_sub$num_textbooks / edu_outlier$num_stude
 
 #Adding distant to every facility
 #combining calculated result back to original data
-edu_sub <- lga_boudary_dist(edu_sub, gps_col="gps")
+# edu_sub <- lga_boudary_dist(edu_sub, gps_col="gps")
 edu_sub$sector <- "education"
 
 e_774 <- merge_non_redundant(edu_sub, e_774_left, by="uuid")
 
 
 #Delete all those have dist >= 35 km
-edu_sub <- subset(edu_sub, dist_fake <= 35 | is.na(dist_fake))
-e_774 <- subset(e_774, dist_fake <= 35 | is.na(dist_fake))
+# edu_sub <- subset(edu_sub, dist_fake <= 35 | is.na(dist_fake))
+# e_774 <- subset(e_774, dist_fake <= 35 | is.na(dist_fake))
 
 
 

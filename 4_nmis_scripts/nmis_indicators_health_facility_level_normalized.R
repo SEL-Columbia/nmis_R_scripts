@@ -69,8 +69,7 @@ health_sub <- rename(health_sub, c('photo' = 'formhub_photo_id',
                              'lab_tests.stool' = 'lab_tests_stool_calc',
                              'lab_tests.tb_microscopy' = 'lab_tests_tb_microscopy_calc',
                              'medication.arvs' = 'hiv_treatment_yn',
-                             "start" = "date_of_survey",
-                             "start" = "submission_time"))
+                             "start" = "date_of_survey"))
                               
 nm_774 <- names(health_outlier)[! names(health_outlier) %in% names(health_sub)]
 nm_774 <- c(nm_774, "uuid")
@@ -81,6 +80,7 @@ rm(nm_774)
 ####################
 ##### SNAPSHOT #####
 ####################
+health_sub$submission_time <- health_sub$date_of_survey
 health_sub$date_of_survey <- as.character(as.Date(health_sub$date_of_survey))
 health_sub$management <- recodeVar(health_outlier$facility_owner_manager,
                                         c('lga', 'community', 'federalgovernment','stategovrenment', 
@@ -434,13 +434,13 @@ health_sub$health_no_child_user_fees <- health_outlier$child_tx_fees_yn == F
 #Adding distant to every facility
 #adding sector column
 #combining calculated result back to original data
-health_sub <- lga_boudary_dist(health_sub, gps_col="gps")
+# health_sub <- lga_boudary_dist(health_sub, gps_col="gps")
 health_sub$sector <- "health"
 health_774 <- merge_non_redundant(health_sub, h_774_left, by="uuid")
 
 #Delete all those have dist >= 35 km
-health_sub <- subset(health_sub, dist_fake <= 35 | is.na(dist_fake))
-health_774 <- subset(health_774, dist_fake <= 35 | is.na(dist_fake))
+# health_sub <- subset(health_sub, dist_fake <= 35 | is.na(dist_fake))
+# health_774 <- subset(health_774, dist_fake <= 35 | is.na(dist_fake))
 
 #writing out
 saveRDS(health_sub, "~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/output_data/normalized/Health_774_NMIS_Facility.rds")
