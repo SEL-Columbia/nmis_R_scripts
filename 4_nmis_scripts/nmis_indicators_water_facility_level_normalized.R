@@ -16,7 +16,8 @@ water_sub <- subset(water_774, select=c("photo", "state", "lga","zone", "lga_id"
 water_sub <- rename(water_sub, 
                             c("photo" = 'formhub_photo_id',
                               "water_functional_yn" = "functional",
-                              "start" = "date_of_survey"))
+                              "start" = "date_of_survey",
+                              "start" = "submission_time"))
 
 stopifnot(nrow(water_sub) == nrow(water_774)) #otherwise calculations below will be wrong
 

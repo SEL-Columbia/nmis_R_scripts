@@ -69,7 +69,8 @@ health_sub <- rename(health_sub, c('photo' = 'formhub_photo_id',
                              'lab_tests.stool' = 'lab_tests_stool_calc',
                              'lab_tests.tb_microscopy' = 'lab_tests_tb_microscopy_calc',
                              'medication.arvs' = 'hiv_treatment_yn',
-                             "start" = "date_of_survey"))
+                             "start" = "date_of_survey",
+                             "start" = "submission_time"))
                               
 nm_774 <- names(health_outlier)[! names(health_outlier) %in% names(health_sub)]
 nm_774 <- c(nm_774, "uuid")

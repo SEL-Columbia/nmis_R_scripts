@@ -39,6 +39,7 @@ edu_sub <- rename(edu_sub, c("photo" = "formhub_photo_id",
                              "num_tchrs_w_nce" = "num_tchrs_with_nce",
                              "num_students_frthr_than_3km" = "students_living_3kmplus_school",
                              "start" = "date_of_survey",
+                             "start" = "submission_time",
                              "classes_outside_yn"  = "class_held_outside"))
 
 # edu_sub$formhub_photo_id <- edu_sub$photo
