@@ -1,5 +1,6 @@
 require(rjson)
 require(plyr)
+require(dplyr)
 
 
 
@@ -29,6 +30,28 @@ RJson_ouput <- function(BASE_DIR, nmis_lga, gap_sheet, edu_774,
     
     # for each lga combine faciliti level indicators and append to
     # lga level indicators
+    
+    total_facility_df <- rbind_list(edu_774, health_774, water_774)
+    
+    system.time(lapply(lgas, function(lga){
+        current_lga <- lga$unique_lga
+        facility_df <- total_facility_df %.% filter(unique_lga == "current_lga")
+        facility_list <- (as.list(as.data.frame(t(facility_df))))
+        # remove names of the facility_list, 
+        # so that the output will be a list of hash table instead of 
+        # hash table with key=sequence
+        names(facility_list) <- NULL
+        
+        lga[["facilities"]] <- facility_list
+        
+        output_json <- toJSON(lga)
+        
+        file_name <- paste(current_lga, "json", sep=".")
+        output_dir <- paste(BASE_DIR, file_name, sep="/")
+        
+        write(output_json, output_dir)
+        
+    }))
     for (lga in lgas){
         
         current_lga <- lga$unique_lga
@@ -37,7 +60,8 @@ RJson_ouput <- function(BASE_DIR, nmis_lga, gap_sheet, edu_774,
                                   subset(health_774, unique_lga == current_lga), 
                                   subset(water_774, unique_lga == current_lga))
         
-        facility_list <- df_to_list(facility_df)
+#         facility_list <- df_to_list(facility_df)
+        facility_list <- (as.list(as.data.frame(t(facility_df))))
         
         # remove names of the facility_list, 
         # so that the output will be a list of hash table instead of 

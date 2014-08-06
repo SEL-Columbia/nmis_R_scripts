@@ -188,6 +188,27 @@ state$state_name <- revalue(state$state_name,
 state$prevalence_of_hiv <- state$preval_hiv/100
 final_total <- merge(final_total, state[c("state_name", "prevalence_of_hiv")], by.x="state", by.y="state_name", all.x=T)
 
+
+#######################################
+###     updating 2013 data          ###
+#######################################
+update2013 <- read.csv("~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/raw_data/DHS_final_2013.csv")
+names(update2013)
+update2013$immunization_rate_dpt3 <- NULL
+
+final_total$prevalence_of_underweight_children_u5 <- NULL
+final_total$prevalence_of_stunting_children_u5 <- NULL
+final_total$prevalence_of_wasting_children_u5 <- NULL
+final_total$immunization_rate_measles <- NULL
+final_total$immunization_rate_dpt3 <- NULL
+final_total$percent_antenatal_care_four <- NULL
+final_total$proportion_children_u5_sleeping_under_itns <- NULL
+final_total$percentage_pregnant_women_tested_for_hiv_during_pregnancy <- NULL
+final_total$prevalence_of_hiv <- NULL
+final_total$proportion_of_births_by_skilled_health_personnel <- NULL
+
+final_total <- merge(final_total, update2013, by = "state", all.x = T)
+##### OUTPUT
 saveRDS(final_total, '~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/output_data/external_data.rds')
 write.csv(final_total, '~/Dropbox/Nigeria/Nigeria 661 Baseline Data Cleaning/external_data/output_data/external_data.csv', row.names=F)
 
